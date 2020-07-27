@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/howlingwolfdb?characterEncoding=UTF-8
-    username: howlingwolfuser # 本番は起動引数で与える
-    password: howlingwolfpass # 本番は起動引数で与える
+    url: jdbc:mysql://localhost:3306/firewolfdb?characterEncoding=UTF-8
+    username: firewolfuser # 本番は起動引数で与える
+    password: firewolfpass # 本番は起動引数で与える
     driverClassName: com.mysql.jdbc.Driver
     type: org.apache.tomcat.jdbc.pool.DataSource
   messages:
@@ -15,15 +15,15 @@ security:
   corsClientUrls:
     - http://localhost:3000
 server:
-  port: 8086
+  port: 8087
   servlet:
-    context-path: /howling-wolf
+    context-path: /firewolf
     session:
       timeout: 86400
   compression:
     enabled: true
   tomcat:
-    basedir: /var/log/howling-wolf
+    basedir: /var/log/firewolf
     accesslog:
       enabled: true
       directory: access
@@ -39,4 +39,4 @@ logging:
     org.springframework: INFO
     root: INFO
     org.seasar.dbflute: ERROR
-  file: /var/log/howling-wolf/tomcat.log
+  file: /var/log/firewolf/tomcat.log

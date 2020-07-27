@@ -1,12 +1,13 @@
-# HOWLING WOLF
+# FIREWOLF
 
-[![CircleCI](https://circleci.com/gh/h-orito/howling-wolf-api/tree/develop.svg?style=svg)](https://circleci.com/gh/h-orito/howling-wolf-api/tree/develop)
+[![CircleCI](https://circleci.com/gh/h-orito/howling-wolf-api/tree/develop.svg?style=svg)](https://circleci.com/gh/h-orito/firewolf-api/tree/develop)
 
 ## Overview
 
 - 人狼ゲームがプレイできるサイトです
 - Kotlin で API を提供します
-- 画面側は[howling-wolf-ui](https://github.com/h-orito/howling-wolf-ui)を参照
+- [howling-wolf-api](https://github.com/h-orito/howling-wolf-api)の派生です
+- 画面側は[firewolf-ui](https://github.com/h-orito/firewolf-ui)を参照
 
 ## Requirement for local development
 
@@ -48,17 +49,17 @@
 
 * 起動
 
-  - 以下の実行引数とともに`HowlingWolfApplication#main` を実行
+  - 以下の実行引数とともに`FirewolfApplication#main` を実行
     - `--firebase.adminsdk.secretkey.path=${Firebaseサービスアカウント秘密鍵の配置パス}`
     - `--firebase.database.url=${FirebaseデータベースURL}`
-  - http://localhost:8086/howling-wolf/ がベース URL になります
+  - http://localhost:8087/firewolf/ がベース URL になります
 
 ## Run
 
   - 実行例
   
 ```
-$ java -jar howling-wolf.jar \
+$ java -jar firewolf.jar \
 	--spring.profiles.active=prd \
 	--spring.datasource.url=jdbc:mysql://${server ip and port}/${database name}?characterEncoding=UTF-8 \
 	--spring.datasource.username=${db user name} \

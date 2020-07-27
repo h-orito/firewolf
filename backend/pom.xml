@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.ort</groupId>
-    <artifactId>howling-wolf</artifactId>
+    <artifactId>firewolf</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>howling-wolf</name>
+    <name>firewolf</name>
     <packaging>jar</packaging>
     <description>人狼ゲームがプレイできるサイトのAPI</description>
 
@@ -155,7 +155,7 @@
                 <artifactId>dbflute-maven-plugin</artifactId>
                 <version>1.1.0</version>
                 <configuration>
-                    <clientProject>howlingwolfdb</clientProject>
+                    <clientProject>firewolfdb</clientProject>
                     <packageBase>com.ort.dbflute</packageBase>
                 </configuration>
             </plugin>
