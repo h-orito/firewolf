@@ -8,10 +8,16 @@ data class VillageOrganizations(
 ) {
     companion object {
         operator fun invoke(
-            organization: Map<Int, String>?
+            organization: String?
         ): VillageOrganizations {
             requireNotNull(organization)
-            return VillageOrganizations(organization = organization)
+            return VillageOrganizations(
+                organization = organization
+                    .replace("\r\n", "\n")
+                    .split("\n")
+                    .map { it.length to it }
+                    .toMap()
+            )
         }
 
         private fun defaultOrganization(): Map<Int, String> {

@@ -15,6 +15,16 @@ data class VillageMessageRestricts(
             type = MessageType(CDef.MessageType.人狼の囁き),
             count = 40,
             length = 200
+        ),
+        VillageMessageRestrict(
+            type = MessageType(CDef.MessageType.独り言),
+            count = 100,
+            length = 200
+        ),
+        VillageMessageRestrict(
+            type = MessageType(CDef.MessageType.死者の呻き),
+            count = 40,
+            length = 200
         )
     )
 ) {

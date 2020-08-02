@@ -125,9 +125,7 @@ object VillageDataConverter {
                 dummyCharaId = detectItemText(settingList, CDef.VillageSettingItem.ダミーキャラid)?.toInt(),
                 charachipId = detectItemText(settingList, CDef.VillageSettingItem.キャラクターグループid)?.toInt()
             ),
-            organizations = VillageOrganizations(
-                organization = detectItemText(settingList, CDef.VillageSettingItem.構成)?.let { convertOrganizeToOrganizationMap(it) }
-            ),
+            organizations = VillageOrganizations.invoke(detectItemText(settingList, CDef.VillageSettingItem.構成)),
             rules = VillageRules.invoke(
                 openVote = detectItemText(settingList, CDef.VillageSettingItem.記名投票か)?.let { it == FLG_TRUE },
                 availableSkillRequest = detectItemText(settingList, CDef.VillageSettingItem.役職希望可能か)?.let { it == FLG_TRUE },
@@ -178,9 +176,5 @@ object VillageDataConverter {
 
     private fun detectItemText(settingList: List<VillageSetting>, item: CDef.VillageSettingItem): String? {
         return settingList.find { setting -> setting.villageSettingItemCodeAsVillageSettingItem == item }?.villageSettingText
-    }
-
-    private fun convertOrganizeToOrganizationMap(organize: String): Map<Int, String> {
-        return organize.replace("\r\n", "\n").split("\n").map { it.length to it }.toMap()
     }
 }
