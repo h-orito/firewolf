@@ -16,14 +16,12 @@ class VillageService(
      * 村一覧取得
      * @param user 入力した場合、参加している村一覧
      * @param villageStatusList 入力した場合、そのステータスで絞り込む
-     * @param isAutoGenerate 指定した場合、自動生成村orそれ以外で絞り込む
      * @return Villages
      */
     fun findVillages(
         user: FirewolfUser? = null,
-        villageStatusList: List<VillageStatus>? = listOf(),
-        isAutoGenerate: Boolean? = null
-    ): Villages = villageDataSource.findVillages(user, villageStatusList, isAutoGenerate)
+        villageStatusList: List<VillageStatus>? = listOf()
+    ): Villages = villageDataSource.findVillages(user, villageStatusList)
 
     /**
      * 村一覧取得

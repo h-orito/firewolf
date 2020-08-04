@@ -75,6 +75,16 @@ class SayDomainService(
         village.assertMessageRestrict(messageContent, latestDayMessageList)
     }
 
+    fun assertCreatorSay(
+        village: Village,
+        messageContent: MessageContent
+    ) {
+        // 事前チェック
+        if (!village.isAvailableSay()) throw FirewolfBusinessException("発言できません")
+        // 長さ、行数チェック
+        messageContent.assertMessageLength(200)
+    }
+
     fun assertParticipateSay(
         village: Village,
         chara: Chara?,

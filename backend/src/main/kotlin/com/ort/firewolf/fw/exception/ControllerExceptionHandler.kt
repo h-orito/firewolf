@@ -3,6 +3,7 @@ package com.ort.firewolf.fw.exception
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.context.request.WebRequest
@@ -24,6 +25,19 @@ class ControllerExceptionHandler : ResponseEntityExceptionHandler() {
             body = FirewolfErrorResponse(status.value(), status.reasonPhrase)
         }
         return ResponseEntity(body, headers, status)
+    }
+
+    override fun handleMethodArgumentNotValid(
+        ex: MethodArgumentNotValidException,
+        headers: HttpHeaders,
+        status: HttpStatus,
+        request: WebRequest
+    ): ResponseEntity<Any> {
+        val message = ex.bindingResult.allErrors.mapNotNull { it.defaultMessage }.joinToString("\n")
+        val headers = HttpHeaders()
+        val body = FirewolfErrorResponse(499, message)
+        val status = HttpStatus.NOT_FOUND
+        return handleExceptionInternal(ex, body, headers, status, request)
     }
 
     @ExceptionHandler(FirewolfBusinessException::class)

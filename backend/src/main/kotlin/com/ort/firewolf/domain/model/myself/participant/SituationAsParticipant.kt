@@ -6,5 +6,6 @@ data class SituationAsParticipant(
     val commit: VillageCommitSituation,
     val say: VillageSaySituation,
     val ability: VillageAbilitySituations,
-    val vote: VillageVoteSituation
+    val vote: VillageVoteSituation,
+    val creator: VillageCreatorSituation
 )

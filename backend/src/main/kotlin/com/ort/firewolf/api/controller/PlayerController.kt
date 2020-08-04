@@ -79,7 +79,9 @@ class PlayerController(
         val charachipIdList = playerRecords.participateVillageList.map { it.village.setting.charachip.charachipId }.distinct()
         val charas: Charas = charachipService.findCharas(charachipIdList)
         val playerIdList =
-            playerRecords.participateVillageList.flatMap { it.village.participant.memberList.map { it.playerId!! } }.distinct()
+            playerRecords.participateVillageList.flatMap {
+                (it.village.participant.memberList + it.village.spectator.memberList).map { member -> member.playerId!! }
+            }.distinct()
         val players: Players = playerService.findPlayers(playerIdList)
         val createPlayerIdList = playerRecords.participateVillageList.map { it.village.creatorPlayerId }
         val createPlayers: Players = playerService.findPlayers(createPlayerIdList)

@@ -57,7 +57,9 @@ class ExternalController(
         val villageList = villageService.findVillagesAsDetail(villageIdList).list.sortedBy { it.id }
         val charas = charachipService.findCharas(villageList.map { it.setting.charachip.charachipId }.distinct())
         val players = playerService.findPlayers(
-            playerIdList = villageList.flatMap { it.participant.memberList.map { member -> member.playerId!! } }.distinct()
+            playerIdList = villageList.flatMap {
+                (it.participant.memberList + it.spectator.memberList).map { member -> member.playerId!! }
+            }.distinct()
         )
         return VillageRecordsView(
             villages = Villages(villageList),

@@ -34,12 +34,14 @@ data class DebugVillageView(
         setting = VillageSettingsView(village.setting),
         participant = VillageParticipantsView(
             village = village,
+            participants = village.participant,
             charas = charas,
             players = players,
             shouldHidePlayer = false
         ),
         spectator = VillageParticipantsView(
             village = village,
+            participants = village.spectator,
             charas = charas,
             players = players,
             shouldHidePlayer = false

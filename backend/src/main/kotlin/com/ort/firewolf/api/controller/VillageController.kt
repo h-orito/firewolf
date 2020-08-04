@@ -14,6 +14,7 @@ import com.ort.firewolf.api.body.VillageSettingBody
 import com.ort.firewolf.api.body.VillageSettingRegisterBody
 import com.ort.firewolf.api.body.VillageTimeCreateBody
 import com.ort.firewolf.api.body.VillageVoteBody
+import com.ort.firewolf.api.body.validator.VillageRegisterBodyValidator
 import com.ort.firewolf.api.form.VillageListForm
 import com.ort.firewolf.api.form.VillageMessageForm
 import com.ort.firewolf.api.view.charachip.CharaView
@@ -56,7 +57,9 @@ import com.ort.firewolf.domain.model.village.Villages
 import com.ort.firewolf.fw.security.FirewolfUser
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.WebDataBinder
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.InitBinder
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -65,8 +68,11 @@ import org.springframework.web.bind.annotation.RestController
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
+
 @RestController
 class VillageController(
+    val villageRegisterBodyValidator: VillageRegisterBodyValidator,
+
     val villageCoordinator: VillageCoordinator,
     val messageCoordinator: MessageCoordinator,
 
@@ -75,6 +81,12 @@ class VillageController(
     val charachipService: CharachipService,
     val messageService: MessageService
 ) {
+
+    @InitBinder("villageRegisterBody")
+    fun initBinder(binder: WebDataBinder) {
+        binder.addValidators(villageRegisterBodyValidator)
+    }
+
     // ===================================================================================
     //                                                                             Execute
     //                                                                           =========
@@ -207,11 +219,11 @@ class VillageController(
     @PostMapping("/village")
     fun registerVillage(
         @AuthenticationPrincipal user: FirewolfUser,
-        @RequestBody @Validated body: VillageRegisterBody
+        @RequestBody @Validated villageRegisterBody: VillageRegisterBody
     ): VillageRegisterView {
         val player: Player = playerService.findPlayer(user)
         val village: Village = Village.createForRegister(
-            resource = convertToVillageCreateResource(body, player)
+            resource = convertToVillageCreateResource(villageRegisterBody, player)
         )
         val villageId: Int = villageCoordinator.registerVillage(village, user)
         return VillageRegisterView(villageId = villageId)
@@ -225,11 +237,11 @@ class VillageController(
     @PostMapping("/village/confirm")
     fun confirmRegisterVillage(
         @AuthenticationPrincipal user: FirewolfUser,
-        @RequestBody @Validated body: VillageRegisterBody
+        @RequestBody @Validated villageRegisterBody: VillageRegisterBody
     ) {
         val player: Player = playerService.findPlayer(user)
         val village: Village = Village.createForRegister(
-            resource = convertToVillageCreateResource(body, player)
+            resource = convertToVillageCreateResource(villageRegisterBody, player)
         )
         villageCoordinator.confirmVillage(village, user)
     }
@@ -268,18 +280,19 @@ class VillageController(
         @AuthenticationPrincipal user: FirewolfUser,
         @RequestBody @Validated body: VillageParticipateBody
     ): MessageView {
+        val isSpectate = body.spectator ?: false
         villageCoordinator.assertParticipate(
             villageId = villageId,
             user = user,
             charaId = body.charaId!!,
             message = body.joinMessage!!,
-            isSpectate = body.spectator ?: false,
+            isSpectate = isSpectate,
             firstRequestSkill = CDef.Skill.codeOf(body.firstRequestSkill),
             secondRequestSkill = CDef.Skill.codeOf(body.secondRequestSkill),
             password = body.joinPassword
         )
         val messageContent = MessageContent.invoke(
-            CDef.MessageType.通常発言.code(),
+            if (isSpectate) CDef.MessageType.見学発言.code() else CDef.MessageType.通常発言.code(),
             body.joinMessage,
             CDef.FaceType.通常.code()
         ).copy(num = 0)

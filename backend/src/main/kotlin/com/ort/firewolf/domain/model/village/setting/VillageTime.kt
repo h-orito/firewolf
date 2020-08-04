@@ -55,6 +55,7 @@ data class VillageTime(
 
     fun isSilentTime(dayStartDatetime: LocalDateTime): Boolean {
         silentHours ?: return false
+        if (silentHours <= 0) return false
         val now = FirewolfDateUtil.currentLocalDateTime()
         return now.isBefore(dayStartDatetime.plusHours(silentHours.toLong()))
     }

@@ -4,9 +4,11 @@ import java.time.LocalDateTime
 import javax.validation.Valid
 import javax.validation.constraints.Max
 import javax.validation.constraints.NotNull
+import javax.validation.constraints.Size
 
 data class VillageRegisterBody(
     @field:NotNull
+    @get:Size(max = 40)
     val villageName: String?,
 
     @field:NotNull
@@ -91,6 +93,7 @@ data class VillageRuleCreateBody(
     @Valid
     val restrictList: List<VillageMessageRestrictCreateBody>?,
 
+    @get:Size(max = 20)
     val joinPassword: String?
 ) {
     constructor() : this(
@@ -112,11 +115,11 @@ data class VillageMessageRestrictCreateBody(
     val type: String?,
 
     @field:NotNull
-    @field:Max(100)
+    @field:Max(100, message = "回数は100回以下にしてください")
     val count: Int?,
 
     @field:NotNull
-    @field:Max(200)
+    @field:Max(200, message = "文字数は200以下にしてください")
     val length: Int?
 ) {
     constructor() : this(null, null, null)

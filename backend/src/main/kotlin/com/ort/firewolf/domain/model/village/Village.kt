@@ -12,7 +12,6 @@ import com.ort.firewolf.domain.model.village.participant.VillageParticipants
 import com.ort.firewolf.domain.model.village.setting.VillageSettings
 import com.ort.firewolf.fw.FirewolfDateUtil
 import com.ort.firewolf.fw.exception.FirewolfBusinessException
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 data class Village(
@@ -41,6 +40,8 @@ data class Village(
 
     private val cancelMessage: String = "人数が不足しているため廃村しました。"
 
+    private val creatorCancelMessage: String = "村建ての操作により廃村しました。"
+
     // ===================================================================================
     //                                                                             message
     //                                                                           =========
@@ -59,6 +60,10 @@ data class Village(
     /** 廃村メッセージ */
     fun createCancelVillageMessage(): Message =
         Message.createPublicSystemMessage(cancelMessage, day.latestDay().id)
+
+    /** 村建て廃村メッセージ */
+    fun createCreatorCancelVillageMessage(): Message =
+        Message.createPublicSystemMessage(creatorCancelMessage, day.latestDay().id)
 
     /** 構成メッセージ */
     fun createOrganizationMessage(): Message {
@@ -179,6 +184,22 @@ data class Village(
     fun isSettled(): Boolean {
         val wolfCount = wolfCount()
         return wolfCount <= 0 || villagerCount() <= wolfCount
+    }
+
+    fun memberById(participantId: Int): VillageParticipant {
+        return findMemberById(participantId) ?: throw IllegalStateException("not found member by id: $participantId")
+    }
+
+    fun findMemberById(participantId: Int): VillageParticipant? {
+        return participant.find(participantId) ?: spectator.find(participantId)
+    }
+
+    fun memberByPlayerId(playerId: Int): VillageParticipant {
+        return findMemberByPlayerId(playerId) ?: throw IllegalStateException("not found member by player_id: $playerId")
+    }
+
+    fun findMemberByPlayerId(playerId: Int): VillageParticipant? {
+        return participant.findByPlayerId(playerId) ?: spectator.findByPlayerId(playerId)
     }
 
     // ===================================================================================
@@ -391,7 +412,14 @@ data class Village(
         this.copy(participant = participant.changeSkillRequest(participantId, first, second))
 
     // 退村
-    fun leaveParticipant(participantId: Int): Village = this.copy(participant = this.participant.leave(participantId))
+    fun leaveParticipant(participantId: Int): Village {
+        val participant = findMemberById(participantId) ?: return this
+        return if (participant.isSpectator) {
+            this.copy(spectator = this.spectator.leave(participantId))
+        } else {
+            this.copy(participant = this.participant.leave(participantId))
+        }
+    }
 
     // 突然死
     fun suddenlyDeathParticipant(participantId: Int, latestDay: VillageDay): Village =

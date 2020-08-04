@@ -26,14 +26,14 @@ data class VillageParticipantView(
         charas: Charas,
         shouldHidePlayer: Boolean
     ) : this(
-        id = village.participant.member(villageParticipantId).id,
-        chara = CharaView(charas.chara(village.participant.member(villageParticipantId).charaId)),
-        player = if (shouldHidePlayer || village.participant.member(villageParticipantId).playerId == null) null
-        else PlayerView(players.list.find { it.id == village.participant.member(villageParticipantId).playerId }!!),
-        dead = village.participant.member(villageParticipantId).dead?.let { DeadView(it, shouldHidePlayer) },
-        isSpectator = village.participant.member(villageParticipantId).isSpectator,
-        skill = if (shouldHidePlayer) null else village.participant.member(villageParticipantId).skill,
-        skillRequest = if (shouldHidePlayer) null else village.participant.member(villageParticipantId).skillRequest,
-        isWin = village.participant.member(villageParticipantId).isWin
+        id = village.memberById(villageParticipantId).id,
+        chara = CharaView(charas.chara(village.memberById(villageParticipantId).charaId)),
+        player = if (shouldHidePlayer || village.memberById(villageParticipantId).playerId == null) null
+        else PlayerView(players.list.find { it.id == village.memberById(villageParticipantId).playerId }!!),
+        dead = village.memberById(villageParticipantId).dead?.let { DeadView(it, shouldHidePlayer) },
+        isSpectator = village.memberById(villageParticipantId).isSpectator,
+        skill = if (shouldHidePlayer) null else village.memberById(villageParticipantId).skill,
+        skillRequest = if (shouldHidePlayer) null else village.memberById(villageParticipantId).skillRequest,
+        isWin = village.memberById(villageParticipantId).isWin
     )
 }

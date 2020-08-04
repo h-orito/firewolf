@@ -51,6 +51,9 @@ data class Message(
         fun createMasonPrivateMessage(text: String, villageDayId: Int): Message =
             createSystemMessage(MessageType(CDef.MessageType.共有相互確認メッセージ), text, villageDayId)
 
+        fun createCreatorSayMessage(text: String, villageDayId: Int): Message =
+            createSystemMessage(MessageType(CDef.MessageType.村建て発言), text, villageDayId)
+
         // ===================================================================================
         //                                                                        Assist Logic
         //                                                                        ============

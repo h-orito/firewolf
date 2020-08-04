@@ -137,7 +137,6 @@ class VillageDataSourceTest : FirewolfTest() {
         // ## Assert ##
         // village
         val village = villageBhv.selectByPK(villageId).get()
-        assertThat(village.villageDisplayName).endsWith("村")
         assertThat(village.createPlayerId).isEqualTo(createPlayerId)
         assertThat(village.villageStatusCodeAsVillageStatus).isEqualTo(CDef.VillageStatus.プロローグ)
         assertThat(village.epilogueDay as Int?).isNull()

@@ -6,8 +6,6 @@ import com.ort.firewolf.application.service.CharachipService
 import com.ort.firewolf.application.service.CommitService
 import com.ort.firewolf.application.service.MessageService
 import com.ort.firewolf.application.service.PlayerService
-import com.ort.firewolf.application.service.ReservedVillageService
-import com.ort.firewolf.application.service.TweetService
 import com.ort.firewolf.application.service.VillageService
 import com.ort.firewolf.application.service.VoteService
 import com.ort.firewolf.domain.model.ability.AbilityType
@@ -28,6 +26,7 @@ import com.ort.firewolf.domain.model.village.vote.VillageVote
 import com.ort.firewolf.domain.model.village.vote.VillageVotes
 import com.ort.firewolf.domain.service.ability.AbilityDomainService
 import com.ort.firewolf.domain.service.commit.CommitDomainService
+import com.ort.firewolf.domain.service.creator.CreatorDomainService
 import com.ort.firewolf.domain.service.participate.ParticipateDomainService
 import com.ort.firewolf.domain.service.say.SayDomainService
 import com.ort.firewolf.domain.service.skill.SkillRequestDomainService
@@ -49,15 +48,14 @@ class VillageCoordinator(
     private val abilityService: AbilityService,
     private val voteService: VoteService,
     private val commitService: CommitService,
-    private val reservedVillageService: ReservedVillageService,
-    private val tweetService: TweetService,
     // domain service
     private val participateDomainService: ParticipateDomainService,
     private val skillRequestDomainService: SkillRequestDomainService,
     private val commitDomainService: CommitDomainService,
     private val sayDomainService: SayDomainService,
     private val abilityDomainService: AbilityDomainService,
-    private val voteDomainService: VoteDomainService
+    private val voteDomainService: VoteDomainService,
+    private val creatorDomainService: CreatorDomainService
 ) {
 
     /**
@@ -69,12 +67,7 @@ class VillageCoordinator(
     fun findParticipant(village: Village, user: FirewolfUser?): VillageParticipant? {
         user ?: return null
         val player: Player = playerService.findPlayer(user)
-        return this.findParticipant(village, player.id)
-    }
-
-    fun findParticipant(village: Village, playerId: Int): VillageParticipant? {
-        val participant: VillageParticipant? = village.participant.memberList.find { it.playerId == playerId && !it.isGone }
-        return participant ?: village.spectator.memberList.find { it.playerId == playerId && !it.isGone }
+        return village.findMemberByPlayerId(player.id)
     }
 
     /**
@@ -201,12 +194,12 @@ class VillageCoordinator(
             isSpectate = isSpectate
         )
         village = villageService.updateVillageDifference(village, changedVillage)
-        val participant: VillageParticipant = findParticipant(village, playerId)!!
+        val participant: VillageParticipant = village.memberByPlayerId(playerId)
         val chara: Chara = charachipService.findChara(charaId)
         // {N}人目、{キャラ名} とユーザー入力の発言
         messageService.registerParticipateMessage(
             village = village,
-            participant = village.participant.member(participant.id),
+            participant = village.findMemberById(participant.id)!!,
             chara = chara,
             message = message,
             isSpectate = isSpectate
@@ -270,6 +263,12 @@ class VillageCoordinator(
         assertSay(villageId, user, messageContent)
     }
 
+    fun confirmToCreatorSay(village: Village, messageText: String) {
+        val messageContent: MessageContent = MessageContent.invoke(CDef.MessageType.村建て発言.code(), messageText, null)
+        // 発言できない状況ならエラー
+        sayDomainService.assertCreatorSay(village, messageContent)
+    }
+
     /**
      * 発言
      *
@@ -289,6 +288,16 @@ class VillageCoordinator(
         val participant: VillageParticipant = findParticipant(village, user)!!
         val message: Message = Message.createSayMessage(participant, village.day.latestDay().id, messageContent)
         messageService.registerSayMessage(villageId, message)
+    }
+
+    @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
+    fun creatorSay(village: Village, messageText: String) {
+        val messageContent: MessageContent = MessageContent.invoke(CDef.MessageType.村建て発言.code(), messageText, null)
+        // 発言できない状況ならエラー
+        sayDomainService.assertCreatorSay(village, messageContent)
+        // 発言
+        val message: Message = Message.createCreatorSayMessage(messageText, village.day.latestDay().id)
+        messageService.registerSayMessage(village.id, message)
     }
 
     /**
@@ -372,7 +381,7 @@ class VillageCoordinator(
     ): SituationAsParticipant {
         val player: Player? = if (user == null) null else playerService.findPlayer(user)
         val participant: VillageParticipant? = findParticipant(village, user)
-        val skillRequest: SkillRequest? = if (participant == null) null else village.participant.member(participant.id).skillRequest
+        val skillRequest: SkillRequest? = if (participant == null) null else village.findMemberById(participant.id)!!.skillRequest
         val abilities: VillageAbilities = abilityService.findVillageAbilities(village.id)
         val votes: VillageVotes = voteService.findVillageVotes(village.id)
         val commit: Commit? = commitService.findCommit(village, participant)
@@ -387,7 +396,8 @@ class VillageCoordinator(
             commit = commitDomainService.convertToSituation(village, participant, commit),
             say = sayDomainService.convertToSituation(village, participant, charas, latestDayMessageList),
             ability = abilityDomainService.convertToSituationList(village, participant, abilities),
-            vote = voteDomainService.convertToSituation(village, participant, votes)
+            vote = voteDomainService.convertToSituation(village, participant, votes),
+            creator = creatorDomainService.convertToSituation(village, player)
         )
     }
 

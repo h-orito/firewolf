@@ -85,7 +85,7 @@ data class VillageParticipants(
     // 呪殺
     fun divineKill(participantId: Int, villageDay: VillageDay): VillageParticipants {
         return this.copy(
-            memberList= this.memberList.map {
+            memberList = this.memberList.map {
                 if (it.id == participantId) it.divineKill(villageDay) else it.copy()
             }
         )
@@ -94,7 +94,11 @@ data class VillageParticipants(
     // 勝敗設定
     fun winLose(winCamo: Camp): VillageParticipants = this.copy(memberList = this.memberList.map { it.winLose(winCamo) })
 
-    fun member(id: Int): VillageParticipant = memberList.first { it.id == id }
+    fun find(id: Int): VillageParticipant? = memberList.firstOrNull { it.id == id }
+
+    fun member(id: Int): VillageParticipant = memberList.firstOrNull { it.id == id } ?: throw IllegalStateException("not found member")
+
+    fun findByPlayerId(playerId: Int): VillageParticipant? = memberList.firstOrNull { it.playerId == playerId && !it.isGone }
 
     fun filterAlive(): VillageParticipants {
         val aliveMembers = memberList.filter { it.isAlive() }

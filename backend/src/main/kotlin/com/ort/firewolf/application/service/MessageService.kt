@@ -121,7 +121,7 @@ class MessageService(
         )
         // 参加発言
         val messageContent = MessageContent.invoke(
-            CDef.MessageType.通常発言.code(),
+            if (isSpectate) CDef.MessageType.見学発言.code() else CDef.MessageType.通常発言.code(),
             message,
             CDef.FaceType.通常.code()
         )

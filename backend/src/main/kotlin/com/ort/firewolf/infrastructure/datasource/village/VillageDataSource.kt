@@ -65,13 +65,11 @@ class VillageDataSource(
      * 村一覧取得
      * @param user 指定した場合は自分が参加した村一覧
      * @param villageStatusList 指定した場合はそのステータスで絞り込む
-     * @param isAutoGenerate 指定した場合、自動生成村orそれ以外で絞り込む
      * @return 村一覧
      */
     fun findVillages(
         user: FirewolfUser? = null,
-        villageStatusList: List<com.ort.firewolf.domain.model.village.VillageStatus>? = listOf(),
-        isAutoGenerate: Boolean? = null
+        villageStatusList: List<com.ort.firewolf.domain.model.village.VillageStatus>? = listOf()
     ): Villages {
         val villageList = villageBhv.selectList {
             it.specify().derivedVillagePlayer().count({ vpCB ->
@@ -95,12 +93,6 @@ class VillageDataSource(
                 it.query().setVillageStatusCode_InScope_AsVillageStatus(
                     villageStatusList.map { status -> status.toCdef() }
                 )
-            }
-            if (isAutoGenerate != null) {
-                it.query().existsVillageSetting { settingCB ->
-                    settingCB.query().setVillageSettingItemCode_Equal_自動生成村か()
-                    settingCB.query().setVillageSettingText_Equal(toFlg(isAutoGenerate))
-                }
             }
 
             it.query().addOrderBy_VillageId_Desc()
@@ -285,7 +277,9 @@ class VillageDataSource(
         after: com.ort.firewolf.domain.model.village.Village
     ) {
         val villageId = after.id
-        if (!before.participant.existsDifference(after.participant)) return
+        if (!before.participant.existsDifference(after.participant)
+            && !before.spectator.existsDifference(after.spectator)
+        ) return
         // 新規
         after.participant.memberList.filterNot { member ->
             before.participant.memberList.any { it.id == member.id }

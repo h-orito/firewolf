@@ -75,7 +75,7 @@ data class VillageParticipant(
     //                                                                                権限
     //                                                                        ============
     // 役職希望可能か
-    fun isAvailableSkillRequest(): Boolean = true // 制限なし
+    fun isAvailableSkillRequest(): Boolean = !isSpectator
 
     // コミット可能か
     fun isAvailableCommit(dummyParticipantId: Int): Boolean {

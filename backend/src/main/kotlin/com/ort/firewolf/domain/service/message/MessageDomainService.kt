@@ -57,7 +57,7 @@ class MessageDomainService(
             CDef.MessageType.襲撃結果,
             CDef.MessageType.共有相互確認メッセージ
         ).forEach {
-            if (isViewableMessage(village, participant, it.code())) allowedTypeList.add(it)
+            if (isViewableMessage(village, participant, it.code(), day)) allowedTypeList.add(it)
         }
         return allowedTypeList
     }
