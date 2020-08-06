@@ -38,9 +38,9 @@ data class Village(
     private val day2Message: String =
         "ついに犠牲者が出た。\n\n村人達は、この中にいる人狼を排除するため、投票を行う事にした。\n無実の犠牲者が出るのもやむをえない。村が全滅するよりは……。\n\n最後まで残るのは村人か、それとも人狼か。"
 
-    private val cancelMessage: String = "人数が不足しているため廃村しました。"
-
     private val creatorCancelMessage: String = "村建ての操作により廃村しました。"
+
+    private val extendPrologueMessage: String = "まだ村人達は揃っていないようだ。"
 
     // ===================================================================================
     //                                                                             message
@@ -56,10 +56,6 @@ data class Village(
     /** 2日目のメッセージ */
     fun createVillageDay2Message(): Message =
         Message.createPublicSystemMessage(day2Message, day.latestDay().id)
-
-    /** 廃村メッセージ */
-    fun createCancelVillageMessage(): Message =
-        Message.createPublicSystemMessage(cancelMessage, day.latestDay().id)
 
     /** 村建て廃村メッセージ */
     fun createCreatorCancelVillageMessage(): Message =
@@ -147,6 +143,9 @@ data class Village(
             silentHoursStr +
             "https://howling-wolf.com/village?id=$id"
     }
+
+    fun createExtendPrologueMessage(): Message =
+        Message.createPublicSystemMessage(extendPrologueMessage, day.latestDay().id)
 
     // ===================================================================================
     //                                                                                read
@@ -411,6 +410,14 @@ data class Village(
     fun changeSkillRequest(participantId: Int, first: CDef.Skill, second: CDef.Skill): Village =
         this.copy(participant = participant.changeSkillRequest(participantId, first, second))
 
+    // 全員おまかせに変更
+    fun changeAllSkillRequestLeftover(): Village =
+        this.copy(
+            participant = participant.copy(
+                memberList = participant.memberList.map { it.changeSkillRequest(CDef.Skill.おまかせ, CDef.Skill.おまかせ) }
+            )
+        )
+
     // 退村
     fun leaveParticipant(participantId: Int): Village {
         val participant = findMemberById(participantId) ?: return this
@@ -457,6 +464,11 @@ data class Village(
 
     // 最新の日を24時間にする
     fun extendLatestDay(): Village = this.copy(day = this.day.extendLatestDay())
+
+    fun extendPrologue(): Village = this.copy(
+        setting = setting.extendPrologue(),
+        day = day.extendPrologue()
+    )
 
     // ===================================================================================
     //                                                                        Assist Logic
@@ -527,6 +539,25 @@ data class Village(
                 day = VillageDays(
                     dayList = listOf()
                 ),
+                winCamp = null
+            )
+        }
+
+        fun createForUpdate(
+            village: Village,
+            resource: VillageCreateResource
+        ): Village {
+            return Village(
+                id = village.id,
+                name = resource.villageName,
+                creatorPlayerId = village.creatorPlayerId,
+                status = village.status,
+                setting = VillageSettings.createForRegister(
+                    resource.setting
+                ),
+                participant = village.participant,
+                spectator = village.spectator,
+                day = village.day,
                 winCamp = null
             )
         }

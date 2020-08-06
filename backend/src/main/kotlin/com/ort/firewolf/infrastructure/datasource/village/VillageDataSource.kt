@@ -244,6 +244,7 @@ class VillageDataSource(
     ) {
         if (before.status.code != after.status.code
             || before.winCamp?.code != after.winCamp?.code
+            || before.name != after.name
         ) {
             updateVillage(after)
         }
@@ -328,6 +329,8 @@ class VillageDataSource(
                 afterTime.startDatetime.format(VillageDataConverter.DATETIME_FORMATTER)
             )
             updateVillageSetting(villageId, CDef.VillageSettingItem.更新間隔秒, afterTime.dayChangeIntervalSeconds.toString())
+            updateVillageSetting(villageId, CDef.VillageSettingItem.沈黙時間, afterTime.silentHours?.toString() ?: "")
+
         })
         after.setting.organizations.let(fun(afterOrg) {
             if (!before.setting.organizations.existsDifference(afterOrg)) return
@@ -363,8 +366,8 @@ class VillageDataSource(
             afterRestricts.restrictList.any { afterRestrict -> beforeRestrict.type.code == afterRestrict.type.code }
         }.forEach { deleteMessageRestriction(villageId, it) }
         // 両方にあるものは更新
-        beforeRestricts.restrictList.filter { beforeRestrict ->
-            afterRestricts.restrictList.any { afterRestrict -> beforeRestrict.type.code == afterRestrict.type.code }
+        afterRestricts.restrictList.filter { afterRestrict ->
+            beforeRestricts.restrictList.any { beforeRestrict -> beforeRestrict.type.code == afterRestrict.type.code }
         }.forEach { updateMessageRestriction(villageId, it) }
         // 変更後にしかないものは登録
         afterRestricts.restrictList.filterNot { afterRestrict ->

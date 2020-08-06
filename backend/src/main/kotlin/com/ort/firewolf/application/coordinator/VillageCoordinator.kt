@@ -19,6 +19,7 @@ import com.ort.firewolf.domain.model.player.Player
 import com.ort.firewolf.domain.model.player.Players
 import com.ort.firewolf.domain.model.skill.SkillRequest
 import com.ort.firewolf.domain.model.village.Village
+import com.ort.firewolf.domain.model.village.VillageCreateResource
 import com.ort.firewolf.domain.model.village.ability.VillageAbilities
 import com.ort.firewolf.domain.model.village.ability.VillageAbility
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
@@ -30,6 +31,7 @@ import com.ort.firewolf.domain.service.creator.CreatorDomainService
 import com.ort.firewolf.domain.service.participate.ParticipateDomainService
 import com.ort.firewolf.domain.service.say.SayDomainService
 import com.ort.firewolf.domain.service.skill.SkillRequestDomainService
+import com.ort.firewolf.domain.service.village.VillageSettingDomainService
 import com.ort.firewolf.domain.service.vote.VoteDomainService
 import com.ort.firewolf.fw.exception.FirewolfBusinessException
 import com.ort.firewolf.fw.security.FirewolfUser
@@ -55,7 +57,8 @@ class VillageCoordinator(
     private val sayDomainService: SayDomainService,
     private val abilityDomainService: AbilityDomainService,
     private val voteDomainService: VoteDomainService,
-    private val creatorDomainService: CreatorDomainService
+    private val creatorDomainService: CreatorDomainService,
+    private val villageSettingDomainService: VillageSettingDomainService
 ) {
 
     /**
@@ -98,16 +101,39 @@ class VillageCoordinator(
         return village.id
     }
 
-    private fun registerVillage(paramVillage: Village): Village {
-        // 村を登録
-        val village: Village = villageService.registerVillage(paramVillage)
-        // 村作成時のシステムメッセージを登録
-        messageService.registerInitialMessage(village)
-        // ダミーキャラを参加させる
-        val chara: Chara = charachipService.findChara(village.setting.charachip.dummyCharaId)
-        participateDummyChara(village.id, village, chara)
+    /**
+     * 村設定変更確認
+     *
+     * @param village village
+     * @param player player
+     * @param resource resource
+     */
+    fun assertModifySetting(village: Village, player: Player, resource: VillageCreateResource) {
+        if (!creatorDomainService.convertToSituation(village, player).isAvailableModifySetting) {
+            throw FirewolfBusinessException("設定を変更できません")
+        }
+        villageSettingDomainService.assertModify(village, resource)
+    }
 
-        return village
+    /**
+     * 村設定変更
+     *
+     * @param village village
+     * @param player player
+     * @param resource resource
+     */
+    @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
+    fun modifySetting(village: Village, player: Player, resource: VillageCreateResource) {
+        assertModifySetting(village, player, resource)
+        // 変更なしの場合もある
+        villageSettingDomainService.createModifyMessage(village, resource)?.let { message ->
+            messageService.registerMessage(village.id, message)
+            var changedVillage = Village.createForUpdate(village, resource)
+            if (!resource.setting.rule.isAvailableSkillRequest) {
+                changedVillage = changedVillage.changeAllSkillRequestLeftover()
+            }
+            villageService.updateVillageDifference(village, changedVillage)
+        }
     }
 
     /**
@@ -287,7 +313,7 @@ class VillageCoordinator(
         val village: Village = villageService.findVillage(villageId)
         val participant: VillageParticipant = findParticipant(village, user)!!
         val message: Message = Message.createSayMessage(participant, village.day.latestDay().id, messageContent)
-        messageService.registerSayMessage(villageId, message)
+        messageService.registerMessage(villageId, message)
     }
 
     @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
@@ -297,7 +323,7 @@ class VillageCoordinator(
         sayDomainService.assertCreatorSay(village, messageContent)
         // 発言
         val message: Message = Message.createCreatorSayMessage(messageText, village.day.latestDay().id)
-        messageService.registerSayMessage(village.id, message)
+        messageService.registerMessage(village.id, message)
     }
 
     /**
@@ -404,6 +430,18 @@ class VillageCoordinator(
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
+    private fun registerVillage(paramVillage: Village): Village {
+        // 村を登録
+        val village: Village = villageService.registerVillage(paramVillage)
+        // 村作成時のシステムメッセージを登録
+        messageService.registerInitialMessage(village)
+        // ダミーキャラを参加させる
+        val chara: Chara = charachipService.findChara(village.setting.charachip.dummyCharaId)
+        participateDummyChara(village.id, village, chara)
+
+        return village
+    }
+
     private fun participateDummyChara(villageId: Int, village: Village, dummyChara: Chara) {
         val dummyPlayerId = 1 // 固定
         val message: String = dummyChara.defaultMessage.joinMessage ?: "人狼なんているわけないじゃん。みんな大げさだなあ"

@@ -12,10 +12,9 @@ class DayChangeDomainService(
     private val progressDomainService: ProgressDomainService,
     private val epilogueDomainService: EpilogueDomainService
 ) {
-
-    fun leaveParticipantIfNeeded(dayChange: DayChange, todayMessages: Messages, charas: Charas): DayChange {
+    fun extendVillageIfNeeded(dayChange: DayChange): DayChange {
         return if (!dayChange.village.status.isPrologue()) dayChange
-        else prologueDomainService.leaveParticipantIfNeeded(dayChange, todayMessages, charas)
+        else prologueDomainService.extendIfNeeded(dayChange)
     }
 
     // コミットや時間経過で次の日に遷移させる場合は村日付を追加

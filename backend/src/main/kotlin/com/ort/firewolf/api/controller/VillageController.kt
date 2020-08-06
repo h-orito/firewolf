@@ -10,7 +10,6 @@ import com.ort.firewolf.api.body.VillageParticipateBody
 import com.ort.firewolf.api.body.VillageRegisterBody
 import com.ort.firewolf.api.body.VillageRuleCreateBody
 import com.ort.firewolf.api.body.VillageSayBody
-import com.ort.firewolf.api.body.VillageSettingBody
 import com.ort.firewolf.api.body.VillageSettingRegisterBody
 import com.ort.firewolf.api.body.VillageTimeCreateBody
 import com.ort.firewolf.api.body.VillageVoteBody
@@ -54,6 +53,7 @@ import com.ort.firewolf.domain.model.village.VillageSettingCreateResource
 import com.ort.firewolf.domain.model.village.VillageStatus
 import com.ort.firewolf.domain.model.village.VillageTimeCreateResource
 import com.ort.firewolf.domain.model.village.Villages
+import com.ort.firewolf.fw.exception.FirewolfBusinessException
 import com.ort.firewolf.fw.security.FirewolfUser
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.validation.annotation.Validated
@@ -483,6 +483,30 @@ class VillageController(
     }
 
     /**
+     * 村設定変更確認
+     * @param villageId villageId
+     * @param user user
+     * @param body 村設定内容
+     */
+    @PostMapping("/village/{villageId}/setting/confirm")
+    fun settingConfirm(
+        @PathVariable("villageId") villageId: Int,
+        @AuthenticationPrincipal user: FirewolfUser,
+        @RequestBody @Validated villageRegisterBody: VillageRegisterBody
+    ) {
+        val village = villageService.findVillage(villageId)
+        val player = playerService.findPlayer(user)
+
+        if (user.authority != CDef.Authority.管理者 && village.creatorPlayerId != player.id)
+            throw FirewolfBusinessException("村建てか管理者しか使えません")
+
+        val createResource = convertToVillageCreateResource(villageRegisterBody, player).copy(
+            createPlayerId = village.creatorPlayerId // 管理者に上書きされるのを防ぐ
+        )
+        villageCoordinator.assertModifySetting(village, player, createResource)
+    }
+
+    /**
      * 村設定変更
      * @param villageId villageId
      * @param user user
@@ -492,9 +516,16 @@ class VillageController(
     fun setting(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: FirewolfUser,
-        @RequestBody @Validated body: VillageSettingBody
+        @RequestBody @Validated villageRegisterBody: VillageRegisterBody
     ) {
-        // TODO 実装
+        val village = villageService.findVillage(villageId)
+        val player = playerService.findPlayer(user)
+
+        if (user.authority != CDef.Authority.管理者 && village.creatorPlayerId != player.id)
+            throw FirewolfBusinessException("村建てか管理者しか使えません")
+
+        val createResource = convertToVillageCreateResource(villageRegisterBody, player)
+        villageCoordinator.modifySetting(village, player, createResource)
     }
 
     // ===================================================================================

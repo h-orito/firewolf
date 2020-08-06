@@ -67,34 +67,6 @@ class DayChangeCoordinatorTest : FirewolfTest() {
     }
 
     @Test
-    fun test_dayChangeIfNeeded_プロローグ_退村者あり() {
-        // ## Arrange ##
-        var village = registerVillage()
-        val charas = charachipService.findCharas(village.setting.charachip.charachipId)
-        (2..4).forEach {
-            villageCoordinator.participate(village.id, it, charas.list[it].id, message = "hoge", isSpectate = false)
-        }
-        village = villageService.findVillage(village.id)
-        messageBhv.selectList {
-            it.query().setVillageId_Equal(village.id)
-            it.query().setVillagePlayerId_InScope(village.participant.memberList.map { member -> member.id })
-        }.forEach {
-            it.messageDatetime = LocalDateTime.now().minusHours(25L)
-            messageBhv.update(it)
-        }
-
-        // ## Act ##
-        dayChangeCoordinator.dayChangeIfNeeded(village)
-
-        // ## Assert ##
-        village = villageService.findVillage(village.id)
-        assertThat(village.status.toCdef()).isEqualTo(CDef.VillageStatus.プロローグ)
-        assertThat(village.participant.count).isEqualTo(1)
-        val allVillage = villageService.findVillage(village.id, false)
-        assertThat(allVillage.participant.memberList.count { it.isGone }).isEqualTo(3)
-    }
-
-    @Test
     fun test_dayChangeIfNeeded_プロローグ_進行中へ() {
         // ## Arrange ##
         var village = registerVillage()

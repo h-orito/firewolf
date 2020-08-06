@@ -14,7 +14,6 @@ import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.message.Message
 import com.ort.firewolf.domain.model.message.MessageContent
 import com.ort.firewolf.domain.model.message.MessageTime
-import com.ort.firewolf.domain.model.message.Messages
 import com.ort.firewolf.domain.model.player.Players
 import com.ort.firewolf.fw.exception.FirewolfBusinessException
 import com.ort.firewolf.fw.security.FirewolfUser
@@ -72,7 +71,7 @@ class CreatorController(
         val changedVillage = village.changeStatus(CDef.VillageStatus.廃村)
         villageService.updateVillageDifference(village, changedVillage)
         val message = village.createCreatorCancelVillageMessage()
-        messageService.updateDifference(villageId, Messages(listOf()), Messages(listOf(message)))
+        messageService.registerMessage(villageId, message)
     }
 
     @PostMapping("/creator/village/{villageId}/say-confirm")

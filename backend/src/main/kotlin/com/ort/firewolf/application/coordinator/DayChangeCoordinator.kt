@@ -56,12 +56,11 @@ class DayChangeCoordinator(
             )
         ), votes, abilities, players)
 
-        // プロローグで長時間発言していない人を退村させる
-        var dayChange = dayChangeDomainService.leaveParticipantIfNeeded(
-            dayChange = beforeDayChange,
-            todayMessages = todayMessages,
-            charas = charas
-        ).let { updateIfNeeded(beforeDayChange, it) }
+        // プロローグ延長処理
+        var dayChange = updateIfNeeded(
+            beforeDayChange,
+            dayChangeDomainService.extendVillageIfNeeded(beforeDayChange)
+        )
 
         // 必要あれば日付追加
         dayChange = dayChangeDomainService.addDayIfNeeded(dayChange, commits).let {

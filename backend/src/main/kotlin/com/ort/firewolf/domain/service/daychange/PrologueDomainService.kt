@@ -3,10 +3,8 @@ package com.ort.firewolf.domain.service.daychange
 import com.ort.dbflute.allcommon.CDef
 import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.daychange.DayChange
-import com.ort.firewolf.domain.model.message.Messages
 import com.ort.firewolf.domain.model.village.Village
 import com.ort.firewolf.domain.service.ability.AbilityDomainService
-import com.ort.firewolf.domain.service.participate.ParticipateDomainService
 import com.ort.firewolf.domain.service.skill.SkillAssignDomainService
 import com.ort.firewolf.fw.FirewolfDateUtil
 import org.springframework.stereotype.Service
@@ -14,31 +12,15 @@ import org.springframework.stereotype.Service
 @Service
 class PrologueDomainService(
     private val abilityDomainService: AbilityDomainService,
-    private val skillAssignDomainService: SkillAssignDomainService,
-    private val participateDomainService: ParticipateDomainService
+    private val skillAssignDomainService: SkillAssignDomainService
 ) {
-
-    fun leaveParticipantIfNeeded(
-        dayChange: DayChange,
-        todayMessages: Messages,
-        charas: Charas
-    ): DayChange {
-        // 24時間以内の発言
-        val recentMessageList =
-            todayMessages.list.filter { it.time.datetime.isAfter(FirewolfDateUtil.currentLocalDateTime().minusDays(1L)) }
-        // 24時間以内に発言していなかったら退村
-        var village = dayChange.village.copy()
-        var messages = dayChange.messages.copy()
-        dayChange.village.notDummyParticipant().memberList.forEach { member ->
-            if (recentMessageList.none { message -> message.fromVillageParticipantId!! == member.id }) {
-                village = village.leaveParticipant(member.id)
-                messages = messages.add(participateDomainService.createLeaveMessage(village, charas.chara(member.charaId)))
-            }
-        }
-        return dayChange.copy(
-            village = village,
-            messages = messages
-        ).setIsChange(dayChange)
+    fun extendIfNeeded(dayChange: DayChange): DayChange {
+        // 開始時刻になっていない場合は何もしない
+        if (!shouldForward(dayChange.village)) return dayChange
+        // 参加人数が足りている場合は何もしない
+        if (!isNotEnoughMemberCount(dayChange.village)) return dayChange
+        // 延長
+        return extendPrologue(dayChange).setIsChange(dayChange)
     }
 
     fun addDayIfNeeded(
@@ -46,8 +28,6 @@ class PrologueDomainService(
     ): DayChange {
         // 開始時刻になっていない場合は何もしない
         if (!shouldForward(dayChange.village)) return dayChange
-        // 開始時刻になっているが参加者数が不足している場合は廃村にする
-        if (isNotEnoughMemberCount(dayChange.village)) return cancelVillage(dayChange).setIsChange(dayChange)
         // 新しい日付追加
         return dayChange.copy(village = dayChange.village.addNewDay()).setIsChange(dayChange)
     }
@@ -83,11 +63,10 @@ class PrologueDomainService(
     private fun shouldForward(village: Village): Boolean =
         !FirewolfDateUtil.currentLocalDateTime().isBefore(village.day.latestDay().dayChangeDatetime)
 
-    // 参加者数が不足している場合に廃村にする
-    private fun cancelVillage(dayChange: DayChange): DayChange {
+    private fun extendPrologue(dayChange: DayChange): DayChange {
         return dayChange.copy(
-            village = dayChange.village.changeStatus(CDef.VillageStatus.廃村),
-            messages = dayChange.messages.add(dayChange.village.createCancelVillageMessage())
+            village = dayChange.village.extendPrologue(),
+            messages = dayChange.messages.add(dayChange.village.createExtendPrologueMessage())
         )
     }
 

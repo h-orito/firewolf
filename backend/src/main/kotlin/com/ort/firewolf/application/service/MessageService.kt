@@ -67,7 +67,6 @@ class MessageService(
         return messageDataSource.findMessage(villageId, messageType, messageNumber)
     }
 
-
     /**
      * 参加者のその日の発言を取得
      *
@@ -91,13 +90,13 @@ class MessageService(
      * @param villageId villageId
      * @param message 発言内容
      */
-    fun registerSayMessage(villageId: Int, message: Message) = messageDataSource.registerMessage(villageId, message)
+    fun registerMessage(villageId: Int, message: Message) = messageDataSource.registerMessage(villageId, message)
 
     /**
      * 村作成時のシステムメッセージ登録
      * @param village village
      */
-    fun registerInitialMessage(village: Village) = messageDataSource.registerMessage(village.id, village.createVillagePrologueMessage())
+    fun registerInitialMessage(village: Village) = registerMessage(village.id, village.createVillagePrologueMessage())
 
     /**
      * 村に参加する際の発言を登録
@@ -125,7 +124,7 @@ class MessageService(
             message,
             CDef.FaceType.通常.code()
         )
-        messageDataSource.registerMessage(
+        registerMessage(
             village.id,
             Message.createSayMessage(participant, village.day.prologueDay().id, messageContent)
         )
@@ -137,7 +136,7 @@ class MessageService(
      * @param chara chara
      */
     fun registerLeaveMessage(village: Village, chara: Chara) =
-        messageDataSource.registerMessage(
+        registerMessage(
             village.id,
             participateDomainService.createLeaveMessage(village, chara)
         )
@@ -160,7 +159,7 @@ class MessageService(
         val myChara: Chara = charas.chara(participant.charaId)
         val targetChara: Chara? = if (targetId == null) null else charas.chara(village.participant, targetId)
         val message: Message = abilityDomainService.createAbilitySetMessage(village, myChara, targetChara, abilityType)
-        messageDataSource.registerMessage(village.id, message)
+        registerMessage(village.id, message)
     }
 
     /**
@@ -171,7 +170,7 @@ class MessageService(
      * @param doCommit コミット/取り消し
      */
     fun registerCommitMessage(village: Village, chara: Chara, doCommit: Boolean) {
-        messageDataSource.registerMessage(
+        registerMessage(
             village.id,
             commitDomainService.createCommitMessage(chara, doCommit, village.day.latestDay().id)
         )
