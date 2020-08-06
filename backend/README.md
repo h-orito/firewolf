@@ -1,7 +1,5 @@
 # FIREWOLF
 
-[![CircleCI](https://circleci.com/gh/h-orito/howling-wolf-api/tree/develop.svg?style=svg)](https://circleci.com/gh/h-orito/firewolf-api/tree/develop)
-
 ## Overview
 
 - 人狼ゲームがプレイできるサイトです
