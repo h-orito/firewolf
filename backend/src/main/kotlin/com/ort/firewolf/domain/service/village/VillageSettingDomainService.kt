@@ -127,7 +127,7 @@ class VillageSettingDomainService {
     }
 
     private fun assertRule(village: Village, rule: VillageRuleCreateResource) {
-        if (village.spectator.count > 0 && rule.isAvailableSpectate) {
+        if (village.spectator.count > 0 && !rule.isAvailableSpectate) {
             throw FirewolfBusinessException("すでに見物人がいるため見物人はOFFにできません")
         }
     }
