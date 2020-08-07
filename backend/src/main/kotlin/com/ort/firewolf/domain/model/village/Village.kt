@@ -557,7 +557,12 @@ data class Village(
                 ),
                 participant = village.participant,
                 spectator = village.spectator,
-                day = village.day,
+                day = village.day.copy(
+                    dayList = village.day.dayList.map {
+                        if (it.day == 0) it.copy(dayChangeDatetime = resource.setting.time.startDatetime)
+                        else it
+                    }
+                ),
                 winCamp = null
             )
         }
