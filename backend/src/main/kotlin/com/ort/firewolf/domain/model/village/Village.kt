@@ -282,7 +282,7 @@ data class Village(
         return true
     }
 
-    fun isAvailableComingOut(): Boolean = status.isProgress()
+    fun isAvailableComingOut(): Boolean = !isSilentTime() && status.isProgress()
 
     /** 村の状況として発言できるか */
     fun isAvailableSay(): Boolean = !status.toCdef().isFinishedVillage // 終了していたら不可
