@@ -4,6 +4,7 @@ import com.ort.dbflute.allcommon.CDef
 import com.ort.firewolf.api.body.VillageAbilityBody
 import com.ort.firewolf.api.body.VillageChangeSkillBody
 import com.ort.firewolf.api.body.VillageCharachipCreateBody
+import com.ort.firewolf.api.body.VillageComingOutBody
 import com.ort.firewolf.api.body.VillageCommitBody
 import com.ort.firewolf.api.body.VillageOrganizationCreateBody
 import com.ort.firewolf.api.body.VillageParticipateBody
@@ -43,6 +44,8 @@ import com.ort.firewolf.domain.model.message.MessageType
 import com.ort.firewolf.domain.model.message.Messages
 import com.ort.firewolf.domain.model.player.Player
 import com.ort.firewolf.domain.model.player.Players
+import com.ort.firewolf.domain.model.skill.Skill
+import com.ort.firewolf.domain.model.skill.Skills
 import com.ort.firewolf.domain.model.village.Village
 import com.ort.firewolf.domain.model.village.VillageCharachipCreateResource
 import com.ort.firewolf.domain.model.village.VillageCreateResource
@@ -53,6 +56,7 @@ import com.ort.firewolf.domain.model.village.VillageSettingCreateResource
 import com.ort.firewolf.domain.model.village.VillageStatus
 import com.ort.firewolf.domain.model.village.VillageTimeCreateResource
 import com.ort.firewolf.domain.model.village.Villages
+import com.ort.firewolf.domain.model.village.participant.coming_out.ComingOuts
 import com.ort.firewolf.fw.exception.FirewolfBusinessException
 import com.ort.firewolf.fw.security.FirewolfUser
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -306,7 +310,8 @@ class VillageController(
                 isSpectator = body.spectator ?: false,
                 skill = null,
                 skillRequest = null,
-                isWin = null
+                isWin = null,
+                commingOuts = ComingOuts()
             ),
             to = null,
             time = MessageTimeView(
@@ -480,6 +485,27 @@ class VillageController(
         @RequestBody @Validated body: VillageCommitBody
     ) {
         villageCoordinator.setCommit(villageId, user, body.commit!!)
+    }
+
+    /**
+     * カミングアウトセット
+     * @param villageId villageId
+     * @param user user
+     * @param body co内容
+     */
+    @PostMapping("/village/{villageId}/comingout")
+    fun comingout(
+        @PathVariable("villageId") villageId: Int,
+        @AuthenticationPrincipal user: FirewolfUser,
+        @RequestBody @Validated body: VillageComingOutBody
+    ) {
+        val skills = if (body.skillCode.isNullOrEmpty()) Skills(listOf())
+        else Skills(body.skillCode.map { Skill(CDef.Skill.codeOf(it)) })
+        villageCoordinator.setComingOut(
+            villageId,
+            user,
+            skills
+        )
     }
 
     /**

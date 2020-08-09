@@ -3,6 +3,7 @@ package com.ort.firewolf.application.coordinator
 import com.ort.dbflute.allcommon.CDef
 import com.ort.firewolf.application.service.AbilityService
 import com.ort.firewolf.application.service.CharachipService
+import com.ort.firewolf.application.service.ComingOutService
 import com.ort.firewolf.application.service.CommitService
 import com.ort.firewolf.application.service.MessageService
 import com.ort.firewolf.application.service.PlayerService
@@ -18,6 +19,7 @@ import com.ort.firewolf.domain.model.myself.participant.SituationAsParticipant
 import com.ort.firewolf.domain.model.player.Player
 import com.ort.firewolf.domain.model.player.Players
 import com.ort.firewolf.domain.model.skill.SkillRequest
+import com.ort.firewolf.domain.model.skill.Skills
 import com.ort.firewolf.domain.model.village.Village
 import com.ort.firewolf.domain.model.village.VillageCreateResource
 import com.ort.firewolf.domain.model.village.ability.VillageAbilities
@@ -26,6 +28,7 @@ import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 import com.ort.firewolf.domain.model.village.vote.VillageVote
 import com.ort.firewolf.domain.model.village.vote.VillageVotes
 import com.ort.firewolf.domain.service.ability.AbilityDomainService
+import com.ort.firewolf.domain.service.coming_out.ComingOutDomainService
 import com.ort.firewolf.domain.service.commit.CommitDomainService
 import com.ort.firewolf.domain.service.creator.CreatorDomainService
 import com.ort.firewolf.domain.service.participate.ParticipateDomainService
@@ -50,6 +53,7 @@ class VillageCoordinator(
     private val abilityService: AbilityService,
     private val voteService: VoteService,
     private val commitService: CommitService,
+    private val comingOutService: ComingOutService,
     // domain service
     private val participateDomainService: ParticipateDomainService,
     private val skillRequestDomainService: SkillRequestDomainService,
@@ -58,7 +62,8 @@ class VillageCoordinator(
     private val abilityDomainService: AbilityDomainService,
     private val voteDomainService: VoteDomainService,
     private val creatorDomainService: CreatorDomainService,
-    private val villageSettingDomainService: VillageSettingDomainService
+    private val villageSettingDomainService: VillageSettingDomainService,
+    private val comingOutDomainService: ComingOutDomainService
 ) {
 
     /**
@@ -393,6 +398,30 @@ class VillageCoordinator(
     }
 
     /**
+     * カミングアウトセット
+     *
+     * @param villageId villageId
+     * @param user user
+     * @param skills
+     */
+    @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
+    fun setComingOut(villageId: Int, user: FirewolfUser, skills: Skills) {
+        // カミングアウトできない状況ならエラー
+        val village: Village = villageService.findVillage(villageId)
+        val participant: VillageParticipant? = findParticipant(village, user)
+        comingOutDomainService.assertComingOut(village, participant)
+        // カミングアウト
+        if (skills.list.isEmpty()) {
+            comingOutService.deleteComingOut(participant!!.id)
+        } else comingOutService.registerComingOut(
+            participant!!.id,
+            skills.list
+        )
+        val chara: Chara = charachipService.findChara(participant.charaId)
+        messageService.registerComingOutMessage(village, chara, skills)
+    }
+
+    /**
      * 参加状況や可能なアクションを取得
      * @param village village
      * @param user user
@@ -420,6 +449,7 @@ class VillageCoordinator(
             ),
             skillRequest = skillRequestDomainService.convertToSituation(village, participant, skillRequest),
             commit = commitDomainService.convertToSituation(village, participant, commit),
+            comingOut = comingOutDomainService.convertToSituation(village, participant),
             say = sayDomainService.convertToSituation(village, participant, charas, latestDayMessageList),
             ability = abilityDomainService.convertToSituationList(village, participant, abilities),
             vote = voteDomainService.convertToSituation(village, participant, votes),

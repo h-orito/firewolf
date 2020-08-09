@@ -30,6 +30,7 @@ import com.ort.firewolf.domain.model.village.VillageTimeCreateResource
 import com.ort.firewolf.domain.model.village.ability.VillageAbilities
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 import com.ort.firewolf.domain.model.village.participant.VillageParticipants
+import com.ort.firewolf.domain.model.village.participant.coming_out.ComingOuts
 import com.ort.firewolf.domain.model.village.setting.PersonCapacity
 import com.ort.firewolf.domain.model.village.setting.VillageCharachip
 import com.ort.firewolf.domain.model.village.setting.VillageOrganizations
@@ -133,7 +134,8 @@ object DummyDomainModelCreator {
         isGone = false,
         skill = null,
         skillRequest = createDummySkillRequest(),
-        isWin = null
+        isWin = null,
+        commigOuts = ComingOuts()
     )
 
     fun createDummySkillRequest(): SkillRequest = SkillRequest(

@@ -25,6 +25,7 @@ import com.ort.firewolf.domain.model.village.VillageStatus
 import com.ort.firewolf.domain.model.village.VillageTimeCreateResource
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 import com.ort.firewolf.domain.model.village.participant.VillageParticipants
+import com.ort.firewolf.domain.model.village.participant.coming_out.ComingOuts
 import com.ort.firewolf.domain.model.village.setting.PersonCapacity
 import com.ort.firewolf.domain.model.village.setting.VillageCharachip
 import com.ort.firewolf.domain.model.village.setting.VillageMessageRestrict
@@ -415,7 +416,8 @@ class VillageDataSourceTest : FirewolfTest() {
             isGone = false,
             skill = null,
             skillRequest = SkillRequest(Skill(CDef.Skill.おまかせ), Skill(CDef.Skill.おまかせ)),
-            isWin = null
+            isWin = null,
+            commigOuts = ComingOuts()
         )
     }
 

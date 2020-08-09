@@ -35,13 +35,13 @@ import com.ort.dbflute.exentity.*;
  *     CAMP
  *
  * [referrer table]
- *     VILLAGE_PLAYER
+ *     COMING_OUT, VILLAGE_PLAYER
  *
  * [foreign property]
  *     camp
  *
  * [referrer property]
- *     villagePlayerByRequestSkillCodeList, villagePlayerBySecondRequestSkillCodeList, villagePlayerBySkillCodeList
+ *     comingOutList, villagePlayerByRequestSkillCodeList, villagePlayerBySecondRequestSkillCodeList, villagePlayerBySkillCodeList
  *
  * [get/set template]
  * /= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -625,6 +625,26 @@ public abstract class BsSkill extends AbstractEntity implements DomainEntity {
     // ===================================================================================
     //                                                                   Referrer Property
     //                                                                   =================
+    /** COMING_OUT by SKILL_CODE, named 'comingOutList'. */
+    protected List<ComingOut> _comingOutList;
+
+    /**
+     * [get] COMING_OUT by SKILL_CODE, named 'comingOutList'.
+     * @return The entity list of referrer property 'comingOutList'. (NotNull: even if no loading, returns empty list)
+     */
+    public List<ComingOut> getComingOutList() {
+        if (_comingOutList == null) { _comingOutList = newReferrerList(); }
+        return _comingOutList;
+    }
+
+    /**
+     * [set] COMING_OUT by SKILL_CODE, named 'comingOutList'.
+     * @param comingOutList The entity list of referrer property 'comingOutList'. (NullAllowed)
+     */
+    public void setComingOutList(List<ComingOut> comingOutList) {
+        _comingOutList = comingOutList;
+    }
+
     /** VILLAGE_PLAYER by REQUEST_SKILL_CODE, named 'villagePlayerByRequestSkillCodeList'. */
     protected List<VillagePlayer> _villagePlayerByRequestSkillCodeList;
 
@@ -716,6 +736,8 @@ public abstract class BsSkill extends AbstractEntity implements DomainEntity {
         StringBuilder sb = new StringBuilder();
         if (_camp != null && _camp.isPresent())
         { sb.append(li).append(xbRDS(_camp, "camp")); }
+        if (_comingOutList != null) { for (ComingOut et : _comingOutList)
+        { if (et != null) { sb.append(li).append(xbRDS(et, "comingOutList")); } } }
         if (_villagePlayerByRequestSkillCodeList != null) { for (VillagePlayer et : _villagePlayerByRequestSkillCodeList)
         { if (et != null) { sb.append(li).append(xbRDS(et, "villagePlayerByRequestSkillCodeList")); } } }
         if (_villagePlayerBySecondRequestSkillCodeList != null) { for (VillagePlayer et : _villagePlayerBySecondRequestSkillCodeList)
@@ -749,6 +771,8 @@ public abstract class BsSkill extends AbstractEntity implements DomainEntity {
         StringBuilder sb = new StringBuilder();
         if (_camp != null && _camp.isPresent())
         { sb.append(dm).append("camp"); }
+        if (_comingOutList != null && !_comingOutList.isEmpty())
+        { sb.append(dm).append("comingOutList"); }
         if (_villagePlayerByRequestSkillCodeList != null && !_villagePlayerByRequestSkillCodeList.isEmpty())
         { sb.append(dm).append("villagePlayerByRequestSkillCodeList"); }
         if (_villagePlayerBySecondRequestSkillCodeList != null && !_villagePlayerBySecondRequestSkillCodeList.isEmpty())

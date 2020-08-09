@@ -65,5 +65,5 @@ class CommitDomainService {
     //                                                                        Assist Logic
     //                                                                        ============
     private fun getCommitSetMessage(doCommit: Boolean, chara: Chara): String =
-        if (doCommit) "${chara.charaName.fullName()}がコミットしました。" else "${chara.charaName.fullName()}がコミットを取り消しました。"
+        if (doCommit) "${chara.charaName.fullName()}が時短希望しました。" else "${chara.charaName.fullName()}が時短希望を取り消しました。"
 }

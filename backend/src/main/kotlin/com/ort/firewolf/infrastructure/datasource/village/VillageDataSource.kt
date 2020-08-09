@@ -199,6 +199,7 @@ class VillageDataSource(
                 }
             }.withNestedReferrer {
                 it.pulloutChara().loadCharaImage { }
+                it.loadComingOut { }
             }
             loader.loadVillageSetting { }
             loader.loadVillageDay {
