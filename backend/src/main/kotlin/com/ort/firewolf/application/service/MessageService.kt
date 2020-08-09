@@ -8,9 +8,11 @@ import com.ort.firewolf.domain.model.message.Message
 import com.ort.firewolf.domain.model.message.MessageContent
 import com.ort.firewolf.domain.model.message.MessageQuery
 import com.ort.firewolf.domain.model.message.Messages
+import com.ort.firewolf.domain.model.skill.Skills
 import com.ort.firewolf.domain.model.village.Village
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 import com.ort.firewolf.domain.service.ability.AbilityDomainService
+import com.ort.firewolf.domain.service.coming_out.ComingOutDomainService
 import com.ort.firewolf.domain.service.commit.CommitDomainService
 import com.ort.firewolf.domain.service.participate.ParticipateDomainService
 import com.ort.firewolf.infrastructure.datasource.message.MessageDataSource
@@ -21,7 +23,8 @@ class MessageService(
     private val messageDataSource: MessageDataSource,
     private val abilityDomainService: AbilityDomainService,
     private val participateDomainService: ParticipateDomainService,
-    private val commitDomainService: CommitDomainService
+    private val commitDomainService: CommitDomainService,
+    private val comingOutDomainService: ComingOutDomainService
 ) {
     /**
      * 発言取得
@@ -173,6 +176,13 @@ class MessageService(
         registerMessage(
             village.id,
             commitDomainService.createCommitMessage(chara, doCommit, village.day.latestDay().id)
+        )
+    }
+
+    fun registerComingOutMessage(village: Village, chara: Chara, skills: Skills) {
+        registerMessage(
+            village.id,
+            comingOutDomainService.createComingOutMessage(chara, skills, village.day.latestDay().id)
         )
     }
 

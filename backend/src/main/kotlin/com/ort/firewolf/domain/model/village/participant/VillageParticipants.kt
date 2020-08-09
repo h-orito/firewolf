@@ -5,6 +5,7 @@ import com.ort.firewolf.domain.model.camp.Camp
 import com.ort.firewolf.domain.model.skill.Skill
 import com.ort.firewolf.domain.model.skill.SkillRequest
 import com.ort.firewolf.domain.model.village.VillageDay
+import com.ort.firewolf.domain.model.village.participant.coming_out.ComingOuts
 
 data class VillageParticipants(
     val count: Int, // 退村した人は含まない
@@ -31,7 +32,8 @@ data class VillageParticipants(
                 isGone = false,
                 skill = null,
                 skillRequest = skillRequest,
-                isWin = null
+                isWin = null,
+                commigOuts = ComingOuts()
             )
         )
     }

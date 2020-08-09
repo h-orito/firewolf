@@ -8,6 +8,7 @@ import com.ort.firewolf.domain.model.player.Players
 import com.ort.firewolf.domain.model.skill.Skill
 import com.ort.firewolf.domain.model.skill.SkillRequest
 import com.ort.firewolf.domain.model.village.Village
+import com.ort.firewolf.domain.model.village.participant.coming_out.ComingOuts
 
 data class VillageParticipantView(
     val id: Int,
@@ -17,7 +18,8 @@ data class VillageParticipantView(
     val isSpectator: Boolean,
     val skill: Skill?,
     val skillRequest: SkillRequest?,
-    val isWin: Boolean?
+    val isWin: Boolean?,
+    val commingOuts: ComingOuts
 ) {
     constructor(
         village: Village,
@@ -34,6 +36,7 @@ data class VillageParticipantView(
         isSpectator = village.memberById(villageParticipantId).isSpectator,
         skill = if (shouldHidePlayer) null else village.memberById(villageParticipantId).skill,
         skillRequest = if (shouldHidePlayer) null else village.memberById(villageParticipantId).skillRequest,
-        isWin = village.memberById(villageParticipantId).isWin
+        isWin = village.memberById(villageParticipantId).isWin,
+        commingOuts = village.memberById(villageParticipantId).commigOuts
     )
 }
