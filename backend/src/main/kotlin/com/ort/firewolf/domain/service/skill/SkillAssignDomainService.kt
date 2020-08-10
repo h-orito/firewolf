@@ -58,7 +58,10 @@ class SkillAssignDomainService {
         // ありの場合は2日目に襲撃死できる役職を割り当て
         val availableSkillList = mutableListOf<CDef.Skill>()
         for ((cdefSkill, capacity) in skillPersonCountMap.entries) {
-            if (cdefSkill.isNoDeadByAttack || cdefSkill.isNotSelectableAttack) continue
+            if (cdefSkill.isNoDeadByAttack ||
+                cdefSkill.isNotSelectableAttack ||
+                cdefSkill.isForceDoubleSuicide
+            ) continue
             repeat(capacity) {
                 availableSkillList.add(cdefSkill)
             }

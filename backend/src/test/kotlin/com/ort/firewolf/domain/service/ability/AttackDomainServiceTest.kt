@@ -638,4 +638,83 @@ class AttackDomainServiceTest : FirewolfTest() {
             }
         assertThat(afterDayChange.messages.list.isNotEmpty()).isTrue()
     }
+
+    @Test
+    fun test_process_襲撃成功_猫又を襲撃() {
+        // ## Arrange ##
+        val aliveWolf = DummyDomainModelCreator.createDummyAliveWolf()
+        val aliveMonsterCat = DummyDomainModelCreator.createDummyAliveVillager().copy(skill = Skill(CDef.Skill.猫又))
+        val deadHunter = DummyDomainModelCreator.createDummyVillageParticipant().copy(
+            dead = DummyDomainModelCreator.createDummyDead(),
+            skill = Skill(CDef.Skill.狩人)
+        )
+        val yesterday = DummyDomainModelCreator.createDummyVillageDay()
+        val latestDay = DummyDomainModelCreator.createDummyVillageDay()
+        val villageAbilities = VillageAbilities(
+            listOf(
+                VillageAbility(
+                    villageDayId = yesterday.id,
+                    myselfId = aliveWolf.id,
+                    targetId = aliveMonsterCat.id,
+                    abilityType = AbilityType(CDef.AbilityType.襲撃)
+                ),
+                VillageAbility(
+                    villageDayId = yesterday.id,
+                    myselfId = deadHunter.id,
+                    targetId = aliveMonsterCat.id,
+                    abilityType = AbilityType(CDef.AbilityType.護衛)
+                )
+            )
+        )
+        val village = DummyDomainModelCreator.createDummyVillage().copy(
+            participant = VillageParticipants(
+                count = 2,
+                memberList = listOf(aliveWolf, aliveMonsterCat, deadHunter)
+            ),
+            day = VillageDays(
+                listOf(
+                    yesterday,
+                    latestDay
+                )
+            )
+        )
+        val dayChange = DayChange(
+            village = village,
+            votes = DummyDomainModelCreator.createDummyVillageVotes(),
+            abilities = villageAbilities,
+            players = DummyDomainModelCreator.createDummyPlayers()
+        )
+        val charas = Charas(
+            listOf(
+                DummyDomainModelCreator.createDummyChara().copy(id = aliveWolf.charaId),
+                DummyDomainModelCreator.createDummyChara().copy(id = aliveMonsterCat.charaId)
+            )
+        )
+
+        // ## Act ##
+        val afterDayChange = attackDomainService.processDayChangeAction(dayChange, charas)
+
+        // ## Assert ##
+        assertThat(afterDayChange.isChange).isTrue()
+        assertThat(afterDayChange.village.participant.memberList.first { it.id == aliveMonsterCat.id }).`as`("襲撃されて死亡")
+            .satisfies { attackedVillager ->
+                assertThat(attackedVillager.isAlive()).`as`("死亡").isFalse()
+                assertThat(attackedVillager.dead?.code).`as`("襲撃死").isEqualTo(CDef.DeadReason.襲撃.code())
+                assertThat(attackedVillager.dead?.villageDay?.id).isEqualTo(latestDay.id)
+            }
+        assertThat(afterDayChange.village.participant.memberList.first { it.id == aliveWolf.id }).`as`("道連れで死亡")
+            .satisfies { aliveWolf ->
+                assertThat(aliveWolf.isAlive()).`as`("死亡").isFalse()
+                assertThat(aliveWolf.dead?.code).isEqualTo(CDef.DeadReason.呪殺.code())
+                assertThat(aliveWolf.dead?.villageDay?.id).isEqualTo(latestDay.id)
+            }
+        assertThat(afterDayChange.messages.list.first()).satisfies { message ->
+            assertThat(message.content.text).contains("襲撃した")
+            assertThat(message.content.type.code).isEqualTo(CDef.MessageType.襲撃結果.code())
+        }
+        assertThat(afterDayChange.messages.list.last()).satisfies { message ->
+            assertThat(message.content.text).contains("道連れにした")
+            assertThat(message.content.type.code).isEqualTo(CDef.MessageType.非公開システムメッセージ.code())
+        }
+    }
 }

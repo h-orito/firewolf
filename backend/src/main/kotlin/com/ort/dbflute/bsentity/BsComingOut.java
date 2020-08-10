@@ -177,11 +177,27 @@ public abstract class BsComingOut extends AbstractEntity implements DomainEntity
     }
 
     /**
+     * Set the value of skillCode as 猫又 (MONSTERCAT). <br>
+     * 猫又
+     */
+    public void setSkillCode_猫又() {
+        setSkillCodeAsSkill(CDef.Skill.猫又);
+    }
+
+    /**
      * Set the value of skillCode as 占い師 (SEER). <br>
      * 占い師
      */
     public void setSkillCode_占い師() {
         setSkillCodeAsSkill(CDef.Skill.占い師);
+    }
+
+    /**
+     * Set the value of skillCode as 聖痕者 (STIGMATA). <br>
+     * 聖痕者
+     */
+    public void setSkillCode_聖痕者() {
+        setSkillCodeAsSkill(CDef.Skill.聖痕者);
     }
 
     /**
@@ -297,6 +313,17 @@ public abstract class BsComingOut extends AbstractEntity implements DomainEntity
     }
 
     /**
+     * Is the value of skillCode 猫又? <br>
+     * 猫又
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isSkillCode猫又() {
+        CDef.Skill cdef = getSkillCodeAsSkill();
+        return cdef != null ? cdef.equals(CDef.Skill.猫又) : false;
+    }
+
+    /**
      * Is the value of skillCode 占い師? <br>
      * 占い師
      * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
@@ -305,6 +332,17 @@ public abstract class BsComingOut extends AbstractEntity implements DomainEntity
     public boolean isSkillCode占い師() {
         CDef.Skill cdef = getSkillCodeAsSkill();
         return cdef != null ? cdef.equals(CDef.Skill.占い師) : false;
+    }
+
+    /**
+     * Is the value of skillCode 聖痕者? <br>
+     * 聖痕者
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isSkillCode聖痕者() {
+        CDef.Skill cdef = getSkillCodeAsSkill();
+        return cdef != null ? cdef.equals(CDef.Skill.聖痕者) : false;
     }
 
     /**
@@ -499,6 +537,16 @@ public abstract class BsComingOut extends AbstractEntity implements DomainEntity
     public boolean isSkillCode_DeadByDivine() {
         CDef.Skill cdef = getSkillCodeAsSkill();
         return cdef != null && cdef.isDeadByDivine();
+    }
+
+    /**
+     * 死亡時道連れにする <br>
+     * The group elements:[猫又]
+     * @return The determination, true or false.
+     */
+    public boolean isSkillCode_ForceDoubleSuicide() {
+        CDef.Skill cdef = getSkillCodeAsSkill();
+        return cdef != null && cdef.isForceDoubleSuicide();
     }
 
     // ===================================================================================

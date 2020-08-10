@@ -7,6 +7,7 @@ import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.daychange.DayChange
 import com.ort.firewolf.domain.model.message.Message
 import com.ort.firewolf.domain.model.village.Village
+import com.ort.firewolf.domain.model.village.VillageDay
 import com.ort.firewolf.domain.model.village.ability.VillageAbilities
 import com.ort.firewolf.domain.model.village.ability.VillageAbility
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
@@ -103,6 +104,19 @@ class AttackDomainService : IAbilityDomainService {
                 // 襲撃成功したら死亡
                 if (isAttackSuccess(dayChange, ability.targetId!!)) {
                     village = village.attackParticipant(ability.targetId, latestDay)
+
+                    // 猫又による道連れ
+                    forceSuicidedParticipant(village.participant.member(ability.targetId), aliveWolf)?.let {
+                        village = village.divineKillParticipant(it.id, village.day.latestDay())
+                        messages = messages.add(
+                            createForceSuicideMessage(
+                                village.participant.member(ability.targetId),
+                                it,
+                                village.day.latestDay(),
+                                charas
+                            )
+                        )
+                    }
                 }
             } ?: return dayChange
 
@@ -152,4 +166,29 @@ class AttackDomainService : IAbilityDomainService {
 
     private fun createAttackMessageString(chara: Chara, targetChara: Chara): String =
         "${chara.charaName.fullName()}達は、${targetChara.charaName.fullName()}を襲撃した。"
+
+    private fun forceSuicidedParticipant(
+        attackedParticipant: VillageParticipant,
+        attacker: VillageParticipant
+    ): VillageParticipant? {
+        // 襲撃されたのが道連れ役職でなければ何もしない
+        if (!attackedParticipant.skill!!.toCdef().isForceDoubleSuicide) return null
+        // 襲撃者を道連れにする
+        return attacker
+    }
+
+    private fun createForceSuicideMessage(
+        attackedParticipant: VillageParticipant,
+        forceSuicidedParticipant: VillageParticipant,
+        latestDay: VillageDay,
+        charas: Charas
+    ): Message {
+        val attackedCharaName = charas.chara(attackedParticipant.charaId).charaName.fullName()
+        val forceSuicidedCharaName = charas.chara(forceSuicidedParticipant.charaId).charaName.fullName()
+        val message = "${attackedCharaName}は、${forceSuicidedCharaName}を道連れにした。"
+        return Message.createPrivateSystemMessage(
+            message,
+            latestDay.id
+        )
+    }
 }
