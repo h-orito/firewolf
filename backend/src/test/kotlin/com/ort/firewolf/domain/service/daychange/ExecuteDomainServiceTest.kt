@@ -3,6 +3,7 @@ package com.ort.firewolf.domain.service.daychange
 import com.ort.dbflute.allcommon.CDef
 import com.ort.firewolf.FirewolfTest
 import com.ort.firewolf.domain.model.charachip.Charas
+import com.ort.firewolf.domain.model.skill.Skill
 import com.ort.firewolf.domain.model.village.VillageDays
 import com.ort.firewolf.domain.model.village.participant.VillageParticipants
 import com.ort.firewolf.domain.model.village.vote.VillageVote
@@ -130,6 +131,94 @@ class ExecuteDomainServiceTest : FirewolfTest() {
             println(executeMessage.content.text)
             assertThat(executeMessage.content.type.toCdef()).isEqualTo(CDef.MessageType.公開システムメッセージ)
             assertThat(executeMessage.content.text).contains(charas.list.first().charaName.name)
+        }
+    }
+
+    @Test
+    fun test_process_処刑あり_猫又を処刑() {
+        // ## Arrange ##
+        val yesterday = DummyDomainModelCreator.createDummyFirstVillageDay()
+        val latestDay = DummyDomainModelCreator.createDummyVillageDay().copy(day = 3)
+        val aliveVillager1 = DummyDomainModelCreator.createDummyAliveVillager()
+        val aliveVillager2 = DummyDomainModelCreator.createDummyAliveVillager()
+        val aliveVillager3 = DummyDomainModelCreator.createDummyAliveVillager()
+        val aliveVillager4 = DummyDomainModelCreator.createDummyAliveVillager()
+        val aliveMonstercat1 = DummyDomainModelCreator.createDummyAliveVillager().copy(skill = Skill(CDef.Skill.猫又))
+        val aliveWolf1 = DummyDomainModelCreator.createDummyAliveWolf()
+        val aliveWolf2 = DummyDomainModelCreator.createDummyAliveWolf()
+        val suddenlyDeathVillager1 = DummyDomainModelCreator.createDummyDeadVillager().suddenlyDeath(latestDay)
+
+        val dayChange = DummyDomainModelCreator.createDummyDayChange().copy(
+            village = DummyDomainModelCreator.createDummyVillage().copy(
+                day = VillageDays(
+                    listOf(
+                        yesterday,
+                        latestDay
+                    )
+                ),
+                participant = VillageParticipants(
+                    count = 12,
+                    memberList = listOf(
+                        aliveVillager1,
+                        aliveVillager2,
+                        aliveVillager3,
+                        aliveVillager4,
+                        aliveMonstercat1,
+                        aliveWolf1,
+                        aliveWolf2,
+                        suddenlyDeathVillager1,
+                        DummyDomainModelCreator.createDummyDeadVillager(),
+                        DummyDomainModelCreator.createDummyDeadVillager(),
+                        DummyDomainModelCreator.createDummyDeadVillager(),
+                        DummyDomainModelCreator.createDummyDeadVillager(),
+                        DummyDomainModelCreator.createDummyDeadVillager()
+                    )
+                )
+            ),
+            votes = VillageVotes(
+                listOf(
+                    VillageVote(yesterday.id, aliveVillager1.id, aliveMonstercat1.id),
+                    VillageVote(yesterday.id, aliveVillager2.id, aliveVillager2.id),
+                    VillageVote(yesterday.id, aliveVillager3.id, aliveVillager3.id),
+                    VillageVote(yesterday.id, aliveVillager4.id, aliveVillager4.id),
+                    VillageVote(yesterday.id, aliveMonstercat1.id, aliveMonstercat1.id),
+                    VillageVote(yesterday.id, aliveWolf1.id, aliveWolf1.id),
+                    VillageVote(yesterday.id, aliveWolf2.id, aliveWolf2.id),
+                    VillageVote(yesterday.id, suddenlyDeathVillager1.id, aliveMonstercat1.id)
+                )
+            )
+        )
+        val charas = Charas(
+            listOf(
+                DummyDomainModelCreator.createDummyChara().copy(id = aliveVillager1.charaId),
+                DummyDomainModelCreator.createDummyChara().copy(id = aliveVillager2.charaId),
+                DummyDomainModelCreator.createDummyChara().copy(id = aliveVillager3.charaId),
+                DummyDomainModelCreator.createDummyChara().copy(id = aliveVillager4.charaId),
+                DummyDomainModelCreator.createDummyChara().copy(id = aliveMonstercat1.charaId),
+                DummyDomainModelCreator.createDummyChara().copy(id = aliveWolf1.charaId),
+                DummyDomainModelCreator.createDummyChara().copy(id = aliveWolf2.charaId),
+                DummyDomainModelCreator.createDummyChara().copy(id = suddenlyDeathVillager1.charaId)
+            )
+        )
+
+        // ## Act ##
+        val afterDayChange = executeDomainService.processDayChangeAction(dayChange, charas)
+
+        // ## Assert ##
+        assertThat(afterDayChange.isChange).isTrue()
+        assertThat(afterDayChange.village.participant.member(aliveMonstercat1.id)).satisfies { villager ->
+            assertThat(villager.isAlive()).isFalse()
+            assertThat(villager.dead?.toCdef()).isEqualTo(CDef.DeadReason.処刑)
+        }
+        assertThat(afterDayChange.village.participant.member(aliveVillager1.id)).satisfies { villager ->
+            assertThat(villager.isAlive()).isFalse()
+            assertThat(villager.dead?.toCdef()).isEqualTo(CDef.DeadReason.呪殺)
+        }
+        assertThat(afterDayChange.messages.list.size).isEqualTo(3)
+        assertThat(afterDayChange.messages.list.last()).satisfies { executeMessage ->
+            println(executeMessage.content.text)
+            assertThat(executeMessage.content.type.toCdef()).isEqualTo(CDef.MessageType.非公開システムメッセージ)
+            assertThat(executeMessage.content.text).contains("道連れにした")
         }
     }
 

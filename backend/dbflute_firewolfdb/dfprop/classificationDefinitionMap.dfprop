@@ -137,6 +137,10 @@ map:{
 					; groupComment=占いにより死亡する
 					; elementList= list:{妖狐}
 				}
+				; forceDoubleSuicide = map:{
+					; groupComment=死亡時道連れにする
+					; elementList= list:{猫又}
+				}
         	}
         }
         ; map:{

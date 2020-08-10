@@ -1,8 +1,8 @@
 package com.ort.firewolf.domain.model.skill
 
 import com.ort.dbflute.allcommon.CDef
-import com.ort.firewolf.domain.model.ability.AbilityTypes
 import com.ort.firewolf.domain.model.ability.AbilityType
+import com.ort.firewolf.domain.model.ability.AbilityTypes
 import com.ort.firewolf.domain.model.camp.Camp
 import com.ort.firewolf.domain.model.message.MessageType
 
@@ -51,7 +51,8 @@ data class Skill(
             CDef.Skill.人狼 to listOf(AbilityType(CDef.AbilityType.襲撃)),
             CDef.Skill.占い師 to listOf(AbilityType(CDef.AbilityType.占い)),
             CDef.Skill.狩人 to listOf(AbilityType(CDef.AbilityType.護衛)),
-            CDef.Skill.霊能者 to listOf(AbilityType("PSYCHIC", "霊視"))
+            CDef.Skill.霊能者 to listOf(AbilityType("PSYCHIC", "霊視")),
+            CDef.Skill.猫又 to listOf(AbilityType("FORCESUICIDE", "道連れ"))
         )
 
         fun skillByShortName(shortName: String): Skill? {

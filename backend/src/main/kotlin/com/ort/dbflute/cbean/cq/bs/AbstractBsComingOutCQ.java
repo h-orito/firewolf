@@ -248,11 +248,27 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
     }
 
     /**
+     * Equal(=). As 猫又 (MONSTERCAT). And OnlyOnceRegistered. <br>
+     * 猫又
+     */
+    public void setSkillCode_Equal_猫又() {
+        setSkillCode_Equal_AsSkill(CDef.Skill.猫又);
+    }
+
+    /**
      * Equal(=). As 占い師 (SEER). And OnlyOnceRegistered. <br>
      * 占い師
      */
     public void setSkillCode_Equal_占い師() {
         setSkillCode_Equal_AsSkill(CDef.Skill.占い師);
+    }
+
+    /**
+     * Equal(=). As 聖痕者 (STIGMATA). And OnlyOnceRegistered. <br>
+     * 聖痕者
+     */
+    public void setSkillCode_Equal_聖痕者() {
+        setSkillCode_Equal_AsSkill(CDef.Skill.聖痕者);
     }
 
     /**
@@ -367,11 +383,27 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
     }
 
     /**
+     * NotEqual(&lt;&gt;). As 猫又 (MONSTERCAT). And OnlyOnceRegistered. <br>
+     * 猫又
+     */
+    public void setSkillCode_NotEqual_猫又() {
+        setSkillCode_NotEqual_AsSkill(CDef.Skill.猫又);
+    }
+
+    /**
      * NotEqual(&lt;&gt;). As 占い師 (SEER). And OnlyOnceRegistered. <br>
      * 占い師
      */
     public void setSkillCode_NotEqual_占い師() {
         setSkillCode_NotEqual_AsSkill(CDef.Skill.占い師);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 聖痕者 (STIGMATA). And OnlyOnceRegistered. <br>
+     * 聖痕者
+     */
+    public void setSkillCode_NotEqual_聖痕者() {
+        setSkillCode_NotEqual_AsSkill(CDef.Skill.聖痕者);
     }
 
     /**
@@ -577,6 +609,16 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
      */
     public void setSkillCode_InScope_DeadByDivine() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfDeadByDivine());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 死亡時道連れにする <br>
+     * The group elements:[猫又]
+     */
+    public void setSkillCode_InScope_ForceDoubleSuicide() {
+        setSkillCode_InScope_AsSkill(CDef.Skill.listOfForceDoubleSuicide());
     }
 
     protected void doSetSkillCode_InScope(Collection<String> skillCodeList) {
