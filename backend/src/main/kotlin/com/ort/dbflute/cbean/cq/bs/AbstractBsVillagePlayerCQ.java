@@ -1382,7 +1382,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 囁きを見られる <br>
-     * The group elements:[人狼, C国狂人]
+     * The group elements:[人狼, 呪狼, 智狼, C国狂人]
      */
     public void setSkillCode_InScope_ViewableWerewolfSay() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfViewableWerewolfSay());
@@ -1392,7 +1392,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 囁き可能 <br>
-     * The group elements:[人狼, C国狂人]
+     * The group elements:[人狼, 呪狼, 智狼, C国狂人]
      */
     public void setSkillCode_InScope_AvailableWerewolfSay() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfAvailableWerewolfSay());
@@ -1401,8 +1401,28 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     /**
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
+     * 共鳴発言を見られる <br>
+     * The group elements:[共鳴者]
+     */
+    public void setSkillCode_InScope_ViewableSympathizeSay() {
+        setSkillCode_InScope_AsSkill(CDef.Skill.listOfViewableSympathizeSay());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 共鳴発言可能 <br>
+     * The group elements:[共鳴者]
+     */
+    public void setSkillCode_InScope_AvailableSympathizeSay() {
+        setSkillCode_InScope_AsSkill(CDef.Skill.listOfAvailableSympathizeSay());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
      * 襲撃対象に選べない <br>
-     * The group elements:[人狼]
+     * The group elements:[人狼, 呪狼, 智狼]
      */
     public void setSkillCode_InScope_NotSelectableAttack() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfNotSelectableAttack());
@@ -1412,7 +1432,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 占い結果が人狼になる <br>
-     * The group elements:[人狼]
+     * The group elements:[人狼, 呪狼, 智狼]
      */
     public void setSkillCode_InScope_DivineResultWolf() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfDivineResultWolf());
@@ -1422,7 +1442,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 霊能結果が人狼になる <br>
-     * The group elements:[人狼]
+     * The group elements:[人狼, 呪狼, 智狼]
      */
     public void setSkillCode_InScope_PsychicResultWolf() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfPsychicResultWolf());
@@ -1432,7 +1452,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 襲撃能力を持つ <br>
-     * The group elements:[人狼]
+     * The group elements:[人狼, 呪狼, 智狼]
      */
     public void setSkillCode_InScope_HasAttackAbility() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfHasAttackAbility());
@@ -1446,6 +1466,16 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      */
     public void setSkillCode_InScope_HasDivineAbility() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfHasDivineAbility());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 役職占い能力を持つ <br>
+     * The group elements:[賢者]
+     */
+    public void setSkillCode_InScope_HasWiseDivineAbility() {
+        setSkillCode_InScope_AsSkill(CDef.Skill.listOfHasWiseDivineAbility());
     }
 
     /**
@@ -1471,8 +1501,48 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     /**
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
+     * 役職霊能能力を持つ <br>
+     * The group elements:[導師]
+     */
+    public void setSkillCode_InScope_HasGuruPsychicAbility() {
+        setSkillCode_InScope_AsSkill(CDef.Skill.listOfHasGuruPsychicAbility());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 検死能力を持つ <br>
+     * The group elements:[検死官]
+     */
+    public void setSkillCode_InScope_HasAutopsyAbility() {
+        setSkillCode_InScope_AsSkill(CDef.Skill.listOfHasAutopsyAbility());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 襲撃役職占い能力を持つ <br>
+     * The group elements:[智狼]
+     */
+    public void setSkillCode_InScope_HasWiseWolfAbility() {
+        setSkillCode_InScope_AsSkill(CDef.Skill.listOfHasWiseWolfAbility());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * パン焼き能力を持つ <br>
+     * The group elements:[パン屋]
+     */
+    public void setSkillCode_InScope_HasBakeryAbility() {
+        setSkillCode_InScope_AsSkill(CDef.Skill.listOfHasBakeryAbility());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
      * 勝敗判定時狼にカウントする <br>
-     * The group elements:[人狼]
+     * The group elements:[人狼, 呪狼, 智狼]
      */
     public void setSkillCode_InScope_CountWolf() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfCountWolf());
@@ -1501,11 +1571,31 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     /**
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
-     * 共有系としてお互いに認知できる <br>
+     * 共有者としてお互いに認知できる <br>
      * The group elements:[共有者]
      */
     public void setSkillCode_InScope_RecognizableEachMason() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfRecognizableEachMason());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 共鳴者としてお互いに認知できる <br>
+     * The group elements:[共鳴者]
+     */
+    public void setSkillCode_InScope_RecognizableEachSympathizer() {
+        setSkillCode_InScope_AsSkill(CDef.Skill.listOfRecognizableEachSympathizer());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 人狼を認知できる <br>
+     * The group elements:[狂信者]
+     */
+    public void setSkillCode_InScope_RecognizableWolf() {
+        setSkillCode_InScope_AsSkill(CDef.Skill.listOfRecognizableWolf());
     }
 
     /**
@@ -1526,6 +1616,16 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      */
     public void setSkillCode_InScope_DeadByDivine() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfDeadByDivine());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 占いにより占った側が死亡する <br>
+     * The group elements:[呪狼]
+     */
+    public void setSkillCode_InScope_CounterDeadByDivine() {
+        setSkillCode_InScope_AsSkill(CDef.Skill.listOfCounterDeadByDivine());
     }
 
     /**
@@ -2007,7 +2107,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 囁きを見られる <br>
-     * The group elements:[人狼, C国狂人]
+     * The group elements:[人狼, 呪狼, 智狼, C国狂人]
      */
     public void setRequestSkillCode_InScope_ViewableWerewolfSay() {
         setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfViewableWerewolfSay());
@@ -2017,7 +2117,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 囁き可能 <br>
-     * The group elements:[人狼, C国狂人]
+     * The group elements:[人狼, 呪狼, 智狼, C国狂人]
      */
     public void setRequestSkillCode_InScope_AvailableWerewolfSay() {
         setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfAvailableWerewolfSay());
@@ -2026,8 +2126,28 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     /**
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
+     * 共鳴発言を見られる <br>
+     * The group elements:[共鳴者]
+     */
+    public void setRequestSkillCode_InScope_ViewableSympathizeSay() {
+        setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfViewableSympathizeSay());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 共鳴発言可能 <br>
+     * The group elements:[共鳴者]
+     */
+    public void setRequestSkillCode_InScope_AvailableSympathizeSay() {
+        setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfAvailableSympathizeSay());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
      * 襲撃対象に選べない <br>
-     * The group elements:[人狼]
+     * The group elements:[人狼, 呪狼, 智狼]
      */
     public void setRequestSkillCode_InScope_NotSelectableAttack() {
         setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfNotSelectableAttack());
@@ -2037,7 +2157,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 占い結果が人狼になる <br>
-     * The group elements:[人狼]
+     * The group elements:[人狼, 呪狼, 智狼]
      */
     public void setRequestSkillCode_InScope_DivineResultWolf() {
         setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfDivineResultWolf());
@@ -2047,7 +2167,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 霊能結果が人狼になる <br>
-     * The group elements:[人狼]
+     * The group elements:[人狼, 呪狼, 智狼]
      */
     public void setRequestSkillCode_InScope_PsychicResultWolf() {
         setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfPsychicResultWolf());
@@ -2057,7 +2177,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 襲撃能力を持つ <br>
-     * The group elements:[人狼]
+     * The group elements:[人狼, 呪狼, 智狼]
      */
     public void setRequestSkillCode_InScope_HasAttackAbility() {
         setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfHasAttackAbility());
@@ -2071,6 +2191,16 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      */
     public void setRequestSkillCode_InScope_HasDivineAbility() {
         setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfHasDivineAbility());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 役職占い能力を持つ <br>
+     * The group elements:[賢者]
+     */
+    public void setRequestSkillCode_InScope_HasWiseDivineAbility() {
+        setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfHasWiseDivineAbility());
     }
 
     /**
@@ -2096,8 +2226,48 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     /**
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
+     * 役職霊能能力を持つ <br>
+     * The group elements:[導師]
+     */
+    public void setRequestSkillCode_InScope_HasGuruPsychicAbility() {
+        setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfHasGuruPsychicAbility());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 検死能力を持つ <br>
+     * The group elements:[検死官]
+     */
+    public void setRequestSkillCode_InScope_HasAutopsyAbility() {
+        setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfHasAutopsyAbility());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 襲撃役職占い能力を持つ <br>
+     * The group elements:[智狼]
+     */
+    public void setRequestSkillCode_InScope_HasWiseWolfAbility() {
+        setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfHasWiseWolfAbility());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * パン焼き能力を持つ <br>
+     * The group elements:[パン屋]
+     */
+    public void setRequestSkillCode_InScope_HasBakeryAbility() {
+        setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfHasBakeryAbility());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
      * 勝敗判定時狼にカウントする <br>
-     * The group elements:[人狼]
+     * The group elements:[人狼, 呪狼, 智狼]
      */
     public void setRequestSkillCode_InScope_CountWolf() {
         setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfCountWolf());
@@ -2126,11 +2296,31 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     /**
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
-     * 共有系としてお互いに認知できる <br>
+     * 共有者としてお互いに認知できる <br>
      * The group elements:[共有者]
      */
     public void setRequestSkillCode_InScope_RecognizableEachMason() {
         setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfRecognizableEachMason());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 共鳴者としてお互いに認知できる <br>
+     * The group elements:[共鳴者]
+     */
+    public void setRequestSkillCode_InScope_RecognizableEachSympathizer() {
+        setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfRecognizableEachSympathizer());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 人狼を認知できる <br>
+     * The group elements:[狂信者]
+     */
+    public void setRequestSkillCode_InScope_RecognizableWolf() {
+        setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfRecognizableWolf());
     }
 
     /**
@@ -2151,6 +2341,16 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      */
     public void setRequestSkillCode_InScope_DeadByDivine() {
         setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfDeadByDivine());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 占いにより占った側が死亡する <br>
+     * The group elements:[呪狼]
+     */
+    public void setRequestSkillCode_InScope_CounterDeadByDivine() {
+        setRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfCounterDeadByDivine());
     }
 
     /**
@@ -2632,7 +2832,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 囁きを見られる <br>
-     * The group elements:[人狼, C国狂人]
+     * The group elements:[人狼, 呪狼, 智狼, C国狂人]
      */
     public void setSecondRequestSkillCode_InScope_ViewableWerewolfSay() {
         setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfViewableWerewolfSay());
@@ -2642,7 +2842,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 囁き可能 <br>
-     * The group elements:[人狼, C国狂人]
+     * The group elements:[人狼, 呪狼, 智狼, C国狂人]
      */
     public void setSecondRequestSkillCode_InScope_AvailableWerewolfSay() {
         setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfAvailableWerewolfSay());
@@ -2651,8 +2851,28 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     /**
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
+     * 共鳴発言を見られる <br>
+     * The group elements:[共鳴者]
+     */
+    public void setSecondRequestSkillCode_InScope_ViewableSympathizeSay() {
+        setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfViewableSympathizeSay());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 共鳴発言可能 <br>
+     * The group elements:[共鳴者]
+     */
+    public void setSecondRequestSkillCode_InScope_AvailableSympathizeSay() {
+        setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfAvailableSympathizeSay());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
      * 襲撃対象に選べない <br>
-     * The group elements:[人狼]
+     * The group elements:[人狼, 呪狼, 智狼]
      */
     public void setSecondRequestSkillCode_InScope_NotSelectableAttack() {
         setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfNotSelectableAttack());
@@ -2662,7 +2882,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 占い結果が人狼になる <br>
-     * The group elements:[人狼]
+     * The group elements:[人狼, 呪狼, 智狼]
      */
     public void setSecondRequestSkillCode_InScope_DivineResultWolf() {
         setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfDivineResultWolf());
@@ -2672,7 +2892,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 霊能結果が人狼になる <br>
-     * The group elements:[人狼]
+     * The group elements:[人狼, 呪狼, 智狼]
      */
     public void setSecondRequestSkillCode_InScope_PsychicResultWolf() {
         setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfPsychicResultWolf());
@@ -2682,7 +2902,7 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 襲撃能力を持つ <br>
-     * The group elements:[人狼]
+     * The group elements:[人狼, 呪狼, 智狼]
      */
     public void setSecondRequestSkillCode_InScope_HasAttackAbility() {
         setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfHasAttackAbility());
@@ -2696,6 +2916,16 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      */
     public void setSecondRequestSkillCode_InScope_HasDivineAbility() {
         setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfHasDivineAbility());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 役職占い能力を持つ <br>
+     * The group elements:[賢者]
+     */
+    public void setSecondRequestSkillCode_InScope_HasWiseDivineAbility() {
+        setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfHasWiseDivineAbility());
     }
 
     /**
@@ -2721,8 +2951,48 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     /**
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
+     * 役職霊能能力を持つ <br>
+     * The group elements:[導師]
+     */
+    public void setSecondRequestSkillCode_InScope_HasGuruPsychicAbility() {
+        setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfHasGuruPsychicAbility());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 検死能力を持つ <br>
+     * The group elements:[検死官]
+     */
+    public void setSecondRequestSkillCode_InScope_HasAutopsyAbility() {
+        setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfHasAutopsyAbility());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 襲撃役職占い能力を持つ <br>
+     * The group elements:[智狼]
+     */
+    public void setSecondRequestSkillCode_InScope_HasWiseWolfAbility() {
+        setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfHasWiseWolfAbility());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * パン焼き能力を持つ <br>
+     * The group elements:[パン屋]
+     */
+    public void setSecondRequestSkillCode_InScope_HasBakeryAbility() {
+        setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfHasBakeryAbility());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
      * 勝敗判定時狼にカウントする <br>
-     * The group elements:[人狼]
+     * The group elements:[人狼, 呪狼, 智狼]
      */
     public void setSecondRequestSkillCode_InScope_CountWolf() {
         setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfCountWolf());
@@ -2751,11 +3021,31 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     /**
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
-     * 共有系としてお互いに認知できる <br>
+     * 共有者としてお互いに認知できる <br>
      * The group elements:[共有者]
      */
     public void setSecondRequestSkillCode_InScope_RecognizableEachMason() {
         setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfRecognizableEachMason());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 共鳴者としてお互いに認知できる <br>
+     * The group elements:[共鳴者]
+     */
+    public void setSecondRequestSkillCode_InScope_RecognizableEachSympathizer() {
+        setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfRecognizableEachSympathizer());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 人狼を認知できる <br>
+     * The group elements:[狂信者]
+     */
+    public void setSecondRequestSkillCode_InScope_RecognizableWolf() {
+        setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfRecognizableWolf());
     }
 
     /**
@@ -2776,6 +3066,16 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      */
     public void setSecondRequestSkillCode_InScope_DeadByDivine() {
         setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfDeadByDivine());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 占いにより占った側が死亡する <br>
+     * The group elements:[呪狼]
+     */
+    public void setSecondRequestSkillCode_InScope_CounterDeadByDivine() {
+        setSecondRequestSkillCode_InScope_AsSkill(CDef.Skill.listOfCounterDeadByDivine());
     }
 
     /**
