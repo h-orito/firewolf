@@ -192,6 +192,14 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
     }
 
     /**
+     * Equal(=). As パン屋 (BAKERY). And OnlyOnceRegistered. <br>
+     * パン屋
+     */
+    public void setSkillCode_Equal_パン屋() {
+        setSkillCode_Equal_AsSkill(CDef.Skill.パン屋);
+    }
+
+    /**
      * Equal(=). As C国狂人 (CMADMAN). And OnlyOnceRegistered. <br>
      * C国狂人
      */
@@ -200,11 +208,43 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
     }
 
     /**
+     * Equal(=). As 検死官 (CORONER). And OnlyOnceRegistered. <br>
+     * 検死官
+     */
+    public void setSkillCode_Equal_検死官() {
+        setSkillCode_Equal_AsSkill(CDef.Skill.検死官);
+    }
+
+    /**
+     * Equal(=). As 呪狼 (CURSEWOLF). And OnlyOnceRegistered. <br>
+     * 呪狼
+     */
+    public void setSkillCode_Equal_呪狼() {
+        setSkillCode_Equal_AsSkill(CDef.Skill.呪狼);
+    }
+
+    /**
+     * Equal(=). As 狂信者 (FANATIC). And OnlyOnceRegistered. <br>
+     * 狂信者
+     */
+    public void setSkillCode_Equal_狂信者() {
+        setSkillCode_Equal_AsSkill(CDef.Skill.狂信者);
+    }
+
+    /**
      * Equal(=). As 妖狐 (FOX). And OnlyOnceRegistered. <br>
      * 妖狐
      */
     public void setSkillCode_Equal_妖狐() {
         setSkillCode_Equal_AsSkill(CDef.Skill.妖狐);
+    }
+
+    /**
+     * Equal(=). As 導師 (GURU). And OnlyOnceRegistered. <br>
+     * 導師
+     */
+    public void setSkillCode_Equal_導師() {
+        setSkillCode_Equal_AsSkill(CDef.Skill.導師);
     }
 
     /**
@@ -272,6 +312,14 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
     }
 
     /**
+     * Equal(=). As 共鳴者 (SYMPATHIZER). And OnlyOnceRegistered. <br>
+     * 共鳴者
+     */
+    public void setSkillCode_Equal_共鳴者() {
+        setSkillCode_Equal_AsSkill(CDef.Skill.共鳴者);
+    }
+
+    /**
      * Equal(=). As 村人 (VILLAGER). And OnlyOnceRegistered. <br>
      * 村人
      */
@@ -303,6 +351,22 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
         setSkillCode_Equal_AsSkill(CDef.Skill.おまかせ人狼陣営);
     }
 
+    /**
+     * Equal(=). As 賢者 (WISE). And OnlyOnceRegistered. <br>
+     * 賢者
+     */
+    public void setSkillCode_Equal_賢者() {
+        setSkillCode_Equal_AsSkill(CDef.Skill.賢者);
+    }
+
+    /**
+     * Equal(=). As 智狼 (WISEWOLF). And OnlyOnceRegistered. <br>
+     * 智狼
+     */
+    public void setSkillCode_Equal_智狼() {
+        setSkillCode_Equal_AsSkill(CDef.Skill.智狼);
+    }
+
     protected void doSetSkillCode_Equal(String skillCode) {
         regSkillCode(CK_EQ, skillCode);
     }
@@ -327,6 +391,14 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
     }
 
     /**
+     * NotEqual(&lt;&gt;). As パン屋 (BAKERY). And OnlyOnceRegistered. <br>
+     * パン屋
+     */
+    public void setSkillCode_NotEqual_パン屋() {
+        setSkillCode_NotEqual_AsSkill(CDef.Skill.パン屋);
+    }
+
+    /**
      * NotEqual(&lt;&gt;). As C国狂人 (CMADMAN). And OnlyOnceRegistered. <br>
      * C国狂人
      */
@@ -335,11 +407,43 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
     }
 
     /**
+     * NotEqual(&lt;&gt;). As 検死官 (CORONER). And OnlyOnceRegistered. <br>
+     * 検死官
+     */
+    public void setSkillCode_NotEqual_検死官() {
+        setSkillCode_NotEqual_AsSkill(CDef.Skill.検死官);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 呪狼 (CURSEWOLF). And OnlyOnceRegistered. <br>
+     * 呪狼
+     */
+    public void setSkillCode_NotEqual_呪狼() {
+        setSkillCode_NotEqual_AsSkill(CDef.Skill.呪狼);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 狂信者 (FANATIC). And OnlyOnceRegistered. <br>
+     * 狂信者
+     */
+    public void setSkillCode_NotEqual_狂信者() {
+        setSkillCode_NotEqual_AsSkill(CDef.Skill.狂信者);
+    }
+
+    /**
      * NotEqual(&lt;&gt;). As 妖狐 (FOX). And OnlyOnceRegistered. <br>
      * 妖狐
      */
     public void setSkillCode_NotEqual_妖狐() {
         setSkillCode_NotEqual_AsSkill(CDef.Skill.妖狐);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 導師 (GURU). And OnlyOnceRegistered. <br>
+     * 導師
+     */
+    public void setSkillCode_NotEqual_導師() {
+        setSkillCode_NotEqual_AsSkill(CDef.Skill.導師);
     }
 
     /**
@@ -407,6 +511,14 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
     }
 
     /**
+     * NotEqual(&lt;&gt;). As 共鳴者 (SYMPATHIZER). And OnlyOnceRegistered. <br>
+     * 共鳴者
+     */
+    public void setSkillCode_NotEqual_共鳴者() {
+        setSkillCode_NotEqual_AsSkill(CDef.Skill.共鳴者);
+    }
+
+    /**
      * NotEqual(&lt;&gt;). As 村人 (VILLAGER). And OnlyOnceRegistered. <br>
      * 村人
      */
@@ -436,6 +548,22 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
      */
     public void setSkillCode_NotEqual_おまかせ人狼陣営() {
         setSkillCode_NotEqual_AsSkill(CDef.Skill.おまかせ人狼陣営);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 賢者 (WISE). And OnlyOnceRegistered. <br>
+     * 賢者
+     */
+    public void setSkillCode_NotEqual_賢者() {
+        setSkillCode_NotEqual_AsSkill(CDef.Skill.賢者);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 智狼 (WISEWOLF). And OnlyOnceRegistered. <br>
+     * 智狼
+     */
+    public void setSkillCode_NotEqual_智狼() {
+        setSkillCode_NotEqual_AsSkill(CDef.Skill.智狼);
     }
 
     protected void doSetSkillCode_NotEqual(String skillCode) {
