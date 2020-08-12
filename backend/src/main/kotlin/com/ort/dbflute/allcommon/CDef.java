@@ -569,7 +569,7 @@ public interface CDef extends Classification {
             }
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
-                subItemMap.put("shortName", "狼");
+                subItemMap.put("shortName", "呪");
                 subItemMap.put("order", "14");
                 subItemMap.put("campCode", "WEREWOLF");
                 subItemMap.put("description", "あなたは呪狼です。人狼系役職とC国狂人同士にしか聞こえない会話が可能です。また、毎晩一人を襲撃することができます。また、あなたを占った人を死亡させることができます。");
@@ -713,7 +713,7 @@ public interface CDef extends Classification {
             }
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
-                subItemMap.put("shortName", "狼");
+                subItemMap.put("shortName", "智");
                 subItemMap.put("order", "15");
                 subItemMap.put("campCode", "WEREWOLF");
                 subItemMap.put("description", "あなたは智狼です。人狼系役職とC国狂人同士にしか聞こえない会話が可能です。また、毎晩一人を襲撃することができます。また、あなたが生存していれば、襲撃成功した際に対象者の役職を知ることができます。");
@@ -1447,9 +1447,6 @@ public interface CDef extends Classification {
         /** 死者の呻き */
         死者の呻き("GRAVE_SAY", "死者の呻き", emptyStrings())
         ,
-        /** 共鳴発言 */
-        共鳴発言("MASON_SAY", "共鳴発言", emptyStrings())
-        ,
         /** 独り言 */
         独り言("MONOLOGUE_SAY", "独り言", emptyStrings())
         ,
@@ -1458,6 +1455,15 @@ public interface CDef extends Classification {
         ,
         /** 参加者一覧 */
         参加者一覧("PARTICIPANTS", "参加者一覧", emptyStrings())
+        ,
+        /** 検死結果 */
+        検死結果("PRIVATE_CORONER", "検死結果", emptyStrings())
+        ,
+        /** 狂信者人狼確認メッセージ */
+        狂信者人狼確認メッセージ("PRIVATE_FANATIC", "狂信者人狼確認メッセージ", emptyStrings())
+        ,
+        /** 役職霊視結果 */
+        役職霊視結果("PRIVATE_GURU", "役職霊視結果", emptyStrings())
         ,
         /** 共有相互確認メッセージ */
         共有相互確認メッセージ("PRIVATE_MASON", "共有相互確認メッセージ", emptyStrings())
@@ -1468,11 +1474,17 @@ public interface CDef extends Classification {
         /** 白黒占い結果 */
         白黒占い結果("PRIVATE_SEER", "白黒占い結果", emptyStrings())
         ,
+        /** 共鳴相互確認メッセージ */
+        共鳴相互確認メッセージ("PRIVATE_SYMPATHIZER", "共鳴相互確認メッセージ", emptyStrings())
+        ,
         /** 非公開システムメッセージ */
         非公開システムメッセージ("PRIVATE_SYSTEM", "非公開システムメッセージ", emptyStrings())
         ,
         /** 襲撃結果 */
         襲撃結果("PRIVATE_WEREWOLF", "襲撃結果", emptyStrings())
+        ,
+        /** 役職占い結果 */
+        役職占い結果("PRIVATE_WISE", "役職占い結果", emptyStrings())
         ,
         /** 公開システムメッセージ */
         公開システムメッセージ("PUBLIC_SYSTEM", "公開システムメッセージ", emptyStrings())
@@ -1482,6 +1494,9 @@ public interface CDef extends Classification {
         ,
         /** 見学発言 */
         見学発言("SPECTATE_SAY", "見学発言", emptyStrings())
+        ,
+        /** 共鳴発言 */
+        共鳴発言("SYMPATHIZE_SAY", "共鳴発言", emptyStrings())
         ,
         /** 人狼の囁き */
         人狼の囁き("WEREWOLF_SAY", "人狼の囁き", emptyStrings())

@@ -61,7 +61,9 @@ class VillageRegisterBodyValidator : Validator {
             && organizationList.any { org ->
                 org.toCharArray().map { it.toString() }.none {
                     val cdefSkill = Skill.skillByShortName(it)!!.toCdef()
-                    !cdefSkill.isNoDeadByAttack && !cdefSkill.isNotSelectableAttack
+                    !cdefSkill.isNoDeadByAttack
+                        && !cdefSkill.isNotSelectableAttack
+                        && !cdefSkill.isForceDoubleSuicide
                 }
             }
         ) {

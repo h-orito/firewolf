@@ -42,17 +42,32 @@ data class Message(
         fun createSeerPrivateMessage(text: String, villageDayId: Int, participant: VillageParticipant): Message =
             createSystemMessage(MessageType(CDef.MessageType.白黒占い結果), text, villageDayId, participant)
 
+        fun createWisePrivateMessage(text: String, villageDayId: Int, participant: VillageParticipant): Message =
+            createSystemMessage(MessageType(CDef.MessageType.役職占い結果), text, villageDayId, participant)
+
         fun createPsychicPrivateMessage(text: String, villageDayId: Int): Message =
             createSystemMessage(MessageType(CDef.MessageType.白黒霊視結果), text, villageDayId)
+
+        fun createGuruPsychicPrivateMessage(text: String, villageDayId: Int): Message =
+            createSystemMessage(MessageType(CDef.MessageType.役職霊視結果), text, villageDayId)
 
         fun createAttackPrivateMessage(text: String, villageDayId: Int): Message =
             createSystemMessage(MessageType(CDef.MessageType.襲撃結果), text, villageDayId)
 
+        fun createFanaticPrivateMessage(text: String, villageDayId: Int): Message =
+            createSystemMessage(MessageType(CDef.MessageType.狂信者人狼確認メッセージ), text, villageDayId)
+
         fun createMasonPrivateMessage(text: String, villageDayId: Int): Message =
             createSystemMessage(MessageType(CDef.MessageType.共有相互確認メッセージ), text, villageDayId)
 
+        fun createSympathizerPrivateMessage(text: String, villageDayId: Int): Message =
+            createSystemMessage(MessageType(CDef.MessageType.共鳴相互確認メッセージ), text, villageDayId)
+
         fun createCreatorSayMessage(text: String, villageDayId: Int): Message =
             createSystemMessage(MessageType(CDef.MessageType.村建て発言), text, villageDayId)
+
+        fun createAutopsyPrivateMessage(text: String, villageDayId: Int): Message =
+            createSystemMessage(MessageType(CDef.MessageType.検死結果), text, villageDayId)
 
         // ===================================================================================
         //                                                                        Assist Logic

@@ -44,8 +44,12 @@ class PrologueDomainService(
         dayChange = addOrganizationMessage(dayChange)
         // 人狼系役職メッセージ追加
         dayChange = addWolfsConfirmMessage(dayChange, charas)
+        // 狂信者がいれば狂信者向けメッセージ追加
+        dayChange = addFanaticMessageIfNeeded(dayChange, charas)
         // 共有がいれば役職メッセージ追加
         dayChange = addMasonsConfirmMessageIfNeeded(dayChange, charas)
+        // 共鳴がいれば役職メッセージ追加
+        dayChange = addSympathizersConfirmMessageIfNeeded(dayChange, charas)
         // ステータス変更
         dayChange = dayChange.copy(village = dayChange.village.changeStatus(CDef.VillageStatus.進行中))
         // デフォルト能力行使指定
@@ -91,8 +95,24 @@ class PrologueDomainService(
         )
     }
 
+    private fun addFanaticMessageIfNeeded(dayChange: DayChange, charas: Charas): DayChange {
+        return dayChange.village.createFanaticConfirmMessage(charas)?.let {
+            dayChange.copy(
+                messages = dayChange.messages.add(it)
+            )
+        } ?: dayChange
+    }
+
     private fun addMasonsConfirmMessageIfNeeded(dayChange: DayChange, charas: Charas): DayChange {
         return dayChange.village.createMasonsConfirmMessage(charas)?.let {
+            dayChange.copy(
+                messages = dayChange.messages.add(it)
+            )
+        } ?: dayChange
+    }
+
+    private fun addSympathizersConfirmMessageIfNeeded(dayChange: DayChange, charas: Charas): DayChange {
+        return dayChange.village.createSympathizersConfirmMessage(charas)?.let {
             dayChange.copy(
                 messages = dayChange.messages.add(it)
             )

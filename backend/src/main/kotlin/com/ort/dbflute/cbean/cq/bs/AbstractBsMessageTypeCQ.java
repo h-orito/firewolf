@@ -79,14 +79,6 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
     }
 
     /**
-     * Equal(=). As 共鳴発言 (MASON_SAY). And OnlyOnceRegistered. <br>
-     * 共鳴発言
-     */
-    public void setMessageTypeCode_Equal_共鳴発言() {
-        setMessageTypeCode_Equal_AsMessageType(CDef.MessageType.共鳴発言);
-    }
-
-    /**
      * Equal(=). As 独り言 (MONOLOGUE_SAY). And OnlyOnceRegistered. <br>
      * 独り言
      */
@@ -108,6 +100,30 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
      */
     public void setMessageTypeCode_Equal_参加者一覧() {
         setMessageTypeCode_Equal_AsMessageType(CDef.MessageType.参加者一覧);
+    }
+
+    /**
+     * Equal(=). As 検死結果 (PRIVATE_CORONER). And OnlyOnceRegistered. <br>
+     * 検死結果
+     */
+    public void setMessageTypeCode_Equal_検死結果() {
+        setMessageTypeCode_Equal_AsMessageType(CDef.MessageType.検死結果);
+    }
+
+    /**
+     * Equal(=). As 狂信者人狼確認メッセージ (PRIVATE_FANATIC). And OnlyOnceRegistered. <br>
+     * 狂信者人狼確認メッセージ
+     */
+    public void setMessageTypeCode_Equal_狂信者人狼確認メッセージ() {
+        setMessageTypeCode_Equal_AsMessageType(CDef.MessageType.狂信者人狼確認メッセージ);
+    }
+
+    /**
+     * Equal(=). As 役職霊視結果 (PRIVATE_GURU). And OnlyOnceRegistered. <br>
+     * 役職霊視結果
+     */
+    public void setMessageTypeCode_Equal_役職霊視結果() {
+        setMessageTypeCode_Equal_AsMessageType(CDef.MessageType.役職霊視結果);
     }
 
     /**
@@ -135,6 +151,14 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
     }
 
     /**
+     * Equal(=). As 共鳴相互確認メッセージ (PRIVATE_SYMPATHIZER). And OnlyOnceRegistered. <br>
+     * 共鳴相互確認メッセージ
+     */
+    public void setMessageTypeCode_Equal_共鳴相互確認メッセージ() {
+        setMessageTypeCode_Equal_AsMessageType(CDef.MessageType.共鳴相互確認メッセージ);
+    }
+
+    /**
      * Equal(=). As 非公開システムメッセージ (PRIVATE_SYSTEM). And OnlyOnceRegistered. <br>
      * 非公開システムメッセージ
      */
@@ -148,6 +172,14 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
      */
     public void setMessageTypeCode_Equal_襲撃結果() {
         setMessageTypeCode_Equal_AsMessageType(CDef.MessageType.襲撃結果);
+    }
+
+    /**
+     * Equal(=). As 役職占い結果 (PRIVATE_WISE). And OnlyOnceRegistered. <br>
+     * 役職占い結果
+     */
+    public void setMessageTypeCode_Equal_役職占い結果() {
+        setMessageTypeCode_Equal_AsMessageType(CDef.MessageType.役職占い結果);
     }
 
     /**
@@ -172,6 +204,14 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
      */
     public void setMessageTypeCode_Equal_見学発言() {
         setMessageTypeCode_Equal_AsMessageType(CDef.MessageType.見学発言);
+    }
+
+    /**
+     * Equal(=). As 共鳴発言 (SYMPATHIZE_SAY). And OnlyOnceRegistered. <br>
+     * 共鳴発言
+     */
+    public void setMessageTypeCode_Equal_共鳴発言() {
+        setMessageTypeCode_Equal_AsMessageType(CDef.MessageType.共鳴発言);
     }
 
     /**
@@ -222,14 +262,6 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
     }
 
     /**
-     * NotEqual(&lt;&gt;). As 共鳴発言 (MASON_SAY). And OnlyOnceRegistered. <br>
-     * 共鳴発言
-     */
-    public void setMessageTypeCode_NotEqual_共鳴発言() {
-        setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.共鳴発言);
-    }
-
-    /**
      * NotEqual(&lt;&gt;). As 独り言 (MONOLOGUE_SAY). And OnlyOnceRegistered. <br>
      * 独り言
      */
@@ -251,6 +283,30 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
      */
     public void setMessageTypeCode_NotEqual_参加者一覧() {
         setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.参加者一覧);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 検死結果 (PRIVATE_CORONER). And OnlyOnceRegistered. <br>
+     * 検死結果
+     */
+    public void setMessageTypeCode_NotEqual_検死結果() {
+        setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.検死結果);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 狂信者人狼確認メッセージ (PRIVATE_FANATIC). And OnlyOnceRegistered. <br>
+     * 狂信者人狼確認メッセージ
+     */
+    public void setMessageTypeCode_NotEqual_狂信者人狼確認メッセージ() {
+        setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.狂信者人狼確認メッセージ);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 役職霊視結果 (PRIVATE_GURU). And OnlyOnceRegistered. <br>
+     * 役職霊視結果
+     */
+    public void setMessageTypeCode_NotEqual_役職霊視結果() {
+        setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.役職霊視結果);
     }
 
     /**
@@ -278,6 +334,14 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
     }
 
     /**
+     * NotEqual(&lt;&gt;). As 共鳴相互確認メッセージ (PRIVATE_SYMPATHIZER). And OnlyOnceRegistered. <br>
+     * 共鳴相互確認メッセージ
+     */
+    public void setMessageTypeCode_NotEqual_共鳴相互確認メッセージ() {
+        setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.共鳴相互確認メッセージ);
+    }
+
+    /**
      * NotEqual(&lt;&gt;). As 非公開システムメッセージ (PRIVATE_SYSTEM). And OnlyOnceRegistered. <br>
      * 非公開システムメッセージ
      */
@@ -291,6 +355,14 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
      */
     public void setMessageTypeCode_NotEqual_襲撃結果() {
         setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.襲撃結果);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 役職占い結果 (PRIVATE_WISE). And OnlyOnceRegistered. <br>
+     * 役職占い結果
+     */
+    public void setMessageTypeCode_NotEqual_役職占い結果() {
+        setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.役職占い結果);
     }
 
     /**
@@ -315,6 +387,14 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
      */
     public void setMessageTypeCode_NotEqual_見学発言() {
         setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.見学発言);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 共鳴発言 (SYMPATHIZE_SAY). And OnlyOnceRegistered. <br>
+     * 共鳴発言
+     */
+    public void setMessageTypeCode_NotEqual_共鳴発言() {
+        setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.共鳴発言);
     }
 
     /**
