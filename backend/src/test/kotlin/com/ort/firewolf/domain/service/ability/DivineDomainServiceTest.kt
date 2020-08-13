@@ -5,6 +5,7 @@ import com.ort.firewolf.FirewolfTest
 import com.ort.firewolf.domain.model.ability.AbilityType
 import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.daychange.DayChange
+import com.ort.firewolf.domain.model.skill.Skill
 import com.ort.firewolf.domain.model.village.VillageDays
 import com.ort.firewolf.domain.model.village.VillageStatus
 import com.ort.firewolf.domain.model.village.ability.VillageAbilities
@@ -364,5 +365,97 @@ class DivineDomainServiceTest : FirewolfTest() {
             assertThat(message.content.text).contains("人狼のようだ")
             assertThat(message.content.type.code).isEqualTo(CDef.MessageType.白黒占い結果.code())
         }
+    }
+
+    @Test
+    fun test_process_呪殺() {
+        // ## Arrange ##
+        val aliveSeer = DummyDomainModelCreator.createDummyAliveSeer()
+        val aliveFox = DummyDomainModelCreator.createDummyAliveWolf().copy(skill = Skill(CDef.Skill.妖狐))
+        val yesterday = DummyDomainModelCreator.createDummyVillageDay()
+        val latestDay = DummyDomainModelCreator.createDummyVillageDay()
+        val villageAbilities = VillageAbilities(
+            listOf(
+                VillageAbility(
+                    villageDayId = yesterday.id,
+                    myselfId = aliveSeer.id,
+                    targetId = aliveFox.id,
+                    abilityType = AbilityType(CDef.AbilityType.占い)
+                )
+            )
+        )
+        val village = DummyDomainModelCreator.createDummyVillage().copy(
+            participant = VillageParticipants(
+                count = 2,
+                memberList = listOf(aliveSeer, aliveFox)
+            ),
+            day = VillageDays(listOf(yesterday, latestDay))
+        )
+        val dayChange = DayChange(
+            village = village,
+            votes = DummyDomainModelCreator.createDummyVillageVotes(),
+            abilities = villageAbilities,
+            players = DummyDomainModelCreator.createDummyPlayers()
+        )
+        val charas = Charas(
+            listOf(
+                DummyDomainModelCreator.createDummyChara().copy(id = aliveFox.charaId),
+                DummyDomainModelCreator.createDummyChara().copy(id = aliveSeer.charaId)
+            )
+        )
+
+        // ## Act ##
+        val afterDayChange = divineDomainService.processDayChangeAction(dayChange, charas)
+
+        // ## Assert ##
+        assertThat(afterDayChange.isChange).isTrue()
+        assertThat(afterDayChange.village.participant.member(aliveFox.id).dead).isNotNull
+        assertThat(afterDayChange.village.participant.member(aliveFox.id).dead!!.toCdef()).isEqualTo(CDef.DeadReason.呪殺)
+    }
+
+    @Test
+    fun test_process_逆呪殺() {
+        // ## Arrange ##
+        val aliveSeer = DummyDomainModelCreator.createDummyAliveSeer()
+        val aliveCurseWolf = DummyDomainModelCreator.createDummyAliveWolf().copy(skill = Skill(CDef.Skill.呪狼))
+        val yesterday = DummyDomainModelCreator.createDummyVillageDay()
+        val latestDay = DummyDomainModelCreator.createDummyVillageDay()
+        val villageAbilities = VillageAbilities(
+            listOf(
+                VillageAbility(
+                    villageDayId = yesterday.id,
+                    myselfId = aliveSeer.id,
+                    targetId = aliveCurseWolf.id,
+                    abilityType = AbilityType(CDef.AbilityType.占い)
+                )
+            )
+        )
+        val village = DummyDomainModelCreator.createDummyVillage().copy(
+            participant = VillageParticipants(
+                count = 2,
+                memberList = listOf(aliveSeer, aliveCurseWolf)
+            ),
+            day = VillageDays(listOf(yesterday, latestDay))
+        )
+        val dayChange = DayChange(
+            village = village,
+            votes = DummyDomainModelCreator.createDummyVillageVotes(),
+            abilities = villageAbilities,
+            players = DummyDomainModelCreator.createDummyPlayers()
+        )
+        val charas = Charas(
+            listOf(
+                DummyDomainModelCreator.createDummyChara().copy(id = aliveCurseWolf.charaId),
+                DummyDomainModelCreator.createDummyChara().copy(id = aliveSeer.charaId)
+            )
+        )
+
+        // ## Act ##
+        val afterDayChange = divineDomainService.processDayChangeAction(dayChange, charas)
+
+        // ## Assert ##
+        assertThat(afterDayChange.isChange).isTrue()
+        assertThat(afterDayChange.village.participant.member(aliveSeer.id).dead).isNotNull
+        assertThat(afterDayChange.village.participant.member(aliveSeer.id).dead!!.toCdef()).isEqualTo(CDef.DeadReason.呪殺)
     }
 }
