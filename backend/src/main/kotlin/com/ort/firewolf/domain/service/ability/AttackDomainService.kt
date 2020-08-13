@@ -105,6 +105,10 @@ class AttackDomainService : IAbilityDomainService {
                 if (isAttackSuccess(dayChange, ability.targetId!!)) {
                     village = village.attackParticipant(ability.targetId, latestDay)
 
+                    // 智狼がいれば追加メッセージ
+                    createWiseWolfMessage(village, charas, village.participant.member(ability.targetId))?.let {
+                        messages = messages.add(it)
+                    }
                     // 猫又による道連れ
                     forceSuicidedParticipant(village.participant.member(ability.targetId), aliveWolf)?.let {
                         village = village.divineKillParticipant(it.id, village.day.latestDay())
@@ -166,6 +170,18 @@ class AttackDomainService : IAbilityDomainService {
 
     private fun createAttackMessageString(chara: Chara, targetChara: Chara): String =
         "${chara.charaName.fullName()}達は、${targetChara.charaName.fullName()}を襲撃した。"
+
+    private fun createWiseWolfMessage(village: Village, charas: Charas, target: VillageParticipant): Message? {
+        // 智狼がいなければ何もしない
+        if (!village.participant.filterAlive().memberList.any { it.skill!!.toCdef().isHasWiseWolfAbility }) return null
+        // 対象の役職を知られる
+        val targetChara = charas.chara(target.charaId)
+        val skill = target.skill!!.name
+        return Message.createAttackPrivateMessage(
+            "${targetChara.charaName.fullName()}は${skill}だったようだ。",
+            village.day.latestDay().id
+        )
+    }
 
     private fun forceSuicidedParticipant(
         attackedParticipant: VillageParticipant,

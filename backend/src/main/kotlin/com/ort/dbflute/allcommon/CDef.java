@@ -466,11 +466,26 @@ public interface CDef extends Classification {
      * 役職
      */
     public enum Skill implements CDef {
+        /** パン屋 */
+        パン屋("BAKERY", "パン屋", emptyStrings())
+        ,
         /** C国狂人 */
         C国狂人("CMADMAN", "C国狂人", emptyStrings())
         ,
+        /** 検死官 */
+        検死官("CORONER", "検死官", emptyStrings())
+        ,
+        /** 呪狼 */
+        呪狼("CURSEWOLF", "呪狼", emptyStrings())
+        ,
+        /** 狂信者 */
+        狂信者("FANATIC", "狂信者", emptyStrings())
+        ,
         /** 妖狐 */
         妖狐("FOX", "妖狐", emptyStrings())
+        ,
+        /** 導師 */
+        導師("GURU", "導師", emptyStrings())
         ,
         /** 狩人 */
         狩人("HUNTER", "狩人", emptyStrings())
@@ -496,6 +511,9 @@ public interface CDef extends Classification {
         /** 聖痕者 */
         聖痕者("STIGMATA", "聖痕者", emptyStrings())
         ,
+        /** 共鳴者 */
+        共鳴者("SYMPATHIZER", "共鳴者", emptyStrings())
+        ,
         /** 村人 */
         村人("VILLAGER", "村人", emptyStrings())
         ,
@@ -507,6 +525,12 @@ public interface CDef extends Classification {
         ,
         /** おまかせ（人狼陣営） */
         おまかせ人狼陣営("WEREWOLFS", "おまかせ（人狼陣営）", emptyStrings())
+        ,
+        /** 賢者 */
+        賢者("WISE", "賢者", emptyStrings())
+        ,
+        /** 智狼 */
+        智狼("WISEWOLF", "智狼", emptyStrings())
         ;
         private static final Map<String, Skill> _codeClsMap = new HashMap<String, Skill>();
         private static final Map<String, Skill> _nameClsMap = new HashMap<String, Skill>();
@@ -521,24 +545,64 @@ public interface CDef extends Classification {
         static {
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
+                subItemMap.put("shortName", "パ");
+                subItemMap.put("order", "12");
+                subItemMap.put("campCode", "VILLAGER");
+                subItemMap.put("description", "あなたはパン屋です。毎日おいしいパンを焼くことができます。生存していると、朝に専用のシステムメッセージが表示されます。また、全てのパン屋が全滅した朝にも専用のシステムメッセージが表示されます。");
+                _subItemMapMap.put(パン屋.code(), Collections.unmodifiableMap(subItemMap));
+            }
+            {
+                Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "Ｃ");
-                subItemMap.put("order", "10");
+                subItemMap.put("order", "17");
                 subItemMap.put("campCode", "WEREWOLF");
                 subItemMap.put("description", "あなたはC国狂人です。人狼系役職とC国狂人同士にしか聞こえない会話が可能で、人狼の勝利があなたの勝利となります。");
                 _subItemMapMap.put(C国狂人.code(), Collections.unmodifiableMap(subItemMap));
             }
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
+                subItemMap.put("shortName", "検");
+                subItemMap.put("order", "6");
+                subItemMap.put("campCode", "VILLAGER");
+                subItemMap.put("description", "あなたは検死官です。無惨な死体となった人物の役職を知ることができます。");
+                _subItemMapMap.put(検死官.code(), Collections.unmodifiableMap(subItemMap));
+            }
+            {
+                Map<String, Object> subItemMap = new HashMap<String, Object>();
+                subItemMap.put("shortName", "呪");
+                subItemMap.put("order", "14");
+                subItemMap.put("campCode", "WEREWOLF");
+                subItemMap.put("description", "あなたは呪狼です。人狼系役職とC国狂人同士にしか聞こえない会話が可能です。また、毎晩一人を襲撃することができます。また、あなたを占った人を死亡させることができます。");
+                _subItemMapMap.put(呪狼.code(), Collections.unmodifiableMap(subItemMap));
+            }
+            {
+                Map<String, Object> subItemMap = new HashMap<String, Object>();
+                subItemMap.put("shortName", "信");
+                subItemMap.put("order", "18");
+                subItemMap.put("campCode", "WEREWOLF");
+                subItemMap.put("description", "あなたは狂信者です。人狼が誰かを知ることができます（人狼からはあなたが狂信者であることはわかりません）。特別な能力はありませんが、人狼の勝利があなたの勝利となります。");
+                _subItemMapMap.put(狂信者.code(), Collections.unmodifiableMap(subItemMap));
+            }
+            {
+                Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "狐");
-                subItemMap.put("order", "11");
+                subItemMap.put("order", "19");
                 subItemMap.put("campCode", "FOX");
                 subItemMap.put("description", "あなたは妖狐です。最後まで生存するとあなたの勝利となります。人狼に襲撃されても死亡しませんが、占われると死亡します。");
                 _subItemMapMap.put(妖狐.code(), Collections.unmodifiableMap(subItemMap));
             }
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
+                subItemMap.put("shortName", "導");
+                subItemMap.put("order", "5");
+                subItemMap.put("campCode", "VILLAGER");
+                subItemMap.put("description", "あなたは導師です。処刑された・突然死した人物の役職を知ることができます。");
+                _subItemMapMap.put(導師.code(), Collections.unmodifiableMap(subItemMap));
+            }
+            {
+                Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "狩");
-                subItemMap.put("order", "4");
+                subItemMap.put("order", "7");
                 subItemMap.put("campCode", "VILLAGER");
                 subItemMap.put("description", "あなたは狩人です。初日以外の毎晩、自分以外の一人を人狼の襲撃から守ることができます。");
                 _subItemMapMap.put(狩人.code(), Collections.unmodifiableMap(subItemMap));
@@ -546,7 +610,7 @@ public interface CDef extends Classification {
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "お");
-                subItemMap.put("order", "12");
+                subItemMap.put("order", "20");
                 subItemMap.put("campCode", "VILLAGER");
                 subItemMap.put("description", "余った役職が割り当てられます。");
                 _subItemMapMap.put(おまかせ.code(), Collections.unmodifiableMap(subItemMap));
@@ -554,7 +618,7 @@ public interface CDef extends Classification {
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "狂");
-                subItemMap.put("order", "9");
+                subItemMap.put("order", "16");
                 subItemMap.put("campCode", "WEREWOLF");
                 subItemMap.put("description", "あなたは狂人です。特別な能力はありませんが、人狼の勝利があなたの勝利となります。");
                 _subItemMapMap.put(狂人.code(), Collections.unmodifiableMap(subItemMap));
@@ -562,7 +626,7 @@ public interface CDef extends Classification {
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "共");
-                subItemMap.put("order", "5");
+                subItemMap.put("order", "8");
                 subItemMap.put("campCode", "VILLAGER");
                 subItemMap.put("description", "あなたは共有者です。他の共有者が誰であるかを知ることができます。");
                 _subItemMapMap.put(共有者.code(), Collections.unmodifiableMap(subItemMap));
@@ -570,7 +634,7 @@ public interface CDef extends Classification {
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "霊");
-                subItemMap.put("order", "3");
+                subItemMap.put("order", "4");
                 subItemMap.put("campCode", "VILLAGER");
                 subItemMap.put("description", "あなたは霊能者です。処刑された・突然死した人物が人狼であったかどうかを知ることができます。");
                 _subItemMapMap.put(霊能者.code(), Collections.unmodifiableMap(subItemMap));
@@ -578,7 +642,7 @@ public interface CDef extends Classification {
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "猫");
-                subItemMap.put("order", "7");
+                subItemMap.put("order", "11");
                 subItemMap.put("campCode", "VILLAGER");
                 subItemMap.put("description", "あなたは猫又です。処刑死したら投票者から1名を、襲撃死したら襲撃者から1名をランダムで道連れにすることができます。");
                 _subItemMapMap.put(猫又.code(), Collections.unmodifiableMap(subItemMap));
@@ -594,10 +658,18 @@ public interface CDef extends Classification {
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "聖");
-                subItemMap.put("order", "6");
+                subItemMap.put("order", "10");
                 subItemMap.put("campCode", "VILLAGER");
                 subItemMap.put("description", "あなたは聖痕者です。特別な能力はありませんが、独特の印を持つため、あなたの正体は比較的信用されやすいでしょう。");
                 _subItemMapMap.put(聖痕者.code(), Collections.unmodifiableMap(subItemMap));
+            }
+            {
+                Map<String, Object> subItemMap = new HashMap<String, Object>();
+                subItemMap.put("shortName", "鳴");
+                subItemMap.put("order", "9");
+                subItemMap.put("campCode", "VILLAGER");
+                subItemMap.put("description", "あなたは共鳴者です。共鳴者同士にしか聞こえない会話が可能です。");
+                _subItemMapMap.put(共鳴者.code(), Collections.unmodifiableMap(subItemMap));
             }
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
@@ -610,7 +682,7 @@ public interface CDef extends Classification {
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "お");
-                subItemMap.put("order", "13");
+                subItemMap.put("order", "21");
                 subItemMap.put("campCode", "VILLAGER");
                 subItemMap.put("description", "村人陣営の中で余った役職が割り当てられます。");
                 _subItemMapMap.put(おまかせ村人陣営.code(), Collections.unmodifiableMap(subItemMap));
@@ -618,7 +690,7 @@ public interface CDef extends Classification {
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "狼");
-                subItemMap.put("order", "8");
+                subItemMap.put("order", "13");
                 subItemMap.put("campCode", "WEREWOLF");
                 subItemMap.put("description", "あなたは人狼です。人狼系役職とC国狂人同士にしか聞こえない会話が可能です。また、毎晩一人を襲撃することができます。");
                 _subItemMapMap.put(人狼.code(), Collections.unmodifiableMap(subItemMap));
@@ -626,10 +698,26 @@ public interface CDef extends Classification {
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "お");
-                subItemMap.put("order", "14");
+                subItemMap.put("order", "22");
                 subItemMap.put("campCode", "VILLAGER");
                 subItemMap.put("description", "人狼陣営の中で余った役職が割り当てられます。");
                 _subItemMapMap.put(おまかせ人狼陣営.code(), Collections.unmodifiableMap(subItemMap));
+            }
+            {
+                Map<String, Object> subItemMap = new HashMap<String, Object>();
+                subItemMap.put("shortName", "賢");
+                subItemMap.put("order", "3");
+                subItemMap.put("campCode", "VILLAGER");
+                subItemMap.put("description", "あなたは賢者です。毎晩一人を占い、その人の役職を知ることができます。");
+                _subItemMapMap.put(賢者.code(), Collections.unmodifiableMap(subItemMap));
+            }
+            {
+                Map<String, Object> subItemMap = new HashMap<String, Object>();
+                subItemMap.put("shortName", "智");
+                subItemMap.put("order", "15");
+                subItemMap.put("campCode", "WEREWOLF");
+                subItemMap.put("description", "あなたは智狼です。人狼系役職とC国狂人同士にしか聞こえない会話が可能です。また、毎晩一人を襲撃することができます。また、あなたが生存していれば、襲撃成功した際に対象者の役職を知ることができます。");
+                _subItemMapMap.put(智狼.code(), Collections.unmodifiableMap(subItemMap));
             }
         }
         private String _code; private String _alias; private Set<String> _sisterSet;
@@ -659,61 +747,81 @@ public interface CDef extends Classification {
         /**
          * Is the classification in the group? <br>
          * 囁きを見られる <br>
-         * The group elements:[人狼, C国狂人]
+         * The group elements:[人狼, 呪狼, 智狼, C国狂人]
          * @return The determination, true or false.
          */
         public boolean isViewableWerewolfSay() {
-            return 人狼.equals(this) || C国狂人.equals(this);
+            return 人狼.equals(this) || 呪狼.equals(this) || 智狼.equals(this) || C国狂人.equals(this);
         }
 
         /**
          * Is the classification in the group? <br>
          * 囁き可能 <br>
-         * The group elements:[人狼, C国狂人]
+         * The group elements:[人狼, 呪狼, 智狼, C国狂人]
          * @return The determination, true or false.
          */
         public boolean isAvailableWerewolfSay() {
-            return 人狼.equals(this) || C国狂人.equals(this);
+            return 人狼.equals(this) || 呪狼.equals(this) || 智狼.equals(this) || C国狂人.equals(this);
+        }
+
+        /**
+         * Is the classification in the group? <br>
+         * 共鳴発言を見られる <br>
+         * The group elements:[共鳴者]
+         * @return The determination, true or false.
+         */
+        public boolean isViewableSympathizeSay() {
+            return 共鳴者.equals(this);
+        }
+
+        /**
+         * Is the classification in the group? <br>
+         * 共鳴発言可能 <br>
+         * The group elements:[共鳴者]
+         * @return The determination, true or false.
+         */
+        public boolean isAvailableSympathizeSay() {
+            return 共鳴者.equals(this);
         }
 
         /**
          * Is the classification in the group? <br>
          * 襲撃対象に選べない <br>
-         * The group elements:[人狼]
+         * The group elements:[人狼, 呪狼, 智狼]
          * @return The determination, true or false.
          */
         public boolean isNotSelectableAttack() {
-            return 人狼.equals(this);
+            return 人狼.equals(this) || 呪狼.equals(this) || 智狼.equals(this);
         }
 
         /**
          * Is the classification in the group? <br>
          * 占い結果が人狼になる <br>
-         * The group elements:[人狼]
+         * The group elements:[人狼, 呪狼, 智狼]
          * @return The determination, true or false.
          */
         public boolean isDivineResultWolf() {
-            return 人狼.equals(this);
+            return 人狼.equals(this) || 呪狼.equals(this) || 智狼.equals(this);
         }
 
         /**
          * Is the classification in the group? <br>
          * 霊能結果が人狼になる <br>
-         * The group elements:[人狼]
+         * The group elements:[人狼, 呪狼, 智狼]
          * @return The determination, true or false.
          */
         public boolean isPsychicResultWolf() {
-            return 人狼.equals(this);
+            return 人狼.equals(this) || 呪狼.equals(this) || 智狼.equals(this);
         }
 
         /**
          * Is the classification in the group? <br>
          * 襲撃能力を持つ <br>
-         * The group elements:[人狼]
+         * The group elements:[人狼, 呪狼, 智狼]
          * @return The determination, true or false.
          */
         public boolean isHasAttackAbility() {
-            return 人狼.equals(this);
+            return 人狼.equals(this) || 呪狼.equals(this) || 智狼.equals(this);
         }
 
         /**
@@ -724,6 +832,16 @@ public interface CDef extends Classification {
          */
         public boolean isHasDivineAbility() {
             return 占い師.equals(this);
+        }
+
+        /**
+         * Is the classification in the group? <br>
+         * 役職占い能力を持つ <br>
+         * The group elements:[賢者]
+         * @return The determination, true or false.
+         */
+        public boolean isHasWiseDivineAbility() {
+            return 賢者.equals(this);
         }
 
         /**
@@ -748,12 +866,52 @@ public interface CDef extends Classification {
 
         /**
          * Is the classification in the group? <br>
+         * 役職霊能能力を持つ <br>
+         * The group elements:[導師]
+         * @return The determination, true or false.
+         */
+        public boolean isHasGuruPsychicAbility() {
+            return 導師.equals(this);
+        }
+
+        /**
+         * Is the classification in the group? <br>
+         * 検死能力を持つ <br>
+         * The group elements:[検死官]
+         * @return The determination, true or false.
+         */
+        public boolean isHasAutopsyAbility() {
+            return 検死官.equals(this);
+        }
+
+        /**
+         * Is the classification in the group? <br>
+         * 襲撃役職占い能力を持つ <br>
+         * The group elements:[智狼]
+         * @return The determination, true or false.
+         */
+        public boolean isHasWiseWolfAbility() {
+            return 智狼.equals(this);
+        }
+
+        /**
+         * Is the classification in the group? <br>
+         * パン焼き能力を持つ <br>
+         * The group elements:[パン屋]
+         * @return The determination, true or false.
+         */
+        public boolean isHasBakeryAbility() {
+            return パン屋.equals(this);
+        }
+
+        /**
+         * Is the classification in the group? <br>
          * 勝敗判定時狼にカウントする <br>
-         * The group elements:[人狼]
+         * The group elements:[人狼, 呪狼, 智狼]
          * @return The determination, true or false.
          */
         public boolean isCountWolf() {
-            return 人狼.equals(this);
+            return 人狼.equals(this) || 呪狼.equals(this) || 智狼.equals(this);
         }
 
         /**
@@ -778,12 +936,32 @@ public interface CDef extends Classification {
 
         /**
          * Is the classification in the group? <br>
-         * 共有系としてお互いに認知できる <br>
+         * 共有者としてお互いに認知できる <br>
          * The group elements:[共有者]
          * @return The determination, true or false.
          */
         public boolean isRecognizableEachMason() {
             return 共有者.equals(this);
+        }
+
+        /**
+         * Is the classification in the group? <br>
+         * 共鳴者としてお互いに認知できる <br>
+         * The group elements:[共鳴者]
+         * @return The determination, true or false.
+         */
+        public boolean isRecognizableEachSympathizer() {
+            return 共鳴者.equals(this);
+        }
+
+        /**
+         * Is the classification in the group? <br>
+         * 人狼を認知できる <br>
+         * The group elements:[狂信者]
+         * @return The determination, true or false.
+         */
+        public boolean isRecognizableWolf() {
+            return 狂信者.equals(this);
         }
 
         /**
@@ -808,6 +986,16 @@ public interface CDef extends Classification {
 
         /**
          * Is the classification in the group? <br>
+         * 占いにより占った側が死亡する <br>
+         * The group elements:[呪狼]
+         * @return The determination, true or false.
+         */
+        public boolean isCounterDeadByDivine() {
+            return 呪狼.equals(this);
+        }
+
+        /**
+         * Is the classification in the group? <br>
          * 死亡時道連れにする <br>
          * The group elements:[猫又]
          * @return The determination, true or false.
@@ -819,19 +1007,29 @@ public interface CDef extends Classification {
         public boolean inGroup(String groupName) {
             if ("viewableWerewolfSay".equals(groupName)) { return isViewableWerewolfSay(); }
             if ("availableWerewolfSay".equals(groupName)) { return isAvailableWerewolfSay(); }
+            if ("viewableSympathizeSay".equals(groupName)) { return isViewableSympathizeSay(); }
+            if ("availableSympathizeSay".equals(groupName)) { return isAvailableSympathizeSay(); }
             if ("notSelectableAttack".equals(groupName)) { return isNotSelectableAttack(); }
             if ("divineResultWolf".equals(groupName)) { return isDivineResultWolf(); }
             if ("psychicResultWolf".equals(groupName)) { return isPsychicResultWolf(); }
             if ("hasAttackAbility".equals(groupName)) { return isHasAttackAbility(); }
             if ("hasDivineAbility".equals(groupName)) { return isHasDivineAbility(); }
+            if ("hasWiseDivineAbility".equals(groupName)) { return isHasWiseDivineAbility(); }
             if ("hasGuardAbility".equals(groupName)) { return isHasGuardAbility(); }
             if ("hasPsychicAbility".equals(groupName)) { return isHasPsychicAbility(); }
+            if ("hasGuruPsychicAbility".equals(groupName)) { return isHasGuruPsychicAbility(); }
+            if ("hasAutopsyAbility".equals(groupName)) { return isHasAutopsyAbility(); }
+            if ("hasWiseWolfAbility".equals(groupName)) { return isHasWiseWolfAbility(); }
+            if ("hasBakeryAbility".equals(groupName)) { return isHasBakeryAbility(); }
             if ("countWolf".equals(groupName)) { return isCountWolf(); }
             if ("noCount".equals(groupName)) { return isNoCount(); }
             if ("someoneSkill".equals(groupName)) { return isSomeoneSkill(); }
             if ("recognizableEachMason".equals(groupName)) { return isRecognizableEachMason(); }
+            if ("recognizableEachSympathizer".equals(groupName)) { return isRecognizableEachSympathizer(); }
+            if ("recognizableWolf".equals(groupName)) { return isRecognizableWolf(); }
             if ("noDeadByAttack".equals(groupName)) { return isNoDeadByAttack(); }
             if ("deadByDivine".equals(groupName)) { return isDeadByDivine(); }
+            if ("counterDeadByDivine".equals(groupName)) { return isCounterDeadByDivine(); }
             if ("forceDoubleSuicide".equals(groupName)) { return isForceDoubleSuicide(); }
             return false;
         }
@@ -902,19 +1100,29 @@ public interface CDef extends Classification {
             if (groupName == null) { throw new IllegalArgumentException("The argument 'groupName' should not be null."); }
             if ("viewableWerewolfSay".equalsIgnoreCase(groupName)) { return listOfViewableWerewolfSay(); }
             if ("availableWerewolfSay".equalsIgnoreCase(groupName)) { return listOfAvailableWerewolfSay(); }
+            if ("viewableSympathizeSay".equalsIgnoreCase(groupName)) { return listOfViewableSympathizeSay(); }
+            if ("availableSympathizeSay".equalsIgnoreCase(groupName)) { return listOfAvailableSympathizeSay(); }
             if ("notSelectableAttack".equalsIgnoreCase(groupName)) { return listOfNotSelectableAttack(); }
             if ("divineResultWolf".equalsIgnoreCase(groupName)) { return listOfDivineResultWolf(); }
             if ("psychicResultWolf".equalsIgnoreCase(groupName)) { return listOfPsychicResultWolf(); }
             if ("hasAttackAbility".equalsIgnoreCase(groupName)) { return listOfHasAttackAbility(); }
             if ("hasDivineAbility".equalsIgnoreCase(groupName)) { return listOfHasDivineAbility(); }
+            if ("hasWiseDivineAbility".equalsIgnoreCase(groupName)) { return listOfHasWiseDivineAbility(); }
             if ("hasGuardAbility".equalsIgnoreCase(groupName)) { return listOfHasGuardAbility(); }
             if ("hasPsychicAbility".equalsIgnoreCase(groupName)) { return listOfHasPsychicAbility(); }
+            if ("hasGuruPsychicAbility".equalsIgnoreCase(groupName)) { return listOfHasGuruPsychicAbility(); }
+            if ("hasAutopsyAbility".equalsIgnoreCase(groupName)) { return listOfHasAutopsyAbility(); }
+            if ("hasWiseWolfAbility".equalsIgnoreCase(groupName)) { return listOfHasWiseWolfAbility(); }
+            if ("hasBakeryAbility".equalsIgnoreCase(groupName)) { return listOfHasBakeryAbility(); }
             if ("countWolf".equalsIgnoreCase(groupName)) { return listOfCountWolf(); }
             if ("noCount".equalsIgnoreCase(groupName)) { return listOfNoCount(); }
             if ("someoneSkill".equalsIgnoreCase(groupName)) { return listOfSomeoneSkill(); }
             if ("recognizableEachMason".equalsIgnoreCase(groupName)) { return listOfRecognizableEachMason(); }
+            if ("recognizableEachSympathizer".equalsIgnoreCase(groupName)) { return listOfRecognizableEachSympathizer(); }
+            if ("recognizableWolf".equalsIgnoreCase(groupName)) { return listOfRecognizableWolf(); }
             if ("noDeadByAttack".equalsIgnoreCase(groupName)) { return listOfNoDeadByAttack(); }
             if ("deadByDivine".equalsIgnoreCase(groupName)) { return listOfDeadByDivine(); }
+            if ("counterDeadByDivine".equalsIgnoreCase(groupName)) { return listOfCounterDeadByDivine(); }
             if ("forceDoubleSuicide".equalsIgnoreCase(groupName)) { return listOfForceDoubleSuicide(); }
             throw new ClassificationNotFoundException("Unknown classification group: Skill." + groupName);
         }
@@ -934,61 +1142,81 @@ public interface CDef extends Classification {
         /**
          * Get the list of group classification elements. (returns new copied list) <br>
          * 囁きを見られる <br>
-         * The group elements:[人狼, C国狂人]
+         * The group elements:[人狼, 呪狼, 智狼, C国狂人]
          * @return The snapshot list of classification elements in the group. (NotNull)
          */
         public static List<Skill> listOfViewableWerewolfSay() {
-            return new ArrayList<Skill>(Arrays.asList(人狼, C国狂人));
+            return new ArrayList<Skill>(Arrays.asList(人狼, 呪狼, 智狼, C国狂人));
         }
 
         /**
          * Get the list of group classification elements. (returns new copied list) <br>
          * 囁き可能 <br>
-         * The group elements:[人狼, C国狂人]
+         * The group elements:[人狼, 呪狼, 智狼, C国狂人]
          * @return The snapshot list of classification elements in the group. (NotNull)
          */
         public static List<Skill> listOfAvailableWerewolfSay() {
-            return new ArrayList<Skill>(Arrays.asList(人狼, C国狂人));
+            return new ArrayList<Skill>(Arrays.asList(人狼, 呪狼, 智狼, C国狂人));
+        }
+
+        /**
+         * Get the list of group classification elements. (returns new copied list) <br>
+         * 共鳴発言を見られる <br>
+         * The group elements:[共鳴者]
+         * @return The snapshot list of classification elements in the group. (NotNull)
+         */
+        public static List<Skill> listOfViewableSympathizeSay() {
+            return new ArrayList<Skill>(Arrays.asList(共鳴者));
+        }
+
+        /**
+         * Get the list of group classification elements. (returns new copied list) <br>
+         * 共鳴発言可能 <br>
+         * The group elements:[共鳴者]
+         * @return The snapshot list of classification elements in the group. (NotNull)
+         */
+        public static List<Skill> listOfAvailableSympathizeSay() {
+            return new ArrayList<Skill>(Arrays.asList(共鳴者));
         }
 
         /**
          * Get the list of group classification elements. (returns new copied list) <br>
          * 襲撃対象に選べない <br>
-         * The group elements:[人狼]
+         * The group elements:[人狼, 呪狼, 智狼]
          * @return The snapshot list of classification elements in the group. (NotNull)
          */
         public static List<Skill> listOfNotSelectableAttack() {
-            return new ArrayList<Skill>(Arrays.asList(人狼));
+            return new ArrayList<Skill>(Arrays.asList(人狼, 呪狼, 智狼));
         }
 
         /**
          * Get the list of group classification elements. (returns new copied list) <br>
          * 占い結果が人狼になる <br>
-         * The group elements:[人狼]
+         * The group elements:[人狼, 呪狼, 智狼]
          * @return The snapshot list of classification elements in the group. (NotNull)
          */
         public static List<Skill> listOfDivineResultWolf() {
-            return new ArrayList<Skill>(Arrays.asList(人狼));
+            return new ArrayList<Skill>(Arrays.asList(人狼, 呪狼, 智狼));
         }
 
         /**
          * Get the list of group classification elements. (returns new copied list) <br>
          * 霊能結果が人狼になる <br>
-         * The group elements:[人狼]
+         * The group elements:[人狼, 呪狼, 智狼]
          * @return The snapshot list of classification elements in the group. (NotNull)
          */
         public static List<Skill> listOfPsychicResultWolf() {
-            return new ArrayList<Skill>(Arrays.asList(人狼));
+            return new ArrayList<Skill>(Arrays.asList(人狼, 呪狼, 智狼));
         }
 
         /**
          * Get the list of group classification elements. (returns new copied list) <br>
          * 襲撃能力を持つ <br>
-         * The group elements:[人狼]
+         * The group elements:[人狼, 呪狼, 智狼]
          * @return The snapshot list of classification elements in the group. (NotNull)
          */
         public static List<Skill> listOfHasAttackAbility() {
-            return new ArrayList<Skill>(Arrays.asList(人狼));
+            return new ArrayList<Skill>(Arrays.asList(人狼, 呪狼, 智狼));
         }
 
         /**
@@ -999,6 +1227,16 @@ public interface CDef extends Classification {
          */
         public static List<Skill> listOfHasDivineAbility() {
             return new ArrayList<Skill>(Arrays.asList(占い師));
+        }
+
+        /**
+         * Get the list of group classification elements. (returns new copied list) <br>
+         * 役職占い能力を持つ <br>
+         * The group elements:[賢者]
+         * @return The snapshot list of classification elements in the group. (NotNull)
+         */
+        public static List<Skill> listOfHasWiseDivineAbility() {
+            return new ArrayList<Skill>(Arrays.asList(賢者));
         }
 
         /**
@@ -1023,12 +1261,52 @@ public interface CDef extends Classification {
 
         /**
          * Get the list of group classification elements. (returns new copied list) <br>
+         * 役職霊能能力を持つ <br>
+         * The group elements:[導師]
+         * @return The snapshot list of classification elements in the group. (NotNull)
+         */
+        public static List<Skill> listOfHasGuruPsychicAbility() {
+            return new ArrayList<Skill>(Arrays.asList(導師));
+        }
+
+        /**
+         * Get the list of group classification elements. (returns new copied list) <br>
+         * 検死能力を持つ <br>
+         * The group elements:[検死官]
+         * @return The snapshot list of classification elements in the group. (NotNull)
+         */
+        public static List<Skill> listOfHasAutopsyAbility() {
+            return new ArrayList<Skill>(Arrays.asList(検死官));
+        }
+
+        /**
+         * Get the list of group classification elements. (returns new copied list) <br>
+         * 襲撃役職占い能力を持つ <br>
+         * The group elements:[智狼]
+         * @return The snapshot list of classification elements in the group. (NotNull)
+         */
+        public static List<Skill> listOfHasWiseWolfAbility() {
+            return new ArrayList<Skill>(Arrays.asList(智狼));
+        }
+
+        /**
+         * Get the list of group classification elements. (returns new copied list) <br>
+         * パン焼き能力を持つ <br>
+         * The group elements:[パン屋]
+         * @return The snapshot list of classification elements in the group. (NotNull)
+         */
+        public static List<Skill> listOfHasBakeryAbility() {
+            return new ArrayList<Skill>(Arrays.asList(パン屋));
+        }
+
+        /**
+         * Get the list of group classification elements. (returns new copied list) <br>
          * 勝敗判定時狼にカウントする <br>
-         * The group elements:[人狼]
+         * The group elements:[人狼, 呪狼, 智狼]
          * @return The snapshot list of classification elements in the group. (NotNull)
          */
         public static List<Skill> listOfCountWolf() {
-            return new ArrayList<Skill>(Arrays.asList(人狼));
+            return new ArrayList<Skill>(Arrays.asList(人狼, 呪狼, 智狼));
         }
 
         /**
@@ -1053,12 +1331,32 @@ public interface CDef extends Classification {
 
         /**
          * Get the list of group classification elements. (returns new copied list) <br>
-         * 共有系としてお互いに認知できる <br>
+         * 共有者としてお互いに認知できる <br>
          * The group elements:[共有者]
          * @return The snapshot list of classification elements in the group. (NotNull)
          */
         public static List<Skill> listOfRecognizableEachMason() {
             return new ArrayList<Skill>(Arrays.asList(共有者));
+        }
+
+        /**
+         * Get the list of group classification elements. (returns new copied list) <br>
+         * 共鳴者としてお互いに認知できる <br>
+         * The group elements:[共鳴者]
+         * @return The snapshot list of classification elements in the group. (NotNull)
+         */
+        public static List<Skill> listOfRecognizableEachSympathizer() {
+            return new ArrayList<Skill>(Arrays.asList(共鳴者));
+        }
+
+        /**
+         * Get the list of group classification elements. (returns new copied list) <br>
+         * 人狼を認知できる <br>
+         * The group elements:[狂信者]
+         * @return The snapshot list of classification elements in the group. (NotNull)
+         */
+        public static List<Skill> listOfRecognizableWolf() {
+            return new ArrayList<Skill>(Arrays.asList(狂信者));
         }
 
         /**
@@ -1083,6 +1381,16 @@ public interface CDef extends Classification {
 
         /**
          * Get the list of group classification elements. (returns new copied list) <br>
+         * 占いにより占った側が死亡する <br>
+         * The group elements:[呪狼]
+         * @return The snapshot list of classification elements in the group. (NotNull)
+         */
+        public static List<Skill> listOfCounterDeadByDivine() {
+            return new ArrayList<Skill>(Arrays.asList(呪狼));
+        }
+
+        /**
+         * Get the list of group classification elements. (returns new copied list) <br>
          * 死亡時道連れにする <br>
          * The group elements:[猫又]
          * @return The snapshot list of classification elements in the group. (NotNull)
@@ -1099,19 +1407,29 @@ public interface CDef extends Classification {
         public static List<Skill> groupOf(String groupName) {
             if ("viewableWerewolfSay".equals(groupName)) { return listOfViewableWerewolfSay(); }
             if ("availableWerewolfSay".equals(groupName)) { return listOfAvailableWerewolfSay(); }
+            if ("viewableSympathizeSay".equals(groupName)) { return listOfViewableSympathizeSay(); }
+            if ("availableSympathizeSay".equals(groupName)) { return listOfAvailableSympathizeSay(); }
             if ("notSelectableAttack".equals(groupName)) { return listOfNotSelectableAttack(); }
             if ("divineResultWolf".equals(groupName)) { return listOfDivineResultWolf(); }
             if ("psychicResultWolf".equals(groupName)) { return listOfPsychicResultWolf(); }
             if ("hasAttackAbility".equals(groupName)) { return listOfHasAttackAbility(); }
             if ("hasDivineAbility".equals(groupName)) { return listOfHasDivineAbility(); }
+            if ("hasWiseDivineAbility".equals(groupName)) { return listOfHasWiseDivineAbility(); }
             if ("hasGuardAbility".equals(groupName)) { return listOfHasGuardAbility(); }
             if ("hasPsychicAbility".equals(groupName)) { return listOfHasPsychicAbility(); }
+            if ("hasGuruPsychicAbility".equals(groupName)) { return listOfHasGuruPsychicAbility(); }
+            if ("hasAutopsyAbility".equals(groupName)) { return listOfHasAutopsyAbility(); }
+            if ("hasWiseWolfAbility".equals(groupName)) { return listOfHasWiseWolfAbility(); }
+            if ("hasBakeryAbility".equals(groupName)) { return listOfHasBakeryAbility(); }
             if ("countWolf".equals(groupName)) { return listOfCountWolf(); }
             if ("noCount".equals(groupName)) { return listOfNoCount(); }
             if ("someoneSkill".equals(groupName)) { return listOfSomeoneSkill(); }
             if ("recognizableEachMason".equals(groupName)) { return listOfRecognizableEachMason(); }
+            if ("recognizableEachSympathizer".equals(groupName)) { return listOfRecognizableEachSympathizer(); }
+            if ("recognizableWolf".equals(groupName)) { return listOfRecognizableWolf(); }
             if ("noDeadByAttack".equals(groupName)) { return listOfNoDeadByAttack(); }
             if ("deadByDivine".equals(groupName)) { return listOfDeadByDivine(); }
+            if ("counterDeadByDivine".equals(groupName)) { return listOfCounterDeadByDivine(); }
             if ("forceDoubleSuicide".equals(groupName)) { return listOfForceDoubleSuicide(); }
             return new ArrayList<Skill>(4);
         }
@@ -1129,9 +1447,6 @@ public interface CDef extends Classification {
         /** 死者の呻き */
         死者の呻き("GRAVE_SAY", "死者の呻き", emptyStrings())
         ,
-        /** 共鳴発言 */
-        共鳴発言("MASON_SAY", "共鳴発言", emptyStrings())
-        ,
         /** 独り言 */
         独り言("MONOLOGUE_SAY", "独り言", emptyStrings())
         ,
@@ -1140,6 +1455,15 @@ public interface CDef extends Classification {
         ,
         /** 参加者一覧 */
         参加者一覧("PARTICIPANTS", "参加者一覧", emptyStrings())
+        ,
+        /** 検死結果 */
+        検死結果("PRIVATE_CORONER", "検死結果", emptyStrings())
+        ,
+        /** 狂信者人狼確認メッセージ */
+        狂信者人狼確認メッセージ("PRIVATE_FANATIC", "狂信者人狼確認メッセージ", emptyStrings())
+        ,
+        /** 役職霊視結果 */
+        役職霊視結果("PRIVATE_GURU", "役職霊視結果", emptyStrings())
         ,
         /** 共有相互確認メッセージ */
         共有相互確認メッセージ("PRIVATE_MASON", "共有相互確認メッセージ", emptyStrings())
@@ -1150,11 +1474,17 @@ public interface CDef extends Classification {
         /** 白黒占い結果 */
         白黒占い結果("PRIVATE_SEER", "白黒占い結果", emptyStrings())
         ,
+        /** 共鳴相互確認メッセージ */
+        共鳴相互確認メッセージ("PRIVATE_SYMPATHIZER", "共鳴相互確認メッセージ", emptyStrings())
+        ,
         /** 非公開システムメッセージ */
         非公開システムメッセージ("PRIVATE_SYSTEM", "非公開システムメッセージ", emptyStrings())
         ,
         /** 襲撃結果 */
         襲撃結果("PRIVATE_WEREWOLF", "襲撃結果", emptyStrings())
+        ,
+        /** 役職占い結果 */
+        役職占い結果("PRIVATE_WISE", "役職占い結果", emptyStrings())
         ,
         /** 公開システムメッセージ */
         公開システムメッセージ("PUBLIC_SYSTEM", "公開システムメッセージ", emptyStrings())
@@ -1164,6 +1494,9 @@ public interface CDef extends Classification {
         ,
         /** 見学発言 */
         見学発言("SPECTATE_SAY", "見学発言", emptyStrings())
+        ,
+        /** 共鳴発言 */
+        共鳴発言("SYMPATHIZE_SAY", "共鳴発言", emptyStrings())
         ,
         /** 人狼の囁き */
         人狼の囁き("WEREWOLF_SAY", "人狼の囁き", emptyStrings())

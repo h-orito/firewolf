@@ -168,14 +168,6 @@ public abstract class BsMessageRestriction extends AbstractEntity implements Dom
     }
 
     /**
-     * Set the value of messageTypeCode as 共鳴発言 (MASON_SAY). <br>
-     * 共鳴発言
-     */
-    public void setMessageTypeCode_共鳴発言() {
-        setMessageTypeCodeAsMessageType(CDef.MessageType.共鳴発言);
-    }
-
-    /**
      * Set the value of messageTypeCode as 独り言 (MONOLOGUE_SAY). <br>
      * 独り言
      */
@@ -197,6 +189,30 @@ public abstract class BsMessageRestriction extends AbstractEntity implements Dom
      */
     public void setMessageTypeCode_参加者一覧() {
         setMessageTypeCodeAsMessageType(CDef.MessageType.参加者一覧);
+    }
+
+    /**
+     * Set the value of messageTypeCode as 検死結果 (PRIVATE_CORONER). <br>
+     * 検死結果
+     */
+    public void setMessageTypeCode_検死結果() {
+        setMessageTypeCodeAsMessageType(CDef.MessageType.検死結果);
+    }
+
+    /**
+     * Set the value of messageTypeCode as 狂信者人狼確認メッセージ (PRIVATE_FANATIC). <br>
+     * 狂信者人狼確認メッセージ
+     */
+    public void setMessageTypeCode_狂信者人狼確認メッセージ() {
+        setMessageTypeCodeAsMessageType(CDef.MessageType.狂信者人狼確認メッセージ);
+    }
+
+    /**
+     * Set the value of messageTypeCode as 役職霊視結果 (PRIVATE_GURU). <br>
+     * 役職霊視結果
+     */
+    public void setMessageTypeCode_役職霊視結果() {
+        setMessageTypeCodeAsMessageType(CDef.MessageType.役職霊視結果);
     }
 
     /**
@@ -224,6 +240,14 @@ public abstract class BsMessageRestriction extends AbstractEntity implements Dom
     }
 
     /**
+     * Set the value of messageTypeCode as 共鳴相互確認メッセージ (PRIVATE_SYMPATHIZER). <br>
+     * 共鳴相互確認メッセージ
+     */
+    public void setMessageTypeCode_共鳴相互確認メッセージ() {
+        setMessageTypeCodeAsMessageType(CDef.MessageType.共鳴相互確認メッセージ);
+    }
+
+    /**
      * Set the value of messageTypeCode as 非公開システムメッセージ (PRIVATE_SYSTEM). <br>
      * 非公開システムメッセージ
      */
@@ -237,6 +261,14 @@ public abstract class BsMessageRestriction extends AbstractEntity implements Dom
      */
     public void setMessageTypeCode_襲撃結果() {
         setMessageTypeCodeAsMessageType(CDef.MessageType.襲撃結果);
+    }
+
+    /**
+     * Set the value of messageTypeCode as 役職占い結果 (PRIVATE_WISE). <br>
+     * 役職占い結果
+     */
+    public void setMessageTypeCode_役職占い結果() {
+        setMessageTypeCodeAsMessageType(CDef.MessageType.役職占い結果);
     }
 
     /**
@@ -261,6 +293,14 @@ public abstract class BsMessageRestriction extends AbstractEntity implements Dom
      */
     public void setMessageTypeCode_見学発言() {
         setMessageTypeCodeAsMessageType(CDef.MessageType.見学発言);
+    }
+
+    /**
+     * Set the value of messageTypeCode as 共鳴発言 (SYMPATHIZE_SAY). <br>
+     * 共鳴発言
+     */
+    public void setMessageTypeCode_共鳴発言() {
+        setMessageTypeCodeAsMessageType(CDef.MessageType.共鳴発言);
     }
 
     /**
@@ -297,17 +337,6 @@ public abstract class BsMessageRestriction extends AbstractEntity implements Dom
     }
 
     /**
-     * Is the value of messageTypeCode 共鳴発言? <br>
-     * 共鳴発言
-     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
-     * @return The determination, true or false.
-     */
-    public boolean isMessageTypeCode共鳴発言() {
-        CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
-        return cdef != null ? cdef.equals(CDef.MessageType.共鳴発言) : false;
-    }
-
-    /**
      * Is the value of messageTypeCode 独り言? <br>
      * 独り言
      * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
@@ -338,6 +367,39 @@ public abstract class BsMessageRestriction extends AbstractEntity implements Dom
     public boolean isMessageTypeCode参加者一覧() {
         CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
         return cdef != null ? cdef.equals(CDef.MessageType.参加者一覧) : false;
+    }
+
+    /**
+     * Is the value of messageTypeCode 検死結果? <br>
+     * 検死結果
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isMessageTypeCode検死結果() {
+        CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
+        return cdef != null ? cdef.equals(CDef.MessageType.検死結果) : false;
+    }
+
+    /**
+     * Is the value of messageTypeCode 狂信者人狼確認メッセージ? <br>
+     * 狂信者人狼確認メッセージ
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isMessageTypeCode狂信者人狼確認メッセージ() {
+        CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
+        return cdef != null ? cdef.equals(CDef.MessageType.狂信者人狼確認メッセージ) : false;
+    }
+
+    /**
+     * Is the value of messageTypeCode 役職霊視結果? <br>
+     * 役職霊視結果
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isMessageTypeCode役職霊視結果() {
+        CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
+        return cdef != null ? cdef.equals(CDef.MessageType.役職霊視結果) : false;
     }
 
     /**
@@ -374,6 +436,17 @@ public abstract class BsMessageRestriction extends AbstractEntity implements Dom
     }
 
     /**
+     * Is the value of messageTypeCode 共鳴相互確認メッセージ? <br>
+     * 共鳴相互確認メッセージ
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isMessageTypeCode共鳴相互確認メッセージ() {
+        CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
+        return cdef != null ? cdef.equals(CDef.MessageType.共鳴相互確認メッセージ) : false;
+    }
+
+    /**
      * Is the value of messageTypeCode 非公開システムメッセージ? <br>
      * 非公開システムメッセージ
      * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
@@ -393,6 +466,17 @@ public abstract class BsMessageRestriction extends AbstractEntity implements Dom
     public boolean isMessageTypeCode襲撃結果() {
         CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
         return cdef != null ? cdef.equals(CDef.MessageType.襲撃結果) : false;
+    }
+
+    /**
+     * Is the value of messageTypeCode 役職占い結果? <br>
+     * 役職占い結果
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isMessageTypeCode役職占い結果() {
+        CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
+        return cdef != null ? cdef.equals(CDef.MessageType.役職占い結果) : false;
     }
 
     /**
@@ -426,6 +510,17 @@ public abstract class BsMessageRestriction extends AbstractEntity implements Dom
     public boolean isMessageTypeCode見学発言() {
         CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
         return cdef != null ? cdef.equals(CDef.MessageType.見学発言) : false;
+    }
+
+    /**
+     * Is the value of messageTypeCode 共鳴発言? <br>
+     * 共鳴発言
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isMessageTypeCode共鳴発言() {
+        CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
+        return cdef != null ? cdef.equals(CDef.MessageType.共鳴発言) : false;
     }
 
     /**
