@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service
 class AbilityDomainService(
     private val attackDomainService: AttackDomainService,
     private val divineDomainService: DivineDomainService,
+    private val wiseDivineDomainService: WiseDivineDomainService,
     private val guardDomainService: GuardDomainService
 ) {
 
@@ -110,6 +111,7 @@ class AbilityDomainService(
         abilities = abilities.addAll(attackDomainService.getDefaultAbilityList(village, abilities))
         // 占い
         abilities = abilities.addAll(divineDomainService.getDefaultAbilityList(village, abilities))
+        abilities = abilities.addAll(wiseDivineDomainService.getDefaultAbilityList(village, abilities))
         // 護衛
         abilities = abilities.addAll(guardDomainService.getDefaultAbilityList(village, abilities))
 

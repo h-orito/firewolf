@@ -128,6 +128,19 @@ data class VillageParticipant(
         return skill?.toCdef()?.isAvailableWerewolfSay ?: false
     }
 
+    fun isViewableSympathizeSay(): Boolean {
+        return skill?.toCdef()?.isViewableSympathizeSay ?: false
+    }
+
+    fun isSayableSympathizeSay(): Boolean {
+        // ダミーはOK
+        if (playerId == 1) return true
+        // 死亡していたら不可
+        if (!isAlive()) return false
+        // 共鳴発言できる役職でなければ不可
+        return skill?.toCdef()?.isAvailableSympathizeSay ?: false
+    }
+
     fun isViewableGraveSay(): Boolean {
         if (isSpectator) return true
         // 突然死以外で死亡している
@@ -169,16 +182,40 @@ data class VillageParticipant(
         return skill?.toCdef()?.isAvailableWerewolfSay ?: false
     }
 
+    fun isViewableAutopsyMessage(): Boolean {
+        // 生存していて検死可能なら開放
+        if (!isAlive()) return false
+        return skill?.toCdef()?.isHasAutopsyAbility ?: false
+    }
+
+    fun isViewableFanaticMessage(): Boolean {
+        // 生存していて狂信者なら開放
+        if (!isAlive()) return false
+        return skill?.toCdef()?.isRecognizableWolf ?: false
+    }
+
     fun isViewableMasonMessage(): Boolean {
         // 生存していて共有職なら開放
         if (!isAlive()) return false
         return skill?.toCdef()?.isRecognizableEachMason ?: false
     }
 
+    fun isViewableSympathizerMessage(): Boolean {
+        // 生存していて共鳴なら開放
+        if (!isAlive()) return false
+        return skill?.toCdef()?.isRecognizableEachSympathizer ?: false
+    }
+
     fun isViewablePsychicMessage(): Boolean {
         // 生存していて霊能者なら開放
         if (!isAlive()) return false
-        return skill?.toCdef() == CDef.Skill.霊能者
+        return skill?.toCdef()?.isHasPsychicAbility ?: false
+    }
+
+    fun isViewableGuruPsychicMessage(): Boolean {
+        // 生存していて導師なら開放
+        if (!isAlive()) return false
+        return skill?.toCdef()?.isHasGuruPsychicAbility ?: false
     }
 
     fun isViewableSecretSay(): Boolean = true // 制約なし

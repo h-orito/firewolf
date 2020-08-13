@@ -79,31 +79,43 @@ map:{
         	; groupingMap = map:{
         		; viewableWerewolfSay = map:{
         			; groupComment=囁きを見られる
-        			; elementList= list:{人狼;C国狂人}
+        			; elementList= list:{人狼;呪狼;智狼;C国狂人}
         		}
         		; availableWerewolfSay = map:{
         			; groupComment=囁き可能
-        			; elementList= list:{人狼;C国狂人}
+        			; elementList= list:{人狼;呪狼;智狼;C国狂人}
         		}
+        		; viewableSympathizeSay = map:{
+					; groupComment=共鳴発言を見られる
+					; elementList= list:{共鳴者}
+				}
+				; availableSympathizeSay = map:{
+					; groupComment=共鳴発言可能
+					; elementList= list:{共鳴者}
+				}
         		; notSelectableAttack = map:{
 					; groupComment=襲撃対象に選べない
-					; elementList= list:{人狼}
+					; elementList= list:{人狼;呪狼;智狼}
 				}
 				; divineResultWolf = map:{
 					; groupComment=占い結果が人狼になる
-					; elementList= list:{人狼}
+					; elementList= list:{人狼;呪狼;智狼}
 				}
 				; psychicResultWolf = map:{
 					; groupComment=霊能結果が人狼になる
-					; elementList= list:{人狼}
+					; elementList= list:{人狼;呪狼;智狼}
 				}
 				; hasAttackAbility = map:{
 					; groupComment=襲撃能力を持つ
-					; elementList= list:{人狼}
+					; elementList= list:{人狼;呪狼;智狼}
 				}
 				; hasDivineAbility = map:{
 					; groupComment=占い能力を持つ
 					; elementList= list:{占い師}
+				}
+				; hasWiseDivineAbility = map:{
+					; groupComment=役職占い能力を持つ
+					; elementList= list:{賢者}
 				}
 				; hasGuardAbility = map:{
 					; groupComment=護衛能力を持つ
@@ -113,9 +125,25 @@ map:{
 					; groupComment=霊能能力を持つ
 					; elementList= list:{霊能者}
 				}
+				; hasGuruPsychicAbility = map:{
+					; groupComment=役職霊能能力を持つ
+					; elementList= list:{導師}
+				}
+				; hasAutopsyAbility = map:{
+					; groupComment=検死能力を持つ
+					; elementList= list:{検死官}
+				}
+				; hasWiseWolfAbility = map:{
+					; groupComment=襲撃役職占い能力を持つ
+					; elementList= list:{智狼}
+				}
+				; hasBakeryAbility = map:{
+					; groupComment=パン焼き能力を持つ
+					; elementList= list:{パン屋}
+				}
 				; countWolf = map:{
 					; groupComment=勝敗判定時狼にカウントする
-					; elementList= list:{人狼}
+					; elementList= list:{人狼;呪狼;智狼}
 				}
 				; noCount = map:{
 					; groupComment=勝敗判定時に人間としてカウントしない
@@ -126,8 +154,16 @@ map:{
 					; elementList= list:{おまかせ;おまかせ村人陣営;おまかせ人狼陣営}
 				}
 				; recognizableEachMason = map:{
-					; groupComment=共有系としてお互いに認知できる
+					; groupComment=共有者としてお互いに認知できる
 					; elementList= list:{共有者}
+				}
+				; recognizableEachSympathizer = map:{
+					; groupComment=共鳴者としてお互いに認知できる
+					; elementList= list:{共鳴者}
+				}
+				; recognizableWolf = map:{
+					; groupComment=人狼を認知できる
+					; elementList= list:{狂信者}
 				}
 				; noDeadByAttack= map:{
 					; groupComment=襲撃耐性を持つ
@@ -136,6 +172,10 @@ map:{
 				; deadByDivine= map:{
 					; groupComment=占いにより死亡する
 					; elementList= list:{妖狐}
+				}
+				; counterDeadByDivine= map:{
+					; groupComment=占いにより占った側が死亡する
+					; elementList= list:{呪狼}
 				}
 				; forceDoubleSuicide = map:{
 					; groupComment=死亡時道連れにする

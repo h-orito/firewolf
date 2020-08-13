@@ -92,7 +92,22 @@ data class Village(
         return Message.createAttackPrivateMessage(text, day.latestDay().id)
     }
 
-    /** 共有系の役職相互確認メッセージ */
+    /** 狂信者の役職確認メッセージ */
+    fun createFanaticConfirmMessage(charas: Charas): Message? {
+        // 狂信者がいなければなし
+        if (participant.memberList.none { it.skill!!.toCdef().isRecognizableWolf }) return null
+        // 襲撃役職を一括りにして人狼とする
+        val text = participant.memberList.filter { it.skill!!.toCdef().isHasAttackAbility }.joinToString(
+            separator = "、",
+            prefix = "この村の人狼は",
+            postfix = "のようだ。"
+        ) {
+            charas.chara(it.charaId).charaName.fullName()
+        }
+        return Message.createFanaticPrivateMessage(text, day.latestDay().id)
+    }
+
+    /** 共有の役職相互確認メッセージ */
     fun createMasonsConfirmMessage(charas: Charas): Message? {
         // 共有がいなければなし
         if (participant.memberList.none { it.skill!!.toCdef().isRecognizableEachMason }) return null
@@ -109,6 +124,25 @@ data class Village(
             postfix = "のようだ。"
         )
         return Message.createMasonPrivateMessage(text, day.latestDay().id)
+    }
+
+    /** 共鳴の役職相互確認メッセージ */
+    fun createSympathizersConfirmMessage(charas: Charas): Message? {
+        // 共鳴がいなければなし
+        if (participant.memberList.none { it.skill!!.toCdef().isRecognizableEachSympathizer }) return null
+        // 共鳴が存在する
+        val text = CDef.Skill.listOfRecognizableEachSympathizer().sortedBy { Integer.parseInt(it.order()) }.mapNotNull { cdefSkill ->
+            val memberList = participant.memberList.filter { it.skill!!.toCdef() == cdefSkill }
+            if (memberList.isEmpty()) null
+            else "${Skill(cdefSkill).name}は${memberList.joinToString(separator = "、") {
+                charas.chara(it.charaId).charaName.fullName()
+            }}"
+        }.joinToString(
+            separator = "、\n",
+            prefix = "この村の",
+            postfix = "のようだ。"
+        )
+        return Message.createSympathizerPrivateMessage(text, day.latestDay().id)
     }
 
     /**
@@ -305,6 +339,12 @@ data class Village(
     /** 村として囁き発言できるか */
     fun isSayableWerewolfSay(): Boolean = status.isProgress() // 進行中以外は不可
 
+    /** 村として共鳴発言を見られるか */
+    fun isViewableSympathizeSay(): Boolean = status.isSolved()
+
+    /** 村として共鳴発言できるか */
+    fun isSayableSympathizeSay(): Boolean = status.isProgress() // 進行中以外は不可
+
     /** 村として墓下発言を見られるか */
     fun isViewableGraveSay(): Boolean {
         if (status.isSolved()) return true
@@ -334,11 +374,23 @@ data class Village(
     /** 村として襲撃メッセージを見られるか */
     fun isViewableAttackMessage(): Boolean = status.isSolved() // 終了していたら全て見られる
 
+    /** 村として検死メッセージを見られるか */
+    fun isViewableAutopsyMessage(): Boolean = status.isSolved() // 終了していたら全て見られる
+
     /** 村として共有メッセージを見られるか */
     fun isViewableMasonMessage(): Boolean = status.isSolved() // 終了していたら全て見られる
 
+    /** 村として共鳴メッセージを見られるか */
+    fun isViewableSympathizerMessage(): Boolean = status.isSolved() // 終了していたら全て見られる
+
+    /** 村として狂信者メッセージを見られるか */
+    fun isViewableFanaticMessage(): Boolean = status.isSolved() // 終了していたら全て見られる
+
     /** 村として白黒霊能結果を見られるか */
     fun isViewablePsychicMessage(): Boolean = status.isSolved()// 終了していたら全て見られる
+
+    /** 村として役職霊能結果を見られるか */
+    fun isViewableGuruPsychicMessage(): Boolean = status.isSolved()// 終了していたら全て見られる
 
     /** 村として秘話を見られるか */
     fun isViewableSecretSay(): Boolean = status.isSolved()

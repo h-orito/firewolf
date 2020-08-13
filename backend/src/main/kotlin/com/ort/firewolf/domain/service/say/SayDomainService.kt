@@ -22,7 +22,8 @@ class SayDomainService(
     private val graveSayDomainService: GraveSayDomainService,
     private val monologueSayDomainService: MonologueSayDomainService,
     private val spectateSayDomainService: SpectateSayDomainService,
-    private val werewolfSayDomainService: WerewolfSayDomainService
+    private val werewolfSayDomainService: WerewolfSayDomainService,
+    private val sympathizeSayDomainService: SympathizeSayDomainService
 ) {
 
     private val defaultMessageTypeOrder = listOf(
@@ -64,6 +65,7 @@ class SayDomainService(
         when (messageContent.type.toCdef()) {
             CDef.MessageType.通常発言 -> normalSayDomainService.assertSay(village, participant!!)
             CDef.MessageType.人狼の囁き -> werewolfSayDomainService.assertSay(village, participant!!)
+            CDef.MessageType.共鳴発言 -> sympathizeSayDomainService.assertSay(village, participant!!)
             CDef.MessageType.死者の呻き -> graveSayDomainService.assertSay(village, participant!!)
             CDef.MessageType.独り言 -> monologueSayDomainService.assertSay(village, participant!!)
             CDef.MessageType.見学発言 -> spectateSayDomainService.assertSay(village, participant!!)
@@ -134,6 +136,13 @@ class SayDomainService(
                 village,
                 latestDayMessageList,
                 CDef.MessageType.人狼の囁き
+            )
+        )
+        if (sympathizeSayDomainService.isSayable(village, participant)) list.add(
+            convertToMessageTypeSituation(
+                village,
+                latestDayMessageList,
+                CDef.MessageType.共鳴発言
             )
         )
         if (graveSayDomainService.isSayable(village, participant)) list.add(

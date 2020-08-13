@@ -9,6 +9,7 @@ import com.ort.firewolf.domain.service.say.MonologueSayDomainService
 import com.ort.firewolf.domain.service.say.NormalSayDomainService
 import com.ort.firewolf.domain.service.say.SecretSayDomainService
 import com.ort.firewolf.domain.service.say.SpectateSayDomainService
+import com.ort.firewolf.domain.service.say.SympathizeSayDomainService
 import com.ort.firewolf.domain.service.say.WerewolfSayDomainService
 import org.springframework.stereotype.Service
 
@@ -16,13 +17,18 @@ import org.springframework.stereotype.Service
 class MessageDomainService(
     private val normalSayDomainService: NormalSayDomainService,
     private val werewolfSayDomainService: WerewolfSayDomainService,
+    private val sympathizeSayDomainService: SympathizeSayDomainService,
     private val graveSayDomainService: GraveSayDomainService,
     private val spectateSayDomainService: SpectateSayDomainService,
     private val monologueSayDomainService: MonologueSayDomainService,
     private val secretSayDomainService: SecretSayDomainService,
     private val psychicMessageDomainService: PsychicMessageDomainService,
+    private val guruPsychicMessageDomainService: GuruPsychicMessageDomainService,
     private val attackMessageDomainService: AttackMessageDomainService,
-    private val masonMessageDomainService: MasonMessageDomainService
+    private val autopsyMessageDomainService: AutopsyMessageDomainService,
+    private val masonMessageDomainService: MasonMessageDomainService,
+    private val sympathizerMessageDomainService: SympathizerMessageDomainService,
+    private val fanaticMessageDomainService: FanaticMessageDomainService
 ) {
 
     private val everyoneAllowedMessageTypeList = listOf(CDef.MessageType.公開システムメッセージ, CDef.MessageType.通常発言, CDef.MessageType.村建て発言)
@@ -53,9 +59,14 @@ class MessageDomainService(
             CDef.MessageType.死者の呻き,
             CDef.MessageType.見学発言,
             CDef.MessageType.人狼の囁き,
+            CDef.MessageType.共鳴発言,
             CDef.MessageType.白黒霊視結果,
+            CDef.MessageType.役職霊視結果,
             CDef.MessageType.襲撃結果,
-            CDef.MessageType.共有相互確認メッセージ
+            CDef.MessageType.共有相互確認メッセージ,
+            CDef.MessageType.共鳴相互確認メッセージ,
+            CDef.MessageType.狂信者人狼確認メッセージ,
+            CDef.MessageType.検死結果
         ).forEach {
             if (isViewableMessage(village, participant, it.code(), day)) allowedTypeList.add(it)
         }
@@ -80,12 +91,17 @@ class MessageDomainService(
             CDef.MessageType.通常発言 -> normalSayDomainService.isViewable(village, participant)
             CDef.MessageType.人狼の囁き -> werewolfSayDomainService.isViewable(village, participant)
             CDef.MessageType.死者の呻き -> graveSayDomainService.isViewable(village, participant)
+            CDef.MessageType.共鳴発言 -> sympathizeSayDomainService.isViewable(village, participant)
             CDef.MessageType.見学発言 -> spectateSayDomainService.isViewable(village, participant, day)
             CDef.MessageType.独り言 -> monologueSayDomainService.isViewable(village, participant)
             CDef.MessageType.秘話 -> secretSayDomainService.isViewable(village, participant)
             CDef.MessageType.白黒霊視結果 -> psychicMessageDomainService.isViewable(village, participant)
+            CDef.MessageType.役職霊視結果 -> guruPsychicMessageDomainService.isViewable(village, participant)
             CDef.MessageType.襲撃結果 -> attackMessageDomainService.isViewable(village, participant)
             CDef.MessageType.共有相互確認メッセージ -> masonMessageDomainService.isViewable(village, participant)
+            CDef.MessageType.共鳴相互確認メッセージ -> sympathizerMessageDomainService.isViewable(village, participant)
+            CDef.MessageType.狂信者人狼確認メッセージ -> fanaticMessageDomainService.isViewable(village, participant)
+            CDef.MessageType.検死結果 -> autopsyMessageDomainService.isViewable(village, participant)
             else -> return false
         }
     }

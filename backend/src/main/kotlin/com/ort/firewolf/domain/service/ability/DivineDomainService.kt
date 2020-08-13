@@ -88,6 +88,8 @@ class DivineDomainService : IAbilityDomainService {
                 messages = messages.add(createDivineMessage(dayChange.village, charas, ability, seer))
                 // 呪殺対象なら死亡
                 if (isDivineKill(dayChange, ability.targetId!!)) village = village.divineKillParticipant(ability.targetId, latestDay)
+                // 逆呪殺対象なら自分が死亡
+                if (isCounterDivineKill(dayChange, ability.targetId)) village = village.divineKillParticipant(seer.id, latestDay)
             }
         }
 
@@ -129,5 +131,12 @@ class DivineDomainService : IAbilityDomainService {
         if (!dayChange.village.participant.member(targetId).isAlive()) return false
         // 対象が呪殺対象でなければ呪殺ではない
         return dayChange.village.participant.member(targetId).skill!!.toCdef().isDeadByDivine
+    }
+
+    private fun isCounterDivineKill(dayChange: DayChange, targetId: Int): Boolean {
+        // 対象が既に死亡していたら呪殺ではない
+        if (!dayChange.village.participant.member(targetId).isAlive()) return false
+        // 対象が逆呪殺対象でなければ逆呪殺されない
+        return dayChange.village.participant.member(targetId).skill!!.toCdef().isCounterDeadByDivine
     }
 }

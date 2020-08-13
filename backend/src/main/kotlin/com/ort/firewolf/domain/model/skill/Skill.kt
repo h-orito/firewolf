@@ -42,17 +42,25 @@ data class Skill(
 
         private val skillAbilityTypeListMap = mapOf(
             CDef.Skill.人狼 to listOf(CDef.AbilityType.襲撃),
+            CDef.Skill.呪狼 to listOf(CDef.AbilityType.襲撃),
+            CDef.Skill.智狼 to listOf(CDef.AbilityType.襲撃),
             CDef.Skill.占い師 to listOf(CDef.AbilityType.占い),
+            CDef.Skill.賢者 to listOf(CDef.AbilityType.占い),
             CDef.Skill.狩人 to listOf(CDef.AbilityType.護衛)
         )
 
         // 説明書専用
         private val skillAbilityListMapForManual = mapOf(
-            CDef.Skill.人狼 to listOf(AbilityType(CDef.AbilityType.襲撃)),
             CDef.Skill.占い師 to listOf(AbilityType(CDef.AbilityType.占い)),
+            CDef.Skill.賢者 to listOf(AbilityType("WISEDIVINE", "役職占い")),
             CDef.Skill.狩人 to listOf(AbilityType(CDef.AbilityType.護衛)),
             CDef.Skill.霊能者 to listOf(AbilityType("PSYCHIC", "霊視")),
-            CDef.Skill.猫又 to listOf(AbilityType("FORCESUICIDE", "道連れ"))
+            CDef.Skill.導師 to listOf(AbilityType("GURUPSYCHIC", "役職霊視")),
+            CDef.Skill.検死官 to listOf(AbilityType("AUTOPSY", "検死")),
+            CDef.Skill.猫又 to listOf(AbilityType("FORCESUICIDE", "道連れ")),
+            CDef.Skill.パン屋 to listOf(AbilityType("BAKE", "パン焼き")),
+            CDef.Skill.人狼 to listOf(AbilityType(CDef.AbilityType.襲撃)),
+            CDef.Skill.智狼 to listOf(AbilityType("WISEATTACK", "襲撃占い"))
         )
 
         fun skillByShortName(shortName: String): Skill? {
@@ -75,6 +83,8 @@ data class Skill(
             val list = mutableListOf<MessageType>()
             // 囁き
             if (cdefSkill.isAvailableWerewolfSay) list.add(MessageType(CDef.MessageType.人狼の囁き))
+            // 共鳴
+            if (cdefSkill.isAvailableSympathizeSay) list.add(MessageType(CDef.MessageType.共鳴発言))
 
             return list
         }
@@ -83,6 +93,8 @@ data class Skill(
             val list = mutableListOf<MessageType>()
             // 囁き
             if (cdefSkill.isViewableWerewolfSay) list.add(MessageType(CDef.MessageType.人狼の囁き))
+            // 共鳴
+            if (cdefSkill.isAvailableSympathizeSay) list.add(MessageType(CDef.MessageType.共鳴発言))
 
             return list
         }

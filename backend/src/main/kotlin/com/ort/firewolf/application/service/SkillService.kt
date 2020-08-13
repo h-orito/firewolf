@@ -13,7 +13,7 @@ class SkillService {
             CDef.Skill.listAll().filterNot {
                 CDef.Skill.listOfSomeoneSkill().contains(it)
             }.sortedBy {
-                it.order()
+                it.order().toInt()
             }.map { Skill(it) }
         )
     }

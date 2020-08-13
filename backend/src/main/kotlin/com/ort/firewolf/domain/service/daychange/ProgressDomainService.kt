@@ -8,9 +8,13 @@ import com.ort.firewolf.domain.model.message.Messages
 import com.ort.firewolf.domain.model.village.Village
 import com.ort.firewolf.domain.service.ability.AbilityDomainService
 import com.ort.firewolf.domain.service.ability.AttackDomainService
+import com.ort.firewolf.domain.service.ability.AutopsyDomainService
+import com.ort.firewolf.domain.service.ability.BakeryDomainService
 import com.ort.firewolf.domain.service.ability.DivineDomainService
 import com.ort.firewolf.domain.service.ability.GuardDomainService
+import com.ort.firewolf.domain.service.ability.GuruDomainService
 import com.ort.firewolf.domain.service.ability.PsychicDomainService
+import com.ort.firewolf.domain.service.ability.WiseDivineDomainService
 import com.ort.firewolf.domain.service.vote.VoteDomainService
 import com.ort.firewolf.fw.FirewolfDateUtil
 import org.springframework.stereotype.Service
@@ -19,9 +23,13 @@ import org.springframework.stereotype.Service
 class ProgressDomainService(
     private val executeDomainService: ExecuteDomainService,
     private val psychicDomainService: PsychicDomainService,
+    private val guruDomainService: GuruDomainService,
     private val divineDomainService: DivineDomainService,
+    private val wiseDivineDomainService: WiseDivineDomainService,
     private val guardDomainService: GuardDomainService,
     private val attackDomainService: AttackDomainService,
+    private val autopsyDomainService: AutopsyDomainService,
+    private val bakeryDomainService: BakeryDomainService,
     private val miserableDeathDomainService: MiserableDeathDomainService,
     private val suddenlyDeathDomainService: SuddenlyDeathDomainService,
     private val epilogueDomainService: EpilogueDomainService,
@@ -50,8 +58,14 @@ class ProgressDomainService(
         // 霊能
         dayChange = psychicDomainService.processDayChangeAction(dayChange, charas)
 
-        // 占い
+        // 導師
+        dayChange = guruDomainService.processDayChangeAction(dayChange, charas)
+
+        // 占い（呪殺、逆呪殺）
         dayChange = divineDomainService.processDayChangeAction(dayChange, charas)
+
+        // 役職占い（呪殺、逆呪殺）
+        dayChange = wiseDivineDomainService.processDayChangeAction(dayChange, charas)
 
         // 護衛
         dayChange = guardDomainService.processDayChangeAction(dayChange, charas)
@@ -62,6 +76,9 @@ class ProgressDomainService(
         // 無惨メッセージ
         dayChange = miserableDeathDomainService.processDayChangeAction(dayChange, charas)
 
+        // 検死
+        dayChange = autopsyDomainService.addAutopsyMessage(dayChange, charas)
+
         // 2日目限定メッセージ
         dayChange = addDay2MessageIfNeeded(dayChange)
 
@@ -70,6 +87,9 @@ class ProgressDomainService(
 
         // 勝敗が決していたらここで終了
         if (dayChange.village.status.isSolved()) return dayChange.setIsChange(beforeDayChange)
+
+        // パン屋メッセージ登録
+        dayChange = bakeryDomainService.addBakeryMessage(dayChange)
 
         // 投票や能力行使のデフォルト設定
         dayChange = abilityDomainService.addDefaultAbilities(dayChange)
