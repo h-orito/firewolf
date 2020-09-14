@@ -60,6 +60,7 @@ data class Skill(
             CDef.Skill.猫又 to listOf(AbilityType("FORCESUICIDE", "道連れ")),
             CDef.Skill.パン屋 to listOf(AbilityType("BAKE", "パン焼き")),
             CDef.Skill.人狼 to listOf(AbilityType(CDef.AbilityType.襲撃)),
+            CDef.Skill.呪狼 to listOf(AbilityType(CDef.AbilityType.襲撃)),
             CDef.Skill.智狼 to listOf(AbilityType("WISEATTACK", "襲撃占い"))
         )
 
