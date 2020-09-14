@@ -17,6 +17,8 @@ data class VillageStatus(
     // ===================================================================================
     //                                                                              status
     //                                                                           =========
+    fun isCanceled(): Boolean = this.toCdef() == CDef.VillageStatus.廃村
+
     fun isSolved(): Boolean = this.toCdef().isSolvedVillage
 
     fun isPrologue(): Boolean = this.toCdef() == CDef.VillageStatus.プロローグ
