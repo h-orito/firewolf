@@ -7,7 +7,6 @@ import com.ort.firewolf.api.view.external.RecruitingVillagesView
 import com.ort.firewolf.api.view.external.VillageRecordsView
 import com.ort.firewolf.application.service.CharachipService
 import com.ort.firewolf.application.service.PlayerService
-import com.ort.firewolf.application.service.ReservedVillageService
 import com.ort.firewolf.application.service.VillageService
 import com.ort.firewolf.domain.model.village.VillageStatus
 import com.ort.firewolf.domain.model.village.Villages
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class ExternalController(
     val villageService: VillageService,
-    val reservedVillageService: ReservedVillageService,
     val charachipService: CharachipService,
     val playerService: PlayerService
 ) {
@@ -31,13 +29,11 @@ class ExternalController(
                 VillageStatus(CDef.VillageStatus.エピローグ)
             )
         ).list.sortedBy { it.id }
-        val reservedVillageList = reservedVillageService.findReservedVillages().list
 
         val charachips = charachipService.findCharaChips()
 
         return RecruitingVillagesView(
             villageList = villageList,
-            reservedVillageList = reservedVillageList,
             charachips = charachips
         )
     }
