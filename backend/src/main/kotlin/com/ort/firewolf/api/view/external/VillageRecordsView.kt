@@ -53,7 +53,7 @@ data class VillageRecordView(
         else village.setting.time.epilogueStartDatetime!!.format(datetimePattern),
         epilogueDay = if (village.status.isCanceled()) null
         else village.setting.time.epilogueDay!!,
-        url = "https://howling-wolf.com/village?id=${village.id}",
+        url = "https://firewolf.netlify.app/village?id=${village.id}",
         winCampName = if (village.status.isCanceled()) null
         else village.winCamp!!.name,
         participantList = (village.participant.memberList + village.spectator.memberList).map {
