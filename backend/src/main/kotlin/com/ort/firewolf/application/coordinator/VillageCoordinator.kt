@@ -28,6 +28,7 @@ import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 import com.ort.firewolf.domain.model.village.vote.VillageVote
 import com.ort.firewolf.domain.model.village.vote.VillageVotes
 import com.ort.firewolf.domain.service.ability.AbilityDomainService
+import com.ort.firewolf.domain.service.admin.AdminDomainService
 import com.ort.firewolf.domain.service.coming_out.ComingOutDomainService
 import com.ort.firewolf.domain.service.commit.CommitDomainService
 import com.ort.firewolf.domain.service.creator.CreatorDomainService
@@ -63,7 +64,8 @@ class VillageCoordinator(
     private val voteDomainService: VoteDomainService,
     private val creatorDomainService: CreatorDomainService,
     private val villageSettingDomainService: VillageSettingDomainService,
-    private val comingOutDomainService: ComingOutDomainService
+    private val comingOutDomainService: ComingOutDomainService,
+    private val adminDomainService: AdminDomainService
 ) {
 
     /**
@@ -453,7 +455,8 @@ class VillageCoordinator(
             say = sayDomainService.convertToSituation(village, participant, charas, latestDayMessageList),
             ability = abilityDomainService.convertToSituationList(village, participant, abilities),
             vote = voteDomainService.convertToSituation(village, participant, votes),
-            creator = creatorDomainService.convertToSituation(village, player)
+            creator = creatorDomainService.convertToSituation(village, player),
+            admin = adminDomainService.convertToSituation(village, participant, players, charas)
         )
     }
 
