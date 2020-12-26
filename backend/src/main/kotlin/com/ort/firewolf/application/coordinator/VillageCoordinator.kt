@@ -7,6 +7,7 @@ import com.ort.firewolf.application.service.ComingOutService
 import com.ort.firewolf.application.service.CommitService
 import com.ort.firewolf.application.service.MessageService
 import com.ort.firewolf.application.service.PlayerService
+import com.ort.firewolf.application.service.SlackService
 import com.ort.firewolf.application.service.VillageService
 import com.ort.firewolf.application.service.VoteService
 import com.ort.firewolf.domain.model.ability.AbilityType
@@ -55,6 +56,7 @@ class VillageCoordinator(
     private val voteService: VoteService,
     private val commitService: CommitService,
     private val comingOutService: ComingOutService,
+    private val slackService: SlackService,
     // domain service
     private val participateDomainService: ParticipateDomainService,
     private val skillRequestDomainService: SkillRequestDomainService,
@@ -321,6 +323,10 @@ class VillageCoordinator(
         val participant: VillageParticipant = findParticipant(village, user)!!
         val message: Message = Message.createSayMessage(participant, village.day.latestDay().id, messageContent)
         messageService.registerMessage(villageId, message)
+        // 特定の文字列が含まれていたら通知
+        if (messageText.contains("@国主") || messageText.contains("＠国主")) {
+            slackService.postToSlack(villageId, messageText)
+        }
     }
 
     @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
