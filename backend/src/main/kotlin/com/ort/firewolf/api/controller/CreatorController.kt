@@ -124,4 +124,21 @@ class CreatorController(
         villageCoordinator.confirmToCreatorSay(village, body.message!!)
         villageCoordinator.creatorSay(village, body.message)
     }
+
+    @PostMapping("/creator/village/{villageId}/extend-epilogue")
+    fun extendEpilogue(
+        @PathVariable("villageId") villageId: Int,
+        @AuthenticationPrincipal user: FirewolfUser
+    ) {
+        val village = villageService.findVillage(villageId)
+        val player = playerService.findPlayer(user)
+
+        if (user.authority != CDef.Authority.管理者 && village.creatorPlayerId != player.id)
+            throw FirewolfBusinessException("村建てか管理者しか使えません")
+
+        val changedVillage = village.extendEpilogue()
+        villageService.updateVillageDifference(village, changedVillage)
+        val message = village.createCreatorExtendEpilogueMessage()
+        messageService.registerMessage(villageId, message)
+    }
 }
