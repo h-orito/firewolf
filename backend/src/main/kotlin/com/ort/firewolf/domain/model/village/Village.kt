@@ -42,6 +42,8 @@ data class Village(
 
     private val extendPrologueMessage: String = "まだ村人達は揃っていないようだ。"
 
+    private val extendEpilogueMessage: String = "エピローグが1日延長されました。"
+
     // ===================================================================================
     //                                                                             message
     //                                                                           =========
@@ -60,6 +62,10 @@ data class Village(
     /** 村建て廃村メッセージ */
     fun createCreatorCancelVillageMessage(): Message =
         Message.createPublicSystemMessage(creatorCancelMessage, day.latestDay().id)
+
+    /** エピローグ延長メッセージ */
+    fun createCreatorExtendEpilogueMessage(): Message =
+        Message.createPublicSystemMessage(extendEpilogueMessage, day.latestDay().id)
 
     /** 構成メッセージ */
     fun createOrganizationMessage(): Message {
@@ -522,6 +528,10 @@ data class Village(
     fun extendPrologue(): Village = this.copy(
         setting = setting.extendPrologue(),
         day = day.extendPrologue()
+    )
+
+    fun extendEpilogue(): Village = this.copy(
+        day = day.extendEpilogue()
     )
 
     // ===================================================================================

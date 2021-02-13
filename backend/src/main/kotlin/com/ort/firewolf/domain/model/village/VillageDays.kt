@@ -41,6 +41,13 @@ data class VillageDays(
         })
     }
 
+    fun extendEpilogue(): VillageDays {
+        return this.copy(dayList = dayList.map {
+            if (it.id == latestDay().id) latestDay().copy(dayChangeDatetime = latestDay().dayChangeDatetime.plusDays(1L))
+            else it
+        })
+    }
+
     fun extendLatestDay(): VillageDays {
         return this.copy(dayList = dayList.map {
             if (it.id == latestDay().id) latestDay().copy(dayChangeDatetime = yesterday().dayChangeDatetime.plusHours(extendHours))

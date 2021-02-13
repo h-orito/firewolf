@@ -17,7 +17,8 @@ class CreatorDomainService {
             isAvailableCreatorSay = isAvailableCreatorSay(village, player),
             isAvailableCancelVillage = isAvailableCancelVillage(village, player),
             isAvailableKick = isAvailableKick(village, player),
-            isAvailableModifySetting = isAvailableModifySetting(village, player)
+            isAvailableModifySetting = isAvailableModifySetting(village, player),
+            isAvailableExtendEpilogue = isAvailableExtendEpilogue(village, player)
         )
     }
 
@@ -66,5 +67,10 @@ class CreatorDomainService {
     ): Boolean {
         if (!this.isAvailableCreatorSetting(village, player)) return false
         return village.status.isPrologue() // プロローグ中のみ可能
+    }
+
+    private fun isAvailableExtendEpilogue(village: Village, player: Player?): Boolean {
+        if (!this.isAvailableCreatorSetting(village, player)) return false
+        return village.status.isEpilogue() // エピローグ中のみ可能
     }
 }
