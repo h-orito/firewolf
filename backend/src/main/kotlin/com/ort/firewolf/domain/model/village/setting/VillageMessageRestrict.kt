@@ -10,7 +10,7 @@ data class VillageMessageRestrict(
     val type: MessageType,
     val count: Int,
     val length: Int,
-    val line: Int = MessageContent.lineMax
+    val line: Int = MessageContent.defaultLineMax
 ) {
     fun assertSay(messageContent: MessageContent, cdefVillageStatus: CDef.VillageStatus, latestDayMessageList: List<Message>) {
         // 回数

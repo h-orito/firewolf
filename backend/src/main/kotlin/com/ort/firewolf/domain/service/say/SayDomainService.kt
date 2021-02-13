@@ -84,7 +84,7 @@ class SayDomainService(
         // 事前チェック
         if (!village.isAvailableSay()) throw FirewolfBusinessException("発言できません")
         // 長さ、行数チェック
-        messageContent.assertMessageLength(200)
+        messageContent.assertMessageLength(400, 40)
     }
 
     fun assertParticipateSay(
@@ -196,7 +196,7 @@ class SayDomainService(
                 latestDayMessageList
             ),
             maxLength = restrict?.length ?: MessageContent.defaultLengthMax,
-            maxLine = restrict?.line ?: MessageContent.lineMax
+            maxLine = restrict?.line ?: MessageContent.defaultLineMax
         )
     }
 

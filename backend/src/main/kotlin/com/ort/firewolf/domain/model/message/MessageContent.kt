@@ -13,7 +13,7 @@ data class MessageContent(
     companion object {
 
         const val defaultLengthMax = 400
-        const val lineMax: Int = 20
+        const val defaultLineMax = 20
 
         operator fun invoke(
             messageType: String,
@@ -42,7 +42,7 @@ data class MessageContent(
         }
     }
 
-    fun assertMessageLength(maxLength: Int) {
+    fun assertMessageLength(maxLength: Int = defaultLengthMax, lineMax: Int = defaultLineMax) {
         // 行数
         if (text.replace("\r\n", "\n").split("\n").size > lineMax) throw FirewolfBadRequestException("行数オーバーです")
         // 文字数
