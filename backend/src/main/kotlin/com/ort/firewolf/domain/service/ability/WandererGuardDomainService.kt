@@ -13,9 +13,9 @@ import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 import org.springframework.stereotype.Service
 
 @Service
-class GuardDomainService : IAbilityDomainService {
+class WandererGuardDomainService : GuardDomainService() {
 
-    override fun getAbilityType(): AbilityType = AbilityType(CDef.AbilityType.護衛)
+    override fun getAbilityType(): AbilityType = AbilityType(CDef.AbilityType.風来護衛)
 
     override fun getSelectableTargetList(
         village: Village,
@@ -27,10 +27,14 @@ class GuardDomainService : IAbilityDomainService {
         // 1日目は護衛できない
         if (village.day.latestDay().day <= 1) return listOf()
 
-        // 連続護衛可能なら自分以外の生存者全員
-        // TODO 連続護衛なし
+        // 今まで護衛していない人
         return village.participant.memberList.filter {
             it.id != participant.id && it.isAlive()
+        }.filterNot { p ->
+            villageAbilities.filterByType(getAbilityType()).list
+                .filterNot { it.villageDayId == village.day.latestDay().id }
+                .filter { it.myselfId == participant.id }
+                .any { it.targetId == p.id }
         }
     }
 
@@ -63,25 +67,22 @@ class GuardDomainService : IAbilityDomainService {
         // 最新日id
         val latestVillageDay = village.day.latestDay()
         // 1日目は護衛できない
-        if (latestVillageDay.day == 1) {
-            return listOf()
-        }
+        if (latestVillageDay.day == 1) return listOf()
 
         // 生存している護衛能力持ちごとに
         return village.participant.filterAlive().memberList.filter {
-            it.skill!!.toCdef().isHasGuardAbility
-        }.mapNotNull { seer ->
-            // 対象は自分以外の生存者からランダム
-            // TODO 連続護衛なし
-            village.participant.filterAlive()
-                .findRandom { it.id != seer.id }?.let {
+            it.skill!!.toCdef().isHasWandererGuardAbility
+        }.mapNotNull { warnderer ->
+            getSelectableTargetList(village, warnderer, villageAbilities)
+                .shuffled().firstOrNull()
+                ?.let {
                     VillageAbility(
-                        villageDayId = latestVillageDay.id,
-                        myselfId = seer.id,
+                        villageDayId = village.day.latestDay().id,
+                        myselfId = warnderer.id,
                         targetId = it.id,
                         abilityType = getAbilityType()
                     )
-                } // 自分しかいない場合
+                }
         }
     }
 
@@ -89,7 +90,7 @@ class GuardDomainService : IAbilityDomainService {
         var messages = dayChange.messages.copy()
 
         dayChange.village.participant.memberList.filter {
-            it.isAlive() && it.skill!!.toCdef().isHasGuardAbility
+            it.isAlive() && it.skill!!.toCdef().isHasWandererGuardAbility
         }.forEach { hunter ->
             dayChange.abilities.list.find {
                 it.myselfId == hunter.id && it.villageDayId == dayChange.village.day.yesterday().id
@@ -103,7 +104,7 @@ class GuardDomainService : IAbilityDomainService {
         ).setIsChange(dayChange)
     }
 
-    override fun isAvailableNoTarget(village: Village): Boolean = false
+    override fun isAvailableNoTarget(village: Village): Boolean = true
 
     override fun isUsable(village: Village, participant: VillageParticipant): Boolean {
         // 2日目以降、生存していたら行使できる

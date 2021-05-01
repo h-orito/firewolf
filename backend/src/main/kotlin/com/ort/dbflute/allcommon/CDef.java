@@ -493,6 +493,9 @@ public interface CDef extends Classification {
         /** おまかせ */
         おまかせ("LEFTOVER", "おまかせ", emptyStrings())
         ,
+        /** 強運者 */
+        強運者("LUCKYMAN", "強運者", emptyStrings())
+        ,
         /** 狂人 */
         狂人("MADMAN", "狂人", emptyStrings())
         ,
@@ -520,6 +523,9 @@ public interface CDef extends Classification {
         /** おまかせ（村人陣営） */
         おまかせ村人陣営("VILLAGERS", "おまかせ（村人陣営）", emptyStrings())
         ,
+        /** 風来狩人 */
+        風来狩人("WANDERER", "風来狩人", emptyStrings())
+        ,
         /** 人狼 */
         人狼("WEREWOLF", "人狼", emptyStrings())
         ,
@@ -546,7 +552,7 @@ public interface CDef extends Classification {
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "パ");
-                subItemMap.put("order", "12");
+                subItemMap.put("order", "13");
                 subItemMap.put("campCode", "VILLAGER");
                 subItemMap.put("description", "あなたはパン屋です。毎日おいしいパンを焼くことができます。生存していると、朝に専用のシステムメッセージが表示されます。また、全てのパン屋が全滅した朝にも専用のシステムメッセージが表示されます。");
                 _subItemMapMap.put(パン屋.code(), Collections.unmodifiableMap(subItemMap));
@@ -554,7 +560,7 @@ public interface CDef extends Classification {
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "Ｃ");
-                subItemMap.put("order", "17");
+                subItemMap.put("order", "19");
                 subItemMap.put("campCode", "WEREWOLF");
                 subItemMap.put("description", "あなたはC国狂人です。人狼系役職とC国狂人同士にしか聞こえない会話が可能で、人狼の勝利があなたの勝利となります。");
                 _subItemMapMap.put(C国狂人.code(), Collections.unmodifiableMap(subItemMap));
@@ -570,7 +576,7 @@ public interface CDef extends Classification {
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "呪");
-                subItemMap.put("order", "14");
+                subItemMap.put("order", "16");
                 subItemMap.put("campCode", "WEREWOLF");
                 subItemMap.put("description", "あなたは呪狼です。人狼系役職とC国狂人同士にしか聞こえない会話が可能です。また、毎晩一人を襲撃することができます。また、あなたを占った人を死亡させることができます。");
                 _subItemMapMap.put(呪狼.code(), Collections.unmodifiableMap(subItemMap));
@@ -578,7 +584,7 @@ public interface CDef extends Classification {
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "信");
-                subItemMap.put("order", "18");
+                subItemMap.put("order", "20");
                 subItemMap.put("campCode", "WEREWOLF");
                 subItemMap.put("description", "あなたは狂信者です。人狼が誰かを知ることができます（人狼からはあなたが狂信者であることはわかりません）。特別な能力はありませんが、人狼の勝利があなたの勝利となります。");
                 _subItemMapMap.put(狂信者.code(), Collections.unmodifiableMap(subItemMap));
@@ -586,7 +592,7 @@ public interface CDef extends Classification {
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "狐");
-                subItemMap.put("order", "19");
+                subItemMap.put("order", "21");
                 subItemMap.put("campCode", "FOX");
                 subItemMap.put("description", "あなたは妖狐です。最後まで生存するとあなたの勝利となります。人狼に襲撃されても死亡しませんが、占われると死亡します。");
                 _subItemMapMap.put(妖狐.code(), Collections.unmodifiableMap(subItemMap));
@@ -610,15 +616,23 @@ public interface CDef extends Classification {
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "お");
-                subItemMap.put("order", "20");
+                subItemMap.put("order", "22");
                 subItemMap.put("campCode", "VILLAGER");
                 subItemMap.put("description", "余った役職が割り当てられます。");
                 _subItemMapMap.put(おまかせ.code(), Collections.unmodifiableMap(subItemMap));
             }
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
+                subItemMap.put("shortName", "運");
+                subItemMap.put("order", "14");
+                subItemMap.put("campCode", "VILLAGER");
+                subItemMap.put("description", "あなたは強運者です。特別な能力はありませんが、投票で最多票が複数いる場合、自分以外から処刑者が選ばれます。");
+                _subItemMapMap.put(強運者.code(), Collections.unmodifiableMap(subItemMap));
+            }
+            {
+                Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "狂");
-                subItemMap.put("order", "16");
+                subItemMap.put("order", "18");
                 subItemMap.put("campCode", "WEREWOLF");
                 subItemMap.put("description", "あなたは狂人です。特別な能力はありませんが、人狼の勝利があなたの勝利となります。");
                 _subItemMapMap.put(狂人.code(), Collections.unmodifiableMap(subItemMap));
@@ -626,7 +640,7 @@ public interface CDef extends Classification {
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "共");
-                subItemMap.put("order", "8");
+                subItemMap.put("order", "9");
                 subItemMap.put("campCode", "VILLAGER");
                 subItemMap.put("description", "あなたは共有者です。他の共有者が誰であるかを知ることができます。");
                 _subItemMapMap.put(共有者.code(), Collections.unmodifiableMap(subItemMap));
@@ -642,7 +656,7 @@ public interface CDef extends Classification {
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "猫");
-                subItemMap.put("order", "11");
+                subItemMap.put("order", "12");
                 subItemMap.put("campCode", "VILLAGER");
                 subItemMap.put("description", "あなたは猫又です。処刑死したら投票者から1名を、襲撃死したら襲撃者から1名をランダムで道連れにすることができます。");
                 _subItemMapMap.put(猫又.code(), Collections.unmodifiableMap(subItemMap));
@@ -658,7 +672,7 @@ public interface CDef extends Classification {
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "聖");
-                subItemMap.put("order", "10");
+                subItemMap.put("order", "11");
                 subItemMap.put("campCode", "VILLAGER");
                 subItemMap.put("description", "あなたは聖痕者です。特別な能力はありませんが、独特の印を持つため、あなたの正体は比較的信用されやすいでしょう。");
                 _subItemMapMap.put(聖痕者.code(), Collections.unmodifiableMap(subItemMap));
@@ -666,7 +680,7 @@ public interface CDef extends Classification {
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "鳴");
-                subItemMap.put("order", "9");
+                subItemMap.put("order", "10");
                 subItemMap.put("campCode", "VILLAGER");
                 subItemMap.put("description", "あなたは共鳴者です。共鳴者同士にしか聞こえない会話が可能です。");
                 _subItemMapMap.put(共鳴者.code(), Collections.unmodifiableMap(subItemMap));
@@ -682,15 +696,23 @@ public interface CDef extends Classification {
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "お");
-                subItemMap.put("order", "21");
+                subItemMap.put("order", "23");
                 subItemMap.put("campCode", "VILLAGER");
                 subItemMap.put("description", "村人陣営の中で余った役職が割り当てられます。");
                 _subItemMapMap.put(おまかせ村人陣営.code(), Collections.unmodifiableMap(subItemMap));
             }
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
+                subItemMap.put("shortName", "風");
+                subItemMap.put("order", "8");
+                subItemMap.put("campCode", "VILLAGER");
+                subItemMap.put("description", "あなたは風来狩人です。初日以外の毎晩、自分以外の一人を人狼の襲撃から守ることができます。ただし、護衛成功失敗にかかわらず、一度守った人は護衛することができません。");
+                _subItemMapMap.put(風来狩人.code(), Collections.unmodifiableMap(subItemMap));
+            }
+            {
+                Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "狼");
-                subItemMap.put("order", "13");
+                subItemMap.put("order", "15");
                 subItemMap.put("campCode", "WEREWOLF");
                 subItemMap.put("description", "あなたは人狼です。人狼系役職とC国狂人同士にしか聞こえない会話が可能です。また、毎晩一人を襲撃することができます。");
                 _subItemMapMap.put(人狼.code(), Collections.unmodifiableMap(subItemMap));
@@ -698,7 +720,7 @@ public interface CDef extends Classification {
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "お");
-                subItemMap.put("order", "22");
+                subItemMap.put("order", "24");
                 subItemMap.put("campCode", "VILLAGER");
                 subItemMap.put("description", "人狼陣営の中で余った役職が割り当てられます。");
                 _subItemMapMap.put(おまかせ人狼陣営.code(), Collections.unmodifiableMap(subItemMap));
@@ -714,7 +736,7 @@ public interface CDef extends Classification {
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "智");
-                subItemMap.put("order", "15");
+                subItemMap.put("order", "17");
                 subItemMap.put("campCode", "WEREWOLF");
                 subItemMap.put("description", "あなたは智狼です。人狼系役職とC国狂人同士にしか聞こえない会話が可能です。また、毎晩一人を襲撃することができます。また、あなたが生存していれば、襲撃成功した際に対象者の役職を知ることができます。");
                 _subItemMapMap.put(智狼.code(), Collections.unmodifiableMap(subItemMap));
@@ -856,6 +878,16 @@ public interface CDef extends Classification {
 
         /**
          * Is the classification in the group? <br>
+         * 風来護衛能力を持つ <br>
+         * The group elements:[風来狩人]
+         * @return The determination, true or false.
+         */
+        public boolean isHasWandererGuardAbility() {
+            return 風来狩人.equals(this);
+        }
+
+        /**
+         * Is the classification in the group? <br>
          * 霊能能力を持つ <br>
          * The group elements:[霊能者]
          * @return The determination, true or false.
@@ -902,6 +934,16 @@ public interface CDef extends Classification {
          */
         public boolean isHasBakeryAbility() {
             return パン屋.equals(this);
+        }
+
+        /**
+         * Is the classification in the group? <br>
+         * 強運能力を持つ <br>
+         * The group elements:[強運者]
+         * @return The determination, true or false.
+         */
+        public boolean isHasLuckyAbility() {
+            return 強運者.equals(this);
         }
 
         /**
@@ -1016,11 +1058,13 @@ public interface CDef extends Classification {
             if ("hasDivineAbility".equals(groupName)) { return isHasDivineAbility(); }
             if ("hasWiseDivineAbility".equals(groupName)) { return isHasWiseDivineAbility(); }
             if ("hasGuardAbility".equals(groupName)) { return isHasGuardAbility(); }
+            if ("hasWandererGuardAbility".equals(groupName)) { return isHasWandererGuardAbility(); }
             if ("hasPsychicAbility".equals(groupName)) { return isHasPsychicAbility(); }
             if ("hasGuruPsychicAbility".equals(groupName)) { return isHasGuruPsychicAbility(); }
             if ("hasAutopsyAbility".equals(groupName)) { return isHasAutopsyAbility(); }
             if ("hasWiseWolfAbility".equals(groupName)) { return isHasWiseWolfAbility(); }
             if ("hasBakeryAbility".equals(groupName)) { return isHasBakeryAbility(); }
+            if ("hasLuckyAbility".equals(groupName)) { return isHasLuckyAbility(); }
             if ("countWolf".equals(groupName)) { return isCountWolf(); }
             if ("noCount".equals(groupName)) { return isNoCount(); }
             if ("someoneSkill".equals(groupName)) { return isSomeoneSkill(); }
@@ -1109,11 +1153,13 @@ public interface CDef extends Classification {
             if ("hasDivineAbility".equalsIgnoreCase(groupName)) { return listOfHasDivineAbility(); }
             if ("hasWiseDivineAbility".equalsIgnoreCase(groupName)) { return listOfHasWiseDivineAbility(); }
             if ("hasGuardAbility".equalsIgnoreCase(groupName)) { return listOfHasGuardAbility(); }
+            if ("hasWandererGuardAbility".equalsIgnoreCase(groupName)) { return listOfHasWandererGuardAbility(); }
             if ("hasPsychicAbility".equalsIgnoreCase(groupName)) { return listOfHasPsychicAbility(); }
             if ("hasGuruPsychicAbility".equalsIgnoreCase(groupName)) { return listOfHasGuruPsychicAbility(); }
             if ("hasAutopsyAbility".equalsIgnoreCase(groupName)) { return listOfHasAutopsyAbility(); }
             if ("hasWiseWolfAbility".equalsIgnoreCase(groupName)) { return listOfHasWiseWolfAbility(); }
             if ("hasBakeryAbility".equalsIgnoreCase(groupName)) { return listOfHasBakeryAbility(); }
+            if ("hasLuckyAbility".equalsIgnoreCase(groupName)) { return listOfHasLuckyAbility(); }
             if ("countWolf".equalsIgnoreCase(groupName)) { return listOfCountWolf(); }
             if ("noCount".equalsIgnoreCase(groupName)) { return listOfNoCount(); }
             if ("someoneSkill".equalsIgnoreCase(groupName)) { return listOfSomeoneSkill(); }
@@ -1251,6 +1297,16 @@ public interface CDef extends Classification {
 
         /**
          * Get the list of group classification elements. (returns new copied list) <br>
+         * 風来護衛能力を持つ <br>
+         * The group elements:[風来狩人]
+         * @return The snapshot list of classification elements in the group. (NotNull)
+         */
+        public static List<Skill> listOfHasWandererGuardAbility() {
+            return new ArrayList<Skill>(Arrays.asList(風来狩人));
+        }
+
+        /**
+         * Get the list of group classification elements. (returns new copied list) <br>
          * 霊能能力を持つ <br>
          * The group elements:[霊能者]
          * @return The snapshot list of classification elements in the group. (NotNull)
@@ -1297,6 +1353,16 @@ public interface CDef extends Classification {
          */
         public static List<Skill> listOfHasBakeryAbility() {
             return new ArrayList<Skill>(Arrays.asList(パン屋));
+        }
+
+        /**
+         * Get the list of group classification elements. (returns new copied list) <br>
+         * 強運能力を持つ <br>
+         * The group elements:[強運者]
+         * @return The snapshot list of classification elements in the group. (NotNull)
+         */
+        public static List<Skill> listOfHasLuckyAbility() {
+            return new ArrayList<Skill>(Arrays.asList(強運者));
         }
 
         /**
@@ -1416,11 +1482,13 @@ public interface CDef extends Classification {
             if ("hasDivineAbility".equals(groupName)) { return listOfHasDivineAbility(); }
             if ("hasWiseDivineAbility".equals(groupName)) { return listOfHasWiseDivineAbility(); }
             if ("hasGuardAbility".equals(groupName)) { return listOfHasGuardAbility(); }
+            if ("hasWandererGuardAbility".equals(groupName)) { return listOfHasWandererGuardAbility(); }
             if ("hasPsychicAbility".equals(groupName)) { return listOfHasPsychicAbility(); }
             if ("hasGuruPsychicAbility".equals(groupName)) { return listOfHasGuruPsychicAbility(); }
             if ("hasAutopsyAbility".equals(groupName)) { return listOfHasAutopsyAbility(); }
             if ("hasWiseWolfAbility".equals(groupName)) { return listOfHasWiseWolfAbility(); }
             if ("hasBakeryAbility".equals(groupName)) { return listOfHasBakeryAbility(); }
+            if ("hasLuckyAbility".equals(groupName)) { return listOfHasLuckyAbility(); }
             if ("countWolf".equals(groupName)) { return listOfCountWolf(); }
             if ("noCount".equals(groupName)) { return listOfNoCount(); }
             if ("someoneSkill".equals(groupName)) { return listOfSomeoneSkill(); }
@@ -1799,6 +1867,9 @@ public interface CDef extends Classification {
         ,
         /** 護衛 */
         護衛("GUARD", "護衛", emptyStrings())
+        ,
+        /** 風来護衛 */
+        風来護衛("WANDERER_GUARD", "風来護衛", emptyStrings())
         ;
         private static final Map<String, AbilityType> _codeClsMap = new HashMap<String, AbilityType>();
         private static final Map<String, AbilityType> _nameClsMap = new HashMap<String, AbilityType>();

@@ -36,9 +36,10 @@ class AttackDomainServiceTest : FirewolfTest() {
         // ## Arrange ##
         val village = DummyDomainModelCreator.createDummyVillage()
         val participant = null
+        val villageAbilities = DummyDomainModelCreator.createDummyVillageAbilities()
 
         // ## Act ##
-        val targetList = attackDomainService.getSelectableTargetList(village, participant)
+        val targetList = attackDomainService.getSelectableTargetList(village, participant, villageAbilities)
 
         // ## Assert ##
         assertThat(targetList).`as`("参加していないので対象なし").isEmpty()
@@ -63,9 +64,10 @@ class AttackDomainServiceTest : FirewolfTest() {
             )
         )
         val participant = DummyDomainModelCreator.createDummyVillageParticipant()
+        val villageAbilities = DummyDomainModelCreator.createDummyVillageAbilities()
 
         // ## Act ##
-        val targetList = attackDomainService.getSelectableTargetList(village, participant)
+        val targetList = attackDomainService.getSelectableTargetList(village, participant, villageAbilities)
 
         // ## Assert ##
         assertThat(targetList.firstOrNull()?.id).`as`("初日なのでダミーキャラ").isEqualTo(dummyParticipant.id)
@@ -95,9 +97,10 @@ class AttackDomainServiceTest : FirewolfTest() {
             )
         )
         val participant = DummyDomainModelCreator.createDummyVillageParticipant()
+        val villageAbilities = DummyDomainModelCreator.createDummyVillageAbilities()
 
         // ## Act ##
-        val targetList = attackDomainService.getSelectableTargetList(village, participant)
+        val targetList = attackDomainService.getSelectableTargetList(village, participant, villageAbilities)
 
         // ## Assert ##
         assertThat(targetList.size).`as`("死亡していなくて襲撃対象にできる役職のみ").isEqualTo(1)

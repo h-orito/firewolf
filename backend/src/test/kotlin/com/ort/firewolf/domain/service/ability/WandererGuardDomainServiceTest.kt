@@ -20,10 +20,10 @@ import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(SpringRunner::class)
 @SpringBootTest
-class GuardDomainServiceTest : FirewolfTest() {
+class WandererGuardDomainServiceTest : FirewolfTest() {
 
     @Autowired
-    lateinit var guardDomainService: GuardDomainService
+    lateinit var wandererGuardDomainService: WandererGuardDomainService
 
     // ===================================================================================
     //                                                                                Test
@@ -36,7 +36,7 @@ class GuardDomainServiceTest : FirewolfTest() {
         val villageAbilities = DummyDomainModelCreator.createDummyVillageAbilities()
 
         // ## Act ##
-        val selectableTargetList = guardDomainService.getSelectableTargetList(village, participant, villageAbilities)
+        val selectableTargetList = wandererGuardDomainService.getSelectableTargetList(village, participant, villageAbilities)
 
         // ## Assert ##
         assertThat(selectableTargetList).`as`("参加していないのでなし").isEmpty()
@@ -56,7 +56,7 @@ class GuardDomainServiceTest : FirewolfTest() {
         val villageAbilities = DummyDomainModelCreator.createDummyVillageAbilities()
 
         // ## Act ##
-        val selectableTargetList = guardDomainService.getSelectableTargetList(village, participant, villageAbilities)
+        val selectableTargetList = wandererGuardDomainService.getSelectableTargetList(village, participant, villageAbilities)
 
         // ## Assert ##
         assertThat(selectableTargetList).`as`("1日目なのでなし").isEmpty()
@@ -65,7 +65,7 @@ class GuardDomainServiceTest : FirewolfTest() {
     @Test
     fun test_getSelectableTargetList_生存者なし() {
         // ## Arrange ##
-        val participant = DummyDomainModelCreator.createDummyAliveHunter()
+        val participant = DummyDomainModelCreator.createDummyAliveWanderer()
         val village = DummyDomainModelCreator.createDummyVillage().copy(
             participant = VillageParticipants(
                 count = 3,
@@ -84,7 +84,7 @@ class GuardDomainServiceTest : FirewolfTest() {
         val villageAbilities = DummyDomainModelCreator.createDummyVillageAbilities()
 
         // ## Act ##
-        val selectableTargetList = guardDomainService.getSelectableTargetList(village, participant, villageAbilities)
+        val selectableTargetList = wandererGuardDomainService.getSelectableTargetList(village, participant, villageAbilities)
 
         // ## Assert ##
         assertThat(selectableTargetList).`as`("生存者が自分だけ").isEmpty()
@@ -93,7 +93,7 @@ class GuardDomainServiceTest : FirewolfTest() {
     @Test
     fun test_getSelectableTargetList_生存者あり() {
         // ## Arrange ##
-        val participant = DummyDomainModelCreator.createDummyAliveHunter()
+        val participant = DummyDomainModelCreator.createDummyAliveWanderer()
         val village = DummyDomainModelCreator.createDummyVillage().copy(
             participant = VillageParticipants(
                 count = 4,
@@ -113,10 +113,49 @@ class GuardDomainServiceTest : FirewolfTest() {
         val villageAbilities = DummyDomainModelCreator.createDummyVillageAbilities()
 
         // ## Act ##
-        val selectableTargetList = guardDomainService.getSelectableTargetList(village, participant, villageAbilities)
+        val selectableTargetList = wandererGuardDomainService.getSelectableTargetList(village, participant, villageAbilities)
 
         // ## Assert ##
         assertThat(selectableTargetList.size).isEqualTo(2)
+    }
+
+    @Test
+    fun test_getSelectableTargetList_生存者あり_護衛した人は護衛できない() {
+        // ## Arrange ##
+        val participant = DummyDomainModelCreator.createDummyAliveWanderer()
+        val firstDay = DummyDomainModelCreator.createDummyVillageDay().copy(day = 1)
+        val secondDay = DummyDomainModelCreator.createDummyVillageDay().copy(day = 2)
+        val aliveVillager = DummyDomainModelCreator.createDummyAliveVillager()
+        val aliveWolf = DummyDomainModelCreator.createDummyAliveWolf()
+        val village = DummyDomainModelCreator.createDummyVillage().copy(
+            participant = VillageParticipants(
+                count = 4,
+                memberList = listOf(
+                    aliveVillager,
+                    DummyDomainModelCreator.createDummyDeadVillager(),
+                    aliveWolf,
+                    participant
+                )
+            ),
+            day = VillageDays(listOf(firstDay, secondDay))
+        )
+        val villageAbilities = VillageAbilities(
+            listOf(
+                VillageAbility(
+                    villageDayId = firstDay.id,
+                    myselfId = participant.id,
+                    targetId = aliveWolf.id,
+                    abilityType = AbilityType(CDef.AbilityType.風来護衛)
+                )
+            )
+        )
+
+        // ## Act ##
+        val selectableTargetList = wandererGuardDomainService.getSelectableTargetList(village, participant, villageAbilities)
+
+        // ## Assert ##
+        assertThat(selectableTargetList.size).isEqualTo(1)
+        assertThat(selectableTargetList.first().id).isEqualTo(aliveVillager.id)
     }
 
     @Test
@@ -127,7 +166,7 @@ class GuardDomainServiceTest : FirewolfTest() {
         val villageAbilities = DummyDomainModelCreator.createDummyVillageAbilities()
 
         // ## Act ##
-        val target = guardDomainService.getSelectingTarget(village, participant, villageAbilities)
+        val target = wandererGuardDomainService.getSelectingTarget(village, participant, villageAbilities)
 
         // ## Assert ##
         assertThat(target).`as`("参加していないのでなし").isNull()
@@ -143,7 +182,7 @@ class GuardDomainServiceTest : FirewolfTest() {
         val villageAbilities = DummyDomainModelCreator.createDummyVillageAbilities()
 
         // ## Act ##
-        val target = guardDomainService.getSelectingTarget(village, participant, villageAbilities)
+        val target = wandererGuardDomainService.getSelectingTarget(village, participant, villageAbilities)
 
         // ## Assert ##
         assertThat(target).`as`("セットしていないのでなし").isNull()
@@ -172,13 +211,13 @@ class GuardDomainServiceTest : FirewolfTest() {
                     villageDayId = latestDay.id,
                     myselfId = participant.id,
                     targetId = aliveWolf.id,
-                    abilityType = AbilityType(CDef.AbilityType.護衛)
+                    abilityType = AbilityType(CDef.AbilityType.風来護衛)
                 )
             )
         )
 
         // ## Act ##
-        val target = guardDomainService.getSelectingTarget(village, participant, villageAbilities)
+        val target = wandererGuardDomainService.getSelectingTarget(village, participant, villageAbilities)
 
         // ## Assert ##
         assertThat(target?.id).isEqualTo(aliveWolf.id)
@@ -191,7 +230,7 @@ class GuardDomainServiceTest : FirewolfTest() {
         val targetChara = DummyDomainModelCreator.createDummyChara()
 
         // ## Act ##
-        val message = guardDomainService.createSetMessage(chara, targetChara)
+        val message = wandererGuardDomainService.createSetMessage(chara, targetChara)
 
         // ## Assert ##
         assertThat(message).`as`("対象あり").doesNotContain("なし")
@@ -204,7 +243,7 @@ class GuardDomainServiceTest : FirewolfTest() {
         val targetChara = null
 
         // ## Act ##
-        val message = guardDomainService.createSetMessage(chara, targetChara)
+        val message = wandererGuardDomainService.createSetMessage(chara, targetChara)
 
         // ## Assert ##
         assertThat(message).`as`("対象なし").contains("なし")
@@ -219,7 +258,7 @@ class GuardDomainServiceTest : FirewolfTest() {
         val villageAbilities = DummyDomainModelCreator.createDummyVillageAbilities()
 
         // ## Act ##
-        val villageAbilityList = guardDomainService.getDefaultAbilityList(village, villageAbilities)
+        val villageAbilityList = wandererGuardDomainService.getDefaultAbilityList(village, villageAbilities)
 
         // ## Assert ##
         assertThat(villageAbilityList).`as`("進行中でないのでなし").isEmpty()
@@ -239,7 +278,7 @@ class GuardDomainServiceTest : FirewolfTest() {
         val villageAbilities = DummyDomainModelCreator.createDummyVillageAbilities()
 
         // ## Act ##
-        val villageAbilityList = guardDomainService.getDefaultAbilityList(village, villageAbilities)
+        val villageAbilityList = wandererGuardDomainService.getDefaultAbilityList(village, villageAbilities)
 
         // ## Assert ##
         assertThat(villageAbilityList).`as`("進行中でないのでなし").isEmpty()
@@ -248,7 +287,7 @@ class GuardDomainServiceTest : FirewolfTest() {
     @Test
     fun test_getDefaultAbilityList_対象なし() {
         // ## Arrange ##
-        val aliveHunter = DummyDomainModelCreator.createDummyAliveHunter()
+        val aliveHunter = DummyDomainModelCreator.createDummyAliveWanderer()
         val deadVillager = DummyDomainModelCreator.createDummyDeadVillager()
         val deadWolf = DummyDomainModelCreator.createDummyDeadWolf()
         val village = DummyDomainModelCreator.createDummyVillage().copy(
@@ -268,7 +307,7 @@ class GuardDomainServiceTest : FirewolfTest() {
         val villageAbilities = DummyDomainModelCreator.createDummyVillageAbilities()
 
         // ## Act ##
-        val villageAbilityList = guardDomainService.getDefaultAbilityList(village, villageAbilities)
+        val villageAbilityList = wandererGuardDomainService.getDefaultAbilityList(village, villageAbilities)
 
         // ## Assert ##
         assertThat(villageAbilityList).`as`("生存者がいないのでなし").isEmpty()
@@ -277,8 +316,8 @@ class GuardDomainServiceTest : FirewolfTest() {
     @Test
     fun test_getDefaultAbilityList_対象あり() {
         // ## Arrange ##
-        val aliveHunter = DummyDomainModelCreator.createDummyAliveHunter()
-        val aliveHunter2 = DummyDomainModelCreator.createDummyAliveHunter()
+        val aliveHunter = DummyDomainModelCreator.createDummyAliveWanderer()
+        val aliveHunter2 = DummyDomainModelCreator.createDummyAliveWanderer()
         val village = DummyDomainModelCreator.createDummyVillage().copy(
             status = VillageStatus(CDef.VillageStatus.進行中),
             participant = VillageParticipants(
@@ -296,13 +335,13 @@ class GuardDomainServiceTest : FirewolfTest() {
         val villageAbilities = DummyDomainModelCreator.createDummyVillageAbilities()
 
         // ## Act ##
-        val villageAbilityList = guardDomainService.getDefaultAbilityList(village, villageAbilities)
+        val villageAbilityList = wandererGuardDomainService.getDefaultAbilityList(village, villageAbilities)
 
         // ## Assert ##
         assertThat(villageAbilityList.size).isEqualTo(2)
         assertThat(villageAbilityList.find { it.myselfId == aliveHunter.id }).satisfies {
             assertThat(it?.targetId).isEqualTo(aliveHunter2.id)
-            assertThat(it?.abilityType?.code).isEqualTo(CDef.AbilityType.護衛.code())
+            assertThat(it?.abilityType?.code).isEqualTo(CDef.AbilityType.風来護衛.code())
         }
         assertThat(villageAbilityList.find { it.myselfId == aliveHunter2.id }).satisfies {
             assertThat(it?.targetId).isEqualTo(aliveHunter.id)
@@ -312,7 +351,7 @@ class GuardDomainServiceTest : FirewolfTest() {
     @Test
     fun test_process_生存している狩人がいない() {
         // ## Arrange ##
-        val deadHunter = DummyDomainModelCreator.createDummyDeadHunter()
+        val deadHunter = DummyDomainModelCreator.createDummyDeadWanderer()
         val aliveVillager = DummyDomainModelCreator.createDummyAliveVillager()
         val yesterday = DummyDomainModelCreator.createDummyVillageDay()
         val latestDay = DummyDomainModelCreator.createDummyVillageDay()
@@ -322,7 +361,7 @@ class GuardDomainServiceTest : FirewolfTest() {
                     villageDayId = yesterday.id,
                     myselfId = deadHunter.id,
                     targetId = aliveVillager.id,
-                    abilityType = AbilityType(CDef.AbilityType.護衛)
+                    abilityType = AbilityType(CDef.AbilityType.風来護衛)
                 )
             )
         )
@@ -342,7 +381,7 @@ class GuardDomainServiceTest : FirewolfTest() {
         val charas = DummyDomainModelCreator.createDummyCharas()
 
         // ## Act ##
-        val afterDayChange = guardDomainService.processDayChangeAction(dayChange, charas)
+        val afterDayChange = wandererGuardDomainService.processDayChangeAction(dayChange, charas)
 
         // ## Assert ##
         assertThat(afterDayChange.isChange).`as`("狩人が死んでいる").isFalse()
@@ -351,7 +390,7 @@ class GuardDomainServiceTest : FirewolfTest() {
     @Test
     fun test_process_能力セットしていない() {
         // ## Arrange ##
-        val aliveHunter = DummyDomainModelCreator.createDummyAliveHunter()
+        val aliveHunter = DummyDomainModelCreator.createDummyAliveWanderer()
         val aliveVillager = DummyDomainModelCreator.createDummyAliveVillager()
         val yesterday = DummyDomainModelCreator.createDummyVillageDay()
         val latestDay = DummyDomainModelCreator.createDummyVillageDay()
@@ -372,7 +411,7 @@ class GuardDomainServiceTest : FirewolfTest() {
         val charas = DummyDomainModelCreator.createDummyCharas()
 
         // ## Act ##
-        val afterDayChange = guardDomainService.processDayChangeAction(dayChange, charas)
+        val afterDayChange = wandererGuardDomainService.processDayChangeAction(dayChange, charas)
 
         // ## Assert ##
         assertThat(afterDayChange.isChange).`as`("能力セットなし").isFalse()
@@ -381,7 +420,7 @@ class GuardDomainServiceTest : FirewolfTest() {
     @Test
     fun test_process_護衛した() {
         // ## Arrange ##
-        val aliveHunter = DummyDomainModelCreator.createDummyAliveHunter()
+        val aliveHunter = DummyDomainModelCreator.createDummyAliveWanderer()
         val aliveWolf = DummyDomainModelCreator.createDummyAliveWolf()
         val yesterday = DummyDomainModelCreator.createDummyVillageDay()
         val latestDay = DummyDomainModelCreator.createDummyVillageDay()
@@ -391,7 +430,7 @@ class GuardDomainServiceTest : FirewolfTest() {
                     villageDayId = yesterday.id,
                     myselfId = aliveHunter.id,
                     targetId = aliveWolf.id,
-                    abilityType = AbilityType(CDef.AbilityType.護衛)
+                    abilityType = AbilityType(CDef.AbilityType.風来護衛)
                 )
             )
         )
@@ -416,7 +455,7 @@ class GuardDomainServiceTest : FirewolfTest() {
         )
 
         // ## Act ##
-        val afterDayChange = guardDomainService.processDayChangeAction(dayChange, charas)
+        val afterDayChange = wandererGuardDomainService.processDayChangeAction(dayChange, charas)
 
         // ## Assert ##
         assertThat(afterDayChange.isChange).isTrue()

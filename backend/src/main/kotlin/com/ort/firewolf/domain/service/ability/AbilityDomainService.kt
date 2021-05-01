@@ -20,17 +20,19 @@ class AbilityDomainService(
     private val attackDomainService: AttackDomainService,
     private val divineDomainService: DivineDomainService,
     private val wiseDivineDomainService: WiseDivineDomainService,
-    private val guardDomainService: GuardDomainService
+    private val guardDomainService: GuardDomainService,
+    private val wandererGuardDomainService: WandererGuardDomainService
 ) {
 
     // 選択可能な対象
     fun getSelectableTargetList(
         village: Village,
         participant: VillageParticipant?,
+        villageAbilities: VillageAbilities,
         abilityType: AbilityType
     ): List<VillageParticipant> {
         if (!canUseAbility(village, participant)) return listOf()
-        return detectDomainService(abilityType)?.getSelectableTargetList(village, participant) ?: listOf()
+        return detectDomainService(abilityType)?.getSelectableTargetList(village, participant, villageAbilities) ?: listOf()
     }
 
     // 選択中の対象
@@ -60,7 +62,8 @@ class AbilityDomainService(
         village: Village,
         participant: VillageParticipant?,
         targetId: Int?,
-        abilityType: AbilityType
+        abilityType: AbilityType,
+        villageAbilities: VillageAbilities
     ) {
         participant?.skill ?: throw FirewolfBadRequestException("役職なし")
         // その能力を持っていない
@@ -71,7 +74,7 @@ class AbilityDomainService(
         if (!isUsable(village, participant, abilityType)) throw FirewolfBusinessException("${abilityType.name}能力を使えない状態です")
         // 対象指定がおかしい
         if (targetId == null && !canNoTarget(village, abilityType)) throw FirewolfBusinessException("対象指定が必要です")
-        if (targetId != null && getSelectableTargetList(village, participant, abilityType).none { it.id == targetId }) {
+        if (targetId != null && getSelectableTargetList(village, participant, villageAbilities, abilityType).none { it.id == targetId }) {
             throw FirewolfBusinessException("指定できない対象を指定しています")
         }
     }
@@ -126,6 +129,7 @@ class AbilityDomainService(
             CDef.AbilityType.襲撃.code() -> attackDomainService
             CDef.AbilityType.占い.code() -> divineDomainService
             CDef.AbilityType.護衛.code() -> guardDomainService
+            CDef.AbilityType.風来護衛.code() -> wandererGuardDomainService
             else -> null
         }
     }
@@ -146,7 +150,7 @@ class AbilityDomainService(
     ): VillageAbilitySituation {
         return VillageAbilitySituation(
             type = abilityType,
-            targetList = this.getSelectableTargetList(village, participant, abilityType),
+            targetList = this.getSelectableTargetList(village, participant, villageAbilities, abilityType),
             target = this.getSelectingTarget(village, participant, villageAbilities, abilityType),
             usable = this.isUsable(village, participant, abilityType),
             isAvailableNoTarget = this.canNoTarget(village, abilityType)

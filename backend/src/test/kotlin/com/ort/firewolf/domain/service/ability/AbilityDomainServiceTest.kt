@@ -34,11 +34,13 @@ class AbilityDomainServiceTest : FirewolfTest() {
         val village = DummyDomainModelCreator.createDummyVillage()
         val participant = null
         val abilityType = AbilityType(CDef.AbilityType.占い)
+        val villageAbilities = DummyDomainModelCreator.createDummyVillageAbilities()
 
         // ## Act ##
         val selectableTargetList = abilityDomainService.getSelectableTargetList(
             village,
             participant,
+            villageAbilities,
             abilityType
         )
 
@@ -52,11 +54,13 @@ class AbilityDomainServiceTest : FirewolfTest() {
         val village = DummyDomainModelCreator.createDummyVillage().changeStatus(CDef.VillageStatus.終了)
         val participant = DummyDomainModelCreator.createDummyVillageParticipant()
         val abilityType = AbilityType(CDef.AbilityType.占い)
+        val villageAbilities = DummyDomainModelCreator.createDummyVillageAbilities()
 
         // ## Act ##
         val selectableTargetList = abilityDomainService.getSelectableTargetList(
             village,
             participant,
+            villageAbilities,
             abilityType
         )
 
@@ -82,9 +86,10 @@ class AbilityDomainServiceTest : FirewolfTest() {
             )
         )
         val abilityType = AbilityType(CDef.AbilityType.占い)
+        val villageAbilities = DummyDomainModelCreator.createDummyVillageAbilities()
 
         // ## Act ##
-        val selectableTargetList = abilityDomainService.getSelectableTargetList(village, participant, abilityType)
+        val selectableTargetList = abilityDomainService.getSelectableTargetList(village, participant, villageAbilities, abilityType)
 
         // ## Assert ##
         assertThat(selectableTargetList.size).isEqualTo(2)
@@ -187,10 +192,11 @@ class AbilityDomainServiceTest : FirewolfTest() {
         val participant = DummyDomainModelCreator.createDummyAliveSeer()
         val targetId = null
         val abilityType = AbilityType(CDef.AbilityType.襲撃)
+        val villageAbilities = DummyDomainModelCreator.createDummyVillageAbilities()
 
         // ## Act ##
         // ## Assert ##
-        abilityDomainService.assertAbility(village, participant, targetId, abilityType)
+        abilityDomainService.assertAbility(village, participant, targetId, abilityType, villageAbilities)
     }
 
     @Test(expected = FirewolfBusinessException::class)
@@ -200,10 +206,11 @@ class AbilityDomainServiceTest : FirewolfTest() {
         val participant = DummyDomainModelCreator.createDummyAliveSeer()
         val targetId = null
         val abilityType = AbilityType(CDef.AbilityType.占い)
+        val villageAbilities = DummyDomainModelCreator.createDummyVillageAbilities()
 
         // ## Act ##
         // ## Assert ##
-        abilityDomainService.assertAbility(village, participant, targetId, abilityType)
+        abilityDomainService.assertAbility(village, participant, targetId, abilityType, villageAbilities)
     }
 
     fun test_assertAbility_対象なしにできる能力で対象なし() {
@@ -212,10 +219,11 @@ class AbilityDomainServiceTest : FirewolfTest() {
         val participant = DummyDomainModelCreator.createDummyAliveWolf()
         val targetId = null
         val abilityType = AbilityType(CDef.AbilityType.襲撃)
+        val villageAbilities = DummyDomainModelCreator.createDummyVillageAbilities()
 
         // ## Act ##
         // ## Assert ##
-        abilityDomainService.assertAbility(village, participant, targetId, abilityType)
+        abilityDomainService.assertAbility(village, participant, targetId, abilityType, villageAbilities)
     }
 
     @Test(expected = FirewolfBusinessException::class)
@@ -233,10 +241,11 @@ class AbilityDomainServiceTest : FirewolfTest() {
         val participant = DummyDomainModelCreator.createDummyAliveWolf()
         val targetId = 10001
         val abilityType = AbilityType(CDef.AbilityType.襲撃)
+        val villageAbilities = DummyDomainModelCreator.createDummyVillageAbilities()
 
         // ## Act ##
         // ## Assert ##
-        abilityDomainService.assertAbility(village, participant, targetId, abilityType)
+        abilityDomainService.assertAbility(village, participant, targetId, abilityType, villageAbilities)
     }
 
     @Test
@@ -254,10 +263,11 @@ class AbilityDomainServiceTest : FirewolfTest() {
         val participant = DummyDomainModelCreator.createDummyAliveWolf()
         val targetId = availableTarget.id
         val abilityType = AbilityType(CDef.AbilityType.襲撃)
+        val villageAbilities = DummyDomainModelCreator.createDummyVillageAbilities()
 
         // ## Act ##
         // ## Assert ##
-        abilityDomainService.assertAbility(village, participant, targetId, abilityType)
+        abilityDomainService.assertAbility(village, participant, targetId, abilityType, villageAbilities)
     }
 
     @Test

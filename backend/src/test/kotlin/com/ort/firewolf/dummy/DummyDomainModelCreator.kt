@@ -222,6 +222,8 @@ object DummyDomainModelCreator {
 
     fun createDummyAliveHunter(): VillageParticipant = createDummyVillageParticipant().copy(skill = Skill(CDef.Skill.狩人))
 
+    fun createDummyAliveWanderer(): VillageParticipant = createDummyVillageParticipant().copy(skill = Skill(CDef.Skill.風来狩人))
+
     fun createDummyAliveMadman(): VillageParticipant = createDummyVillageParticipant().copy(skill = Skill(CDef.Skill.狂人))
 
     fun createDummyDeadWolf(): VillageParticipant = createDummyAliveWolf().copy(dead = createDummyDead())
@@ -233,6 +235,8 @@ object DummyDomainModelCreator {
     fun createDummyDeadPsychic(): VillageParticipant = createDummyAlivePsychic().copy(dead = createDummyDead())
 
     fun createDummyDeadHunter(): VillageParticipant = createDummyAliveHunter().copy(dead = createDummyDead())
+
+    fun createDummyDeadWanderer(): VillageParticipant = createDummyAliveWanderer().copy(dead = createDummyDead())
 
     // ===================================================================================
     //                                                                        Assist Logic

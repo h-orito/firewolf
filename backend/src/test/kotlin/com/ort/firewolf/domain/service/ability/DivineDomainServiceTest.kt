@@ -34,9 +34,10 @@ class DivineDomainServiceTest : FirewolfTest() {
         // ## Arrange ##
         val village = DummyDomainModelCreator.createDummyVillage()
         val participant = null
+        val villageAbilities = DummyDomainModelCreator.createDummyVillageAbilities()
 
         // ## Act ##
-        val selectableTargetList = divineDomainService.getSelectableTargetList(village, participant)
+        val selectableTargetList = divineDomainService.getSelectableTargetList(village, participant, villageAbilities)
 
         // ## Assert ##
         assertThat(selectableTargetList).`as`("参加していないのでなし").isEmpty()
@@ -56,9 +57,10 @@ class DivineDomainServiceTest : FirewolfTest() {
                 )
             )
         )
+        val villageAbilities = DummyDomainModelCreator.createDummyVillageAbilities()
 
         // ## Act ##
-        val selectableTargetList = divineDomainService.getSelectableTargetList(village, participant)
+        val selectableTargetList = divineDomainService.getSelectableTargetList(village, participant, villageAbilities)
 
         // ## Assert ##
         assertThat(selectableTargetList).`as`("生存者が自分だけ").isEmpty()
@@ -79,9 +81,10 @@ class DivineDomainServiceTest : FirewolfTest() {
                 )
             )
         )
+        val villageAbilities = DummyDomainModelCreator.createDummyVillageAbilities()
 
         // ## Act ##
-        val selectableTargetList = divineDomainService.getSelectableTargetList(village, participant)
+        val selectableTargetList = divineDomainService.getSelectableTargetList(village, participant, villageAbilities)
 
         // ## Assert ##
         assertThat(selectableTargetList.size).isEqualTo(2)

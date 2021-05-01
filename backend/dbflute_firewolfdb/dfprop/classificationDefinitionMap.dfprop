@@ -121,6 +121,10 @@ map:{
 					; groupComment=護衛能力を持つ
 					; elementList= list:{狩人}
 				}
+				; hasWandererGuardAbility = map:{
+					; groupComment=風来護衛能力を持つ
+					; elementList= list:{風来狩人}
+				}
 				; hasPsychicAbility = map:{
 					; groupComment=霊能能力を持つ
 					; elementList= list:{霊能者}
@@ -140,6 +144,10 @@ map:{
 				; hasBakeryAbility = map:{
 					; groupComment=パン焼き能力を持つ
 					; elementList= list:{パン屋}
+				}
+				; hasLuckyAbility = map:{
+					; groupComment=強運能力を持つ
+					; elementList= list:{強運者}
 				}
 				; countWolf = map:{
 					; groupComment=勝敗判定時狼にカウントする

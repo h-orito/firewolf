@@ -264,6 +264,14 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
     }
 
     /**
+     * Equal(=). As 強運者 (LUCKYMAN). And OnlyOnceRegistered. <br>
+     * 強運者
+     */
+    public void setSkillCode_Equal_強運者() {
+        setSkillCode_Equal_AsSkill(CDef.Skill.強運者);
+    }
+
+    /**
      * Equal(=). As 狂人 (MADMAN). And OnlyOnceRegistered. <br>
      * 狂人
      */
@@ -333,6 +341,14 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
      */
     public void setSkillCode_Equal_おまかせ村人陣営() {
         setSkillCode_Equal_AsSkill(CDef.Skill.おまかせ村人陣営);
+    }
+
+    /**
+     * Equal(=). As 風来狩人 (WANDERER). And OnlyOnceRegistered. <br>
+     * 風来狩人
+     */
+    public void setSkillCode_Equal_風来狩人() {
+        setSkillCode_Equal_AsSkill(CDef.Skill.風来狩人);
     }
 
     /**
@@ -463,6 +479,14 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
     }
 
     /**
+     * NotEqual(&lt;&gt;). As 強運者 (LUCKYMAN). And OnlyOnceRegistered. <br>
+     * 強運者
+     */
+    public void setSkillCode_NotEqual_強運者() {
+        setSkillCode_NotEqual_AsSkill(CDef.Skill.強運者);
+    }
+
+    /**
      * NotEqual(&lt;&gt;). As 狂人 (MADMAN). And OnlyOnceRegistered. <br>
      * 狂人
      */
@@ -532,6 +556,14 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
      */
     public void setSkillCode_NotEqual_おまかせ村人陣営() {
         setSkillCode_NotEqual_AsSkill(CDef.Skill.おまかせ村人陣営);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 風来狩人 (WANDERER). And OnlyOnceRegistered. <br>
+     * 風来狩人
+     */
+    public void setSkillCode_NotEqual_風来狩人() {
+        setSkillCode_NotEqual_AsSkill(CDef.Skill.風来狩人);
     }
 
     /**
@@ -702,6 +734,16 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
     /**
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
+     * 風来護衛能力を持つ <br>
+     * The group elements:[風来狩人]
+     */
+    public void setSkillCode_InScope_HasWandererGuardAbility() {
+        setSkillCode_InScope_AsSkill(CDef.Skill.listOfHasWandererGuardAbility());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
      * 霊能能力を持つ <br>
      * The group elements:[霊能者]
      */
@@ -747,6 +789,16 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
      */
     public void setSkillCode_InScope_HasBakeryAbility() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfHasBakeryAbility());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 強運能力を持つ <br>
+     * The group elements:[強運者]
+     */
+    public void setSkillCode_InScope_HasLuckyAbility() {
+        setSkillCode_InScope_AsSkill(CDef.Skill.listOfHasLuckyAbility());
     }
 
     /**

@@ -141,6 +141,14 @@ public abstract class BsAbilityType extends AbstractEntity implements DomainEnti
         setAbilityTypeCodeAsAbilityType(CDef.AbilityType.護衛);
     }
 
+    /**
+     * Set the value of abilityTypeCode as 風来護衛 (WANDERER_GUARD). <br>
+     * 風来護衛
+     */
+    public void setAbilityTypeCode_風来護衛() {
+        setAbilityTypeCodeAsAbilityType(CDef.AbilityType.風来護衛);
+    }
+
     // ===================================================================================
     //                                                        Classification Determination
     //                                                        ============================
@@ -175,6 +183,17 @@ public abstract class BsAbilityType extends AbstractEntity implements DomainEnti
     public boolean isAbilityTypeCode護衛() {
         CDef.AbilityType cdef = getAbilityTypeCodeAsAbilityType();
         return cdef != null ? cdef.equals(CDef.AbilityType.護衛) : false;
+    }
+
+    /**
+     * Is the value of abilityTypeCode 風来護衛? <br>
+     * 風来護衛
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isAbilityTypeCode風来護衛() {
+        CDef.AbilityType cdef = getAbilityTypeCodeAsAbilityType();
+        return cdef != null ? cdef.equals(CDef.AbilityType.風来護衛) : false;
     }
 
     // ===================================================================================
