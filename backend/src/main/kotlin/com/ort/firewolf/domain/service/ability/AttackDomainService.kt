@@ -20,7 +20,8 @@ class AttackDomainService : IAbilityDomainService {
 
     override fun getSelectableTargetList(
         village: Village,
-        participant: VillageParticipant?
+        participant: VillageParticipant?,
+        villageAbilities: VillageAbilities
     ): List<VillageParticipant> {
         participant ?: return listOf()
 
@@ -69,7 +70,7 @@ class AttackDomainService : IAbilityDomainService {
             it.skill!!.toCdef().isHasAttackAbility
         } ?: return listOf() // 生存している人狼がいないので襲撃なし
         // 対象も選択可能なものからランダム
-        return getSelectableTargetList(village, wolf)
+        return getSelectableTargetList(village, wolf, villageAbilities)
             .shuffled().firstOrNull()
             ?.let {
                 listOf(
@@ -145,7 +146,8 @@ class AttackDomainService : IAbilityDomainService {
         if (!dayChange.village.participant.member(targetId).isAlive()) return false
         // 対象が護衛されていたら失敗
         if (dayChange.abilities.list.any { villageAbility ->
-                villageAbility.abilityType.code == CDef.AbilityType.護衛.code()
+                (villageAbility.abilityType.code == CDef.AbilityType.護衛.code()
+                    || villageAbility.abilityType.code == CDef.AbilityType.風来護衛.code())
                     && villageAbility.targetId == targetId
                     && villageAbility.villageDayId == dayChange.village.day.yesterday().id
                     && dayChange.village.participant.member(villageAbility.myselfId).isAlive()

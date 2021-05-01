@@ -40,22 +40,22 @@ class ExecuteDomainService(
 
         // 得票数トップの参加者リスト
         val maxVotedParticipantIdList = filterMaxVotedParticipantList(votedMap)
-        // うち一人を処刑する
-        maxVotedParticipantIdList.shuffled().first().let { executedParticipantId ->
-            // 処刑（突然死していた場合は死因を上書きしない）
-            val executedParticipant = village.participant.member(executedParticipantId)
-            if (executedParticipant.isAlive()) {
-                village = village.executeParticipant(executedParticipantId, village.day.latestDay())
-            }
-            // 処刑メッセージ
-            messages = messages.add(createExecuteMessage(village, executedParticipantId, votedMap, charas))
 
-            // 猫又による道連れ
-            if (executedParticipant.isAlive()) {
-                forceSuicidedParticipant(village, dayChange.votes, executedParticipant)?.let {
-                    village = village.divineKillParticipant(it.id, village.day.latestDay())
-                    messages = messages.add(createForceSuicideMessage(executedParticipant, it, village.day.latestDay(), charas))
-                }
+        // うち一人を処刑する
+        val executedParticipantId = getExecutedParticipantId(maxVotedParticipantIdList, village)
+        // 処刑（突然死していた場合は死因を上書きしない）
+        val executedParticipant = village.participant.member(executedParticipantId)
+        if (executedParticipant.isAlive()) {
+            village = village.executeParticipant(executedParticipantId, village.day.latestDay())
+        }
+        // 処刑メッセージ
+        messages = messages.add(createExecuteMessage(village, executedParticipantId, votedMap, charas))
+
+        // 猫又による道連れ
+        if (executedParticipant.isAlive()) {
+            forceSuicidedParticipant(village, dayChange.votes, executedParticipant)?.let {
+                village = village.divineKillParticipant(it.id, village.day.latestDay())
+                messages = messages.add(createForceSuicideMessage(executedParticipant, it, village.day.latestDay(), charas))
             }
         }
         return dayChange.copy(
@@ -129,5 +129,13 @@ class ExecuteDomainService(
             message,
             latestDay.id
         )
+    }
+
+    private fun getExecutedParticipantId(maxVotedParticipantIdList: List<Int>, village: Village): Int {
+        // 強運者を除いて1名以上存在したら強運者以外から選択
+        val excludeLuckyManList = maxVotedParticipantIdList.filterNot { village.participant.member(it).skill!!.toCdef().isHasLuckyAbility }
+        return if (excludeLuckyManList.isNotEmpty()) excludeLuckyManList.shuffled().first()
+        // 全員強運者
+        else maxVotedParticipantIdList.shuffled().first()
     }
 }

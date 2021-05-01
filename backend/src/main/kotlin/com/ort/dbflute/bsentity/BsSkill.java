@@ -233,6 +233,14 @@ public abstract class BsSkill extends AbstractEntity implements DomainEntity {
     }
 
     /**
+     * Set the value of skillCode as 強運者 (LUCKYMAN). <br>
+     * 強運者
+     */
+    public void setSkillCode_強運者() {
+        setSkillCodeAsSkill(CDef.Skill.強運者);
+    }
+
+    /**
      * Set the value of skillCode as 狂人 (MADMAN). <br>
      * 狂人
      */
@@ -302,6 +310,14 @@ public abstract class BsSkill extends AbstractEntity implements DomainEntity {
      */
     public void setSkillCode_おまかせ村人陣営() {
         setSkillCodeAsSkill(CDef.Skill.おまかせ村人陣営);
+    }
+
+    /**
+     * Set the value of skillCode as 風来狩人 (WANDERER). <br>
+     * 風来狩人
+     */
+    public void setSkillCode_風来狩人() {
+        setSkillCodeAsSkill(CDef.Skill.風来狩人);
     }
 
     /**
@@ -463,6 +479,17 @@ public abstract class BsSkill extends AbstractEntity implements DomainEntity {
     }
 
     /**
+     * Is the value of skillCode 強運者? <br>
+     * 強運者
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isSkillCode強運者() {
+        CDef.Skill cdef = getSkillCodeAsSkill();
+        return cdef != null ? cdef.equals(CDef.Skill.強運者) : false;
+    }
+
+    /**
      * Is the value of skillCode 狂人? <br>
      * 狂人
      * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
@@ -559,6 +586,17 @@ public abstract class BsSkill extends AbstractEntity implements DomainEntity {
     public boolean isSkillCodeおまかせ村人陣営() {
         CDef.Skill cdef = getSkillCodeAsSkill();
         return cdef != null ? cdef.equals(CDef.Skill.おまかせ村人陣営) : false;
+    }
+
+    /**
+     * Is the value of skillCode 風来狩人? <br>
+     * 風来狩人
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isSkillCode風来狩人() {
+        CDef.Skill cdef = getSkillCodeAsSkill();
+        return cdef != null ? cdef.equals(CDef.Skill.風来狩人) : false;
     }
 
     /**
@@ -716,6 +754,16 @@ public abstract class BsSkill extends AbstractEntity implements DomainEntity {
     }
 
     /**
+     * 風来護衛能力を持つ <br>
+     * The group elements:[風来狩人]
+     * @return The determination, true or false.
+     */
+    public boolean isSkillCode_HasWandererGuardAbility() {
+        CDef.Skill cdef = getSkillCodeAsSkill();
+        return cdef != null && cdef.isHasWandererGuardAbility();
+    }
+
+    /**
      * 霊能能力を持つ <br>
      * The group elements:[霊能者]
      * @return The determination, true or false.
@@ -763,6 +811,16 @@ public abstract class BsSkill extends AbstractEntity implements DomainEntity {
     public boolean isSkillCode_HasBakeryAbility() {
         CDef.Skill cdef = getSkillCodeAsSkill();
         return cdef != null && cdef.isHasBakeryAbility();
+    }
+
+    /**
+     * 強運能力を持つ <br>
+     * The group elements:[強運者]
+     * @return The determination, true or false.
+     */
+    public boolean isSkillCode_HasLuckyAbility() {
+        CDef.Skill cdef = getSkillCodeAsSkill();
+        return cdef != null && cdef.isHasLuckyAbility();
     }
 
     /**

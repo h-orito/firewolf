@@ -352,8 +352,9 @@ class VillageCoordinator(
         // 能力セットできない状況ならエラー
         val village: Village = villageService.findVillage(villageId)
         val participant: VillageParticipant? = findParticipant(village, user)
+        val villageAbilities: VillageAbilities = abilityService.findVillageAbilities(villageId)
         val abilityType = AbilityType(abilityTypeCode)
-        abilityDomainService.assertAbility(village, participant, targetId, abilityType)
+        abilityDomainService.assertAbility(village, participant, targetId, abilityType, villageAbilities)
         // 能力セット
         val villageAbility = VillageAbility(village.day.latestDay().id, participant!!.id, targetId, abilityType)
         abilityService.updateAbility(villageAbility)

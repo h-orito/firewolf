@@ -14,6 +14,7 @@ import com.ort.firewolf.domain.service.ability.DivineDomainService
 import com.ort.firewolf.domain.service.ability.GuardDomainService
 import com.ort.firewolf.domain.service.ability.GuruDomainService
 import com.ort.firewolf.domain.service.ability.PsychicDomainService
+import com.ort.firewolf.domain.service.ability.WandererGuardDomainService
 import com.ort.firewolf.domain.service.ability.WiseDivineDomainService
 import com.ort.firewolf.domain.service.vote.VoteDomainService
 import com.ort.firewolf.fw.FirewolfDateUtil
@@ -27,6 +28,7 @@ class ProgressDomainService(
     private val divineDomainService: DivineDomainService,
     private val wiseDivineDomainService: WiseDivineDomainService,
     private val guardDomainService: GuardDomainService,
+    private val wandererGuardDomainService: WandererGuardDomainService,
     private val attackDomainService: AttackDomainService,
     private val autopsyDomainService: AutopsyDomainService,
     private val bakeryDomainService: BakeryDomainService,
@@ -69,6 +71,9 @@ class ProgressDomainService(
 
         // 護衛
         dayChange = guardDomainService.processDayChangeAction(dayChange, charas)
+
+        // 風来護衛
+        dayChange = wandererGuardDomainService.processDayChangeAction(dayChange, charas)
 
         // 襲撃
         dayChange = attackDomainService.processDayChangeAction(dayChange, charas)
