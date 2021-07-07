@@ -9,36 +9,29 @@
 
 ## Requirement for local development
 
-- mysql
+- Mysql
 
-  - docker を使うなりインストールするなりして用意してください
-  - ポートは 3306 を使用します
-
-- maven
-
-  - インストールしておいてください
-  - いくつ以上なら大丈夫かわかりませんが私は`3.5`を使っています
+    - docker を使うなりインストールするなりして用意してください
+    - ポートは 3306 を使用します
 
 - Firebase
 
-  - JWT検証にFirebase Admin Sdkを利用しているため、プロジェクトを作成し、秘密鍵を生成しておいてください 
-  （後の手順で秘密鍵のファイルパス、データベースURLを利用します） 
-  see https://firebase.google.com/docs/admin/setup?hl=ja
-  
+    - JWT検証にFirebase Admin Sdkを利用しているため、プロジェクトを作成し、秘密鍵を生成しておいてください （後の手順で秘密鍵のファイルパス、データベースURLを利用します）
+      see https://firebase.google.com/docs/admin/setup?hl=ja
 
 ## Setup for local development
 
 - clone
 
-  - 好きな場所にこのプロジェクトを clone してください
-  - IntelliJ なり Eclipse なり好きな IDE で開いてください
-  - maven プロジェクトとしてインポートすると良いでしょう
-  - インポートしたら依存ライブラリを取り込んでおいてください
+    - 好きな場所にこのプロジェクトを clone してください
+    - IntelliJ なり Eclipse なり好きな IDE で開いてください
+    - gradle プロジェクトとしてインポートすると良いでしょう
+    - インポートしたら依存ライブラリを取り込んでおいてください
 
 * DB
 
-  - スキーマ、ユーザ情報は`application.yml`参照
-  - 以下実行するとローカル開発用 DB がセットアップされます
+    - スキーマ、ユーザ情報は`application.yml`参照
+    - 以下実行するとローカル開発用 DB がセットアップされます
 
   ```bash
   cd dbflute_xxxdb
@@ -47,15 +40,15 @@
 
 * 起動
 
-  - 以下の実行引数とともに`FirewolfApplication#main` を実行
-    - `--firebase.adminsdk.secretkey.path=${Firebaseサービスアカウント秘密鍵の配置パス}`
-    - `--firebase.database.url=${FirebaseデータベースURL}`
-  - http://localhost:8087/firewolf/ がベース URL になります
+    - 以下の実行引数とともに`FirewolfApplication#main` を実行
+        - `--firebase.adminsdk.secretkey.path=${Firebaseサービスアカウント秘密鍵の配置パス}`
+        - `--firebase.database.url=${FirebaseデータベースURL}`
+    - http://localhost:8087/firewolf/ がベース URL になります
 
 ## Run
 
-  - 実行例
-  
+- 実行例
+
 ```
 $ java -jar firewolf.jar \
 	--spring.profiles.active=prd \
@@ -65,7 +58,6 @@ $ java -jar firewolf.jar \
 	--firebase.adminsdk.secretkey.path=${Firebaseサービスアカウント秘密鍵の配置パス} \
 	--firebase.database.url=${FirebaseデータベースURL} \
 ```
-
 
 ## Contribution
 
@@ -82,7 +74,7 @@ $ java -jar firewolf.jar \
 ```
 
 - ブランチ名は`feature/{変更内容}`でお願いします。
-  - Issue と紐づく場合は`#{Issue番号}`を含めてください。 e.g. `feature/valid_password#1`
+    - Issue と紐づく場合は`#{Issue番号}`を含めてください。 e.g. `feature/valid_password#1`
 
 ## License
 
