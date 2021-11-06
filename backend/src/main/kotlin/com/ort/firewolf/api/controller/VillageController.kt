@@ -2,6 +2,7 @@ package com.ort.firewolf.api.controller
 
 import com.ort.dbflute.allcommon.CDef
 import com.ort.firewolf.api.body.VillageAbilityBody
+import com.ort.firewolf.api.body.VillageActionBody
 import com.ort.firewolf.api.body.VillageChangeSkillBody
 import com.ort.firewolf.api.body.VillageCharachipCreateBody
 import com.ort.firewolf.api.body.VillageComingOutBody
@@ -42,6 +43,7 @@ import com.ort.firewolf.domain.model.message.MessageQuery
 import com.ort.firewolf.domain.model.message.MessageTime
 import com.ort.firewolf.domain.model.message.MessageType
 import com.ort.firewolf.domain.model.message.Messages
+import com.ort.firewolf.domain.model.message.toModel
 import com.ort.firewolf.domain.model.player.Player
 import com.ort.firewolf.domain.model.player.Players
 import com.ort.firewolf.domain.model.skill.Skill
@@ -187,7 +189,8 @@ class VillageController(
         val players: Players = playerService.findPlayers(villageId)
         val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipId)
         val villageDayId: Int = village.day.dayList.first { it.day == day && it.noonnight == noonnight }.id
-        val todayMessages = messageService.findMessages(village.id, villageDayId, MessageQuery(listOf(CDef.MessageType.通常発言)))
+        val todayMessages =
+            messageService.findMessages(village.id, villageDayId, MessageQuery(listOf(CDef.MessageType.通常発言)))
         return MessagesView(
             messages = messages,
             village = village,
@@ -439,6 +442,62 @@ class VillageController(
         @RequestBody @Validated body: VillageSayBody
     ) {
         villageCoordinator.say(villageId, user, body.message!!, body.messageType!!, body.faceType!!)
+    }
+
+    /**
+     * アクション確認
+     * @param villageId villageId
+     * @param user user
+     * @param body 発言内容
+     */
+    @PostMapping("/village/{villageId}/action-confirm")
+    @ResponseBody
+    fun actionConfirm(
+        @PathVariable("villageId") villageId: Int,
+        @AuthenticationPrincipal user: FirewolfUser,
+        @RequestBody @Validated body: VillageActionBody
+    ): MessageView {
+        val messageText = "${body.myself!!}${body.target ?: ""}${body.message!!}"
+        villageCoordinator.confirmToSay(villageId, user, messageText, CDef.MessageType.アクション.code(), null)
+        val village = villageService.findVillage(villageId)
+        val participant = villageCoordinator.findParticipant(village, user)
+        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipId)
+        val players: Players = playerService.findPlayers(villageId)
+        return MessageView(
+            message = Message(
+                fromVillageParticipantId = participant!!.id,
+                toVillageParticipantId = null,
+                time = MessageTime(
+                    villageDayId = village.day.latestDay().id,
+                    datetime = LocalDateTime.now(),
+                    unixTimeMilli = LocalDateTime.now().toInstant(ZoneOffset.ofHours(+9)).toEpochMilli()
+                ),
+                content = MessageContent.invoke(
+                    messageType = CDef.MessageType.アクション.toModel().code,
+                    text = body.message,
+                    faceCode = null
+                ).copy(num = 1)
+            ),
+            village = village,
+            players = players,
+            charas = charas,
+            shouldHidePlayer = true
+        )
+    }
+
+    /**
+     * アクション
+     * @param villageId villageId
+     * @param user user
+     * @param body 発言内容
+     */
+    @PostMapping("/village/{villageId}/action")
+    fun say(
+        @PathVariable("villageId") villageId: Int,
+        @AuthenticationPrincipal user: FirewolfUser,
+        @RequestBody @Validated body: VillageActionBody
+    ) {
+        villageCoordinator.say(villageId, user, body.message!!, CDef.MessageType.アクション.code(), null)
     }
 
     /**

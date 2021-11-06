@@ -31,7 +31,12 @@ class MessageDomainService(
     private val fanaticMessageDomainService: FanaticMessageDomainService
 ) {
 
-    private val everyoneAllowedMessageTypeList = listOf(CDef.MessageType.公開システムメッセージ, CDef.MessageType.通常発言, CDef.MessageType.村建て発言)
+    private val everyoneAllowedMessageTypeList = listOf(
+        CDef.MessageType.公開システムメッセージ,
+        CDef.MessageType.通常発言,
+        CDef.MessageType.村建て発言,
+        CDef.MessageType.アクション
+    )
 
     /**
      * 閲覧できる発言種別リスト
@@ -119,7 +124,8 @@ class MessageDomainService(
         participantIdList: List<Int>?
     ): MessageQuery {
         val availableMessageTypeList = viewableMessageTypeList(village, participant, day, authority)
-        val requestMessageTypeList = if (messageTypeList.isNullOrEmpty()) CDef.MessageType.listAll() else messageTypeList
+        val requestMessageTypeList =
+            if (messageTypeList.isNullOrEmpty()) CDef.MessageType.listAll() else messageTypeList
         val queryMessageTypeList = requestMessageTypeList.filter { availableMessageTypeList.contains(it) }
         return MessageQuery(
             from = from,
@@ -129,7 +135,12 @@ class MessageDomainService(
             participant = participant,
             messageTypeList = queryMessageTypeList,
             participantIdList = participantIdList,
-            includeMonologue = isIncludeMonologue(participant, participantIdList, requestMessageTypeList, queryMessageTypeList),
+            includeMonologue = isIncludeMonologue(
+                participant,
+                participantIdList,
+                requestMessageTypeList,
+                queryMessageTypeList
+            ),
             includeSecret = false, // TODO 秘話実装する際に実装
             includePrivateAbility = isIncludePrivateAbility(participant, requestMessageTypeList)
         )

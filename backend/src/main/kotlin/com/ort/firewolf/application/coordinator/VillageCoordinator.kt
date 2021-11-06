@@ -292,7 +292,7 @@ class VillageCoordinator(
      * @param messageType 発言種別
      * @param faceType 表情種別
      */
-    fun confirmToSay(villageId: Int, user: FirewolfUser, messageText: String, messageType: String, faceType: String) {
+    fun confirmToSay(villageId: Int, user: FirewolfUser, messageText: String, messageType: String, faceType: String?) {
         val messageContent: MessageContent = MessageContent.invoke(messageType, messageText, faceType)
         // 発言できない状況ならエラー
         assertSay(villageId, user, messageContent)
@@ -314,7 +314,7 @@ class VillageCoordinator(
      * @param faceType 表情種別
      */
     @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
-    fun say(villageId: Int, user: FirewolfUser, messageText: String, messageType: String, faceType: String) {
+    fun say(villageId: Int, user: FirewolfUser, messageText: String, messageType: String, faceType: String?) {
         val messageContent: MessageContent = MessageContent.invoke(messageType, messageText, faceType)
         // 発言できない状況ならエラー
         assertSay(villageId, user, messageContent)
@@ -445,7 +445,8 @@ class VillageCoordinator(
     ): SituationAsParticipant {
         val player: Player? = if (user == null) null else playerService.findPlayer(user)
         val participant: VillageParticipant? = findParticipant(village, user)
-        val skillRequest: SkillRequest? = if (participant == null) null else village.findMemberById(participant.id)!!.skillRequest
+        val skillRequest: SkillRequest? =
+            if (participant == null) null else village.findMemberById(participant.id)!!.skillRequest
         val abilities: VillageAbilities = abilityService.findVillageAbilities(village.id)
         val votes: VillageVotes = voteService.findVillageVotes(village.id)
         val commit: Commit? = commitService.findCommit(village, participant)
