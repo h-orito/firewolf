@@ -4,6 +4,7 @@ import com.ort.dbflute.allcommon.CDef
 import com.ort.firewolf.domain.model.message.MessageQuery
 import com.ort.firewolf.domain.model.village.Village
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
+import com.ort.firewolf.domain.service.say.ActionSayDomainService
 import com.ort.firewolf.domain.service.say.GraveSayDomainService
 import com.ort.firewolf.domain.service.say.MonologueSayDomainService
 import com.ort.firewolf.domain.service.say.NormalSayDomainService
@@ -21,6 +22,7 @@ class MessageDomainService(
     private val graveSayDomainService: GraveSayDomainService,
     private val spectateSayDomainService: SpectateSayDomainService,
     private val monologueSayDomainService: MonologueSayDomainService,
+    private val actionSayDomainService: ActionSayDomainService,
     private val secretSayDomainService: SecretSayDomainService,
     private val psychicMessageDomainService: PsychicMessageDomainService,
     private val guruPsychicMessageDomainService: GuruPsychicMessageDomainService,
@@ -107,6 +109,7 @@ class MessageDomainService(
             CDef.MessageType.共鳴相互確認メッセージ -> sympathizerMessageDomainService.isViewable(village, participant)
             CDef.MessageType.狂信者人狼確認メッセージ -> fanaticMessageDomainService.isViewable(village, participant)
             CDef.MessageType.検死結果 -> autopsyMessageDomainService.isViewable(village, participant)
+            CDef.MessageType.アクション -> actionSayDomainService.isViewable(village, participant)
             else -> return false
         }
     }

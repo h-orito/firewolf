@@ -83,6 +83,7 @@ class VillageSettingDomainService {
         if (rules.availableSuddenlyDeath != resourceRules.isAvailableSuddenlyDeath) list.add("突然死有無")
         if (rules.availableCommit != resourceRules.isAvailableCommit) list.add("時短希望有無")
         if (rules.availableDummySkill != resourceRules.isAvailableDummySkill) list.add("ダミー役欠け有無")
+        if (rules.availableAction != resourceRules.isAvailableAction) list.add("アクション有無")
     }
 
     private fun addRestrictModifyMessage(

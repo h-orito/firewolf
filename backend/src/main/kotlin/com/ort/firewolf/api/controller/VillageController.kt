@@ -310,10 +310,10 @@ class VillageController(
                 chara = CharaView(chara),
                 player = null,
                 dead = null,
-                isSpectator = body.spectator ?: false,
+                spectator = body.spectator ?: false,
                 skill = null,
                 skillRequest = null,
-                isWin = null,
+                win = null,
                 commingOuts = ComingOuts()
             ),
             to = null,
@@ -457,8 +457,7 @@ class VillageController(
         @AuthenticationPrincipal user: FirewolfUser,
         @RequestBody @Validated body: VillageActionBody
     ): MessageView {
-        val messageText = "${body.myself!!}${body.target ?: ""}${body.message!!}"
-        villageCoordinator.confirmToSay(villageId, user, messageText, CDef.MessageType.アクション.code(), null)
+        villageCoordinator.confirmToSay(villageId, user, body.message!!, CDef.MessageType.アクション.code(), null)
         val village = villageService.findVillage(villageId)
         val participant = villageCoordinator.findParticipant(village, user)
         val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipId)
@@ -474,7 +473,7 @@ class VillageController(
                 ),
                 content = MessageContent.invoke(
                     messageType = CDef.MessageType.アクション.toModel().code,
-                    text = body.message,
+                    text = "${body.myself!!}${body.target ?: ""}${body.message!!}",
                     faceCode = null
                 ).copy(num = 1)
             ),
@@ -497,7 +496,7 @@ class VillageController(
         @AuthenticationPrincipal user: FirewolfUser,
         @RequestBody @Validated body: VillageActionBody
     ) {
-        villageCoordinator.say(villageId, user, body.message!!, CDef.MessageType.アクション.code(), null)
+        villageCoordinator.action(villageId, user, body.myself!!, body.target, body.message!!)
     }
 
     /**
@@ -670,6 +669,7 @@ class VillageController(
         isAvailableSuddenlyDeath = body.availableSuddenlyDeath!!,
         isAvailableCommit = body.availableCommit!!,
         isAvailableDummySkill = body.availableDummySkill!!,
+        isAvailableAction = body.availableAction!!,
         restrictList = body.restrictList!!.map {
             VillageMessageRestrictCreateResource(
                 type = MessageType(CDef.MessageType.codeOf(it.type!!)),

@@ -118,7 +118,7 @@ class VillageCoordinator(
      * @param resource resource
      */
     fun assertModifySetting(village: Village, player: Player, resource: VillageCreateResource) {
-        if (!creatorDomainService.convertToSituation(village, player).isAvailableModifySetting) {
+        if (!creatorDomainService.convertToSituation(village, player).availableModifySetting) {
             throw FirewolfBusinessException("設定を変更できません")
         }
         villageSettingDomainService.assertModify(village, resource)
@@ -326,6 +326,41 @@ class VillageCoordinator(
         // 特定の文字列が含まれていたら通知
         if (messageText.contains("@国主") || messageText.contains("＠国主")) {
             slackService.postToSlack(villageId, messageText)
+        }
+    }
+
+    /**
+     * アクション
+     *
+     * @param villageId villageId
+     * @param user user
+     * @param messageText 発言内容
+     * @param messageType 発言種別
+     * @param faceType 表情種別
+     */
+    @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
+    fun action(
+        villageId: Int,
+        user: FirewolfUser,
+        myselfText: String,
+        targetText: String?,
+        messageText: String
+    ) {
+        // 発言できない状況ならエラー
+        assertSay(villageId, user, MessageContent.invoke(CDef.MessageType.アクション.code(), messageText, null))
+        // 発言
+        val village: Village = villageService.findVillage(villageId)
+        val participant: VillageParticipant = findParticipant(village, user)!!
+        val text = "${myselfText}${targetText ?: ""}${messageText}"
+        val message: Message = Message.createSayMessage(
+            participant,
+            village.day.latestDay().id,
+            MessageContent.invoke(CDef.MessageType.アクション.code(), text, null)
+        )
+        messageService.registerMessage(villageId, message)
+        // 特定の文字列が含まれていたら通知
+        if (messageText.contains("@国主") || messageText.contains("＠国主")) {
+            slackService.postToSlack(villageId, text)
         }
     }
 

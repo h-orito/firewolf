@@ -48,6 +48,7 @@ data class VillageSettings(
                     availableSuddenlyDeath = resource.rule.isAvailableSuddenlyDeath,
                     availableCommit = resource.rule.isAvailableCommit,
                     availableDummySkill = resource.rule.isAvailableDummySkill,
+                    availableAction = resource.rule.isAvailableAction,
                     messageRestrict = VillageMessageRestricts(
                         existRestricts = true,
                         restrictList = resource.rule.restrictList.map {
@@ -69,10 +70,10 @@ data class VillageSettings(
 
     fun existsDifference(setting: VillageSettings): Boolean {
         return capacity.existsDifference(setting.capacity)
-            || time.existsDifference(setting.time)
-            || organizations.existsDifference(setting.organizations)
-            || rules.existsDifference(setting.rules)
-            || password.existsDifference(setting.password)
+                || time.existsDifference(setting.time)
+                || organizations.existsDifference(setting.organizations)
+                || rules.existsDifference(setting.rules)
+                || password.existsDifference(setting.password)
     }
 
     fun extendPrologue(): VillageSettings {
