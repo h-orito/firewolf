@@ -40,6 +40,7 @@ data class VillageRuleCreateResource(
     val isAvailableCommit: Boolean,
     val isAvailableDummySkill: Boolean,
     val isAvailableAction: Boolean,
+    val isAvailableSecretSay: Boolean,
     val restrictList: List<VillageMessageRestrictCreateResource>,
     val joinPassword: String?
 )

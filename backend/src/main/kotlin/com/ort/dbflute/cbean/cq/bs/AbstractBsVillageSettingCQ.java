@@ -248,6 +248,14 @@ public abstract class AbstractBsVillageSettingCQ extends AbstractConditionQuery 
     }
 
     /**
+     * Equal(=). As 秘話可能か (is_available_secret_say). And OnlyOnceRegistered. <br>
+     * 秘話可能か
+     */
+    public void setVillageSettingItemCode_Equal_秘話可能か() {
+        setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.秘話可能か);
+    }
+
+    /**
      * Equal(=). As 役職希望可能か (is_available_skill_request). And OnlyOnceRegistered. <br>
      * 役職希望可能か
      */
@@ -428,6 +436,14 @@ public abstract class AbstractBsVillageSettingCQ extends AbstractConditionQuery 
      */
     public void setVillageSettingItemCode_NotEqual_役欠けありか() {
         setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.役欠けありか);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 秘話可能か (is_available_secret_say). And OnlyOnceRegistered. <br>
+     * 秘話可能か
+     */
+    public void setVillageSettingItemCode_NotEqual_秘話可能か() {
+        setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.秘話可能か);
     }
 
     /**

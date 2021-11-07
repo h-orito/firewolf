@@ -24,7 +24,8 @@ class SayDomainService(
     private val spectateSayDomainService: SpectateSayDomainService,
     private val werewolfSayDomainService: WerewolfSayDomainService,
     private val sympathizeSayDomainService: SympathizeSayDomainService,
-    private val actionSayDomainService: ActionSayDomainService
+    private val actionSayDomainService: ActionSayDomainService,
+    private val secretSayDomainService: SecretSayDomainService
 ) {
 
     private val defaultMessageTypeOrder = listOf(
@@ -58,7 +59,8 @@ class SayDomainService(
         myself: VillageParticipant?,
         chara: Chara?,
         latestDayMessageList: List<Message>,
-        messageContent: MessageContent
+        messageContent: MessageContent,
+        targetId: Int?
     ) {
         // 事前チェック
         if (!isAvailableSay(village, myself)) throw FirewolfBusinessException("発言できません")
@@ -71,6 +73,7 @@ class SayDomainService(
             CDef.MessageType.独り言 -> monologueSayDomainService.assertSay(village, myself!!)
             CDef.MessageType.見学発言 -> spectateSayDomainService.assertSay(village, myself!!)
             CDef.MessageType.アクション -> actionSayDomainService.assertSay(village, myself!!)
+            CDef.MessageType.秘話 -> secretSayDomainService.assertSay(village, myself!!, targetId)
             else -> throw FirewolfBadRequestException("不正な発言種別です")
         }
         // 表情種別チェック
@@ -130,6 +133,7 @@ class SayDomainService(
         if (normalSayDomainService.isSayable(village, myself!!)) list.add(
             convertToMessageTypeSituation(
                 village,
+                myself,
                 latestDayMessageList,
                 CDef.MessageType.通常発言
             )
@@ -137,6 +141,7 @@ class SayDomainService(
         if (werewolfSayDomainService.isSayable(village, myself)) list.add(
             convertToMessageTypeSituation(
                 village,
+                myself,
                 latestDayMessageList,
                 CDef.MessageType.人狼の囁き
             )
@@ -144,6 +149,7 @@ class SayDomainService(
         if (sympathizeSayDomainService.isSayable(village, myself)) list.add(
             convertToMessageTypeSituation(
                 village,
+                myself,
                 latestDayMessageList,
                 CDef.MessageType.共鳴発言
             )
@@ -151,6 +157,7 @@ class SayDomainService(
         if (graveSayDomainService.isSayable(village, myself)) list.add(
             convertToMessageTypeSituation(
                 village,
+                myself,
                 latestDayMessageList,
                 CDef.MessageType.死者の呻き
             )
@@ -158,6 +165,7 @@ class SayDomainService(
         if (monologueSayDomainService.isSayable(village, myself)) list.add(
             convertToMessageTypeSituation(
                 village,
+                myself,
                 latestDayMessageList,
                 CDef.MessageType.独り言
             )
@@ -165,6 +173,7 @@ class SayDomainService(
         if (spectateSayDomainService.isSayable(village, myself)) list.add(
             convertToMessageTypeSituation(
                 village,
+                myself,
                 latestDayMessageList,
                 CDef.MessageType.見学発言
             )
@@ -172,8 +181,17 @@ class SayDomainService(
         if (actionSayDomainService.isSayable(village, myself)) list.add(
             convertToMessageTypeSituation(
                 village,
+                myself,
                 latestDayMessageList,
                 CDef.MessageType.アクション
+            )
+        )
+        if (secretSayDomainService.isSayable(village, myself)) list.add(
+            convertToMessageTypeSituation(
+                village,
+                myself,
+                latestDayMessageList,
+                CDef.MessageType.秘話
             )
         )
 
@@ -182,13 +200,17 @@ class SayDomainService(
 
     private fun convertToMessageTypeSituation(
         village: Village,
+        myself: VillageParticipant,
         latestDayMessageList: List<Message>,
         messageType: CDef.MessageType
     ): VillageSayMessageTypeSituation {
+        val targetList =
+            if (messageType != CDef.MessageType.秘話) emptyList()
+            else (village.participant.memberList + village.spectator.memberList).filterNot { it.id == myself.id }
         return VillageSayMessageTypeSituation(
             messageType = MessageType(messageType),
             restrict = convertToRestrictSituation(village, latestDayMessageList, messageType),
-            targetList = listOf() // todo
+            targetList = targetList
         )
     }
 

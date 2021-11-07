@@ -93,6 +93,9 @@ data class VillageRuleCreateBody(
     val availableAction: Boolean?,
 
     @field:NotNull
+    val availableSecretSay: Boolean?,
+
+    @field:NotNull
     @Valid
     val restrictList: List<VillageMessageRestrictCreateBody>?,
 
@@ -100,6 +103,7 @@ data class VillageRuleCreateBody(
     val joinPassword: String?
 ) {
     constructor() : this(
+        null,
         null,
         null,
         null,

@@ -250,18 +250,19 @@ data class Village(
         return participant.findByPlayerId(playerId) ?: spectator.findByPlayerId(playerId)
     }
 
+    fun allParticipants(): VillageParticipants {
+        val list = participant.memberList + spectator.memberList
+        return VillageParticipants(
+            count = list.size,
+            memberList = list
+        )
+    }
+
     // ===================================================================================
     //                                                                                 権限
     //                                                                           =========
     /** 村として参加可能か */
-    fun isAvailableParticipate(): Boolean {
-        // プロローグでない
-        if (!status.isPrologue()) return false
-        // 既に最大人数まで参加している
-        if (participant.count >= setting.capacity.max) return false
-
-        return true
-    }
+    fun isAvailableParticipate(): Boolean = status.isPrologue() && participant.count < setting.capacity.max
 
     /**
      * 村としての参加チェック
@@ -304,12 +305,7 @@ data class Village(
     }
 
     /** 村として役職希望可能か */
-    fun isAvailableSkillRequest(): Boolean {
-        // プロローグでない
-        if (!status.isPrologue()) return false
-        // 役職希望設定
-        return setting.rules.availableSkillRequest
-    }
+    fun isAvailableSkillRequest(): Boolean = status.isPrologue() && setting.rules.availableSkillRequest
 
     /**
      * 役職希望変更チェック
@@ -325,97 +321,33 @@ data class Village(
         ) throw FirewolfBusinessException("役職希望変更できません")
     }
 
-    /** 村としてコミットできるか */
-    fun isAvailableCommit(): Boolean {
-        // コミットできない設定ならNG
-        if (!setting.rules.availableCommit) return false
-        // 進行中以外はNG
-        if (!status.isProgress()) return false
+    fun isSilentTime(): Boolean =
+        status.isProgress() && setting.time.isSilentTime(day.yesterday().dayChangeDatetime)
 
-        return true
-    }
-
+    fun isAvailableCommit(): Boolean = setting.rules.availableCommit && status.isProgress()
     fun isAvailableComingOut(): Boolean = !isSilentTime() && status.isProgress()
-
-    /** 村の状況として発言できるか */
-    fun isAvailableSay(): Boolean = !status.toCdef().isFinishedVillage // 終了していたら不可
-
-    /** 村として通常発言できるか */
-    fun isSayableNormalSay(): Boolean {
-        // 終了していたら不可
-        if (status.toCdef().isFinishedVillage) return false
-        // 進行中で沈黙時間だったら不可
-        return !isSilentTime()
-    }
-
-    fun isSilentTime(): Boolean {
-        return status.isProgress() && setting.time.isSilentTime(day.yesterday().dayChangeDatetime)
-    }
-
-    /** 村として囁き発言を見られるか */
+    fun isAvailableSay(): Boolean = !status.toCdef().isFinishedVillage
+    fun isSayableNormalSay(): Boolean = !status.isFinished() && !isSilentTime()
     fun isViewableWerewolfSay(): Boolean = status.isSolved()
-
-    /** 村として囁き発言できるか */
-    fun isSayableWerewolfSay(): Boolean = status.isProgress() // 進行中以外は不可
-
-    /** 村として共鳴発言を見られるか */
+    fun isSayableWerewolfSay(): Boolean = status.isProgress()
     fun isViewableSympathizeSay(): Boolean = status.isSolved()
-
-    /** 村として共鳴発言できるか */
-    fun isSayableSympathizeSay(): Boolean = status.isProgress() // 進行中以外は不可
-
-    /** 村として墓下発言を見られるか */
-    fun isViewableGraveSay(): Boolean {
-        if (status.isSolved()) return true
-        return setting.rules.visibleGraveMessage
-    }
-
-    /** 村として墓下発言できるか */
-    fun isSayableGraveSay(): Boolean = status.isProgress() // 進行中以外は不可
-
-    /** 村として独り言を見られるか */
-    fun isViewableMonologueSay(): Boolean = status.isSolved() // 終了していたら全て見られる
-
-    /** 村として独り言発言できるか */
-    fun isSayableMonologueSay(): Boolean = true // 制約なし
-
-    /** 村として見学発言を見られるか */
-    fun isViewableSpectateSay(): Boolean {
-        // 進行中以外は開放
-        if (!status.isProgress()) return true
-        // 見られる設定なら開放
-        return setting.rules.visibleGraveMessage
-    }
-
-    /** アクション発言できるか */
+    fun isSayableSympathizeSay(): Boolean = status.isProgress()
+    fun isViewableGraveSay(): Boolean = status.isSolved() || setting.rules.visibleGraveMessage
+    fun isSayableGraveSay(): Boolean = status.isProgress()
+    fun isViewableMonologueSay(): Boolean = status.isSolved()
+    fun isSayableMonologueSay(): Boolean = true
+    fun isViewableSpectateSay(): Boolean = !status.isProgress() || setting.rules.visibleGraveMessage
     fun isSayableActionSay(): Boolean = !status.isFinished() && setting.rules.availableAction
-
-    /** 村として見学発言できるか */
-    fun isSayableSpectateSay(): Boolean = true // 制約なし
-
-    /** 村として襲撃メッセージを見られるか */
-    fun isViewableAttackMessage(): Boolean = status.isSolved() // 終了していたら全て見られる
-
-    /** 村として検死メッセージを見られるか */
-    fun isViewableAutopsyMessage(): Boolean = status.isSolved() // 終了していたら全て見られる
-
-    /** 村として共有メッセージを見られるか */
-    fun isViewableMasonMessage(): Boolean = status.isSolved() // 終了していたら全て見られる
-
-    /** 村として共鳴メッセージを見られるか */
-    fun isViewableSympathizerMessage(): Boolean = status.isSolved() // 終了していたら全て見られる
-
-    /** 村として狂信者メッセージを見られるか */
-    fun isViewableFanaticMessage(): Boolean = status.isSolved() // 終了していたら全て見られる
-
-    /** 村として白黒霊能結果を見られるか */
-    fun isViewablePsychicMessage(): Boolean = status.isSolved()// 終了していたら全て見られる
-
-    /** 村として役職霊能結果を見られるか */
-    fun isViewableGuruPsychicMessage(): Boolean = status.isSolved()// 終了していたら全て見られる
-
-    /** 村として秘話を見られるか */
+    fun isSayableSpectateSay(): Boolean = true
+    fun isViewableAttackMessage(): Boolean = status.isSolved()
+    fun isViewableAutopsyMessage(): Boolean = status.isSolved()
+    fun isViewableMasonMessage(): Boolean = status.isSolved()
+    fun isViewableSympathizerMessage(): Boolean = status.isSolved()
+    fun isViewableFanaticMessage(): Boolean = status.isSolved()
+    fun isViewablePsychicMessage(): Boolean = status.isSolved()
+    fun isViewableGuruPsychicMessage(): Boolean = status.isSolved()
     fun isViewableSecretSay(): Boolean = status.isSolved()
+    fun isSayableSecretSay(): Boolean = !status.isFinished() && setting.rules.availableSecretSay
 
     /**
      * 発言制限チェック

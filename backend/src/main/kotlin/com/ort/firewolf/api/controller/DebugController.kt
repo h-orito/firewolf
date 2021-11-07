@@ -196,7 +196,7 @@ class DebugController(
         if ("local" != env) throw FirewolfBusinessException("この環境では使用できません")
 
         repeat(100) {
-            villageCoordinator.say(villageId, user, "${it}回目の発言", "NORMAL_SAY", "NORMAL")
+            villageCoordinator.say(villageId, user, "${it}回目の発言", "NORMAL_SAY", "NORMAL", null)
         }
     }
 

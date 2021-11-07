@@ -19,3 +19,4 @@ is_auto_generated	自動生成村か	17
 silent_hours	沈黙時間	18
 is_available_dummy_skill	役欠けありか	19
 is_available_action	アクション可能か	20
+is_available_secret_say	秘話可能か	21

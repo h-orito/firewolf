@@ -49,6 +49,7 @@ data class VillageSettings(
                     availableCommit = resource.rule.isAvailableCommit,
                     availableDummySkill = resource.rule.isAvailableDummySkill,
                     availableAction = resource.rule.isAvailableAction,
+                    availableSecretSay = resource.rule.isAvailableSecretSay,
                     messageRestrict = VillageMessageRestricts(
                         existRestricts = true,
                         restrictList = resource.rule.restrictList.map {
