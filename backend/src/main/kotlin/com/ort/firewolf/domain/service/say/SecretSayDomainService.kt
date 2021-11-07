@@ -9,12 +9,8 @@ import org.springframework.stereotype.Service
 class SecretSayDomainService {
 
     fun isViewable(village: Village, participant: VillageParticipant?): Boolean {
-        // いずれかを満たせばok
         // 村として可能か
-        if (village.isViewableSecretSay()) return true
-        // 参加者として可能か
-        participant ?: return false
-        return participant.isViewableSecretSay()
+        return village.isViewableMonologueSay()
     }
 
     fun isSayable(village: Village, participant: VillageParticipant): Boolean {
