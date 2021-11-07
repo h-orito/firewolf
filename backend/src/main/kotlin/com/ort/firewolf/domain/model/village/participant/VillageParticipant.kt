@@ -37,7 +37,6 @@ data class VillageParticipant(
     fun isSayableSympathizeSay(): Boolean = isAdmin() || (isAlive() && skill?.isAvailableSympathizeSay() ?: false)
     fun isViewableGraveSay(): Boolean = isAdmin() || isSpectator || (isDead() && !dead!!.isSuddenly())
     fun isSayableGraveSay(): Boolean = isAdmin() || (!isSpectator && isDead() && !dead!!.isSuddenly())
-    fun isViewableMonologueSay(): Boolean = true
     fun isSayableMonologueSay(): Boolean = true
     fun isViewableSpectateSay(): Boolean = isAdmin() || isSpectator || (isDead() && !dead!!.isSuddenly())
     fun isSayableSpectateSay(): Boolean = isAdmin() || isSpectator
@@ -48,7 +47,6 @@ data class VillageParticipant(
     fun isViewableSympathizerMessage(): Boolean = skill?.isRecognizableEachSympathizer() ?: false
     fun isViewablePsychicMessage(): Boolean = skill?.isHasPsychicAbility() ?: false
     fun isViewableGuruPsychicMessage(): Boolean = skill?.isHasGuruPsychicAbility() ?: false
-    fun isViewableSecretSay(): Boolean = true
     fun isSayableSecretSay(): Boolean = true
 
     // 能力行使可能か
