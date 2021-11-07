@@ -153,6 +153,7 @@ object VillageDataConverter {
                     CDef.VillageSettingItem.役欠けありか
                 )?.let { it == FLG_TRUE },
                 availableAction = detectItemText(settingList, CDef.VillageSettingItem.アクション可能か)?.let { it == FLG_TRUE },
+                availableSecretSay = detectItemText(settingList, CDef.VillageSettingItem.秘話可能か)?.let { it == FLG_TRUE },
                 messageRestrict = VillageMessageRestricts(
                     existRestricts = restrictList.isNotEmpty(),
                     restrictList = restrictList.map {

@@ -179,6 +179,14 @@ public abstract class BsVillageSettingItem extends AbstractEntity implements Dom
     }
 
     /**
+     * Set the value of villageSettingItemCode as 秘話可能か (is_available_secret_say). <br>
+     * 秘話可能か
+     */
+    public void setVillageSettingItemCode_秘話可能か() {
+        setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.秘話可能か);
+    }
+
+    /**
      * Set the value of villageSettingItemCode as 役職希望可能か (is_available_skill_request). <br>
      * 役職希望可能か
      */
@@ -360,6 +368,17 @@ public abstract class BsVillageSettingItem extends AbstractEntity implements Dom
     public boolean isVillageSettingItemCode役欠けありか() {
         CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
         return cdef != null ? cdef.equals(CDef.VillageSettingItem.役欠けありか) : false;
+    }
+
+    /**
+     * Is the value of villageSettingItemCode 秘話可能か? <br>
+     * 秘話可能か
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isVillageSettingItemCode秘話可能か() {
+        CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
+        return cdef != null ? cdef.equals(CDef.VillageSettingItem.秘話可能か) : false;
     }
 
     /**

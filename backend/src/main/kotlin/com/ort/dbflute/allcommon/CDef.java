@@ -2145,6 +2145,9 @@ public interface CDef extends Classification {
         /** 役欠けありか */
         役欠けありか("is_available_dummy_skill", "役欠けありか", emptyStrings())
         ,
+        /** 秘話可能か */
+        秘話可能か("is_available_secret_say", "秘話可能か", emptyStrings())
+        ,
         /** 役職希望可能か */
         役職希望可能か("is_available_skill_request", "役職希望可能か", emptyStrings())
         ,

@@ -48,7 +48,8 @@ data class VillageParticipant(
     fun isViewableSympathizerMessage(): Boolean = skill?.isRecognizableEachSympathizer() ?: false
     fun isViewablePsychicMessage(): Boolean = skill?.isHasPsychicAbility() ?: false
     fun isViewableGuruPsychicMessage(): Boolean = skill?.isHasGuruPsychicAbility() ?: false
-    fun isViewableSecretSay(): Boolean = true // 制約なし
+    fun isViewableSecretSay(): Boolean = true
+    fun isSayableSecretSay(): Boolean = true
 
     // 能力行使可能か
     fun canUseAbility(): Boolean = !isSpectator

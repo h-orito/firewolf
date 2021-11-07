@@ -144,7 +144,12 @@ class MessageDomainService(
                 requestMessageTypeList,
                 queryMessageTypeList
             ),
-            includeSecret = false, // TODO 秘話実装する際に実装
+            includeSecret = isIncludeSecret(
+                participant,
+                participantIdList,
+                requestMessageTypeList,
+                queryMessageTypeList
+            ),
             includePrivateAbility = isIncludePrivateAbility(participant, requestMessageTypeList)
         )
     }
@@ -162,6 +167,23 @@ class MessageDomainService(
         if (participantIdList != null && !participantIdList.contains(participant.id)) return false
         // 求めていなければ不要
         if (!requestMessageTypeList.contains(CDef.MessageType.独り言)) return false
+
+        return true
+    }
+
+    private fun isIncludeSecret(
+        participant: VillageParticipant?,
+        participantIdList: List<Int>?,
+        requestMessageTypeList: List<CDef.MessageType>,
+        queryMessageTypeList: List<CDef.MessageType>
+    ): Boolean {
+        // 既に取得対象になっていれば不要
+        if (queryMessageTypeList.contains(CDef.MessageType.秘話)) return false
+        // 自分が取得対象になっていなければ不要
+        participant ?: return false
+        if (participantIdList != null && !participantIdList.contains(participant.id)) return false
+        // 求めていなければ不要
+        if (!requestMessageTypeList.contains(CDef.MessageType.秘話)) return false
 
         return true
     }

@@ -402,7 +402,14 @@ class VillageController(
         @AuthenticationPrincipal user: FirewolfUser,
         @RequestBody @Validated body: VillageSayBody
     ): MessageView {
-        villageCoordinator.confirmToSay(villageId, user, body.message!!, body.messageType!!, body.faceType!!)
+        villageCoordinator.confirmToSay(
+            villageId,
+            user,
+            body.message!!,
+            body.messageType!!,
+            body.faceType!!,
+            body.targetId
+        )
         val village = villageService.findVillage(villageId)
         val participant = villageCoordinator.findParticipant(village, user)
         val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipId)
@@ -410,7 +417,7 @@ class VillageController(
         return MessageView(
             message = Message(
                 fromVillageParticipantId = participant!!.id,
-                toVillageParticipantId = null,
+                toVillageParticipantId = body.targetId,
                 time = MessageTime(
                     villageDayId = village.day.latestDay().id,
                     datetime = LocalDateTime.now(),
@@ -441,7 +448,7 @@ class VillageController(
         @AuthenticationPrincipal user: FirewolfUser,
         @RequestBody @Validated body: VillageSayBody
     ) {
-        villageCoordinator.say(villageId, user, body.message!!, body.messageType!!, body.faceType!!)
+        villageCoordinator.say(villageId, user, body.message!!, body.messageType!!, body.faceType!!, body.targetId)
     }
 
     /**
@@ -670,6 +677,7 @@ class VillageController(
         isAvailableCommit = body.availableCommit!!,
         isAvailableDummySkill = body.availableDummySkill!!,
         isAvailableAction = body.availableAction!!,
+        isAvailableSecretSay = body.availableSecretSay!!,
         restrictList = body.restrictList!!.map {
             VillageMessageRestrictCreateResource(
                 type = MessageType(CDef.MessageType.codeOf(it.type!!)),

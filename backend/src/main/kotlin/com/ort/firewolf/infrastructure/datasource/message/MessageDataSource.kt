@@ -175,7 +175,12 @@ class MessageDataSource(
 
         // 何回目の発言か
         if (message.content.type.shouldSetCount()) {
-            val count: Int = selectMessageTypeCount(villageId, message.time.villageDayId, messageTypeCode, message.fromVillageParticipantId)
+            val count: Int = selectMessageTypeCount(
+                villageId,
+                message.time.villageDayId,
+                messageTypeCode,
+                message.fromVillageParticipantId
+            )
             mes.messageCount = count + 1
         }
 
@@ -273,9 +278,7 @@ class MessageDataSource(
                     // 何もしない
                 } else {
                     cb.orScopeQuery { orCB ->
-                        if (query.includeMonologue) orCB.orScopeQueryAndPart { andCB -> queryMyMonologue(andCB, participantId) }
-                        if (query.includeSecret) orCB.orScopeQueryAndPart { andCB -> querySecretSayToMe(andCB, participantId) }
-                        if (query.includePrivateAbility) orCB.orScopeQueryAndPart { andCB -> queryMyPrivateAbility(andCB, participantId) }
+                        queryMyself(cb, query, query.participant)
                     }
                 }
             }
@@ -287,15 +290,28 @@ class MessageDataSource(
             else {
                 cb.orScopeQuery { orCB ->
                     orCB.query().setMessageTypeCode_InScope(query.messageTypeList.map { type -> type.code() })
-                    if (query.includeMonologue) orCB.orScopeQueryAndPart { andCB -> queryMyMonologue(andCB, participantId) }
-                    if (query.includeSecret) orCB.orScopeQueryAndPart { andCB -> querySecretSayToMe(andCB, participantId) }
-                    if (query.includePrivateAbility) orCB.orScopeQueryAndPart { andCB -> queryMyPrivateAbility(andCB, participantId) }
+                    queryMyself(cb, query, query.participant)
                 }
             }
         }
         query.from?.let { cb.query().setMessageUnixtimestampMilli_GreaterThan(it) }
-        query.keyword?.let { cb.query().setMessageContent_LikeSearch(it) { op -> op.splitByBlank().likeContain().asOrSplit() } }
+        query.keyword?.let {
+            cb.query().setMessageContent_LikeSearch(it) { op -> op.splitByBlank().likeContain().asOrSplit() }
+        }
         if (!query.participantIdList.isNullOrEmpty()) cb.query().setVillagePlayerId_InScope(query.participantIdList)
+    }
+
+    private fun queryMyself(cb: MessageCB, query: MessageQuery, myself: VillageParticipant) {
+        if (query.includeMonologue) {
+            cb.orScopeQueryAndPart { andCB -> queryMyMonologue(andCB, myself.id) }
+        }
+        if (query.includeSecret) {
+            cb.orScopeQueryAndPart { andCB -> queryMySecret(andCB, myself.id) }
+            cb.orScopeQueryAndPart { andCB -> querySecretToMe(andCB, myself.id) }
+        }
+        if (query.includePrivateAbility) {
+            cb.orScopeQueryAndPart { andCB -> queryMyPrivateAbility(andCB, myself.id) }
+        }
     }
 
     private fun queryMyMonologue(cb: MessageCB, id: Int) {
@@ -303,13 +319,18 @@ class MessageDataSource(
         cb.query().setMessageTypeCode_Equal(CDef.MessageType.独り言.code())
     }
 
+    private fun queryMySecret(cb: MessageCB, id: Int) {
+        cb.query().setVillagePlayerId_Equal(id)
+        cb.query().setMessageTypeCode_Equal(CDef.MessageType.秘話.code())
+    }
+
+    private fun querySecretToMe(cb: MessageCB, id: Int) {
+        cb.query().setToVillagePlayerId_Equal(id)
+        cb.query().setMessageTypeCode_Equal(CDef.MessageType.秘話.code())
+    }
+
     private fun queryMyPrivateAbility(cb: MessageCB, id: Int) {
         cb.query().setVillagePlayerId_Equal(id)
         cb.query().setMessageTypeCode_InScope(MessageQuery.personalPrivateAbilityList.map { it.code() })
-    }
-
-    private fun querySecretSayToMe(cb: MessageCB, id: Int) {
-        cb.query().setToVillagePlayerId_Equal(id)
-        cb.query().setMessageTypeCode_Equal(CDef.MessageType.秘話.code())
     }
 }

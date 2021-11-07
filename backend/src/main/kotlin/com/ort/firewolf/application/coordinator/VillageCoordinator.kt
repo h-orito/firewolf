@@ -291,11 +291,19 @@ class VillageCoordinator(
      * @param messageText 発言内容
      * @param messageType 発言種別
      * @param faceType 表情種別
+     * @param targetId 秘話相手
      */
-    fun confirmToSay(villageId: Int, user: FirewolfUser, messageText: String, messageType: String, faceType: String?) {
+    fun confirmToSay(
+        villageId: Int,
+        user: FirewolfUser,
+        messageText: String,
+        messageType: String,
+        faceType: String?,
+        tagetId: Int? = null
+    ) {
         val messageContent: MessageContent = MessageContent.invoke(messageType, messageText, faceType)
         // 発言できない状況ならエラー
-        assertSay(villageId, user, messageContent)
+        assertSay(villageId, user, messageContent, tagetId)
     }
 
     fun confirmToCreatorSay(village: Village, messageText: String) {
@@ -314,14 +322,23 @@ class VillageCoordinator(
      * @param faceType 表情種別
      */
     @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
-    fun say(villageId: Int, user: FirewolfUser, messageText: String, messageType: String, faceType: String?) {
+    fun say(
+        villageId: Int,
+        user: FirewolfUser,
+        messageText: String,
+        messageType: String,
+        faceType: String?,
+        targetId: Int?
+    ) {
         val messageContent: MessageContent = MessageContent.invoke(messageType, messageText, faceType)
         // 発言できない状況ならエラー
-        assertSay(villageId, user, messageContent)
+        assertSay(villageId, user, messageContent, targetId)
         // 発言
         val village: Village = villageService.findVillage(villageId)
         val participant: VillageParticipant = findParticipant(village, user)!!
-        val message: Message = Message.createSayMessage(participant, village.day.latestDay().id, messageContent)
+        val toParticipant: VillageParticipant? = targetId?.let { village.allParticipants().member(targetId) }
+        val message: Message =
+            Message.createSayMessage(participant, village.day.latestDay().id, messageContent, toParticipant)
         messageService.registerMessage(villageId, message)
         // 特定の文字列が含まれていたら通知
         if (messageText.contains("@国主") || messageText.contains("＠国主")) {
@@ -347,7 +364,7 @@ class VillageCoordinator(
         messageText: String
     ) {
         // 発言できない状況ならエラー
-        assertSay(villageId, user, MessageContent.invoke(CDef.MessageType.アクション.code(), messageText, null))
+        assertSay(villageId, user, MessageContent.invoke(CDef.MessageType.アクション.code(), messageText, null), null)
         // 発言
         val village: Village = villageService.findVillage(villageId)
         val participant: VillageParticipant = findParticipant(village, user)!!
@@ -530,12 +547,17 @@ class VillageCoordinator(
         )
     }
 
-    private fun assertSay(villageId: Int, user: FirewolfUser?, messageContent: MessageContent) {
+    private fun assertSay(
+        villageId: Int,
+        user: FirewolfUser?,
+        messageContent: MessageContent,
+        targetId: Int?
+    ) {
         val village: Village = villageService.findVillage(villageId)
         val participant: VillageParticipant? = findParticipant(village, user)
         val chara: Chara? = if (participant == null) null else charachipService.findChara(participant.charaId)
         val latestDayMessageList: List<Message> =
             messageService.findParticipateDayMessageList(villageId, village.day.latestDay(), participant)
-        sayDomainService.assertSay(village, participant, chara, latestDayMessageList, messageContent)
+        sayDomainService.assertSay(village, participant, chara, latestDayMessageList, messageContent, targetId)
     }
 }
