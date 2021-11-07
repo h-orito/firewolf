@@ -16,7 +16,7 @@ import com.ort.dbflute.cbean.*;
 import com.ort.dbflute.cbean.cq.*;
 
 /**
- * The abstract condition-query of message_type.
+ * The abstract condition-query of MESSAGE_TYPE.
  * @author DBFlute(AutoGenerator)
  */
 public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
@@ -37,7 +37,7 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
     }
 
     public String asTableDbName() {
-        return "message_type";
+        return "MESSAGE_TYPE";
     }
 
     // ===================================================================================
@@ -60,6 +60,14 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
      */
     public void setMessageTypeCode_Equal_AsMessageType(CDef.MessageType cdef) {
         doSetMessageTypeCode_Equal(cdef != null ? cdef.code() : null);
+    }
+
+    /**
+     * Equal(=). As アクション (ACTION). And OnlyOnceRegistered. <br>
+     * アクション
+     */
+    public void setMessageTypeCode_Equal_アクション() {
+        setMessageTypeCode_Equal_AsMessageType(CDef.MessageType.アクション);
     }
 
     /**
@@ -243,6 +251,14 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
      */
     public void setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType cdef) {
         doSetMessageTypeCode_NotEqual(cdef != null ? cdef.code() : null);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As アクション (ACTION). And OnlyOnceRegistered. <br>
+     * アクション
+     */
+    public void setMessageTypeCode_NotEqual_アクション() {
+        setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.アクション);
     }
 
     /**
@@ -457,8 +473,8 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
 
     /**
      * Set up ExistsReferrer (correlated sub-query). <br>
-     * {exists (select MESSAGE_TYPE_CODE from message_restriction where ...)} <br>
-     * message_restriction by MESSAGE_TYPE_CODE, named 'messageRestrictionAsOne'.
+     * {exists (select MESSAGE_TYPE_CODE from MESSAGE_RESTRICTION where ...)} <br>
+     * MESSAGE_RESTRICTION by MESSAGE_TYPE_CODE, named 'messageRestrictionAsOne'.
      * <pre>
      * cb.query().<span style="color: #CC4747">existsMessageRestriction</span>(restrictionCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
      *     restrictionCB.query().set...
@@ -476,8 +492,8 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
 
     /**
      * Set up NotExistsReferrer (correlated sub-query). <br>
-     * {not exists (select MESSAGE_TYPE_CODE from message_restriction where ...)} <br>
-     * message_restriction by MESSAGE_TYPE_CODE, named 'messageRestrictionAsOne'.
+     * {not exists (select MESSAGE_TYPE_CODE from MESSAGE_RESTRICTION where ...)} <br>
+     * MESSAGE_RESTRICTION by MESSAGE_TYPE_CODE, named 'messageRestrictionAsOne'.
      * <pre>
      * cb.query().<span style="color: #CC4747">notExistsMessageRestriction</span>(restrictionCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
      *     restrictionCB.query().set...
@@ -503,8 +519,8 @@ public abstract class AbstractBsMessageTypeCQ extends AbstractConditionQuery {
 
     /**
      * Prepare for (Query)DerivedReferrer (correlated sub-query). <br>
-     * {FOO &lt;= (select max(BAR) from message_restriction where ...)} <br>
-     * message_restriction by MESSAGE_TYPE_CODE, named 'messageRestrictionAsOne'.
+     * {FOO &lt;= (select max(BAR) from MESSAGE_RESTRICTION where ...)} <br>
+     * MESSAGE_RESTRICTION by MESSAGE_TYPE_CODE, named 'messageRestrictionAsOne'.
      * <pre>
      * cb.query().<span style="color: #CC4747">derivedMessageRestriction()</span>.<span style="color: #CC4747">max</span>(restrictionCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
      *     restrictionCB.specify().<span style="color: #CC4747">columnFoo...</span> <span style="color: #3F7E5E">// derived column by function</span>

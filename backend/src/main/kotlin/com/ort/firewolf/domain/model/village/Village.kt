@@ -84,17 +84,20 @@ data class Village(
 
     /** 人狼系の役職相互確認メッセージ */
     fun createWolfsConfirmMessage(charas: Charas): Message {
-        val text = CDef.Skill.listOfAvailableWerewolfSay().sortedBy { Integer.parseInt(it.order()) }.mapNotNull { cdefSkill ->
-            val memberList = participant.memberList.filter { it.skill!!.toCdef() == cdefSkill }
-            if (memberList.isEmpty()) null
-            else "${Skill(cdefSkill).name}は${memberList.joinToString(separator = "、") {
-                charas.chara(it.charaId).charaName.fullName()
-            }}"
-        }.joinToString(
-            separator = "、\n",
-            prefix = "この村の",
-            postfix = "のようだ。"
-        )
+        val text =
+            CDef.Skill.listOfAvailableWerewolfSay().sortedBy { Integer.parseInt(it.order()) }.mapNotNull { cdefSkill ->
+                val memberList = participant.memberList.filter { it.skill!!.toCdef() == cdefSkill }
+                if (memberList.isEmpty()) null
+                else "${Skill(cdefSkill).name}は${
+                    memberList.joinToString(separator = "、") {
+                        charas.chara(it.charaId).charaName.fullName()
+                    }
+                }"
+            }.joinToString(
+                separator = "、\n",
+                prefix = "この村の",
+                postfix = "のようだ。"
+            )
         return Message.createAttackPrivateMessage(text, day.latestDay().id)
     }
 
@@ -118,17 +121,20 @@ data class Village(
         // 共有がいなければなし
         if (participant.memberList.none { it.skill!!.toCdef().isRecognizableEachMason }) return null
         // 共有が存在する
-        val text = CDef.Skill.listOfRecognizableEachMason().sortedBy { Integer.parseInt(it.order()) }.mapNotNull { cdefSkill ->
-            val memberList = participant.memberList.filter { it.skill!!.toCdef() == cdefSkill }
-            if (memberList.isEmpty()) null
-            else "${Skill(cdefSkill).name}は${memberList.joinToString(separator = "、") {
-                charas.chara(it.charaId).charaName.fullName()
-            }}"
-        }.joinToString(
-            separator = "、\n",
-            prefix = "この村の",
-            postfix = "のようだ。"
-        )
+        val text =
+            CDef.Skill.listOfRecognizableEachMason().sortedBy { Integer.parseInt(it.order()) }.mapNotNull { cdefSkill ->
+                val memberList = participant.memberList.filter { it.skill!!.toCdef() == cdefSkill }
+                if (memberList.isEmpty()) null
+                else "${Skill(cdefSkill).name}は${
+                    memberList.joinToString(separator = "、") {
+                        charas.chara(it.charaId).charaName.fullName()
+                    }
+                }"
+            }.joinToString(
+                separator = "、\n",
+                prefix = "この村の",
+                postfix = "のようだ。"
+            )
         return Message.createMasonPrivateMessage(text, day.latestDay().id)
     }
 
@@ -137,17 +143,20 @@ data class Village(
         // 共鳴がいなければなし
         if (participant.memberList.none { it.skill!!.toCdef().isRecognizableEachSympathizer }) return null
         // 共鳴が存在する
-        val text = CDef.Skill.listOfRecognizableEachSympathizer().sortedBy { Integer.parseInt(it.order()) }.mapNotNull { cdefSkill ->
-            val memberList = participant.memberList.filter { it.skill!!.toCdef() == cdefSkill }
-            if (memberList.isEmpty()) null
-            else "${Skill(cdefSkill).name}は${memberList.joinToString(separator = "、") {
-                charas.chara(it.charaId).charaName.fullName()
-            }}"
-        }.joinToString(
-            separator = "、\n",
-            prefix = "この村の",
-            postfix = "のようだ。"
-        )
+        val text = CDef.Skill.listOfRecognizableEachSympathizer().sortedBy { Integer.parseInt(it.order()) }
+            .mapNotNull { cdefSkill ->
+                val memberList = participant.memberList.filter { it.skill!!.toCdef() == cdefSkill }
+                if (memberList.isEmpty()) null
+                else "${Skill(cdefSkill).name}は${
+                    memberList.joinToString(separator = "、") {
+                        charas.chara(it.charaId).charaName.fullName()
+                    }
+                }"
+            }.joinToString(
+                separator = "、\n",
+                prefix = "この村の",
+                postfix = "のようだ。"
+            )
         return Message.createSympathizerPrivateMessage(text, day.latestDay().id)
     }
 
@@ -177,11 +186,11 @@ data class Village(
         } ?: ""
 
         return "新しい村が作成されました。\r\n" +
-            "村名：$name\r\n" +
-            "編成：$organization\r\n" +
-            "開始予定：$startDatetime\r\n" +
-            silentHoursStr +
-            "https://howling-wolf.com/village?id=$id"
+                "村名：$name\r\n" +
+                "編成：$organization\r\n" +
+                "開始予定：$startDatetime\r\n" +
+                silentHoursStr +
+                "https://howling-wolf.com/village?id=$id"
     }
 
     fun createExtendPrologueMessage(): Message =
@@ -213,10 +222,10 @@ data class Village(
     // 差分があるか
     fun existsDifference(village: Village): Boolean {
         return status.code != village.status.code
-            || winCamp?.code != village.winCamp?.code
-            || participant.existsDifference(village.participant)
-            || day.existsDifference(village.day)
-            || setting.existsDifference(village.setting)
+                || winCamp?.code != village.winCamp?.code
+                || participant.existsDifference(village.participant)
+                || day.existsDifference(village.day)
+                || setting.existsDifference(village.setting)
     }
 
     // 決着がついたか
@@ -308,8 +317,12 @@ data class Village(
      * @param second 第2役職希望
      */
     fun assertSkillRequest(first: CDef.Skill, second: CDef.Skill) {
-        if (setting.organizations.allRequestableSkillList().none { it.code == first.code() }) throw FirewolfBusinessException("役職希望変更できません")
-        if (setting.organizations.allRequestableSkillList().none { it.code == second.code() }) throw FirewolfBusinessException("役職希望変更できません")
+        if (setting.organizations.allRequestableSkillList()
+                .none { it.code == first.code() }
+        ) throw FirewolfBusinessException("役職希望変更できません")
+        if (setting.organizations.allRequestableSkillList()
+                .none { it.code == second.code() }
+        ) throw FirewolfBusinessException("役職希望変更できません")
     }
 
     /** 村としてコミットできるか */
@@ -373,6 +386,9 @@ data class Village(
         // 見られる設定なら開放
         return setting.rules.visibleGraveMessage
     }
+
+    /** アクション発言できるか */
+    fun isSayableActionSay(): Boolean = !status.isFinished() && setting.rules.availableAction
 
     /** 村として見学発言できるか */
     fun isSayableSpectateSay(): Boolean = true // 制約なし
@@ -511,7 +527,8 @@ data class Village(
     }
 
     // ステータス変更
-    fun changeStatus(cdefVillageStatus: CDef.VillageStatus): Village = this.copy(status = VillageStatus(cdefVillageStatus))
+    fun changeStatus(cdefVillageStatus: CDef.VillageStatus): Village =
+        this.copy(status = VillageStatus(cdefVillageStatus))
 
     // エピローグ遷移
     fun toEpilogue(): Village {
@@ -539,7 +556,7 @@ data class Village(
     //                                                                        ============
     private fun isAlreadyParticipateCharacter(charaId: Int): Boolean {
         return participant.memberList.any { it.charaId == charaId }
-            || spectator.memberList.any { it.charaId == charaId }
+                || spectator.memberList.any { it.charaId == charaId }
     }
 
     private fun assertPassword(password: String?) {

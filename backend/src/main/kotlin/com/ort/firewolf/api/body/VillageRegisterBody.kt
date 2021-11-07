@@ -90,6 +90,9 @@ data class VillageRuleCreateBody(
     val availableDummySkill: Boolean?,
 
     @field:NotNull
+    val availableAction: Boolean?,
+
+    @field:NotNull
     @Valid
     val restrictList: List<VillageMessageRestrictCreateBody>?,
 
@@ -97,6 +100,7 @@ data class VillageRuleCreateBody(
     val joinPassword: String?
 ) {
     constructor() : this(
+        null,
         null,
         null,
         null,
@@ -119,7 +123,7 @@ data class VillageMessageRestrictCreateBody(
     val count: Int?,
 
     @field:NotNull
-    @field:Max(200, message = "文字数は200以下にしてください")
+    @field:Max(400, message = "文字数は400以下にしてください")
     val length: Int?
 ) {
     constructor() : this(null, null, null)

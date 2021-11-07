@@ -23,7 +23,8 @@ class SayDomainService(
     private val monologueSayDomainService: MonologueSayDomainService,
     private val spectateSayDomainService: SpectateSayDomainService,
     private val werewolfSayDomainService: WerewolfSayDomainService,
-    private val sympathizeSayDomainService: SympathizeSayDomainService
+    private val sympathizeSayDomainService: SympathizeSayDomainService,
+    private val actionSayDomainService: ActionSayDomainService
 ) {
 
     private val defaultMessageTypeOrder = listOf(
@@ -54,21 +55,22 @@ class SayDomainService(
 
     fun assertSay(
         village: Village,
-        participant: VillageParticipant?,
+        myself: VillageParticipant?,
         chara: Chara?,
         latestDayMessageList: List<Message>,
         messageContent: MessageContent
     ) {
         // 事前チェック
-        if (!isAvailableSay(village, participant)) throw FirewolfBusinessException("発言できません")
+        if (!isAvailableSay(village, myself)) throw FirewolfBusinessException("発言できません")
         // 発言種別ごとのチェック
         when (messageContent.type.toCdef()) {
-            CDef.MessageType.通常発言 -> normalSayDomainService.assertSay(village, participant!!)
-            CDef.MessageType.人狼の囁き -> werewolfSayDomainService.assertSay(village, participant!!)
-            CDef.MessageType.共鳴発言 -> sympathizeSayDomainService.assertSay(village, participant!!)
-            CDef.MessageType.死者の呻き -> graveSayDomainService.assertSay(village, participant!!)
-            CDef.MessageType.独り言 -> monologueSayDomainService.assertSay(village, participant!!)
-            CDef.MessageType.見学発言 -> spectateSayDomainService.assertSay(village, participant!!)
+            CDef.MessageType.通常発言 -> normalSayDomainService.assertSay(village, myself!!)
+            CDef.MessageType.人狼の囁き -> werewolfSayDomainService.assertSay(village, myself!!)
+            CDef.MessageType.共鳴発言 -> sympathizeSayDomainService.assertSay(village, myself!!)
+            CDef.MessageType.死者の呻き -> graveSayDomainService.assertSay(village, myself!!)
+            CDef.MessageType.独り言 -> monologueSayDomainService.assertSay(village, myself!!)
+            CDef.MessageType.見学発言 -> spectateSayDomainService.assertSay(village, myself!!)
+            CDef.MessageType.アクション -> actionSayDomainService.assertSay(village, myself!!)
             else -> throw FirewolfBadRequestException("不正な発言種別です")
         }
         // 表情種別チェック
@@ -104,7 +106,8 @@ class SayDomainService(
     //                                                                        Assist Logic
     //                                                                        ============
     private fun isSelectableFaceType(chara: Chara, messageContent: MessageContent): Boolean =
-        chara.faceList.any { it.type == messageContent.faceCode }
+        messageContent.type.toCdef() == CDef.MessageType.アクション
+                || chara.faceList.any { it.type == messageContent.faceCode }
 
     private fun isAvailableSay(village: Village, participant: VillageParticipant?): Boolean {
         // 参加者として可能か
@@ -117,53 +120,60 @@ class SayDomainService(
 
     private fun getSelectableMessageTypeList(
         village: Village,
-        participant: VillageParticipant?,
+        myself: VillageParticipant?,
         latestDayMessageList: List<Message>
     ): List<VillageSayMessageTypeSituation> {
-        if (!isAvailableSay(village, participant)) return listOf()
+        if (!isAvailableSay(village, myself)) return listOf()
 
         val list: MutableList<VillageSayMessageTypeSituation> = mutableListOf()
 
-        if (normalSayDomainService.isSayable(village, participant!!)) list.add(
+        if (normalSayDomainService.isSayable(village, myself!!)) list.add(
             convertToMessageTypeSituation(
                 village,
                 latestDayMessageList,
                 CDef.MessageType.通常発言
             )
         )
-        if (werewolfSayDomainService.isSayable(village, participant)) list.add(
+        if (werewolfSayDomainService.isSayable(village, myself)) list.add(
             convertToMessageTypeSituation(
                 village,
                 latestDayMessageList,
                 CDef.MessageType.人狼の囁き
             )
         )
-        if (sympathizeSayDomainService.isSayable(village, participant)) list.add(
+        if (sympathizeSayDomainService.isSayable(village, myself)) list.add(
             convertToMessageTypeSituation(
                 village,
                 latestDayMessageList,
                 CDef.MessageType.共鳴発言
             )
         )
-        if (graveSayDomainService.isSayable(village, participant)) list.add(
+        if (graveSayDomainService.isSayable(village, myself)) list.add(
             convertToMessageTypeSituation(
                 village,
                 latestDayMessageList,
                 CDef.MessageType.死者の呻き
             )
         )
-        if (monologueSayDomainService.isSayable(village, participant)) list.add(
+        if (monologueSayDomainService.isSayable(village, myself)) list.add(
             convertToMessageTypeSituation(
                 village,
                 latestDayMessageList,
                 CDef.MessageType.独り言
             )
         )
-        if (spectateSayDomainService.isSayable(village, participant)) list.add(
+        if (spectateSayDomainService.isSayable(village, myself)) list.add(
             convertToMessageTypeSituation(
                 village,
                 latestDayMessageList,
                 CDef.MessageType.見学発言
+            )
+        )
+        if (actionSayDomainService.isSayable(village, myself)) list.add(
+            convertToMessageTypeSituation(
+                village,
+                latestDayMessageList,
+                CDef.MessageType.アクション
             )
         )
 
@@ -189,7 +199,7 @@ class SayDomainService(
     ): VillageSayRestrictSituation {
         val restrict = village.setting.rules.messageRestrict.restrict(messageType)
         return VillageSayRestrictSituation(
-            isRestricted = restrict != null,
+            restricted = restrict != null,
             maxCount = restrict?.count,
             remainingCount = restrict?.remainingCount(
                 village.status.toCdef(),

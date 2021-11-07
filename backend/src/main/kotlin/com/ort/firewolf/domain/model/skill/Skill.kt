@@ -4,6 +4,7 @@ import com.ort.dbflute.allcommon.CDef
 import com.ort.firewolf.domain.model.ability.AbilityType
 import com.ort.firewolf.domain.model.ability.AbilityTypes
 import com.ort.firewolf.domain.model.camp.Camp
+import com.ort.firewolf.domain.model.camp.toModel
 import com.ort.firewolf.domain.model.message.MessageType
 
 data class Skill(
@@ -37,6 +38,19 @@ data class Skill(
         countCamp = getCountCamp(cdefSkill),
         description = cdefSkill.description()
     )
+
+    fun camp(): Camp = CDef.Camp.codeOf(toCdef().campCode()).toModel()
+
+    fun isViewableWerewolfSay(): Boolean = toCdef().isViewableWerewolfSay
+    fun isAvailableWerewolfSay(): Boolean = toCdef().isAvailableWerewolfSay
+    fun isViewableSympathizeSay(): Boolean = toCdef().isViewableSympathizeSay
+    fun isAvailableSympathizeSay(): Boolean = toCdef().isAvailableSympathizeSay
+    fun isHasAutopsyAbility(): Boolean = toCdef().isHasAutopsyAbility
+    fun isRecognizableWolf(): Boolean = toCdef().isRecognizableWolf
+    fun isRecognizableEachMason(): Boolean = toCdef().isRecognizableEachMason
+    fun isRecognizableEachSympathizer(): Boolean = toCdef().isRecognizableEachSympathizer
+    fun isHasPsychicAbility(): Boolean = toCdef().isHasPsychicAbility
+    fun isHasGuruPsychicAbility(): Boolean = toCdef().isHasGuruPsychicAbility
 
     companion object {
 
@@ -118,3 +132,5 @@ data class Skill(
 
     fun toCdef(): CDef.Skill = CDef.Skill.codeOf(code)
 }
+
+fun CDef.Skill.toModel(): Skill = Skill(this)

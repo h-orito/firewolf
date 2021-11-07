@@ -4,6 +4,7 @@ import com.ort.dbflute.allcommon.CDef
 import com.ort.firewolf.domain.model.message.MessageQuery
 import com.ort.firewolf.domain.model.village.Village
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
+import com.ort.firewolf.domain.service.say.ActionSayDomainService
 import com.ort.firewolf.domain.service.say.GraveSayDomainService
 import com.ort.firewolf.domain.service.say.MonologueSayDomainService
 import com.ort.firewolf.domain.service.say.NormalSayDomainService
@@ -21,6 +22,7 @@ class MessageDomainService(
     private val graveSayDomainService: GraveSayDomainService,
     private val spectateSayDomainService: SpectateSayDomainService,
     private val monologueSayDomainService: MonologueSayDomainService,
+    private val actionSayDomainService: ActionSayDomainService,
     private val secretSayDomainService: SecretSayDomainService,
     private val psychicMessageDomainService: PsychicMessageDomainService,
     private val guruPsychicMessageDomainService: GuruPsychicMessageDomainService,
@@ -31,7 +33,12 @@ class MessageDomainService(
     private val fanaticMessageDomainService: FanaticMessageDomainService
 ) {
 
-    private val everyoneAllowedMessageTypeList = listOf(CDef.MessageType.公開システムメッセージ, CDef.MessageType.通常発言, CDef.MessageType.村建て発言)
+    private val everyoneAllowedMessageTypeList = listOf(
+        CDef.MessageType.公開システムメッセージ,
+        CDef.MessageType.通常発言,
+        CDef.MessageType.村建て発言,
+        CDef.MessageType.アクション
+    )
 
     /**
      * 閲覧できる発言種別リスト
@@ -102,6 +109,7 @@ class MessageDomainService(
             CDef.MessageType.共鳴相互確認メッセージ -> sympathizerMessageDomainService.isViewable(village, participant)
             CDef.MessageType.狂信者人狼確認メッセージ -> fanaticMessageDomainService.isViewable(village, participant)
             CDef.MessageType.検死結果 -> autopsyMessageDomainService.isViewable(village, participant)
+            CDef.MessageType.アクション -> actionSayDomainService.isViewable(village, participant)
             else -> return false
         }
     }
@@ -119,7 +127,8 @@ class MessageDomainService(
         participantIdList: List<Int>?
     ): MessageQuery {
         val availableMessageTypeList = viewableMessageTypeList(village, participant, day, authority)
-        val requestMessageTypeList = if (messageTypeList.isNullOrEmpty()) CDef.MessageType.listAll() else messageTypeList
+        val requestMessageTypeList =
+            if (messageTypeList.isNullOrEmpty()) CDef.MessageType.listAll() else messageTypeList
         val queryMessageTypeList = requestMessageTypeList.filter { availableMessageTypeList.contains(it) }
         return MessageQuery(
             from = from,
@@ -129,7 +138,12 @@ class MessageDomainService(
             participant = participant,
             messageTypeList = queryMessageTypeList,
             participantIdList = participantIdList,
-            includeMonologue = isIncludeMonologue(participant, participantIdList, requestMessageTypeList, queryMessageTypeList),
+            includeMonologue = isIncludeMonologue(
+                participant,
+                participantIdList,
+                requestMessageTypeList,
+                queryMessageTypeList
+            ),
             includeSecret = false, // TODO 秘話実装する際に実装
             includePrivateAbility = isIncludePrivateAbility(participant, requestMessageTypeList)
         )

@@ -1509,6 +1509,9 @@ public interface CDef extends Classification {
      * メッセージ種別
      */
     public enum MessageType implements CDef {
+        /** アクション */
+        アクション("ACTION", "アクション", emptyStrings())
+        ,
         /** 村建て発言 */
         村建て発言("CREATOR_SAY", "村建て発言", emptyStrings())
         ,
@@ -2132,6 +2135,9 @@ public interface CDef extends Classification {
         ,
         /** 自動生成村か */
         自動生成村か("is_auto_generated", "自動生成村か", emptyStrings())
+        ,
+        /** アクション可能か */
+        アクション可能か("is_available_action", "アクション可能か", emptyStrings())
         ,
         /** コミット可能か */
         コミット可能か("is_available_commit", "コミット可能か", emptyStrings())

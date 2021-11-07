@@ -329,7 +329,11 @@ class VillageDataSource(
                 CDef.VillageSettingItem.開始予定日時,
                 afterTime.startDatetime.format(VillageDataConverter.DATETIME_FORMATTER)
             )
-            updateVillageSetting(villageId, CDef.VillageSettingItem.更新間隔秒, afterTime.dayChangeIntervalSeconds.toString())
+            updateVillageSetting(
+                villageId,
+                CDef.VillageSettingItem.更新間隔秒,
+                afterTime.dayChangeIntervalSeconds.toString()
+            )
             updateVillageSetting(villageId, CDef.VillageSettingItem.沈黙時間, afterTime.silentHours?.toString() ?: "")
 
         })
@@ -343,10 +347,15 @@ class VillageDataSource(
             updateVillageSetting(villageId, CDef.VillageSettingItem.役職希望可能か, toFlg(afterRules.availableSkillRequest))
             updateVillageSetting(villageId, CDef.VillageSettingItem.見学可能か, toFlg(afterRules.availableSpectate))
             updateVillageSetting(villageId, CDef.VillageSettingItem.墓下役職公開ありか, toFlg(afterRules.openSkillInGrave))
-            updateVillageSetting(villageId, CDef.VillageSettingItem.墓下見学発言を生存者が見られるか, toFlg(afterRules.visibleGraveMessage))
+            updateVillageSetting(
+                villageId,
+                CDef.VillageSettingItem.墓下見学発言を生存者が見られるか,
+                toFlg(afterRules.visibleGraveMessage)
+            )
             updateVillageSetting(villageId, CDef.VillageSettingItem.突然死ありか, toFlg(afterRules.availableSuddenlyDeath))
             updateVillageSetting(villageId, CDef.VillageSettingItem.コミット可能か, toFlg(afterRules.availableCommit))
             updateVillageSetting(villageId, CDef.VillageSettingItem.役欠けありか, toFlg(afterRules.availableDummySkill))
+            updateVillageSetting(villageId, CDef.VillageSettingItem.アクション可能か, toFlg(afterRules.availableAction))
         })
         after.setting.password.let(fun(afterPassword) {
             if (!before.setting.password.existsDifference(afterPassword)) return
@@ -498,7 +507,11 @@ class VillageDataSource(
             CDef.VillageSettingItem.開始予定日時,
             settings.time.startDatetime.format(VillageDataConverter.DATETIME_FORMATTER)
         )
-        insertVillageSetting(villageId, CDef.VillageSettingItem.更新間隔秒, settings.time.dayChangeIntervalSeconds.toString())
+        insertVillageSetting(
+            villageId,
+            CDef.VillageSettingItem.更新間隔秒,
+            settings.time.dayChangeIntervalSeconds.toString()
+        )
         insertVillageSetting(villageId, CDef.VillageSettingItem.ダミーキャラid, settings.charachip.dummyCharaId.toString())
         insertVillageSetting(villageId, CDef.VillageSettingItem.キャラクターグループid, settings.charachip.charachipId.toString())
         insertVillageSetting(villageId, CDef.VillageSettingItem.構成, settings.organizations.toString())
@@ -506,12 +519,17 @@ class VillageDataSource(
         insertVillageSetting(villageId, CDef.VillageSettingItem.役職希望可能か, toFlg(settings.rules.availableSkillRequest))
         insertVillageSetting(villageId, CDef.VillageSettingItem.見学可能か, toFlg(settings.rules.availableSpectate))
         insertVillageSetting(villageId, CDef.VillageSettingItem.墓下役職公開ありか, toFlg(settings.rules.openSkillInGrave))
-        insertVillageSetting(villageId, CDef.VillageSettingItem.墓下見学発言を生存者が見られるか, toFlg(settings.rules.visibleGraveMessage))
+        insertVillageSetting(
+            villageId,
+            CDef.VillageSettingItem.墓下見学発言を生存者が見られるか,
+            toFlg(settings.rules.visibleGraveMessage)
+        )
         insertVillageSetting(villageId, CDef.VillageSettingItem.突然死ありか, toFlg(settings.rules.availableSuddenlyDeath))
         insertVillageSetting(villageId, CDef.VillageSettingItem.コミット可能か, toFlg(settings.rules.availableCommit))
         insertVillageSetting(villageId, CDef.VillageSettingItem.入村パスワード, settings.password.joinPassword ?: "")
         insertVillageSetting(villageId, CDef.VillageSettingItem.沈黙時間, settings.time.silentHours?.toString() ?: "")
         insertVillageSetting(villageId, CDef.VillageSettingItem.役欠けありか, toFlg(settings.rules.availableDummySkill))
+        insertVillageSetting(villageId, CDef.VillageSettingItem.アクション可能か, toFlg(settings.rules.availableAction))
     }
 
     private fun insertVillageSetting(villageId: Int, item: CDef.VillageSettingItem, value: String) {

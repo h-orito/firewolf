@@ -16,3 +16,5 @@ data class Camp(
 
     fun toCdef(): CDef.Camp = CDef.Camp.codeOf(code)
 }
+
+fun CDef.Camp.toModel(): Camp = Camp(this)

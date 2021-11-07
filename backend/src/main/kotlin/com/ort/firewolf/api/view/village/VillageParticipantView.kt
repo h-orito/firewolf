@@ -15,10 +15,10 @@ data class VillageParticipantView(
     val chara: CharaView,
     val player: PlayerView?,
     val dead: DeadView?,
-    val isSpectator: Boolean,
+    val spectator: Boolean,
     val skill: Skill?,
     val skillRequest: SkillRequest?,
-    val isWin: Boolean?,
+    val win: Boolean?,
     val commingOuts: ComingOuts
 ) {
     constructor(
@@ -33,10 +33,10 @@ data class VillageParticipantView(
         player = if (shouldHidePlayer || village.memberById(villageParticipantId).playerId == null) null
         else PlayerView(players.list.find { it.id == village.memberById(villageParticipantId).playerId }!!),
         dead = village.memberById(villageParticipantId).dead?.let { DeadView(it, shouldHidePlayer) },
-        isSpectator = village.memberById(villageParticipantId).isSpectator,
+        spectator = village.memberById(villageParticipantId).isSpectator,
         skill = if (shouldHidePlayer) null else village.memberById(villageParticipantId).skill,
         skillRequest = if (shouldHidePlayer) null else village.memberById(villageParticipantId).skillRequest,
-        isWin = village.memberById(villageParticipantId).isWin,
+        win = village.memberById(villageParticipantId).isWin,
         commingOuts = village.memberById(villageParticipantId).commigOuts
     )
 }

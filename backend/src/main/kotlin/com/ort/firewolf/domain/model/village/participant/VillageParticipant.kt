@@ -23,8 +23,38 @@ data class VillageParticipant(
     // ===================================================================================
     //                                                                                read
     //                                                                           =========
-    // 生存しているか
+    fun isAdmin(): Boolean = playerId == 1
     fun isAlive(): Boolean = dead == null
+    fun isDead(): Boolean = !isAlive()
+    fun isAvailableSkillRequest(): Boolean = !isSpectator
+    fun isAvailableCommit(dummyParticipantId: Int): Boolean = !isSpectator && isAlive() && id != dummyParticipantId
+    fun isAvailableComingOut(): Boolean = !isSpectator && isAlive()
+    fun isAvailableSay(isEpilogue: Boolean): Boolean = !isDead() || !dead!!.isSuddenly() || isEpilogue
+    fun isSayableNormalSay(isEpilogue: Boolean): Boolean = isAdmin() || (!isSpectator && (isAlive() || isEpilogue))
+    fun isViewableWerewolfSay(): Boolean = isAdmin() || skill?.isViewableWerewolfSay() ?: false
+    fun isSayableWerewolfSay(): Boolean = isAdmin() || (isAlive() && skill?.isAvailableWerewolfSay() ?: false)
+    fun isViewableSympathizeSay(): Boolean = isAdmin() || skill?.isViewableSympathizeSay() ?: false
+    fun isSayableSympathizeSay(): Boolean = isAdmin() || (isAlive() && skill?.isAvailableSympathizeSay() ?: false)
+    fun isViewableGraveSay(): Boolean = isAdmin() || isSpectator || (isDead() && !dead!!.isSuddenly())
+    fun isSayableGraveSay(): Boolean = isAdmin() || (!isSpectator && isDead() && !dead!!.isSuddenly())
+    fun isViewableMonologueSay(): Boolean = true
+    fun isSayableMonologueSay(): Boolean = true
+    fun isViewableSpectateSay(): Boolean = isAdmin() || isSpectator || (isDead() && !dead!!.isSuddenly())
+    fun isSayableSpectateSay(): Boolean = isAdmin() || isSpectator
+    fun isViewableAttackMessage(): Boolean = skill?.isAvailableWerewolfSay() ?: false
+    fun isViewableAutopsyMessage(): Boolean = skill?.isHasAutopsyAbility() ?: false
+    fun isViewableFanaticMessage(): Boolean = skill?.isRecognizableWolf() ?: false
+    fun isViewableMasonMessage(): Boolean = skill?.isRecognizableEachMason() ?: false
+    fun isViewableSympathizerMessage(): Boolean = skill?.isRecognizableEachSympathizer() ?: false
+    fun isViewablePsychicMessage(): Boolean = skill?.isHasPsychicAbility() ?: false
+    fun isViewableGuruPsychicMessage(): Boolean = skill?.isHasGuruPsychicAbility() ?: false
+    fun isViewableSecretSay(): Boolean = true // 制約なし
+
+    // 能力行使可能か
+    fun canUseAbility(): Boolean = !isSpectator
+
+    // 投票可能か
+    fun isAvailableVote(): Boolean = isAlive() && !isSpectator
 
     // 差分有無
     fun existsDifference(participant: VillageParticipant): Boolean {
@@ -47,7 +77,8 @@ data class VillageParticipant(
     fun gone(): VillageParticipant = this.copy(isGone = true)
 
     // 突然死
-    fun suddenlyDeath(villageDay: VillageDay): VillageParticipant = this.copy(dead = Dead(CDef.DeadReason.突然, villageDay))
+    fun suddenlyDeath(villageDay: VillageDay): VillageParticipant =
+        this.copy(dead = Dead(CDef.DeadReason.突然, villageDay))
 
     // 処刑
     fun execute(villageDay: VillageDay): VillageParticipant = this.copy(dead = Dead(CDef.DeadReason.処刑, villageDay))
@@ -67,166 +98,9 @@ data class VillageParticipant(
 
     // 勝敗
     fun winLose(winCamp: Camp): VillageParticipant {
-        val isSuddenlyDeath = dead?.toCdef() == CDef.DeadReason.突然
+        val isSuddenlyDeath = dead?.isSuddenly() ?: false
         return this.copy(
-            isWin = !isSuddenlyDeath && skill?.toCdef()?.campCode() == winCamp.code
+            isWin = !isSuddenlyDeath && skill?.camp()?.code == winCamp.code
         )
-    }
-
-    // ===================================================================================
-    //                                                                                権限
-    //                                                                        ============
-    // 役職希望可能か
-    fun isAvailableSkillRequest(): Boolean = !isSpectator
-
-    // コミット可能か
-    fun isAvailableCommit(dummyParticipantId: Int): Boolean {
-        // 参加していなかったり死亡していたらNG
-        if (isSpectator) return false
-        if (!isAlive()) return false
-        // ダミーはコミットできない
-        if (id == dummyParticipantId) return false
-
-        return true
-    }
-
-    fun isAvailableComingOut(): Boolean {
-        // 参加していなかったり死亡していたらNG
-        if (isSpectator) return false
-        if (!isAlive()) return false
-        return true
-    }
-
-    // 発言可能か
-    fun isAvailableSay(isEpilogue: Boolean): Boolean {
-        // 突然死した場合はエピローグ以外NG
-        if (dead?.toCdef() == CDef.DeadReason.突然 && !isEpilogue) return false
-        return true
-    }
-
-    fun isSayableNormalSay(isEpilogue: Boolean): Boolean {
-        // ダミーはOK
-        if (playerId == 1) return true
-        // 見学は不可
-        if (isSpectator) return false
-        // エピローグ以外で死亡している場合は不可
-        if (!isAlive() && !isEpilogue) return false
-
-        return true
-    }
-
-    fun isViewableWerewolfSay(): Boolean {
-        return skill?.toCdef()?.isViewableWerewolfSay ?: false
-    }
-
-    fun isSayableWerewolfSay(): Boolean {
-        // ダミーはOK
-        if (playerId == 1) return true
-        // 死亡していたら不可
-        if (!isAlive()) return false
-        // 囁ける役職でなければ不可
-        return skill?.toCdef()?.isAvailableWerewolfSay ?: false
-    }
-
-    fun isViewableSympathizeSay(): Boolean {
-        return skill?.toCdef()?.isViewableSympathizeSay ?: false
-    }
-
-    fun isSayableSympathizeSay(): Boolean {
-        // ダミーはOK
-        if (playerId == 1) return true
-        // 死亡していたら不可
-        if (!isAlive()) return false
-        // 共鳴発言できる役職でなければ不可
-        return skill?.toCdef()?.isAvailableSympathizeSay ?: false
-    }
-
-    fun isViewableGraveSay(): Boolean {
-        if (isSpectator) return true
-        // 突然死以外で死亡している
-        return !isAlive() && CDef.DeadReason.突然.code() != dead?.code
-    }
-
-    fun isSayableGraveSay(): Boolean {
-        // ダミーはOK
-        if (playerId == 1) return true
-        // 死亡していなかったら不可
-        if (isAlive()) return false
-        // 見学は不可
-        if (isSpectator) return false
-        // 突然死は不可
-        if (dead?.toCdef() == CDef.DeadReason.突然) return false
-        return true
-    }
-
-    fun isViewableMonologueSay(): Boolean = true // 制約なし
-
-    fun isSayableMonologueSay(): Boolean = true // 制約なし
-
-    fun isViewableSpectateSay(): Boolean {
-        // 見学は開放
-        if (isSpectator) return true
-        // 突然死以外で死亡している
-        return !isAlive() && CDef.DeadReason.突然.code() != dead?.code
-    }
-
-    fun isSayableSpectateSay(): Boolean {
-        // ダミーはOK
-        if (playerId == 1) return true
-        return isSpectator // 見学していなかったら不可
-    }
-
-    fun isViewableAttackMessage(): Boolean {
-        // 生存していて囁き可能なら開放
-        if (!isAlive()) return false
-        return skill?.toCdef()?.isAvailableWerewolfSay ?: false
-    }
-
-    fun isViewableAutopsyMessage(): Boolean {
-        // 生存していて検死可能なら開放
-        if (!isAlive()) return false
-        return skill?.toCdef()?.isHasAutopsyAbility ?: false
-    }
-
-    fun isViewableFanaticMessage(): Boolean {
-        // 生存していて狂信者なら開放
-        if (!isAlive()) return false
-        return skill?.toCdef()?.isRecognizableWolf ?: false
-    }
-
-    fun isViewableMasonMessage(): Boolean {
-        // 生存していて共有職なら開放
-        if (!isAlive()) return false
-        return skill?.toCdef()?.isRecognizableEachMason ?: false
-    }
-
-    fun isViewableSympathizerMessage(): Boolean {
-        // 生存していて共鳴なら開放
-        if (!isAlive()) return false
-        return skill?.toCdef()?.isRecognizableEachSympathizer ?: false
-    }
-
-    fun isViewablePsychicMessage(): Boolean {
-        // 生存していて霊能者なら開放
-        if (!isAlive()) return false
-        return skill?.toCdef()?.isHasPsychicAbility ?: false
-    }
-
-    fun isViewableGuruPsychicMessage(): Boolean {
-        // 生存していて導師なら開放
-        if (!isAlive()) return false
-        return skill?.toCdef()?.isHasGuruPsychicAbility ?: false
-    }
-
-    fun isViewableSecretSay(): Boolean = true // 制約なし
-
-    // 能力行使可能か
-    fun canUseAbility(): Boolean = !isSpectator
-
-    // 投票可能か
-    fun isAvailableVote(): Boolean {
-        if (!isAlive()) return false
-        if (isSpectator) return false
-        return true
     }
 }

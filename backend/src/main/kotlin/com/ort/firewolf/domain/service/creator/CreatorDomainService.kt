@@ -13,12 +13,12 @@ class CreatorDomainService {
         player: Player?
     ): VillageCreatorSituation {
         return VillageCreatorSituation(
-            isAvailableCreatorSetting = isAvailableCreatorSetting(village, player),
-            isAvailableCreatorSay = isAvailableCreatorSay(village, player),
-            isAvailableCancelVillage = isAvailableCancelVillage(village, player),
-            isAvailableKick = isAvailableKick(village, player),
-            isAvailableModifySetting = isAvailableModifySetting(village, player),
-            isAvailableExtendEpilogue = isAvailableExtendEpilogue(village, player)
+            availableCreatorSetting = isAvailableCreatorSetting(village, player),
+            availableCreatorSay = isAvailableCreatorSay(village, player),
+            availableCancelVillage = isAvailableCancelVillage(village, player),
+            availableKick = isAvailableKick(village, player),
+            availableModifySetting = isAvailableModifySetting(village, player),
+            availableExtendEpilogue = isAvailableExtendEpilogue(village, player)
         )
     }
 

@@ -25,7 +25,6 @@ data class MessageType(
         )
     }
 
-
     fun toCdef(): CDef.MessageType = CDef.MessageType.codeOf(code)
 
     // 何回目の発言かを登録すべきか
@@ -34,3 +33,5 @@ data class MessageType(
         return requiredCountTypeList.contains(cdefMessageType)
     }
 }
+
+fun CDef.MessageType.toModel(): MessageType = MessageType(this)

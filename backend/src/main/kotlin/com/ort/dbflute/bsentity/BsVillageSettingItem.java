@@ -83,7 +83,7 @@ public abstract class BsVillageSettingItem extends AbstractEntity implements Dom
 
     /** {@inheritDoc} */
     public String asTableDbName() {
-        return "village_setting_item";
+        return "VILLAGE_SETTING_ITEM";
     }
 
     // ===================================================================================
@@ -152,6 +152,14 @@ public abstract class BsVillageSettingItem extends AbstractEntity implements Dom
      */
     public void setVillageSettingItemCode_自動生成村か() {
         setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.自動生成村か);
+    }
+
+    /**
+     * Set the value of villageSettingItemCode as アクション可能か (is_available_action). <br>
+     * アクション可能か
+     */
+    public void setVillageSettingItemCode_アクション可能か() {
+        setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.アクション可能か);
     }
 
     /**
@@ -319,6 +327,17 @@ public abstract class BsVillageSettingItem extends AbstractEntity implements Dom
     public boolean isVillageSettingItemCode自動生成村か() {
         CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
         return cdef != null ? cdef.equals(CDef.VillageSettingItem.自動生成村か) : false;
+    }
+
+    /**
+     * Is the value of villageSettingItemCode アクション可能か? <br>
+     * アクション可能か
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isVillageSettingItemCodeアクション可能か() {
+        CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
+        return cdef != null ? cdef.equals(CDef.VillageSettingItem.アクション可能か) : false;
     }
 
     /**

@@ -37,7 +37,7 @@ class FirebaseConfig {
             return
         }
         val serviceAccount = FileInputStream(firebaseAdminsdkSecretkeyPath)
-        val options = FirebaseOptions.Builder()
+        val options = FirebaseOptions.builder()
             .setCredentials(GoogleCredentials.fromStream(serviceAccount))
             .setDatabaseUrl(firebaseDatabaseUrl)
             .build()
