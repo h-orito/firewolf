@@ -7,6 +7,7 @@ import com.ort.firewolf.domain.model.message.Message
 import com.ort.firewolf.domain.model.message.MessageContent
 import com.ort.firewolf.domain.model.skill.Skill
 import com.ort.firewolf.domain.model.skill.SkillRequest
+import com.ort.firewolf.domain.model.skill.Skills
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 import com.ort.firewolf.domain.model.village.participant.VillageParticipants
 import com.ort.firewolf.domain.model.village.setting.VillageSettings
@@ -84,29 +85,16 @@ data class Village(
 
     /** 人狼系の役職相互確認メッセージ */
     fun createWolfsConfirmMessage(charas: Charas): Message {
-        val text =
-            CDef.Skill.listOfAvailableWerewolfSay().sortedBy { Integer.parseInt(it.order()) }.mapNotNull { cdefSkill ->
-                val memberList = participant.memberList.filter { it.skill!!.toCdef() == cdefSkill }
-                if (memberList.isEmpty()) null
-                else "${Skill(cdefSkill).name}は${
-                    memberList.joinToString(separator = "、") {
-                        charas.chara(it.charaId).charaName.fullName()
-                    }
-                }"
-            }.joinToString(
-                separator = "、\n",
-                prefix = "この村の",
-                postfix = "のようだ。"
-            )
+        val text = createRecognizeSkillMessageText(Skills.wolfs.list, charas)
         return Message.createAttackPrivateMessage(text, day.latestDay().id)
     }
 
     /** 狂信者の役職確認メッセージ */
     fun createFanaticConfirmMessage(charas: Charas): Message? {
         // 狂信者がいなければなし
-        if (participant.memberList.none { it.skill!!.toCdef().isRecognizableWolf }) return null
+        if (participant.memberList.none { it.skill!!.canRecognizeWolf() }) return null
         // 襲撃役職を一括りにして人狼とする
-        val text = participant.memberList.filter { it.skill!!.toCdef().isHasAttackAbility }.joinToString(
+        val text = participant.memberList.filter { it.skill!!.hasAttackAbility() }.joinToString(
             separator = "、",
             prefix = "この村の人狼は",
             postfix = "のようだ。"
@@ -119,45 +107,41 @@ data class Village(
     /** 共有の役職相互確認メッセージ */
     fun createMasonsConfirmMessage(charas: Charas): Message? {
         // 共有がいなければなし
-        if (participant.memberList.none { it.skill!!.toCdef().isRecognizableEachMason }) return null
-        // 共有が存在する
-        val text =
-            CDef.Skill.listOfRecognizableEachMason().sortedBy { Integer.parseInt(it.order()) }.mapNotNull { cdefSkill ->
-                val memberList = participant.memberList.filter { it.skill!!.toCdef() == cdefSkill }
-                if (memberList.isEmpty()) null
-                else "${Skill(cdefSkill).name}は${
-                    memberList.joinToString(separator = "、") {
-                        charas.chara(it.charaId).charaName.fullName()
-                    }
-                }"
-            }.joinToString(
-                separator = "、\n",
-                prefix = "この村の",
-                postfix = "のようだ。"
-            )
+        if (participant.memberList.none { it.skill!!.canRecognizeEachMason() }) return null
+        val text = createRecognizeSkillMessageText(Skills.masons.list, charas)
         return Message.createMasonPrivateMessage(text, day.latestDay().id)
     }
 
     /** 共鳴の役職相互確認メッセージ */
     fun createSympathizersConfirmMessage(charas: Charas): Message? {
         // 共鳴がいなければなし
-        if (participant.memberList.none { it.skill!!.toCdef().isRecognizableEachSympathizer }) return null
-        // 共鳴が存在する
-        val text = CDef.Skill.listOfRecognizableEachSympathizer().sortedBy { Integer.parseInt(it.order()) }
-            .mapNotNull { cdefSkill ->
-                val memberList = participant.memberList.filter { it.skill!!.toCdef() == cdefSkill }
-                if (memberList.isEmpty()) null
-                else "${Skill(cdefSkill).name}は${
-                    memberList.joinToString(separator = "、") {
-                        charas.chara(it.charaId).charaName.fullName()
-                    }
-                }"
-            }.joinToString(
-                separator = "、\n",
-                prefix = "この村の",
-                postfix = "のようだ。"
-            )
+        if (participant.memberList.none { it.skill!!.canRecognizeEachSympathizer() }) return null
+        val text = createRecognizeSkillMessageText(Skills.sympathizers.list, charas)
         return Message.createSympathizerPrivateMessage(text, day.latestDay().id)
+    }
+
+    /** 妖狐系の役職相互確認メッセージ */
+    fun createFoxsConfirmMessage(charas: Charas): Message? {
+        // 妖狐がいなければなし
+        if (participant.memberList.none { it.skill!!.canRecognizeFoxs() }) return null
+        val text = createRecognizeSkillMessageText(Skills.foxs.list, charas)
+        return Message.createFoxPrivateMessage(text, day.latestDay().id)
+    }
+
+    private fun createRecognizeSkillMessageText(skills: List<Skill>, charas: Charas): String {
+        return skills.mapNotNull { skill ->
+            val list = participant.filterBySkill(skill).memberList
+            if (list.isEmpty()) null
+            else "${skill.name}は${
+                list.joinToString(separator = "、") {
+                    charas.chara(it.charaId).charaName.fullName()
+                }
+            }"
+        }.joinToString(
+            separator = "、\n",
+            prefix = "この村の",
+            postfix = "のようだ。"
+        )
     }
 
     /**
@@ -343,6 +327,7 @@ data class Village(
     fun isViewableAutopsyMessage(): Boolean = status.isSolved()
     fun isViewableMasonMessage(): Boolean = status.isSolved()
     fun isViewableSympathizerMessage(): Boolean = status.isSolved()
+    fun isViewableFoxMessage(): Boolean = status.isSolved()
     fun isViewableFanaticMessage(): Boolean = status.isSolved()
     fun isViewablePsychicMessage(): Boolean = status.isSolved()
     fun isViewableGuruPsychicMessage(): Boolean = status.isSolved()
@@ -452,6 +437,9 @@ data class Village(
     fun divineKillParticipant(participantId: Int, latestDay: VillageDay): Village =
         this.copy(participant = this.participant.divineKill(participantId, latestDay))
 
+    // 後追い
+    fun suicideParticipant(participantId: Int): Village =
+        this.copy(participant = this.participant.suicide(participantId, day.latestDay()))
 
     // 役職割り当て
     fun assignSkill(participants: VillageParticipants): Village {

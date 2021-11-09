@@ -63,6 +63,9 @@ data class Message(
         fun createSympathizerPrivateMessage(text: String, villageDayId: Int): Message =
             createSystemMessage(MessageType(CDef.MessageType.共鳴相互確認メッセージ), text, villageDayId)
 
+        fun createFoxPrivateMessage(text: String, villageDayId: Int): Message =
+            createSystemMessage(MessageType(CDef.MessageType.妖狐メッセージ), text, villageDayId)
+
         fun createCreatorSayMessage(text: String, villageDayId: Int): Message =
             createSystemMessage(MessageType(CDef.MessageType.村建て発言), text, villageDayId)
 

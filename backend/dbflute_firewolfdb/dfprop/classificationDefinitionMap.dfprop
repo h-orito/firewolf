@@ -173,6 +173,10 @@ map:{
 					; groupComment=人狼を認知できる
 					; elementList= list:{狂信者}
 				}
+				; recognizableFox = map:{
+					; groupComment=妖狐を認知できる
+					; elementList= list:{妖狐;背徳者}
+				}
 				; noDeadByAttack= map:{
 					; groupComment=襲撃耐性を持つ
 					; elementList= list:{妖狐}

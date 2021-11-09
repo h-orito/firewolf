@@ -490,6 +490,9 @@ public interface CDef extends Classification {
         /** 狩人 */
         狩人("HUNTER", "狩人", emptyStrings())
         ,
+        /** 背徳者 */
+        背徳者("IMMORAL", "背徳者", emptyStrings())
+        ,
         /** おまかせ */
         おまかせ("LEFTOVER", "おまかせ", emptyStrings())
         ,
@@ -594,7 +597,7 @@ public interface CDef extends Classification {
                 subItemMap.put("shortName", "狐");
                 subItemMap.put("order", "21");
                 subItemMap.put("campCode", "FOX");
-                subItemMap.put("description", "あなたは妖狐です。最後まで生存するとあなたの勝利となります。人狼に襲撃されても死亡しませんが、占われると死亡します。");
+                subItemMap.put("description", "あなたは妖狐です。最後まで生存するとあなたの勝利となります。人狼に襲撃されても死亡しませんが、占われると死亡します。また、あなたは他の妖狐が誰であるかを知ることができます。");
                 _subItemMapMap.put(妖狐.code(), Collections.unmodifiableMap(subItemMap));
             }
             {
@@ -615,8 +618,16 @@ public interface CDef extends Classification {
             }
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
-                subItemMap.put("shortName", "お");
+                subItemMap.put("shortName", "背");
                 subItemMap.put("order", "22");
+                subItemMap.put("campCode", "FOX");
+                subItemMap.put("description", "あなたは背徳者です。特別な能力はありませんが、妖狐の勝利があなたの勝利となります。あなたは、妖狐が全滅すると後追いしてしまいます。また、あなたは妖狐が誰であるかを知ることができます。");
+                _subItemMapMap.put(背徳者.code(), Collections.unmodifiableMap(subItemMap));
+            }
+            {
+                Map<String, Object> subItemMap = new HashMap<String, Object>();
+                subItemMap.put("shortName", "お");
+                subItemMap.put("order", "23");
                 subItemMap.put("campCode", "VILLAGER");
                 subItemMap.put("description", "余った役職が割り当てられます。");
                 _subItemMapMap.put(おまかせ.code(), Collections.unmodifiableMap(subItemMap));
@@ -696,7 +707,7 @@ public interface CDef extends Classification {
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "お");
-                subItemMap.put("order", "23");
+                subItemMap.put("order", "24");
                 subItemMap.put("campCode", "VILLAGER");
                 subItemMap.put("description", "村人陣営の中で余った役職が割り当てられます。");
                 _subItemMapMap.put(おまかせ村人陣営.code(), Collections.unmodifiableMap(subItemMap));
@@ -720,7 +731,7 @@ public interface CDef extends Classification {
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("shortName", "お");
-                subItemMap.put("order", "24");
+                subItemMap.put("order", "25");
                 subItemMap.put("campCode", "VILLAGER");
                 subItemMap.put("description", "人狼陣営の中で余った役職が割り当てられます。");
                 _subItemMapMap.put(おまかせ人狼陣営.code(), Collections.unmodifiableMap(subItemMap));
@@ -1008,6 +1019,16 @@ public interface CDef extends Classification {
 
         /**
          * Is the classification in the group? <br>
+         * 妖狐を認知できる <br>
+         * The group elements:[妖狐, 背徳者]
+         * @return The determination, true or false.
+         */
+        public boolean isRecognizableFox() {
+            return 妖狐.equals(this) || 背徳者.equals(this);
+        }
+
+        /**
+         * Is the classification in the group? <br>
          * 襲撃耐性を持つ <br>
          * The group elements:[妖狐]
          * @return The determination, true or false.
@@ -1071,6 +1092,7 @@ public interface CDef extends Classification {
             if ("recognizableEachMason".equals(groupName)) { return isRecognizableEachMason(); }
             if ("recognizableEachSympathizer".equals(groupName)) { return isRecognizableEachSympathizer(); }
             if ("recognizableWolf".equals(groupName)) { return isRecognizableWolf(); }
+            if ("recognizableFox".equals(groupName)) { return isRecognizableFox(); }
             if ("noDeadByAttack".equals(groupName)) { return isNoDeadByAttack(); }
             if ("deadByDivine".equals(groupName)) { return isDeadByDivine(); }
             if ("counterDeadByDivine".equals(groupName)) { return isCounterDeadByDivine(); }
@@ -1166,6 +1188,7 @@ public interface CDef extends Classification {
             if ("recognizableEachMason".equalsIgnoreCase(groupName)) { return listOfRecognizableEachMason(); }
             if ("recognizableEachSympathizer".equalsIgnoreCase(groupName)) { return listOfRecognizableEachSympathizer(); }
             if ("recognizableWolf".equalsIgnoreCase(groupName)) { return listOfRecognizableWolf(); }
+            if ("recognizableFox".equalsIgnoreCase(groupName)) { return listOfRecognizableFox(); }
             if ("noDeadByAttack".equalsIgnoreCase(groupName)) { return listOfNoDeadByAttack(); }
             if ("deadByDivine".equalsIgnoreCase(groupName)) { return listOfDeadByDivine(); }
             if ("counterDeadByDivine".equalsIgnoreCase(groupName)) { return listOfCounterDeadByDivine(); }
@@ -1427,6 +1450,16 @@ public interface CDef extends Classification {
 
         /**
          * Get the list of group classification elements. (returns new copied list) <br>
+         * 妖狐を認知できる <br>
+         * The group elements:[妖狐, 背徳者]
+         * @return The snapshot list of classification elements in the group. (NotNull)
+         */
+        public static List<Skill> listOfRecognizableFox() {
+            return new ArrayList<Skill>(Arrays.asList(妖狐, 背徳者));
+        }
+
+        /**
+         * Get the list of group classification elements. (returns new copied list) <br>
          * 襲撃耐性を持つ <br>
          * The group elements:[妖狐]
          * @return The snapshot list of classification elements in the group. (NotNull)
@@ -1495,6 +1528,7 @@ public interface CDef extends Classification {
             if ("recognizableEachMason".equals(groupName)) { return listOfRecognizableEachMason(); }
             if ("recognizableEachSympathizer".equals(groupName)) { return listOfRecognizableEachSympathizer(); }
             if ("recognizableWolf".equals(groupName)) { return listOfRecognizableWolf(); }
+            if ("recognizableFox".equals(groupName)) { return listOfRecognizableFox(); }
             if ("noDeadByAttack".equals(groupName)) { return listOfNoDeadByAttack(); }
             if ("deadByDivine".equals(groupName)) { return listOfDeadByDivine(); }
             if ("counterDeadByDivine".equals(groupName)) { return listOfCounterDeadByDivine(); }
@@ -1532,6 +1566,9 @@ public interface CDef extends Classification {
         ,
         /** 狂信者人狼確認メッセージ */
         狂信者人狼確認メッセージ("PRIVATE_FANATIC", "狂信者人狼確認メッセージ", emptyStrings())
+        ,
+        /** 妖狐メッセージ */
+        妖狐メッセージ("PRIVATE_FOX", "妖狐メッセージ", emptyStrings())
         ,
         /** 役職霊視結果 */
         役職霊視結果("PRIVATE_GURU", "役職霊視結果", emptyStrings())
@@ -1699,6 +1736,9 @@ public interface CDef extends Classification {
         ,
         /** 突然 */
         突然("SUDDEN", "突然", emptyStrings())
+        ,
+        /** 後追 */
+        後追("SUICIDE", "後追", emptyStrings())
         ;
         private static final Map<String, DeadReason> _codeClsMap = new HashMap<String, DeadReason>();
         private static final Map<String, DeadReason> _nameClsMap = new HashMap<String, DeadReason>();

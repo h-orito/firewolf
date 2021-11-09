@@ -256,6 +256,14 @@ public abstract class AbstractBsMessageRestrictionCQ extends AbstractConditionQu
     }
 
     /**
+     * Equal(=). As 妖狐メッセージ (PRIVATE_FOX). And OnlyOnceRegistered. <br>
+     * 妖狐メッセージ
+     */
+    public void setMessageTypeCode_Equal_妖狐メッセージ() {
+        setMessageTypeCode_Equal_AsMessageType(CDef.MessageType.妖狐メッセージ);
+    }
+
+    /**
      * Equal(=). As 役職霊視結果 (PRIVATE_GURU). And OnlyOnceRegistered. <br>
      * 役職霊視結果
      */
@@ -444,6 +452,14 @@ public abstract class AbstractBsMessageRestrictionCQ extends AbstractConditionQu
      */
     public void setMessageTypeCode_NotEqual_狂信者人狼確認メッセージ() {
         setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.狂信者人狼確認メッセージ);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 妖狐メッセージ (PRIVATE_FOX). And OnlyOnceRegistered. <br>
+     * 妖狐メッセージ
+     */
+    public void setMessageTypeCode_NotEqual_妖狐メッセージ() {
+        setMessageTypeCode_NotEqual_AsMessageType(CDef.MessageType.妖狐メッセージ);
     }
 
     /**

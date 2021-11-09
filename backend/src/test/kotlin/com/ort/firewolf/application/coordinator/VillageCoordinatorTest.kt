@@ -234,7 +234,8 @@ class VillageCoordinatorTest : FirewolfTest() {
             user,
             messageText,
             CDef.MessageType.通常発言.code(),
-            CDef.FaceType.通常.code()
+            CDef.FaceType.通常.code(),
+            null
         )
 
         // ## Assert ##
@@ -436,7 +437,8 @@ class VillageCoordinatorTest : FirewolfTest() {
             user,
             "hoge",
             CDef.MessageType.通常発言.code(),
-            CDef.FaceType.通常.code()
+            CDef.FaceType.通常.code(),
+            null
         )
 
         // ## Act ##

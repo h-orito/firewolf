@@ -127,6 +127,14 @@ public abstract class AbstractBsSkillCQ extends AbstractConditionQuery {
     }
 
     /**
+     * Equal(=). As 背徳者 (IMMORAL). And OnlyOnceRegistered. <br>
+     * 背徳者
+     */
+    public void setSkillCode_Equal_背徳者() {
+        setSkillCode_Equal_AsSkill(CDef.Skill.背徳者);
+    }
+
+    /**
      * Equal(=). As おまかせ (LEFTOVER). And OnlyOnceRegistered. <br>
      * おまかせ
      */
@@ -339,6 +347,14 @@ public abstract class AbstractBsSkillCQ extends AbstractConditionQuery {
      */
     public void setSkillCode_NotEqual_狩人() {
         setSkillCode_NotEqual_AsSkill(CDef.Skill.狩人);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 背徳者 (IMMORAL). And OnlyOnceRegistered. <br>
+     * 背徳者
+     */
+    public void setSkillCode_NotEqual_背徳者() {
+        setSkillCode_NotEqual_AsSkill(CDef.Skill.背徳者);
     }
 
     /**
@@ -730,6 +746,16 @@ public abstract class AbstractBsSkillCQ extends AbstractConditionQuery {
      */
     public void setSkillCode_InScope_RecognizableWolf() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfRecognizableWolf());
+    }
+
+    /**
+     * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
+     * 役職 <br>
+     * 妖狐を認知できる <br>
+     * The group elements:[妖狐, 背徳者]
+     */
+    public void setSkillCode_InScope_RecognizableFox() {
+        setSkillCode_InScope_AsSkill(CDef.Skill.listOfRecognizableFox());
     }
 
     /**
