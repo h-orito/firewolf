@@ -318,6 +318,14 @@ public abstract class BsVillagePlayer extends AbstractEntity implements DomainEn
     }
 
     /**
+     * Set the value of skillCode as 背徳者 (IMMORAL). <br>
+     * 背徳者
+     */
+    public void setSkillCode_背徳者() {
+        setSkillCodeAsSkill(CDef.Skill.背徳者);
+    }
+
+    /**
      * Set the value of skillCode as おまかせ (LEFTOVER). <br>
      * おまかせ
      */
@@ -507,6 +515,14 @@ public abstract class BsVillagePlayer extends AbstractEntity implements DomainEn
      */
     public void setRequestSkillCode_狩人() {
         setRequestSkillCodeAsSkill(CDef.Skill.狩人);
+    }
+
+    /**
+     * Set the value of requestSkillCode as 背徳者 (IMMORAL). <br>
+     * 背徳者
+     */
+    public void setRequestSkillCode_背徳者() {
+        setRequestSkillCodeAsSkill(CDef.Skill.背徳者);
     }
 
     /**
@@ -702,6 +718,14 @@ public abstract class BsVillagePlayer extends AbstractEntity implements DomainEn
     }
 
     /**
+     * Set the value of secondRequestSkillCode as 背徳者 (IMMORAL). <br>
+     * 背徳者
+     */
+    public void setSecondRequestSkillCode_背徳者() {
+        setSecondRequestSkillCodeAsSkill(CDef.Skill.背徳者);
+    }
+
+    /**
      * Set the value of secondRequestSkillCode as おまかせ (LEFTOVER). <br>
      * おまかせ
      */
@@ -861,6 +885,14 @@ public abstract class BsVillagePlayer extends AbstractEntity implements DomainEn
         setDeadReasonCodeAsDeadReason(CDef.DeadReason.突然);
     }
 
+    /**
+     * Set the value of deadReasonCode as 後追 (SUICIDE). <br>
+     * 後追
+     */
+    public void setDeadReasonCode_後追() {
+        setDeadReasonCodeAsDeadReason(CDef.DeadReason.後追);
+    }
+
     // ===================================================================================
     //                                                        Classification Determination
     //                                                        ============================
@@ -950,6 +982,17 @@ public abstract class BsVillagePlayer extends AbstractEntity implements DomainEn
     public boolean isSkillCode狩人() {
         CDef.Skill cdef = getSkillCodeAsSkill();
         return cdef != null ? cdef.equals(CDef.Skill.狩人) : false;
+    }
+
+    /**
+     * Is the value of skillCode 背徳者? <br>
+     * 背徳者
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isSkillCode背徳者() {
+        CDef.Skill cdef = getSkillCodeAsSkill();
+        return cdef != null ? cdef.equals(CDef.Skill.背徳者) : false;
     }
 
     /**
@@ -1369,6 +1412,16 @@ public abstract class BsVillagePlayer extends AbstractEntity implements DomainEn
     }
 
     /**
+     * 妖狐を認知できる <br>
+     * The group elements:[妖狐, 背徳者]
+     * @return The determination, true or false.
+     */
+    public boolean isSkillCode_RecognizableFox() {
+        CDef.Skill cdef = getSkillCodeAsSkill();
+        return cdef != null && cdef.isRecognizableFox();
+    }
+
+    /**
      * 襲撃耐性を持つ <br>
      * The group elements:[妖狐]
      * @return The determination, true or false.
@@ -1494,6 +1547,17 @@ public abstract class BsVillagePlayer extends AbstractEntity implements DomainEn
     public boolean isRequestSkillCode狩人() {
         CDef.Skill cdef = getRequestSkillCodeAsSkill();
         return cdef != null ? cdef.equals(CDef.Skill.狩人) : false;
+    }
+
+    /**
+     * Is the value of requestSkillCode 背徳者? <br>
+     * 背徳者
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isRequestSkillCode背徳者() {
+        CDef.Skill cdef = getRequestSkillCodeAsSkill();
+        return cdef != null ? cdef.equals(CDef.Skill.背徳者) : false;
     }
 
     /**
@@ -1913,6 +1977,16 @@ public abstract class BsVillagePlayer extends AbstractEntity implements DomainEn
     }
 
     /**
+     * 妖狐を認知できる <br>
+     * The group elements:[妖狐, 背徳者]
+     * @return The determination, true or false.
+     */
+    public boolean isRequestSkillCode_RecognizableFox() {
+        CDef.Skill cdef = getRequestSkillCodeAsSkill();
+        return cdef != null && cdef.isRecognizableFox();
+    }
+
+    /**
      * 襲撃耐性を持つ <br>
      * The group elements:[妖狐]
      * @return The determination, true or false.
@@ -2038,6 +2112,17 @@ public abstract class BsVillagePlayer extends AbstractEntity implements DomainEn
     public boolean isSecondRequestSkillCode狩人() {
         CDef.Skill cdef = getSecondRequestSkillCodeAsSkill();
         return cdef != null ? cdef.equals(CDef.Skill.狩人) : false;
+    }
+
+    /**
+     * Is the value of secondRequestSkillCode 背徳者? <br>
+     * 背徳者
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isSecondRequestSkillCode背徳者() {
+        CDef.Skill cdef = getSecondRequestSkillCodeAsSkill();
+        return cdef != null ? cdef.equals(CDef.Skill.背徳者) : false;
     }
 
     /**
@@ -2457,6 +2542,16 @@ public abstract class BsVillagePlayer extends AbstractEntity implements DomainEn
     }
 
     /**
+     * 妖狐を認知できる <br>
+     * The group elements:[妖狐, 背徳者]
+     * @return The determination, true or false.
+     */
+    public boolean isSecondRequestSkillCode_RecognizableFox() {
+        CDef.Skill cdef = getSecondRequestSkillCodeAsSkill();
+        return cdef != null && cdef.isRecognizableFox();
+    }
+
+    /**
      * 襲撃耐性を持つ <br>
      * The group elements:[妖狐]
      * @return The determination, true or false.
@@ -2538,6 +2633,17 @@ public abstract class BsVillagePlayer extends AbstractEntity implements DomainEn
     public boolean isDeadReasonCode突然() {
         CDef.DeadReason cdef = getDeadReasonCodeAsDeadReason();
         return cdef != null ? cdef.equals(CDef.DeadReason.突然) : false;
+    }
+
+    /**
+     * Is the value of deadReasonCode 後追? <br>
+     * 後追
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isDeadReasonCode後追() {
+        CDef.DeadReason cdef = getDeadReasonCodeAsDeadReason();
+        return cdef != null ? cdef.equals(CDef.DeadReason.後追) : false;
     }
 
     /**

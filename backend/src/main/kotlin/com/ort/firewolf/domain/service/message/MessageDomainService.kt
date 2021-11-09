@@ -30,6 +30,7 @@ class MessageDomainService(
     private val autopsyMessageDomainService: AutopsyMessageDomainService,
     private val masonMessageDomainService: MasonMessageDomainService,
     private val sympathizerMessageDomainService: SympathizerMessageDomainService,
+    private val foxMessageDomainService: FoxMessageDomainService,
     private val fanaticMessageDomainService: FanaticMessageDomainService
 ) {
 
@@ -73,6 +74,7 @@ class MessageDomainService(
             CDef.MessageType.共有相互確認メッセージ,
             CDef.MessageType.共鳴相互確認メッセージ,
             CDef.MessageType.狂信者人狼確認メッセージ,
+            CDef.MessageType.妖狐メッセージ,
             CDef.MessageType.検死結果
         ).forEach {
             if (isViewableMessage(village, participant, it.code(), day)) allowedTypeList.add(it)
@@ -108,6 +110,7 @@ class MessageDomainService(
             CDef.MessageType.共有相互確認メッセージ -> masonMessageDomainService.isViewable(village, participant)
             CDef.MessageType.共鳴相互確認メッセージ -> sympathizerMessageDomainService.isViewable(village, participant)
             CDef.MessageType.狂信者人狼確認メッセージ -> fanaticMessageDomainService.isViewable(village, participant)
+            CDef.MessageType.妖狐メッセージ -> foxMessageDomainService.isViewable(village, participant)
             CDef.MessageType.検死結果 -> autopsyMessageDomainService.isViewable(village, participant)
             CDef.MessageType.アクション -> actionSayDomainService.isViewable(village, participant)
             else -> return false

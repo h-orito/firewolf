@@ -20,7 +20,12 @@ data class VillageParticipants(
         )
     }
 
-    fun addParticipant(charaId: Int, playerId: Int, skillRequest: SkillRequest, isSpectator: Boolean): VillageParticipants {
+    fun addParticipant(
+        charaId: Int,
+        playerId: Int,
+        skillRequest: SkillRequest,
+        isSpectator: Boolean
+    ): VillageParticipants {
         return this.copy(
             count = count + 1,
             memberList = memberList + VillageParticipant(
@@ -93,20 +98,40 @@ data class VillageParticipants(
         )
     }
 
+    // 後追い
+    fun suicide(participantId: Int, villageDay: VillageDay): VillageParticipants {
+        return this.copy(
+            memberList = this.memberList.map {
+                if (it.id == participantId) it.suicide(villageDay) else it.copy()
+            }
+        )
+    }
+
     // 勝敗設定
-    fun winLose(winCamo: Camp): VillageParticipants = this.copy(memberList = this.memberList.map { it.winLose(winCamo) })
+    fun winLose(winCamp: Camp): VillageParticipants =
+        this.copy(memberList = this.memberList.map { it.winLose(winCamp) })
 
     fun find(id: Int): VillageParticipant? = memberList.firstOrNull { it.id == id }
 
-    fun member(id: Int): VillageParticipant = memberList.firstOrNull { it.id == id } ?: throw IllegalStateException("not found member")
+    fun member(id: Int): VillageParticipant =
+        memberList.firstOrNull { it.id == id } ?: throw IllegalStateException("not found member")
 
-    fun findByPlayerId(playerId: Int): VillageParticipant? = memberList.firstOrNull { it.playerId == playerId && !it.isGone }
+    fun findByPlayerId(playerId: Int): VillageParticipant? =
+        memberList.firstOrNull { it.playerId == playerId && !it.isGone }
 
     fun filterAlive(): VillageParticipants {
         val aliveMembers = memberList.filter { it.isAlive() }
         return VillageParticipants(
             count = aliveMembers.size,
             memberList = aliveMembers
+        )
+    }
+
+    fun filterBySkill(skill: Skill): VillageParticipants {
+        val list = memberList.filter { it.skill?.toCdef() == skill.toCdef() }
+        return copy(
+            count = list.size,
+            memberList = list
         )
     }
 

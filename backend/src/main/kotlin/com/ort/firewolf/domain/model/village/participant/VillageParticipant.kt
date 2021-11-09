@@ -41,12 +41,13 @@ data class VillageParticipant(
     fun isViewableSpectateSay(): Boolean = isAdmin() || isSpectator || (isDead() && !dead!!.isSuddenly())
     fun isSayableSpectateSay(): Boolean = isAdmin() || isSpectator
     fun isViewableAttackMessage(): Boolean = skill?.isAvailableWerewolfSay() ?: false
-    fun isViewableAutopsyMessage(): Boolean = skill?.isHasAutopsyAbility() ?: false
-    fun isViewableFanaticMessage(): Boolean = skill?.isRecognizableWolf() ?: false
-    fun isViewableMasonMessage(): Boolean = skill?.isRecognizableEachMason() ?: false
-    fun isViewableSympathizerMessage(): Boolean = skill?.isRecognizableEachSympathizer() ?: false
-    fun isViewablePsychicMessage(): Boolean = skill?.isHasPsychicAbility() ?: false
-    fun isViewableGuruPsychicMessage(): Boolean = skill?.isHasGuruPsychicAbility() ?: false
+    fun isViewableAutopsyMessage(): Boolean = skill?.hasAutopsyAbility() ?: false
+    fun isViewableFanaticMessage(): Boolean = skill?.canRecognizeWolf() ?: false
+    fun isViewableMasonMessage(): Boolean = skill?.canRecognizeEachMason() ?: false
+    fun isViewableSympathizerMessage(): Boolean = skill?.canRecognizeEachSympathizer() ?: false
+    fun isViewableFoxMessage(): Boolean = skill?.canRecognizeFoxs() ?: false
+    fun isViewablePsychicMessage(): Boolean = skill?.hasPsychicAbility() ?: false
+    fun isViewableGuruPsychicMessage(): Boolean = skill?.hasGuruPsychicAbility() ?: false
     fun isSayableSecretSay(): Boolean = true
 
     // 能力行使可能か
@@ -87,6 +88,9 @@ data class VillageParticipant(
 
     // 呪殺
     fun divineKill(villageDay: VillageDay): VillageParticipant = this.copy(dead = Dead(CDef.DeadReason.呪殺, villageDay))
+
+    // 後追い
+    fun suicide(villageDay: VillageDay): VillageParticipant = this.copy(dead = Dead(CDef.DeadReason.後追, villageDay))
 
     // 役職割り当て
     fun assignSkill(skill: Skill): VillageParticipant = this.copy(skill = skill)

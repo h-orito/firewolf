@@ -82,6 +82,8 @@ object DummyDomainModelCreator {
                     isAvailableSuddenlyDeath = true,
                     isAvailableCommit = false,
                     isAvailableDummySkill = false,
+                    isAvailableAction = false,
+                    isAvailableSecretSay = false,
                     restrictList = listOf(),
                     joinPassword = null
                 )
@@ -119,7 +121,8 @@ object DummyDomainModelCreator {
 
     fun createDummyVillageCharachip(): VillageCharachip = VillageCharachip(1, 1)
 
-    fun createDummyVillageTime(): VillageTime = VillageTime("dummy", LocalDateTime.now(), null, null, LocalDateTime.now(), 0, null)
+    fun createDummyVillageTime(): VillageTime =
+        VillageTime("dummy", LocalDateTime.now(), null, null, LocalDateTime.now(), 0, null)
 
     fun createDummyPersonCapacity(): PersonCapacity = PersonCapacity(1, 1)
 
@@ -214,17 +217,22 @@ object DummyDomainModelCreator {
 
     fun createDummyAliveWolf(): VillageParticipant = createDummyVillageParticipant().copy(skill = Skill(CDef.Skill.人狼))
 
-    fun createDummyAliveVillager(): VillageParticipant = createDummyVillageParticipant().copy(skill = Skill(CDef.Skill.村人))
+    fun createDummyAliveVillager(): VillageParticipant =
+        createDummyVillageParticipant().copy(skill = Skill(CDef.Skill.村人))
 
     fun createDummyAliveSeer(): VillageParticipant = createDummyVillageParticipant().copy(skill = Skill(CDef.Skill.占い師))
 
-    fun createDummyAlivePsychic(): VillageParticipant = createDummyVillageParticipant().copy(skill = Skill(CDef.Skill.霊能者))
+    fun createDummyAlivePsychic(): VillageParticipant =
+        createDummyVillageParticipant().copy(skill = Skill(CDef.Skill.霊能者))
 
-    fun createDummyAliveHunter(): VillageParticipant = createDummyVillageParticipant().copy(skill = Skill(CDef.Skill.狩人))
+    fun createDummyAliveHunter(): VillageParticipant =
+        createDummyVillageParticipant().copy(skill = Skill(CDef.Skill.狩人))
 
-    fun createDummyAliveWanderer(): VillageParticipant = createDummyVillageParticipant().copy(skill = Skill(CDef.Skill.風来狩人))
+    fun createDummyAliveWanderer(): VillageParticipant =
+        createDummyVillageParticipant().copy(skill = Skill(CDef.Skill.風来狩人))
 
-    fun createDummyAliveMadman(): VillageParticipant = createDummyVillageParticipant().copy(skill = Skill(CDef.Skill.狂人))
+    fun createDummyAliveMadman(): VillageParticipant =
+        createDummyVillageParticipant().copy(skill = Skill(CDef.Skill.狂人))
 
     fun createDummyDeadWolf(): VillageParticipant = createDummyAliveWolf().copy(dead = createDummyDead())
 

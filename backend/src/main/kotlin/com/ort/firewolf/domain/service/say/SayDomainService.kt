@@ -60,7 +60,7 @@ class SayDomainService(
         chara: Chara?,
         latestDayMessageList: List<Message>,
         messageContent: MessageContent,
-        targetId: Int?
+        targetId: Int? = null
     ) {
         // 事前チェック
         if (!isAvailableSay(village, myself)) throw FirewolfBusinessException("発言できません")

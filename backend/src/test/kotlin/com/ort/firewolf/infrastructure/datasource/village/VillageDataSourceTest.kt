@@ -103,6 +103,8 @@ class VillageDataSourceTest : FirewolfTest() {
                         isAvailableSuddenlyDeath = true,
                         isAvailableCommit = false,
                         isAvailableDummySkill = false,
+                        isAvailableAction = false,
+                        isAvailableSecretSay = false,
                         restrictList = listOf(
                             VillageMessageRestrictCreateResource(
                                 type = MessageType(CDef.MessageType.通常発言),

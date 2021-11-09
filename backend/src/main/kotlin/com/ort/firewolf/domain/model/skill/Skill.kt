@@ -45,12 +45,17 @@ data class Skill(
     fun isAvailableWerewolfSay(): Boolean = toCdef().isAvailableWerewolfSay
     fun isViewableSympathizeSay(): Boolean = toCdef().isViewableSympathizeSay
     fun isAvailableSympathizeSay(): Boolean = toCdef().isAvailableSympathizeSay
-    fun isHasAutopsyAbility(): Boolean = toCdef().isHasAutopsyAbility
-    fun isRecognizableWolf(): Boolean = toCdef().isRecognizableWolf
-    fun isRecognizableEachMason(): Boolean = toCdef().isRecognizableEachMason
-    fun isRecognizableEachSympathizer(): Boolean = toCdef().isRecognizableEachSympathizer
-    fun isHasPsychicAbility(): Boolean = toCdef().isHasPsychicAbility
-    fun isHasGuruPsychicAbility(): Boolean = toCdef().isHasGuruPsychicAbility
+
+    fun canRecognizeWolf(): Boolean = toCdef().isRecognizableWolf
+    fun canRecognizeEachMason(): Boolean = toCdef().isRecognizableEachMason
+    fun canRecognizeEachSympathizer(): Boolean = toCdef().isRecognizableEachSympathizer
+    fun canRecognizeFoxs(): Boolean = toCdef().isRecognizableFox
+    fun hasAutopsyAbility(): Boolean = toCdef().isHasAutopsyAbility
+    fun hasPsychicAbility(): Boolean = toCdef().isHasPsychicAbility
+    fun hasGuruPsychicAbility(): Boolean = toCdef().isHasGuruPsychicAbility
+    fun hasAttackAbility(): Boolean = toCdef().isHasAttackAbility
+
+    fun isFoxCount(): Boolean = Skills.foxs.list.any { it.code == code }
 
     companion object {
 
