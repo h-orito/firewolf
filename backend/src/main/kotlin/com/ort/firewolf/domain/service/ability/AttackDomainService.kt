@@ -45,7 +45,7 @@ class AttackDomainService : IAbilityDomainService {
 
         // 襲撃能力のある参加者のID
         val attackableParticipantIdList =
-            village.participant.memberList.filter { it.skill!!.toCdef().isHasAttackAbility }.map { it.id }
+            village.participant.memberList.filter { it.skill!!.hasAttackAbility() }.map { it.id }
 
         val targetVillageParticipantId = villageAbilities
             .filterLatestday(village)
@@ -56,8 +56,28 @@ class AttackDomainService : IAbilityDomainService {
         return village.participant.member(targetVillageParticipantId)
     }
 
+    fun getSelectingAttacker(
+        village: Village,
+        villageAbilities: VillageAbilities
+    ): VillageParticipant? {
+        // 襲撃能力のある参加者のID
+        val attackableParticipantIdList =
+            village.participant.memberList.filter { it.skill!!.hasAttackAbility() }.map { it.id }
+
+        val attackerId = villageAbilities
+            .filterLatestday(village)
+            .filterByType(getAbilityType()).list
+            .find { attackableParticipantIdList.contains(it.myselfId) }
+            ?.myselfId ?: return null
+        return village.participant.member(attackerId)
+    }
+
+    fun getSelectableAttacker(village: Village): List<VillageParticipant> {
+        return village.participant.filterAlive().memberList.filter { it.skill!!.hasAttackAbility() }
+    }
+
     override fun createSetMessage(myChara: Chara, targetChara: Chara?): String =
-        "${myChara.charaName.name}が襲撃対象を${targetChara?.charaName?.name ?: "なし"}に設定しました。"
+        "襲撃者を${myChara.charaName.name}に、襲撃対象を${targetChara?.charaName?.name ?: "なし"}に設定しました。"
 
     override fun getDefaultAbilityList(
         village: Village,
@@ -89,9 +109,10 @@ class AttackDomainService : IAbilityDomainService {
         charas: Charas
     ): DayChange {
         val latestDay = dayChange.village.day.latestDay()
-        val aliveWolf = dayChange.village.participant.filterAlive().findRandom {
-            it.skill!!.toCdef().isHasAttackAbility
-        } ?: return dayChange
+        // 人狼が全員死亡していたら襲撃なし
+        if (dayChange.village.participant.filterAlive().memberList.none { it.skill!!.hasAttackAbility() }) {
+            return dayChange
+        }
 
         var village = dayChange.village.copy()
         var messages = dayChange.messages.copy()
@@ -100,8 +121,9 @@ class AttackDomainService : IAbilityDomainService {
             .filterYesterday(village).list
             .find { it.targetId != null }
             ?.let { ability ->
+                val attacker = village.participant.member(ability.myselfId)
                 // 襲撃メッセージ
-                messages = messages.add(createAttackMessage(village, charas, aliveWolf, ability))
+                messages = messages.add(createAttackMessage(village, charas, attacker, ability))
                 // 襲撃成功したら死亡
                 if (isAttackSuccess(dayChange, ability.targetId!!)) {
                     village = village.attackParticipant(ability.targetId, latestDay)
@@ -111,7 +133,7 @@ class AttackDomainService : IAbilityDomainService {
                         messages = messages.add(it)
                     }
                     // 猫又による道連れ
-                    forceSuicidedParticipant(village.participant.member(ability.targetId), aliveWolf)?.let {
+                    forceSuicidedParticipant(village.participant.member(ability.targetId), attacker)?.let {
                         village = village.divineKillParticipant(it.id, village.day.latestDay())
                         messages = messages.add(
                             createForceSuicideMessage(
@@ -147,10 +169,10 @@ class AttackDomainService : IAbilityDomainService {
         // 対象が護衛されていたら失敗
         if (dayChange.abilities.list.any { villageAbility ->
                 (villageAbility.abilityType.code == CDef.AbilityType.護衛.code()
-                    || villageAbility.abilityType.code == CDef.AbilityType.風来護衛.code())
-                    && villageAbility.targetId == targetId
-                    && villageAbility.villageDayId == dayChange.village.day.yesterday().id
-                    && dayChange.village.participant.member(villageAbility.myselfId).isAlive()
+                        || villageAbility.abilityType.code == CDef.AbilityType.風来護衛.code())
+                        && villageAbility.targetId == targetId
+                        && villageAbility.villageDayId == dayChange.village.day.yesterday().id
+                        && dayChange.village.participant.member(villageAbility.myselfId).isAlive()
             }) {
             return false
         }
@@ -189,6 +211,8 @@ class AttackDomainService : IAbilityDomainService {
         attackedParticipant: VillageParticipant,
         attacker: VillageParticipant
     ): VillageParticipant? {
+        // 襲撃者が既に死亡していたら何もしない
+        if (attacker.isDead()) return null
         // 襲撃されたのが道連れ役職でなければ何もしない
         if (!attackedParticipant.skill!!.toCdef().isForceDoubleSuicide) return null
         // 襲撃者を道連れにする
