@@ -89,7 +89,8 @@ class AbilityDomainServiceTest : FirewolfTest() {
         val villageAbilities = DummyDomainModelCreator.createDummyVillageAbilities()
 
         // ## Act ##
-        val selectableTargetList = abilityDomainService.getSelectableTargetList(village, participant, villageAbilities, abilityType)
+        val selectableTargetList =
+            abilityDomainService.getSelectableTargetList(village, participant, villageAbilities, abilityType)
 
         // ## Assert ##
         assertThat(selectableTargetList.size).isEqualTo(2)
@@ -196,7 +197,7 @@ class AbilityDomainServiceTest : FirewolfTest() {
 
         // ## Act ##
         // ## Assert ##
-        abilityDomainService.assertAbility(village, participant, targetId, abilityType, villageAbilities)
+        abilityDomainService.assertAbility(village, participant, null, targetId, abilityType, villageAbilities)
     }
 
     @Test(expected = FirewolfBusinessException::class)
@@ -210,7 +211,7 @@ class AbilityDomainServiceTest : FirewolfTest() {
 
         // ## Act ##
         // ## Assert ##
-        abilityDomainService.assertAbility(village, participant, targetId, abilityType, villageAbilities)
+        abilityDomainService.assertAbility(village, participant, null, targetId, abilityType, villageAbilities)
     }
 
     fun test_assertAbility_対象なしにできる能力で対象なし() {
@@ -223,7 +224,14 @@ class AbilityDomainServiceTest : FirewolfTest() {
 
         // ## Act ##
         // ## Assert ##
-        abilityDomainService.assertAbility(village, participant, targetId, abilityType, villageAbilities)
+        abilityDomainService.assertAbility(
+            village,
+            participant,
+            participant.id,
+            targetId,
+            abilityType,
+            villageAbilities
+        )
     }
 
     @Test(expected = FirewolfBusinessException::class)
@@ -245,7 +253,7 @@ class AbilityDomainServiceTest : FirewolfTest() {
 
         // ## Act ##
         // ## Assert ##
-        abilityDomainService.assertAbility(village, participant, targetId, abilityType, villageAbilities)
+        abilityDomainService.assertAbility(village, participant, participant.id, targetId, abilityType, villageAbilities)
     }
 
     @Test
@@ -267,7 +275,7 @@ class AbilityDomainServiceTest : FirewolfTest() {
 
         // ## Act ##
         // ## Assert ##
-        abilityDomainService.assertAbility(village, participant, targetId, abilityType, villageAbilities)
+        abilityDomainService.assertAbility(village, participant, participant.id, targetId, abilityType, villageAbilities)
     }
 
     @Test

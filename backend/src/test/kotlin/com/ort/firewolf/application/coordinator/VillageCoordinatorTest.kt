@@ -286,6 +286,7 @@ class VillageCoordinatorTest : FirewolfTest() {
         villageCoordinator.setAbility(
             village.id,
             user,
+            null,
             dummy.id,
             CDef.AbilityType.占い.code()
         )
@@ -449,6 +450,7 @@ class VillageCoordinatorTest : FirewolfTest() {
         villageCoordinator.setAbility(
             village.id,
             user,
+            null,
             village.dummyChara().id,
             CDef.AbilityType.占い.code()
         )

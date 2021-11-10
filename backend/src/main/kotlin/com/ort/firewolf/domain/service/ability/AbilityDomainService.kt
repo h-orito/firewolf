@@ -63,6 +63,7 @@ class AbilityDomainService(
     fun assertAbility(
         village: Village,
         participant: VillageParticipant?,
+        myselfId: Int?,
         targetId: Int?,
         abilityType: AbilityType,
         villageAbilities: VillageAbilities
@@ -73,13 +74,11 @@ class AbilityDomainService(
             throw FirewolfBadRequestException("${abilityType.name}の能力を持っていません")
         }
         // 使えない状況
-        if (!isUsable(
-                village,
-                participant,
-                abilityType
-            )
-        ) throw FirewolfBusinessException("${abilityType.name}能力を使えない状態です")
+        if (!isUsable(village, participant, abilityType)) {
+            throw FirewolfBusinessException("${abilityType.name}能力を使えない状態です")
+        }
         // 対象指定がおかしい
+        if (abilityType.toCdef() == CDef.AbilityType.襲撃 && myselfId == null) throw FirewolfBusinessException("襲撃者指定が必要です")
         if (targetId == null && !canNoTarget(village, abilityType)) throw FirewolfBusinessException("対象指定が必要です")
         if (targetId != null && getSelectableTargetList(
                 village,
@@ -178,6 +177,8 @@ class AbilityDomainService(
     ): VillageAbilitySituation {
         return VillageAbilitySituation(
             type = abilityType,
+            attacker = getSelectingAttacker(village, participant, villageAbilities, abilityType),
+            attackerList = getSelectableAttacker(village, participant, abilityType),
             targetList = this.getSelectableTargetList(village, participant, villageAbilities, abilityType),
             target = this.getSelectingTarget(village, participant, villageAbilities, abilityType),
             usable = this.isUsable(village, participant, abilityType),
@@ -213,5 +214,26 @@ class AbilityDomainService(
         return dayChange.village.createFoxsConfirmMessage(charas)?.let {
             dayChange.copy(messages = dayChange.messages.add(it))
         } ?: dayChange
+    }
+
+    private fun getSelectingAttacker(
+        village: Village,
+        participant: VillageParticipant?,
+        villageAbilities: VillageAbilities,
+        abilityType: AbilityType
+    ): VillageParticipant? {
+        return if (!canUseAbility(village, participant)) null
+        else if (abilityType.toCdef() != CDef.AbilityType.襲撃) null
+        else attackDomainService.getSelectingAttacker(village, villageAbilities)
+    }
+
+    private fun getSelectableAttacker(
+        village: Village,
+        participant: VillageParticipant?,
+        abilityType: AbilityType
+    ): List<VillageParticipant> {
+        return if (!canUseAbility(village, participant)) emptyList()
+        else if (abilityType.toCdef() != CDef.AbilityType.襲撃) emptyList()
+        else attackDomainService.getSelectableAttacker(village)
     }
 }
