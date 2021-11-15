@@ -26,11 +26,6 @@ class VillageRegisterBodyValidator : Validator {
 
         // 編成
         validateOrganization(body, errors)
-
-        // 沈黙時間を設定している場合、コミットは設定できない
-        if (body.setting.rule!!.availableCommit!! && body.setting.time!!.silentHours != null && body.setting.time.silentHours!! > 0) {
-            errors.reject("", "更新後沈黙時間を設定する場合、時短希望はありにできません")
-        }
     }
 
     private fun validateOrganization(body: VillageRegisterBody, errors: Errors) {
@@ -62,8 +57,8 @@ class VillageRegisterBodyValidator : Validator {
                 org.toCharArray().map { it.toString() }.none {
                     val cdefSkill = Skill.skillByShortName(it)!!.toCdef()
                     !cdefSkill.isNoDeadByAttack
-                        && !cdefSkill.isNotSelectableAttack
-                        && !cdefSkill.isForceDoubleSuicide
+                            && !cdefSkill.isNotSelectableAttack
+                            && !cdefSkill.isForceDoubleSuicide
                 }
             }
         ) {
@@ -73,7 +68,8 @@ class VillageRegisterBodyValidator : Validator {
 
         // 人狼がいない
         if (organizationList.any { org ->
-                org.toCharArray().map { it.toString() }.none { Skill.skillByShortName(it)!!.toCdef().isHasAttackAbility }
+                org.toCharArray().map { it.toString() }
+                    .none { Skill.skillByShortName(it)!!.toCdef().isHasAttackAbility }
             }) {
             errors.reject("", "襲撃役職が必要です")
             return
@@ -82,7 +78,8 @@ class VillageRegisterBodyValidator : Validator {
         // 人狼が半数以上
         if (organizationList.any { org ->
                 val personCount = org.length
-                val wolfCount = org.toCharArray().map { it.toString() }.count { Skill.skillByShortName(it)!!.toCdef().isHasAttackAbility }
+                val wolfCount = org.toCharArray().map { it.toString() }
+                    .count { Skill.skillByShortName(it)!!.toCdef().isHasAttackAbility }
                 wolfCount >= personCount / 2
             }
         ) {
