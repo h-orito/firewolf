@@ -13,6 +13,7 @@ import com.ort.firewolf.domain.model.message.Messages
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 import com.ort.firewolf.fw.FirewolfDateUtil
 import com.ort.firewolf.fw.exception.FirewolfBusinessException
+import org.dbflute.cbean.result.PagingResultBean
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Repository
 import java.time.ZoneOffset
@@ -47,41 +48,45 @@ class MessageDataSource(
             return Messages(listOf())
         }
 
-        return if (query.isPaging()) {
-            val messageList = messageBhv.selectPage {
-                queryMessage(
-                    cb = it,
-                    villageId = villageId,
-                    villageDayId = villageDayId,
-                    query = query
-                )
-                it.query().addOrderBy_MessageUnixtimestampMilli_Asc()
-                it.paging(query.pageSize!!, query.pageNum!!)
-            }
-            Messages(
-                list = messageList.map { convertMessageToMessage(it) },
-                allRecordCount = messageList.allRecordCount,
-                allPageCount = messageList.allPageCount,
-                isExistPrePage = messageList.existsPreviousPage(),
-                isExistNextPage = messageList.existsNextPage(),
-                currentPageNum = messageList.currentPageNumber
+        val messagePage = messageBhv.selectPage {
+            queryPaging(it, query)
+            queryMessage(
+                cb = it,
+                villageId = villageId,
+                villageDayId = villageDayId,
+                query = query
             )
-
-        } else {
-            val messageList = messageBhv.selectList {
-                queryMessage(
-                    cb = it,
-                    villageId = villageId,
-                    villageDayId = villageDayId,
-                    query = query
-                )
+            if (query.isLatest) {
+                it.query().addOrderBy_MessageUnixtimestampMilli_Desc()
+            } else {
                 it.query().addOrderBy_MessageUnixtimestampMilli_Asc()
             }
-            Messages(
-                list = messageList.map { convertMessageToMessage(it) }
-            )
         }
+        return if (query.isLatest) mapMessagesWithLatest(messagePage)
+        else mapMessagesWithPaging(messagePage)
     }
+
+    private fun mapMessagesWithPaging(messagePage: PagingResultBean<Message>): Messages =
+        Messages(
+            list = messagePage.map { convertMessageToMessage(it) },
+            allPageCount = messagePage.allPageCount,
+            allRecordCount = messagePage.allRecordCount,
+            isExistPrePage = messagePage.existsPreviousPage(),
+            isExistNextPage = messagePage.existsNextPage(),
+            currentPageNum = messagePage.currentPageNumber,
+            isLatest = false
+        )
+
+    private fun mapMessagesWithLatest(messagePage: PagingResultBean<Message>): Messages =
+        Messages(
+            list = messagePage.reversed().map { convertMessageToMessage(it) },
+            allPageCount = messagePage.allPageCount,
+            allRecordCount = messagePage.allRecordCount,
+            isExistPrePage = messagePage.existsNextPage(), // 逆順にしているので
+            isExistNextPage = false, // 最新なので次はなし
+            currentPageNum = null,
+            isLatest = true
+        )
 
     /**
      * 最新発言日時取得
@@ -106,7 +111,8 @@ class MessageDataSource(
             participantIdList = null,
             includeMonologue = false,
             includeSecret = false,
-            includePrivateAbility = false
+            includePrivateAbility = false,
+            isLatest = false
         )
         return messageBhv.selectEntityWithDeletedCheck() {
             queryMessage(it, villageId, null, query)
@@ -332,5 +338,15 @@ class MessageDataSource(
     private fun queryMyPrivateAbility(cb: MessageCB, id: Int) {
         cb.query().setVillagePlayerId_Equal(id)
         cb.query().setMessageTypeCode_InScope(MessageQuery.personalPrivateAbilityList.map { it.code() })
+    }
+
+    private fun queryPaging(cb: MessageCB, query: MessageQuery) {
+        when {
+            !query.isPaging() -> cb.paging(100000, 1)
+            query.isLatest -> cb.paging(query.pageSize!!, 1)
+            query.pageNum != null && query.pageSize != null -> cb.paging(query.pageSize, query.pageNum)
+            query.pageSize != null -> cb.paging(query.pageSize, 100000)
+            else -> cb.paging(100000, 1)
+        }
     }
 }

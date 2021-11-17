@@ -127,6 +127,7 @@ class MessageDomainService(
         pageSize: Int?,
         pageNum: Int?,
         keyword: String?,
+        isLatest: Boolean,
         participantIdList: List<Int>?
     ): MessageQuery {
         val availableMessageTypeList = viewableMessageTypeList(village, participant, day, authority)
@@ -153,7 +154,8 @@ class MessageDomainService(
                 requestMessageTypeList,
                 queryMessageTypeList
             ),
-            includePrivateAbility = isIncludePrivateAbility(participant, requestMessageTypeList)
+            includePrivateAbility = isIncludePrivateAbility(participant, requestMessageTypeList),
+            isLatest = isLatest
         )
     }
 
