@@ -19,7 +19,10 @@ class FirewolfAccessContextInterceptor : HandlerInterceptorAdapter() {
         // [アクセスユーザ]
         val userInfo: FirewolfUser? = FirewolfUserInfoUtil.getUserInfo()
         val accessUser = userInfo?.username ?: "not_login_user"
-        val ipAddress = request.remoteAddr
+        val xForwardedFor = request.getHeader("X-Forwarded-For")
+        val ipAddress =
+            if (xForwardedFor.isNullOrEmpty()) request.remoteAddr
+            else xForwardedFor
 
         val context = AccessContext()
         context.accessLocalDateTime = accessLocalDateTime
