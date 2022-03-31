@@ -1,4 +1,4 @@
-package com.ort.howlingwolf.api.controller
+package com.ort.firewolf.api.controller
 
 import org.springframework.core.annotation.Order
 import org.springframework.web.bind.WebDataBinder
