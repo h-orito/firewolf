@@ -12,7 +12,7 @@ import com.ort.dbflute.cbean.cq.bs.*;
 import com.ort.dbflute.cbean.cq.*;
 
 /**
- * The condition-query for in-line of PLAYER.
+ * The condition-query for in-line of player.
  * @author DBFlute(AutoGenerator)
  */
 public class PlayerCIQ extends AbstractBsPlayerCQ {
@@ -87,6 +87,7 @@ public class PlayerCIQ extends AbstractBsPlayerCQ {
     protected ConditionValue xgetCValueTwitterUserName() { return _myCQ.xdfgetTwitterUserName(); }
     protected ConditionValue xgetCValueAuthorityCode() { return _myCQ.xdfgetAuthorityCode(); }
     protected ConditionValue xgetCValueIsRestrictedParticipation() { return _myCQ.xdfgetIsRestrictedParticipation(); }
+    protected ConditionValue xgetCValueShouldCheckAccessInfo() { return _myCQ.xdfgetShouldCheckAccessInfo(); }
     protected ConditionValue xgetCValueRegisterDatetime() { return _myCQ.xdfgetRegisterDatetime(); }
     protected ConditionValue xgetCValueRegisterTrace() { return _myCQ.xdfgetRegisterTrace(); }
     protected ConditionValue xgetCValueUpdateDatetime() { return _myCQ.xdfgetUpdateDatetime(); }

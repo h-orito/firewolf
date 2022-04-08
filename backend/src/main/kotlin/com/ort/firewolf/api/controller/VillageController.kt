@@ -355,10 +355,11 @@ class VillageController(
             villageId = villageId,
             playerId = player.id,
             charaId = body.charaId,
-            message = body.joinMessage!!,
+            message = body.joinMessage,
             isSpectate = body.spectator ?: false,
             firstRequestSkill = CDef.Skill.codeOf(body.firstRequestSkill),
-            secondRequestSkill = CDef.Skill.codeOf(body.secondRequestSkill)
+            secondRequestSkill = CDef.Skill.codeOf(body.secondRequestSkill),
+            ipAddress = user.ipAddress!!
         )
     }
 

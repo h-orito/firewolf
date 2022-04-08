@@ -3,6 +3,7 @@ package com.ort.firewolf.fw.interceptor
 import com.ort.firewolf.fw.FirewolfDateUtil
 import com.ort.firewolf.fw.FirewolfUserInfoUtil
 import com.ort.firewolf.fw.security.FirewolfUser
+import com.ort.firewolf.fw.security.getIpAddress
 import org.dbflute.hook.AccessContext
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter
 import javax.servlet.http.HttpServletRequest
@@ -19,14 +20,10 @@ class FirewolfAccessContextInterceptor : HandlerInterceptorAdapter() {
         // [アクセスユーザ]
         val userInfo: FirewolfUser? = FirewolfUserInfoUtil.getUserInfo()
         val accessUser = userInfo?.username ?: "not_login_user"
-        val xForwardedFor = request.getHeader("X-Forwarded-For")
-        val ipAddress =
-            if (xForwardedFor.isNullOrEmpty()) request.remoteAddr
-            else xForwardedFor
 
         val context = AccessContext()
         context.accessLocalDateTime = accessLocalDateTime
-        context.accessUser = "$accessUser: $ipAddress"
+        context.accessUser = "$accessUser: ${request.getIpAddress()}"
         AccessContext.setAccessContextOnThread(context)
 
         // Handlerメソッドを呼び出す場合はtrueを返却する

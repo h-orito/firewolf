@@ -21,7 +21,7 @@ import com.ort.dbflute.exentity.*;
  *     PLAYER_ID
  *
  * [column]
- *     PLAYER_ID, UID, NICKNAME, TWITTER_USER_NAME, AUTHORITY_CODE, IS_RESTRICTED_PARTICIPATION, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
+ *     PLAYER_ID, UID, NICKNAME, TWITTER_USER_NAME, AUTHORITY_CODE, IS_RESTRICTED_PARTICIPATION, SHOULD_CHECK_ACCESS_INFO, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
  *
  * [sequence]
  *     
@@ -52,6 +52,7 @@ import com.ort.dbflute.exentity.*;
  * String twitterUserName = entity.getTwitterUserName();
  * String authorityCode = entity.getAuthorityCode();
  * Boolean isRestrictedParticipation = entity.getIsRestrictedParticipation();
+ * Boolean shouldCheckAccessInfo = entity.getShouldCheckAccessInfo();
  * java.time.LocalDateTime registerDatetime = entity.getRegisterDatetime();
  * String registerTrace = entity.getRegisterTrace();
  * java.time.LocalDateTime updateDatetime = entity.getUpdateDatetime();
@@ -62,6 +63,7 @@ import com.ort.dbflute.exentity.*;
  * entity.setTwitterUserName(twitterUserName);
  * entity.setAuthorityCode(authorityCode);
  * entity.setIsRestrictedParticipation(isRestrictedParticipation);
+ * entity.setShouldCheckAccessInfo(shouldCheckAccessInfo);
  * entity.setRegisterDatetime(registerDatetime);
  * entity.setRegisterTrace(registerTrace);
  * entity.setUpdateDatetime(updateDatetime);
@@ -93,11 +95,14 @@ public abstract class BsPlayer extends AbstractEntity implements DomainEntity, E
     /** TWITTER_USER_NAME: {NotNull, VARCHAR(15)} */
     protected String _twitterUserName;
 
-    /** AUTHORITY_CODE: {IX, NotNull, VARCHAR(20), FK to AUTHORITY, classification=Authority} */
+    /** AUTHORITY_CODE: {IX, NotNull, VARCHAR(20), FK to authority, classification=Authority} */
     protected String _authorityCode;
 
     /** IS_RESTRICTED_PARTICIPATION: {NotNull, BIT} */
     protected Boolean _isRestrictedParticipation;
+
+    /** SHOULD_CHECK_ACCESS_INFO: {NotNull, BIT} */
+    protected Boolean _shouldCheckAccessInfo;
 
     /** REGISTER_DATETIME: {NotNull, DATETIME(19)} */
     protected java.time.LocalDateTime _registerDatetime;
@@ -121,7 +126,7 @@ public abstract class BsPlayer extends AbstractEntity implements DomainEntity, E
 
     /** {@inheritDoc} */
     public String asTableDbName() {
-        return "PLAYER";
+        return "player";
     }
 
     // ===================================================================================
@@ -149,7 +154,7 @@ public abstract class BsPlayer extends AbstractEntity implements DomainEntity, E
     //                                                             =======================
     /**
      * Get the value of authorityCode as the classification of Authority. <br>
-     * AUTHORITY_CODE: {IX, NotNull, VARCHAR(20), FK to AUTHORITY, classification=Authority} <br>
+     * AUTHORITY_CODE: {IX, NotNull, VARCHAR(20), FK to authority, classification=Authority} <br>
      * 権限
      * <p>It's treated as case insensitive and if the code value is null, it returns null.</p>
      * @return The instance of classification definition (as ENUM type). (NullAllowed: when the column value is null)
@@ -160,7 +165,7 @@ public abstract class BsPlayer extends AbstractEntity implements DomainEntity, E
 
     /**
      * Set the value of authorityCode as the classification of Authority. <br>
-     * AUTHORITY_CODE: {IX, NotNull, VARCHAR(20), FK to AUTHORITY, classification=Authority} <br>
+     * AUTHORITY_CODE: {IX, NotNull, VARCHAR(20), FK to authority, classification=Authority} <br>
      * 権限
      * @param cdef The instance of classification definition (as ENUM type). (NullAllowed: if null, null value is set to the column)
      */
@@ -236,11 +241,11 @@ public abstract class BsPlayer extends AbstractEntity implements DomainEntity, E
         _authority = authority;
     }
 
-    /** PLAYER_DETAIL by PLAYER_ID, named 'playerDetailAsOne'. */
+    /** player_detail by PLAYER_ID, named 'playerDetailAsOne'. */
     protected OptionalEntity<PlayerDetail> _playerDetailAsOne;
 
     /**
-     * [get] PLAYER_DETAIL by PLAYER_ID, named 'playerDetailAsOne'.
+     * [get] player_detail by PLAYER_ID, named 'playerDetailAsOne'.
      * Optional: alwaysPresent(), ifPresent().orElse(), get(), ...
      * @return the entity of foreign property(referrer-as-one) 'playerDetailAsOne'. (NotNull, EmptyAllowed: when e.g. no data, no setupSelect)
      */
@@ -250,7 +255,7 @@ public abstract class BsPlayer extends AbstractEntity implements DomainEntity, E
     }
 
     /**
-     * [set] PLAYER_DETAIL by PLAYER_ID, named 'playerDetailAsOne'.
+     * [set] player_detail by PLAYER_ID, named 'playerDetailAsOne'.
      * @param playerDetailAsOne The entity of foreign property(referrer-as-one) 'playerDetailAsOne'. (NullAllowed)
      */
     public void setPlayerDetailAsOne(OptionalEntity<PlayerDetail> playerDetailAsOne) {
@@ -352,6 +357,7 @@ public abstract class BsPlayer extends AbstractEntity implements DomainEntity, E
         sb.append(dm).append(xfND(_twitterUserName));
         sb.append(dm).append(xfND(_authorityCode));
         sb.append(dm).append(xfND(_isRestrictedParticipation));
+        sb.append(dm).append(xfND(_shouldCheckAccessInfo));
         sb.append(dm).append(xfND(_registerDatetime));
         sb.append(dm).append(xfND(_registerTrace));
         sb.append(dm).append(xfND(_updateDatetime));
@@ -469,7 +475,7 @@ public abstract class BsPlayer extends AbstractEntity implements DomainEntity, E
     }
 
     /**
-     * [get] AUTHORITY_CODE: {IX, NotNull, VARCHAR(20), FK to AUTHORITY, classification=Authority} <br>
+     * [get] AUTHORITY_CODE: {IX, NotNull, VARCHAR(20), FK to authority, classification=Authority} <br>
      * 権限コード
      * @return The value of the column 'AUTHORITY_CODE'. (basically NotNull if selected: for the constraint)
      */
@@ -479,7 +485,7 @@ public abstract class BsPlayer extends AbstractEntity implements DomainEntity, E
     }
 
     /**
-     * [set] AUTHORITY_CODE: {IX, NotNull, VARCHAR(20), FK to AUTHORITY, classification=Authority} <br>
+     * [set] AUTHORITY_CODE: {IX, NotNull, VARCHAR(20), FK to authority, classification=Authority} <br>
      * 権限コード
      * @param authorityCode The value of the column 'AUTHORITY_CODE'. (basically NotNull if update: for the constraint)
      */
@@ -507,6 +513,26 @@ public abstract class BsPlayer extends AbstractEntity implements DomainEntity, E
     public void setIsRestrictedParticipation(Boolean isRestrictedParticipation) {
         registerModifiedProperty("isRestrictedParticipation");
         _isRestrictedParticipation = isRestrictedParticipation;
+    }
+
+    /**
+     * [get] SHOULD_CHECK_ACCESS_INFO: {NotNull, BIT} <br>
+     * アクセス情報を確認するか
+     * @return The value of the column 'SHOULD_CHECK_ACCESS_INFO'. (basically NotNull if selected: for the constraint)
+     */
+    public Boolean getShouldCheckAccessInfo() {
+        checkSpecifiedProperty("shouldCheckAccessInfo");
+        return _shouldCheckAccessInfo;
+    }
+
+    /**
+     * [set] SHOULD_CHECK_ACCESS_INFO: {NotNull, BIT} <br>
+     * アクセス情報を確認するか
+     * @param shouldCheckAccessInfo The value of the column 'SHOULD_CHECK_ACCESS_INFO'. (basically NotNull if update: for the constraint)
+     */
+    public void setShouldCheckAccessInfo(Boolean shouldCheckAccessInfo) {
+        registerModifiedProperty("shouldCheckAccessInfo");
+        _shouldCheckAccessInfo = shouldCheckAccessInfo;
     }
 
     /**

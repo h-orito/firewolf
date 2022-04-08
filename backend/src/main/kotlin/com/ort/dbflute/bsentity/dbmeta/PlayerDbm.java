@@ -14,7 +14,7 @@ import com.ort.dbflute.allcommon.*;
 import com.ort.dbflute.exentity.*;
 
 /**
- * The DB meta of PLAYER. (Singleton)
+ * The DB meta of player. (Singleton)
  * @author DBFlute(AutoGenerator)
  */
 public class PlayerDbm extends AbstractDBMeta {
@@ -56,6 +56,7 @@ public class PlayerDbm extends AbstractDBMeta {
             }
         }, "authorityCode");
         setupEpg(_epgMap, et -> ((Player)et).getIsRestrictedParticipation(), (et, vl) -> ((Player)et).setIsRestrictedParticipation((Boolean)vl), "isRestrictedParticipation");
+        setupEpg(_epgMap, et -> ((Player)et).getShouldCheckAccessInfo(), (et, vl) -> ((Player)et).setShouldCheckAccessInfo((Boolean)vl), "shouldCheckAccessInfo");
         setupEpg(_epgMap, et -> ((Player)et).getRegisterDatetime(), (et, vl) -> ((Player)et).setRegisterDatetime(ctldt(vl)), "registerDatetime");
         setupEpg(_epgMap, et -> ((Player)et).getRegisterTrace(), (et, vl) -> ((Player)et).setRegisterTrace((String)vl), "registerTrace");
         setupEpg(_epgMap, et -> ((Player)et).getUpdateDatetime(), (et, vl) -> ((Player)et).setUpdateDatetime(ctldt(vl)), "updateDatetime");
@@ -80,7 +81,7 @@ public class PlayerDbm extends AbstractDBMeta {
     // ===================================================================================
     //                                                                          Table Info
     //                                                                          ==========
-    protected final String _tableDbName = "PLAYER";
+    protected final String _tableDbName = "player";
     protected final String _tableDispName = "PLAYER";
     protected final String _tablePropertyName = "player";
     protected final TableSqlName _tableSqlName = new TableSqlName("PLAYER", _tableDbName);
@@ -99,6 +100,7 @@ public class PlayerDbm extends AbstractDBMeta {
     protected final ColumnInfo _columnTwitterUserName = cci("TWITTER_USER_NAME", "TWITTER_USER_NAME", null, null, String.class, "twitterUserName", null, false, false, true, "VARCHAR", 15, 0, null, null, false, null, null, null, null, null, false);
     protected final ColumnInfo _columnAuthorityCode = cci("AUTHORITY_CODE", "AUTHORITY_CODE", null, null, String.class, "authorityCode", null, false, false, true, "VARCHAR", 20, 0, null, null, false, null, null, "authority", null, CDef.DefMeta.Authority, false);
     protected final ColumnInfo _columnIsRestrictedParticipation = cci("IS_RESTRICTED_PARTICIPATION", "IS_RESTRICTED_PARTICIPATION", null, null, Boolean.class, "isRestrictedParticipation", null, false, false, true, "BIT", null, null, null, null, false, null, null, null, null, null, false);
+    protected final ColumnInfo _columnShouldCheckAccessInfo = cci("SHOULD_CHECK_ACCESS_INFO", "SHOULD_CHECK_ACCESS_INFO", null, null, Boolean.class, "shouldCheckAccessInfo", null, false, false, true, "BIT", null, null, null, null, false, null, null, null, null, null, false);
     protected final ColumnInfo _columnRegisterDatetime = cci("REGISTER_DATETIME", "REGISTER_DATETIME", null, null, java.time.LocalDateTime.class, "registerDatetime", null, false, false, true, "DATETIME", 19, 0, null, null, true, null, null, null, null, null, false);
     protected final ColumnInfo _columnRegisterTrace = cci("REGISTER_TRACE", "REGISTER_TRACE", null, null, String.class, "registerTrace", null, false, false, true, "VARCHAR", 64, 0, null, null, true, null, null, null, null, null, false);
     protected final ColumnInfo _columnUpdateDatetime = cci("UPDATE_DATETIME", "UPDATE_DATETIME", null, null, java.time.LocalDateTime.class, "updateDatetime", null, false, false, true, "DATETIME", 19, 0, null, null, true, null, null, null, null, null, false);
@@ -125,7 +127,7 @@ public class PlayerDbm extends AbstractDBMeta {
      */
     public ColumnInfo columnTwitterUserName() { return _columnTwitterUserName; }
     /**
-     * AUTHORITY_CODE: {IX, NotNull, VARCHAR(20), FK to AUTHORITY, classification=Authority}
+     * AUTHORITY_CODE: {IX, NotNull, VARCHAR(20), FK to authority, classification=Authority}
      * @return The information object of specified column. (NotNull)
      */
     public ColumnInfo columnAuthorityCode() { return _columnAuthorityCode; }
@@ -134,6 +136,11 @@ public class PlayerDbm extends AbstractDBMeta {
      * @return The information object of specified column. (NotNull)
      */
     public ColumnInfo columnIsRestrictedParticipation() { return _columnIsRestrictedParticipation; }
+    /**
+     * SHOULD_CHECK_ACCESS_INFO: {NotNull, BIT}
+     * @return The information object of specified column. (NotNull)
+     */
+    public ColumnInfo columnShouldCheckAccessInfo() { return _columnShouldCheckAccessInfo; }
     /**
      * REGISTER_DATETIME: {NotNull, DATETIME(19)}
      * @return The information object of specified column. (NotNull)
@@ -163,6 +170,7 @@ public class PlayerDbm extends AbstractDBMeta {
         ls.add(columnTwitterUserName());
         ls.add(columnAuthorityCode());
         ls.add(columnIsRestrictedParticipation());
+        ls.add(columnShouldCheckAccessInfo());
         ls.add(columnRegisterDatetime());
         ls.add(columnRegisterTrace());
         ls.add(columnUpdateDatetime());
@@ -204,7 +212,7 @@ public class PlayerDbm extends AbstractDBMeta {
         return cfi("FK_PLAYER_AUTHORITY", "authority", this, AuthorityDbm.getInstance(), mp, 0, org.dbflute.optional.OptionalEntity.class, false, false, false, false, null, null, false, "playerList", false);
     }
     /**
-     * PLAYER_DETAIL by PLAYER_ID, named 'playerDetailAsOne'.
+     * player_detail by PLAYER_ID, named 'playerDetailAsOne'.
      * @return The information object of foreign property(referrer-as-one). (NotNull)
      */
     public ForeignInfo foreignPlayerDetailAsOne() {

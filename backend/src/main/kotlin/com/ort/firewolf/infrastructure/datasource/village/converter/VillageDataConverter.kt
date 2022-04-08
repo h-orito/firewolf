@@ -190,7 +190,8 @@ object VillageDataConverter {
                 list = vp.comingOutList.map {
                     ComingOut(Skill(it.skillCodeAsSkill))
                 }
-            )
+            ),
+            ipAddresses = vp.villagePlayerAccessInfoList.map { it.ipAddress }
         )
     }
 

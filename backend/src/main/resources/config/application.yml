@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/firewolfdb?characterEncoding=UTF-8
+    url: jdbc:mysql://127.0.0.1:3306/firewolfdb?characterEncoding=UTF-8
     username: firewolfuser # 本番は起動引数で与える
     password: firewolfpass # 本番は起動引数で与える
     driverClassName: com.mysql.jdbc.Driver
@@ -39,6 +39,7 @@ logging:
     root: INFO
     org.seasar.dbflute: ERROR
   file.name: /var/log/firewolf.log
+slack.token:
 twitter:
   oauth:
     consumer-key: ""

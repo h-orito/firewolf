@@ -118,7 +118,7 @@ public abstract class BsReservedVillage extends AbstractEntity implements Domain
 
     /** {@inheritDoc} */
     public String asTableDbName() {
-        return "RESERVED_VILLAGE";
+        return "reserved_village";
     }
 
     // ===================================================================================

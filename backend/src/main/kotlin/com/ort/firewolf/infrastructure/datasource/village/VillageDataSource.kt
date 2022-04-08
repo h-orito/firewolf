@@ -1,16 +1,8 @@
 package com.ort.firewolf.infrastructure.datasource.village
 
 import com.ort.dbflute.allcommon.CDef
-import com.ort.dbflute.exbhv.MessageRestrictionBhv
-import com.ort.dbflute.exbhv.VillageBhv
-import com.ort.dbflute.exbhv.VillageDayBhv
-import com.ort.dbflute.exbhv.VillagePlayerBhv
-import com.ort.dbflute.exbhv.VillageSettingBhv
-import com.ort.dbflute.exentity.MessageRestriction
-import com.ort.dbflute.exentity.Village
-import com.ort.dbflute.exentity.VillageDay
-import com.ort.dbflute.exentity.VillagePlayer
-import com.ort.dbflute.exentity.VillageSetting
+import com.ort.dbflute.exbhv.*
+import com.ort.dbflute.exentity.*
 import com.ort.firewolf.domain.model.village.Villages
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 import com.ort.firewolf.domain.model.village.setting.VillageMessageRestrict
@@ -21,11 +13,12 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class VillageDataSource(
-    val villageBhv: VillageBhv,
-    val villageSettingBhv: VillageSettingBhv,
-    val villageDayBhv: VillageDayBhv,
-    val villagePlayerBhv: VillagePlayerBhv,
-    val messageRestrictionBhv: MessageRestrictionBhv
+    private val villageBhv: VillageBhv,
+    private val villageSettingBhv: VillageSettingBhv,
+    private val villageDayBhv: VillageDayBhv,
+    private val villagePlayerBhv: VillagePlayerBhv,
+    private val villagePlayerAccessInfoBhv: VillagePlayerAccessInfoBhv,
+    private val messageRestrictionBhv: MessageRestrictionBhv
 ) {
 
     /**
@@ -170,6 +163,7 @@ class VillageDataSource(
                 vpCB.query().setIsGone_Equal(false)
             }.withNestedReferrer {
                 it.pulloutChara().loadCharaImage { }
+                it.loadVillagePlayerAccessInfo { }
             }
             loader.loadVillageSetting { }
             loader.loadVillageDay {
@@ -200,6 +194,7 @@ class VillageDataSource(
             }.withNestedReferrer {
                 it.pulloutChara().loadCharaImage { }
                 it.loadComingOut { }
+                it.loadVillagePlayerAccessInfo { }
             }
             loader.loadVillageSetting { }
             loader.loadVillageDay {
@@ -286,12 +281,14 @@ class VillageDataSource(
         after.participant.memberList.filterNot { member ->
             before.participant.memberList.any { it.id == member.id }
         }.forEach {
-            insertVillagePlayer(villageId, it)
+            val participantId = insertVillagePlayer(villageId, it)
+            insertVillagePlayerAccessInfos(participantId, it.ipAddresses)
         }
         after.spectator.memberList.filterNot { member ->
             before.spectator.memberList.any { it.id == member.id }
         }.forEach {
-            insertVillagePlayer(villageId, it)
+            val participantId = insertVillagePlayer(villageId, it)
+            insertVillagePlayerAccessInfos(participantId, it.ipAddresses)
         }
 
         // 更新
@@ -300,12 +297,14 @@ class VillageDataSource(
         }.forEach {
             val beforeMember = before.participant.member(it.id)
             if (it.existsDifference(beforeMember)) updateVillagePlayer(villageId, it)
+            insertVillagePlayerAccessInfos(it.id, it.ipAddresses)
         }
         after.spectator.memberList.filter { member ->
             before.spectator.memberList.any { it.id == member.id }
         }.forEach {
             val beforeMember = before.spectator.member(it.id)
             if (it.existsDifference(beforeMember)) updateVillagePlayer(villageId, it)
+            insertVillagePlayerAccessInfos(it.id, it.ipAddresses)
         }
     }
 
@@ -458,6 +457,24 @@ class VillageDataSource(
         villagePlayer.requestSkillCodeAsSkill = villagePlayerModel.skillRequest.first.toCdef()
         villagePlayer.secondRequestSkillCodeAsSkill = villagePlayerModel.skillRequest.second.toCdef()
         villagePlayerBhv.update(villagePlayer)
+    }
+
+    private fun insertVillagePlayerAccessInfos(participantId: Int, ipAddresses: List<String>) {
+        val exists = villagePlayerAccessInfoBhv.selectList {
+            it.query().setVillagePlayerId_Equal(participantId)
+        }.map { it.ipAddress }
+        ipAddresses.filterNot { exists.contains(it) }.forEach {
+            insertVillagePlayerAccessInfo(participantId, it)
+        }
+    }
+
+    private fun insertVillagePlayerAccessInfo(participantId: Int, ipAddress: String) {
+        val optAccessInfo = villagePlayerAccessInfoBhv.selectByUniqueOf(participantId, ipAddress)
+        if (optAccessInfo.isPresent) return
+        val info = VillagePlayerAccessInfo()
+        info.villagePlayerId = participantId
+        info.ipAddress = ipAddress
+        villagePlayerAccessInfoBhv.insert(info)
     }
 
     // ===================================================================================

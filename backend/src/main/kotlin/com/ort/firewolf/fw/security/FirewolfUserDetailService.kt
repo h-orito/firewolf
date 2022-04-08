@@ -45,6 +45,7 @@ class FirewolfUserDetailService(
         player.nickname = "名無し"
         player.twitterUserName = "未設定"
         player.isRestrictedParticipation = false
+        player.shouldCheckAccessInfo = true
         playerBhv.insert(player)
         return FirewolfUser(
             uid = uid,

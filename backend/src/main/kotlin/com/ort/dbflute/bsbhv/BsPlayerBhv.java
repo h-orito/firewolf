@@ -28,7 +28,7 @@ import com.ort.dbflute.cbean.*;
  *     PLAYER_ID
  *
  * [column]
- *     PLAYER_ID, UID, NICKNAME, TWITTER_USER_NAME, AUTHORITY_CODE, IS_RESTRICTED_PARTICIPATION, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
+ *     PLAYER_ID, UID, NICKNAME, TWITTER_USER_NAME, AUTHORITY_CODE, IS_RESTRICTED_PARTICIPATION, SHOULD_CHECK_ACCESS_INFO, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
  *
  * [sequence]
  *     
@@ -67,7 +67,7 @@ public abstract class BsPlayerBhv extends AbstractBehaviorWritable<Player, Playe
     /** {@inheritDoc} */
     public PlayerDbm asDBMeta() { return PlayerDbm.getInstance(); }
     /** {@inheritDoc} */
-    public String asTableDbName() { return "PLAYER"; }
+    public String asTableDbName() { return "player"; }
 
     // ===================================================================================
     //                                                                        New Instance

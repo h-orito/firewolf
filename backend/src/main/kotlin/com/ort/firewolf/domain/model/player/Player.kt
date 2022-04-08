@@ -11,6 +11,7 @@ data class Player(
     val otherSiteName: String?,
     val introduction: String?,
     val isRestrictedParticipation: Boolean,
+    val shouldCheckAccessInfo: Boolean,
     val participateProgressVillageIdList: List<Int> = listOf(),
     val participateFinishedVillageIdList: List<Int> = listOf(),
     val createProgressVillageIdList: List<Int> = listOf(),

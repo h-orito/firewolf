@@ -67,7 +67,7 @@ class PlayerDataSource(
     fun update(uid: String, nickname: String, twitterUserName: String, twitterUserId: String?) {
         val player = Player()
         player.uniqueBy(uid)
-        player.nickname = removeSurrogate(nickname)
+        player.nickname = removeSurrogate(nickname).ifEmpty { "名無し" }
         player.twitterUserName = twitterUserName
         twitterUserId?.let { player.registerTrace = "twitterId: $it" }
         playerBhv.update(player)
@@ -115,6 +115,7 @@ class PlayerDataSource(
             otherSiteName = player.playerDetailAsOne.map { it.otherSiteName }.orElse(null),
             introduction = player.playerDetailAsOne.map { it.introduction }.orElse(null),
             isRestrictedParticipation = player.isRestrictedParticipation,
+            shouldCheckAccessInfo = player.shouldCheckAccessInfo,
             participateProgressVillageIdList = player.villagePlayerList.filter {
                 !it.village.get().villageStatusCodeAsVillageStatus.isSolvedVillage
             }.map { it.villageId },
@@ -137,7 +138,8 @@ class PlayerDataSource(
             twitterUserName = player.twitterUserName,
             otherSiteName = player.playerDetailAsOne.map { it.otherSiteName }.orElse(null),
             introduction = player.playerDetailAsOne.map { it.introduction }.orElse(null),
-            isRestrictedParticipation = player.isRestrictedParticipation
+            isRestrictedParticipation = player.isRestrictedParticipation,
+            shouldCheckAccessInfo = player.shouldCheckAccessInfo
         )
     }
 
