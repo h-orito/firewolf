@@ -13,7 +13,7 @@ import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 import org.springframework.stereotype.Service
 
 @Service
-class GuardDomainService : IAbilityDomainService {
+open class GuardDomainService : IAbilityDomainService {
 
     override fun getAbilityType(): AbilityType = AbilityType(CDef.AbilityType.護衛)
 

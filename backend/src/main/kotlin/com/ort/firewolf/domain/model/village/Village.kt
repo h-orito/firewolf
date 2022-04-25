@@ -444,7 +444,6 @@ data class Village(
     fun suicideParticipant(participantId: Int): Village =
         this.copy(participant = this.participant.suicide(participantId, day.latestDay()))
 
-
     // IPアドレス追加
     fun addParticipantIpAddress(id: Int, ipAddress: String): Village =
         this.copy(participant = this.participant.addIpAddress(id, ipAddress))
