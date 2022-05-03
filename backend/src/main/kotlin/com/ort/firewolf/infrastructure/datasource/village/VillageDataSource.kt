@@ -10,6 +10,7 @@ import com.ort.firewolf.domain.model.village.setting.VillageSettings
 import com.ort.firewolf.fw.security.FirewolfUser
 import com.ort.firewolf.infrastructure.datasource.village.converter.VillageDataConverter
 import org.springframework.stereotype.Repository
+import java.time.LocalDateTime
 
 @Repository
 class VillageDataSource(
@@ -42,6 +43,7 @@ class VillageDataSource(
                 id = 1, // dummy
                 day = 0,
                 noonnight = CDef.Noonnight.昼.code(),
+                startDatetime = LocalDateTime.now(),
                 dayChangeDatetime = paramVillage.setting.time.startDatetime
             )
         )
