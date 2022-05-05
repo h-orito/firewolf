@@ -22,11 +22,7 @@ import com.ort.firewolf.fw.security.FirewolfUser
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 
 /**
@@ -73,7 +69,7 @@ class DebugController(
 
         // 参戦していないキャラを人数分探す
         val charaList = charaBhv.selectList { cb ->
-            cb.query().setCharaGroupId_Equal(village.setting.charachip.charachipId)
+            cb.query().setCharaGroupId_InScope(village.setting.charachip.charachipIds)
             cb.query().notExistsVillagePlayer { villagePlayerCB ->
                 villagePlayerCB.query().setVillageId_Equal(villageId)
                 villagePlayerCB.query().setIsGone_Equal(false)
@@ -159,9 +155,10 @@ class DebugController(
         if ("local" != env) throw FirewolfBusinessException("この環境では使用できません")
 
         val village: Village = villageService.findVillage(villageId)
-        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipId)
+        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipIds)
         val players: Players = playerService.findPlayers(villageId)
-        val createPlayer: com.ort.firewolf.domain.model.player.Player = playerService.findPlayer(village.creatorPlayerId)
+        val createPlayer: com.ort.firewolf.domain.model.player.Player =
+            playerService.findPlayer(village.creatorPlayerId)
         return DebugVillageView(
             village = village,
             charas = charas,

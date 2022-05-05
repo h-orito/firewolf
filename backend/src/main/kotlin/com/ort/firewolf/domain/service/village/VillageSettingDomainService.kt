@@ -121,8 +121,8 @@ class VillageSettingDomainService {
     }
 
     private fun assertCharachip(charachip: VillageCharachip, resourceCharachip: VillageCharachipCreateResource) {
-        if (charachip.charachipId != resourceCharachip.charachipId
-            || charachip.dummyCharaId != resourceCharachip.dummyCharaId
+        if (charachip.charachipIds.size != resourceCharachip.charachipIds.size
+            || charachip.charachipIds.any { !resourceCharachip.charachipIds.contains(it) }
         ) {
             throw FirewolfBusinessException("キャラチップとダミーキャラは変更できません")
         }

@@ -27,7 +27,7 @@ data class VillageOrganizationCreateResource(
 
 data class VillageCharachipCreateResource(
     val dummyCharaId: Int,
-    val charachipId: Int
+    val charachipIds: List<Int>
 )
 
 data class VillageRuleCreateResource(

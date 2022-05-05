@@ -18,22 +18,23 @@ import com.ort.dbflute.allcommon.ImplementedInvokerAssistant;
 import com.ort.dbflute.allcommon.ImplementedSqlClauseCreator;
 import com.ort.dbflute.cbean.*;
 import com.ort.dbflute.cbean.cq.*;
+import com.ort.dbflute.cbean.nss.*;
 
 /**
- * The base condition-bean of chara_group.
+ * The base condition-bean of village_chara_group.
  * @author DBFlute(AutoGenerator)
  */
-public class BsCharaGroupCB extends AbstractConditionBean {
+public class BsVillageCharaGroupCB extends AbstractConditionBean {
 
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
-    protected CharaGroupCQ _conditionQuery;
+    protected VillageCharaGroupCQ _conditionQuery;
 
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
-    public BsCharaGroupCB() {
+    public BsVillageCharaGroupCB() {
         if (DBFluteConfig.getInstance().isPagingCountLater()) {
             enablePagingCountLater();
         }
@@ -76,7 +77,7 @@ public class BsCharaGroupCB extends AbstractConditionBean {
     }
 
     public String asTableDbName() {
-        return "chara_group";
+        return "village_chara_group";
     }
 
     // ===================================================================================
@@ -84,23 +85,23 @@ public class BsCharaGroupCB extends AbstractConditionBean {
     //                                                                 ===================
     /**
      * Accept the query condition of primary key as equal.
-     * @param charaGroupId : PK, ID, NotNull, INT UNSIGNED(10). (NotNull)
+     * @param villageCharaGroupId : PK, ID, NotNull, INT UNSIGNED(10). (NotNull)
      * @return this. (NotNull)
      */
-    public CharaGroupCB acceptPK(Integer charaGroupId) {
-        assertObjectNotNull("charaGroupId", charaGroupId);
-        BsCharaGroupCB cb = this;
-        cb.query().setCharaGroupId_Equal(charaGroupId);
-        return (CharaGroupCB)this;
+    public VillageCharaGroupCB acceptPK(Integer villageCharaGroupId) {
+        assertObjectNotNull("villageCharaGroupId", villageCharaGroupId);
+        BsVillageCharaGroupCB cb = this;
+        cb.query().setVillageCharaGroupId_Equal(villageCharaGroupId);
+        return (VillageCharaGroupCB)this;
     }
 
     public ConditionBean addOrderBy_PK_Asc() {
-        query().addOrderBy_CharaGroupId_Asc();
+        query().addOrderBy_VillageCharaGroupId_Asc();
         return this;
     }
 
     public ConditionBean addOrderBy_PK_Desc() {
-        query().addOrderBy_CharaGroupId_Desc();
+        query().addOrderBy_VillageCharaGroupId_Desc();
         return this;
     }
 
@@ -164,34 +165,34 @@ public class BsCharaGroupCB extends AbstractConditionBean {
      * </pre>
      * @return The instance of condition-query for base-point table to set up query. (NotNull)
      */
-    public CharaGroupCQ query() {
+    public VillageCharaGroupCQ query() {
         assertQueryPurpose(); // assert only when user-public query
         return doGetConditionQuery();
     }
 
-    public CharaGroupCQ xdfgetConditionQuery() { // public for parameter comment and internal
+    public VillageCharaGroupCQ xdfgetConditionQuery() { // public for parameter comment and internal
         return doGetConditionQuery();
     }
 
-    protected CharaGroupCQ doGetConditionQuery() {
+    protected VillageCharaGroupCQ doGetConditionQuery() {
         if (_conditionQuery == null) {
             _conditionQuery = createLocalCQ();
         }
         return _conditionQuery;
     }
 
-    protected CharaGroupCQ createLocalCQ() {
+    protected VillageCharaGroupCQ createLocalCQ() {
         return xcreateCQ(null, getSqlClause(), getSqlClause().getBasePointAliasName(), 0);
     }
 
-    protected CharaGroupCQ xcreateCQ(ConditionQuery childQuery, SqlClause sqlClause, String aliasName, int nestLevel) {
-        CharaGroupCQ cq = xnewCQ(childQuery, sqlClause, aliasName, nestLevel);
+    protected VillageCharaGroupCQ xcreateCQ(ConditionQuery childQuery, SqlClause sqlClause, String aliasName, int nestLevel) {
+        VillageCharaGroupCQ cq = xnewCQ(childQuery, sqlClause, aliasName, nestLevel);
         cq.xsetBaseCB(this);
         return cq;
     }
 
-    protected CharaGroupCQ xnewCQ(ConditionQuery childQuery, SqlClause sqlClause, String aliasName, int nestLevel) {
-        return new CharaGroupCQ(childQuery, sqlClause, aliasName, nestLevel);
+    protected VillageCharaGroupCQ xnewCQ(ConditionQuery childQuery, SqlClause sqlClause, String aliasName, int nestLevel) {
+        return new VillageCharaGroupCQ(childQuery, sqlClause, aliasName, nestLevel);
     }
 
     /**
@@ -215,10 +216,10 @@ public class BsCharaGroupCB extends AbstractConditionBean {
      * </pre>
      * @param unionCBLambda The callback for query of 'union'. (NotNull)
      */
-    public void union(UnionQuery<CharaGroupCB> unionCBLambda) {
-        final CharaGroupCB cb = new CharaGroupCB(); cb.xsetupForUnion(this); xsyncUQ(cb);
+    public void union(UnionQuery<VillageCharaGroupCB> unionCBLambda) {
+        final VillageCharaGroupCB cb = new VillageCharaGroupCB(); cb.xsetupForUnion(this); xsyncUQ(cb);
         try { lock(); unionCBLambda.query(cb); } finally { unlock(); } xsaveUCB(cb);
-        final CharaGroupCQ cq = cb.query(); query().xsetUnionQuery(cq);
+        final VillageCharaGroupCQ cq = cb.query(); query().xsetUnionQuery(cq);
     }
 
     /**
@@ -232,33 +233,71 @@ public class BsCharaGroupCB extends AbstractConditionBean {
      * </pre>
      * @param unionCBLambda The callback for query of 'union all'. (NotNull)
      */
-    public void unionAll(UnionQuery<CharaGroupCB> unionCBLambda) {
-        final CharaGroupCB cb = new CharaGroupCB(); cb.xsetupForUnion(this); xsyncUQ(cb);
+    public void unionAll(UnionQuery<VillageCharaGroupCB> unionCBLambda) {
+        final VillageCharaGroupCB cb = new VillageCharaGroupCB(); cb.xsetupForUnion(this); xsyncUQ(cb);
         try { lock(); unionCBLambda.query(cb); } finally { unlock(); } xsaveUCB(cb);
-        final CharaGroupCQ cq = cb.query(); query().xsetUnionAllQuery(cq);
+        final VillageCharaGroupCQ cq = cb.query(); query().xsetUnionAllQuery(cq);
     }
 
     // ===================================================================================
     //                                                                         SetupSelect
     //                                                                         ===========
+    protected CharaGroupNss _nssCharaGroup;
+    public CharaGroupNss xdfgetNssCharaGroup() {
+        if (_nssCharaGroup == null) { _nssCharaGroup = new CharaGroupNss(null); }
+        return _nssCharaGroup;
+    }
     /**
      * Set up relation columns to select clause. <br>
-     * DESIGNER by my DESIGNER_ID, named 'designer'.
+     * CHARA_GROUP by my CHARA_GROUP_ID, named 'charaGroup'.
      * <pre>
-     * <span style="color: #0000C0">charaGroupBhv</span>.selectEntity(<span style="color: #553000">cb</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-     *     <span style="color: #553000">cb</span>.<span style="color: #CC4747">setupSelect_Designer()</span>; <span style="color: #3F7E5E">// ...().with[nested-relation]()</span>
+     * <span style="color: #0000C0">villageCharaGroupBhv</span>.selectEntity(<span style="color: #553000">cb</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+     *     <span style="color: #553000">cb</span>.<span style="color: #CC4747">setupSelect_CharaGroup()</span>; <span style="color: #3F7E5E">// ...().with[nested-relation]()</span>
      *     <span style="color: #553000">cb</span>.query().set...
-     * }).alwaysPresent(<span style="color: #553000">charaGroup</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-     *     ... = <span style="color: #553000">charaGroup</span>.<span style="color: #CC4747">getDesigner()</span>; <span style="color: #3F7E5E">// you can get by using SetupSelect</span>
+     * }).alwaysPresent(<span style="color: #553000">villageCharaGroup</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+     *     ... = <span style="color: #553000">villageCharaGroup</span>.<span style="color: #CC4747">getCharaGroup()</span>; <span style="color: #3F7E5E">// you can get by using SetupSelect</span>
      * });
      * </pre>
+     * @return The set-upper of nested relation. {setupSelect...().with[nested-relation]} (NotNull)
      */
-    public void setupSelect_Designer() {
-        assertSetupSelectPurpose("designer");
+    public CharaGroupNss setupSelect_CharaGroup() {
+        assertSetupSelectPurpose("charaGroup");
         if (hasSpecifiedLocalColumn()) {
-            specify().columnDesignerId();
+            specify().columnCharaGroupId();
         }
-        doSetupSelect(() -> query().queryDesigner());
+        doSetupSelect(() -> query().queryCharaGroup());
+        if (_nssCharaGroup == null || !_nssCharaGroup.hasConditionQuery())
+        { _nssCharaGroup = new CharaGroupNss(query().queryCharaGroup()); }
+        return _nssCharaGroup;
+    }
+
+    protected VillageNss _nssVillage;
+    public VillageNss xdfgetNssVillage() {
+        if (_nssVillage == null) { _nssVillage = new VillageNss(null); }
+        return _nssVillage;
+    }
+    /**
+     * Set up relation columns to select clause. <br>
+     * VILLAGE by my VILLAGE_ID, named 'village'.
+     * <pre>
+     * <span style="color: #0000C0">villageCharaGroupBhv</span>.selectEntity(<span style="color: #553000">cb</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+     *     <span style="color: #553000">cb</span>.<span style="color: #CC4747">setupSelect_Village()</span>; <span style="color: #3F7E5E">// ...().with[nested-relation]()</span>
+     *     <span style="color: #553000">cb</span>.query().set...
+     * }).alwaysPresent(<span style="color: #553000">villageCharaGroup</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+     *     ... = <span style="color: #553000">villageCharaGroup</span>.<span style="color: #CC4747">getVillage()</span>; <span style="color: #3F7E5E">// you can get by using SetupSelect</span>
+     * });
+     * </pre>
+     * @return The set-upper of nested relation. {setupSelect...().with[nested-relation]} (NotNull)
+     */
+    public VillageNss setupSelect_Village() {
+        assertSetupSelectPurpose("village");
+        if (hasSpecifiedLocalColumn()) {
+            specify().columnVillageId();
+        }
+        doSetupSelect(() -> query().queryVillage());
+        if (_nssVillage == null || !_nssVillage.hasConditionQuery())
+        { _nssVillage = new VillageNss(query().queryVillage()); }
+        return _nssVillage;
     }
 
     // [DBFlute-0.7.4]
@@ -301,32 +340,28 @@ public class BsCharaGroupCB extends AbstractConditionBean {
         return _specification != null && _specification.hasSpecifiedColumn();
     }
 
-    public static class HpSpecification extends HpAbstractSpecification<CharaGroupCQ> {
-        protected DesignerCB.HpSpecification _designer;
-        public HpSpecification(ConditionBean baseCB, HpSpQyCall<CharaGroupCQ> qyCall
+    public static class HpSpecification extends HpAbstractSpecification<VillageCharaGroupCQ> {
+        protected CharaGroupCB.HpSpecification _charaGroup;
+        protected VillageCB.HpSpecification _village;
+        public HpSpecification(ConditionBean baseCB, HpSpQyCall<VillageCharaGroupCQ> qyCall
                              , HpCBPurpose purpose, DBMetaProvider dbmetaProvider
                              , HpSDRFunctionFactory sdrFuncFactory)
         { super(baseCB, qyCall, purpose, dbmetaProvider, sdrFuncFactory); }
         /**
-         * CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
+         * VILLAGE_CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
+         * @return The information object of specified column. (NotNull)
+         */
+        public SpecifiedColumn columnVillageCharaGroupId() { return doColumn("VILLAGE_CHARA_GROUP_ID"); }
+        /**
+         * VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village}
+         * @return The information object of specified column. (NotNull)
+         */
+        public SpecifiedColumn columnVillageId() { return doColumn("VILLAGE_ID"); }
+        /**
+         * CHARA_GROUP_ID: {IX, NotNull, INT UNSIGNED(10), FK to chara_group}
          * @return The information object of specified column. (NotNull)
          */
         public SpecifiedColumn columnCharaGroupId() { return doColumn("CHARA_GROUP_ID"); }
-        /**
-         * CHARA_GROUP_NAME: {NotNull, VARCHAR(40)}
-         * @return The information object of specified column. (NotNull)
-         */
-        public SpecifiedColumn columnCharaGroupName() { return doColumn("CHARA_GROUP_NAME"); }
-        /**
-         * DESIGNER_ID: {IX, NotNull, INT UNSIGNED(10), FK to designer}
-         * @return The information object of specified column. (NotNull)
-         */
-        public SpecifiedColumn columnDesignerId() { return doColumn("DESIGNER_ID"); }
-        /**
-         * DESCRIPTION_URL: {TEXT(65535)}
-         * @return The information object of specified column. (NotNull)
-         */
-        public SpecifiedColumn columnDescriptionUrl() { return doColumn("DESCRIPTION_URL"); }
         /**
          * REGISTER_DATETIME: {NotNull, DATETIME(19)}
          * @return The information object of specified column. (NotNull)
@@ -351,75 +386,65 @@ public class BsCharaGroupCB extends AbstractConditionBean {
         public void exceptRecordMetaColumn() { doExceptRecordMetaColumn(); }
         @Override
         protected void doSpecifyRequiredColumn() {
-            columnCharaGroupId(); // PK
-            if (qyCall().qy().hasConditionQueryDesigner()
-                    || qyCall().qy().xgetReferrerQuery() instanceof DesignerCQ) {
-                columnDesignerId(); // FK or one-to-one referrer
+            columnVillageCharaGroupId(); // PK
+            if (qyCall().qy().hasConditionQueryCharaGroup()
+                    || qyCall().qy().xgetReferrerQuery() instanceof CharaGroupCQ) {
+                columnCharaGroupId(); // FK or one-to-one referrer
+            }
+            if (qyCall().qy().hasConditionQueryVillage()
+                    || qyCall().qy().xgetReferrerQuery() instanceof VillageCQ) {
+                columnVillageId(); // FK or one-to-one referrer
             }
         }
         @Override
-        protected String getTableDbName() { return "chara_group"; }
+        protected String getTableDbName() { return "village_chara_group"; }
         /**
          * Prepare to specify functions about relation table. <br>
-         * DESIGNER by my DESIGNER_ID, named 'designer'.
+         * CHARA_GROUP by my CHARA_GROUP_ID, named 'charaGroup'.
          * @return The instance for specification for relation table to specify. (NotNull)
          */
-        public DesignerCB.HpSpecification specifyDesigner() {
-            assertRelation("designer");
-            if (_designer == null) {
-                _designer = new DesignerCB.HpSpecification(_baseCB
-                    , xcreateSpQyCall(() -> _qyCall.has() && _qyCall.qy().hasConditionQueryDesigner()
-                                    , () -> _qyCall.qy().queryDesigner())
+        public CharaGroupCB.HpSpecification specifyCharaGroup() {
+            assertRelation("charaGroup");
+            if (_charaGroup == null) {
+                _charaGroup = new CharaGroupCB.HpSpecification(_baseCB
+                    , xcreateSpQyCall(() -> _qyCall.has() && _qyCall.qy().hasConditionQueryCharaGroup()
+                                    , () -> _qyCall.qy().queryCharaGroup())
                     , _purpose, _dbmetaProvider, xgetSDRFnFc());
                 if (xhasSyncQyCall()) { // inherits it
-                    _designer.xsetSyncQyCall(xcreateSpQyCall(
-                        () -> xsyncQyCall().has() && xsyncQyCall().qy().hasConditionQueryDesigner()
-                      , () -> xsyncQyCall().qy().queryDesigner()));
+                    _charaGroup.xsetSyncQyCall(xcreateSpQyCall(
+                        () -> xsyncQyCall().has() && xsyncQyCall().qy().hasConditionQueryCharaGroup()
+                      , () -> xsyncQyCall().qy().queryCharaGroup()));
                 }
             }
-            return _designer;
+            return _charaGroup;
         }
         /**
-         * Prepare for (Specify)DerivedReferrer (correlated sub-query). <br>
-         * {select max(FOO) from chara where ...) as FOO_MAX} <br>
-         * CHARA by CHARA_GROUP_ID, named 'charaList'.
-         * <pre>
-         * cb.specify().<span style="color: #CC4747">derived${relationMethodIdentityName}()</span>.<span style="color: #CC4747">max</span>(charaCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-         *     charaCB.specify().<span style="color: #CC4747">column...</span> <span style="color: #3F7E5E">// derived column by function</span>
-         *     charaCB.query().set... <span style="color: #3F7E5E">// referrer condition</span>
-         * }, Chara.<span style="color: #CC4747">ALIAS_foo...</span>);
-         * </pre>
-         * @return The object to set up a function for referrer table. (NotNull)
+         * Prepare to specify functions about relation table. <br>
+         * VILLAGE by my VILLAGE_ID, named 'village'.
+         * @return The instance for specification for relation table to specify. (NotNull)
          */
-        public HpSDRFunction<CharaCB, CharaGroupCQ> derivedChara() {
-            assertDerived("charaList"); if (xhasSyncQyCall()) { xsyncQyCall().qy(); } // for sync (for example, this in ColumnQuery)
-            return cHSDRF(_baseCB, _qyCall.qy(), (String fn, SubQuery<CharaCB> sq, CharaGroupCQ cq, String al, DerivedReferrerOption op)
-                    -> cq.xsderiveCharaList(fn, sq, al, op), _dbmetaProvider);
-        }
-        /**
-         * Prepare for (Specify)DerivedReferrer (correlated sub-query). <br>
-         * {select max(FOO) from village_chara_group where ...) as FOO_MAX} <br>
-         * VILLAGE_CHARA_GROUP by CHARA_GROUP_ID, named 'villageCharaGroupList'.
-         * <pre>
-         * cb.specify().<span style="color: #CC4747">derived${relationMethodIdentityName}()</span>.<span style="color: #CC4747">max</span>(groupCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-         *     groupCB.specify().<span style="color: #CC4747">column...</span> <span style="color: #3F7E5E">// derived column by function</span>
-         *     groupCB.query().set... <span style="color: #3F7E5E">// referrer condition</span>
-         * }, VillageCharaGroup.<span style="color: #CC4747">ALIAS_foo...</span>);
-         * </pre>
-         * @return The object to set up a function for referrer table. (NotNull)
-         */
-        public HpSDRFunction<VillageCharaGroupCB, CharaGroupCQ> derivedVillageCharaGroup() {
-            assertDerived("villageCharaGroupList"); if (xhasSyncQyCall()) { xsyncQyCall().qy(); } // for sync (for example, this in ColumnQuery)
-            return cHSDRF(_baseCB, _qyCall.qy(), (String fn, SubQuery<VillageCharaGroupCB> sq, CharaGroupCQ cq, String al, DerivedReferrerOption op)
-                    -> cq.xsderiveVillageCharaGroupList(fn, sq, al, op), _dbmetaProvider);
+        public VillageCB.HpSpecification specifyVillage() {
+            assertRelation("village");
+            if (_village == null) {
+                _village = new VillageCB.HpSpecification(_baseCB
+                    , xcreateSpQyCall(() -> _qyCall.has() && _qyCall.qy().hasConditionQueryVillage()
+                                    , () -> _qyCall.qy().queryVillage())
+                    , _purpose, _dbmetaProvider, xgetSDRFnFc());
+                if (xhasSyncQyCall()) { // inherits it
+                    _village.xsetSyncQyCall(xcreateSpQyCall(
+                        () -> xsyncQyCall().has() && xsyncQyCall().qy().hasConditionQueryVillage()
+                      , () -> xsyncQyCall().qy().queryVillage()));
+                }
+            }
+            return _village;
         }
         /**
          * Prepare for (Specify)MyselfDerived (SubQuery).
          * @return The object to set up a function for myself table. (NotNull)
          */
-        public HpSDRFunction<CharaGroupCB, CharaGroupCQ> myselfDerived() {
+        public HpSDRFunction<VillageCharaGroupCB, VillageCharaGroupCQ> myselfDerived() {
             assertDerived("myselfDerived"); if (xhasSyncQyCall()) { xsyncQyCall().qy(); } // for sync (for example, this in ColumnQuery)
-            return cHSDRF(_baseCB, _qyCall.qy(), (String fn, SubQuery<CharaGroupCB> sq, CharaGroupCQ cq, String al, DerivedReferrerOption op)
+            return cHSDRF(_baseCB, _qyCall.qy(), (String fn, SubQuery<VillageCharaGroupCB> sq, VillageCharaGroupCQ cq, String al, DerivedReferrerOption op)
                     -> cq.xsmyselfDerive(fn, sq, al, op), _dbmetaProvider);
         }
     }
@@ -432,9 +457,9 @@ public class BsCharaGroupCB extends AbstractConditionBean {
      * This is very specialty so you can get the frontier spirit. Bon voyage!
      * @return The condition-bean for dream cruise, which is linked to main condition-bean.
      */
-    public CharaGroupCB dreamCruiseCB() {
-        CharaGroupCB cb = new CharaGroupCB();
-        cb.xsetupForDreamCruise((CharaGroupCB) this);
+    public VillageCharaGroupCB dreamCruiseCB() {
+        VillageCharaGroupCB cb = new VillageCharaGroupCB();
+        cb.xsetupForDreamCruise((VillageCharaGroupCB) this);
         return cb;
     }
 
@@ -459,15 +484,15 @@ public class BsCharaGroupCB extends AbstractConditionBean {
      * @param colCBLambda The callback for specify-query of left column. (NotNull)
      * @return The object for setting up operand and right column. (NotNull)
      */
-    public HpColQyOperand<CharaGroupCB> columnQuery(final SpecifyQuery<CharaGroupCB> colCBLambda) {
+    public HpColQyOperand<VillageCharaGroupCB> columnQuery(final SpecifyQuery<VillageCharaGroupCB> colCBLambda) {
         return xcreateColQyOperand((rightSp, operand) -> {
             return xcolqy(xcreateColumnQueryCB(), xcreateColumnQueryCB(), colCBLambda, rightSp, operand);
         });
     }
 
-    protected CharaGroupCB xcreateColumnQueryCB() {
-        CharaGroupCB cb = new CharaGroupCB();
-        cb.xsetupForColumnQuery((CharaGroupCB)this);
+    protected VillageCharaGroupCB xcreateColumnQueryCB() {
+        VillageCharaGroupCB cb = new VillageCharaGroupCB();
+        cb.xsetupForColumnQuery((VillageCharaGroupCB)this);
         return cb;
     }
 
@@ -487,8 +512,8 @@ public class BsCharaGroupCB extends AbstractConditionBean {
      * </pre>
      * @param orCBLambda The callback for query of or-condition. (NotNull)
      */
-    public void orScopeQuery(OrQuery<CharaGroupCB> orCBLambda) {
-        xorSQ((CharaGroupCB)this, orCBLambda);
+    public void orScopeQuery(OrQuery<VillageCharaGroupCB> orCBLambda) {
+        xorSQ((VillageCharaGroupCB)this, orCBLambda);
     }
 
     /**
@@ -506,8 +531,8 @@ public class BsCharaGroupCB extends AbstractConditionBean {
      * </pre>
      * @param andCBLambda The callback for query of and-condition. (NotNull)
      */
-    public void orScopeQueryAndPart(AndQuery<CharaGroupCB> andCBLambda) {
-        xorSQAP((CharaGroupCB)this, andCBLambda);
+    public void orScopeQueryAndPart(AndQuery<VillageCharaGroupCB> andCBLambda) {
+        xorSQAP((VillageCharaGroupCB)this, andCBLambda);
     }
 
     // ===================================================================================
@@ -537,11 +562,11 @@ public class BsCharaGroupCB extends AbstractConditionBean {
     //                                                                        ============
     @Override
     protected void xprepareSyncQyCall(ConditionBean mainCB) {
-        final CharaGroupCB cb;
+        final VillageCharaGroupCB cb;
         if (mainCB != null) {
-            cb = (CharaGroupCB)mainCB;
+            cb = (VillageCharaGroupCB)mainCB;
         } else {
-            cb = new CharaGroupCB();
+            cb = new VillageCharaGroupCB();
         }
         specify().xsetSyncQyCall(xcreateSpQyCall(() -> true, () -> cb.query()));
     }
@@ -550,8 +575,8 @@ public class BsCharaGroupCB extends AbstractConditionBean {
     //                                                                            Internal
     //                                                                            ========
     // very internal (for suppressing warn about 'Not Use Import')
-    protected String xgetConditionBeanClassNameInternally() { return CharaGroupCB.class.getName(); }
-    protected String xgetConditionQueryClassNameInternally() { return CharaGroupCQ.class.getName(); }
+    protected String xgetConditionBeanClassNameInternally() { return VillageCharaGroupCB.class.getName(); }
+    protected String xgetConditionQueryClassNameInternally() { return VillageCharaGroupCQ.class.getName(); }
     protected String xgetSubQueryClassNameInternally() { return SubQuery.class.getName(); }
     protected String xgetConditionOptionClassNameInternally() { return ConditionOption.class.getName(); }
 }

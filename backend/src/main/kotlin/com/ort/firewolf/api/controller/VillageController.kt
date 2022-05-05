@@ -1,20 +1,7 @@
 package com.ort.firewolf.api.controller
 
 import com.ort.dbflute.allcommon.CDef
-import com.ort.firewolf.api.body.VillageAbilityBody
-import com.ort.firewolf.api.body.VillageActionBody
-import com.ort.firewolf.api.body.VillageChangeSkillBody
-import com.ort.firewolf.api.body.VillageCharachipCreateBody
-import com.ort.firewolf.api.body.VillageComingOutBody
-import com.ort.firewolf.api.body.VillageCommitBody
-import com.ort.firewolf.api.body.VillageOrganizationCreateBody
-import com.ort.firewolf.api.body.VillageParticipateBody
-import com.ort.firewolf.api.body.VillageRegisterBody
-import com.ort.firewolf.api.body.VillageRuleCreateBody
-import com.ort.firewolf.api.body.VillageSayBody
-import com.ort.firewolf.api.body.VillageSettingRegisterBody
-import com.ort.firewolf.api.body.VillageTimeCreateBody
-import com.ort.firewolf.api.body.VillageVoteBody
+import com.ort.firewolf.api.body.*
 import com.ort.firewolf.api.body.validator.VillageRegisterBodyValidator
 import com.ort.firewolf.api.form.VillageListForm
 import com.ort.firewolf.api.form.VillageMessageForm
@@ -23,12 +10,7 @@ import com.ort.firewolf.api.view.message.MessageTimeView
 import com.ort.firewolf.api.view.message.MessageView
 import com.ort.firewolf.api.view.message.MessagesView
 import com.ort.firewolf.api.view.myself.participant.SituationAsParticipantView
-import com.ort.firewolf.api.view.village.VillageAnchorMessageView
-import com.ort.firewolf.api.view.village.VillageLatestView
-import com.ort.firewolf.api.view.village.VillageParticipantView
-import com.ort.firewolf.api.view.village.VillageRegisterView
-import com.ort.firewolf.api.view.village.VillageView
-import com.ort.firewolf.api.view.village.VillagesView
+import com.ort.firewolf.api.view.village.*
 import com.ort.firewolf.application.coordinator.MessageCoordinator
 import com.ort.firewolf.application.coordinator.VillageCoordinator
 import com.ort.firewolf.application.service.CharachipService
@@ -37,40 +19,19 @@ import com.ort.firewolf.application.service.PlayerService
 import com.ort.firewolf.application.service.VillageService
 import com.ort.firewolf.domain.model.charachip.Chara
 import com.ort.firewolf.domain.model.charachip.Charas
-import com.ort.firewolf.domain.model.message.Message
-import com.ort.firewolf.domain.model.message.MessageContent
-import com.ort.firewolf.domain.model.message.MessageQuery
-import com.ort.firewolf.domain.model.message.MessageTime
-import com.ort.firewolf.domain.model.message.MessageType
-import com.ort.firewolf.domain.model.message.Messages
-import com.ort.firewolf.domain.model.message.toModel
+import com.ort.firewolf.domain.model.message.*
 import com.ort.firewolf.domain.model.player.Player
 import com.ort.firewolf.domain.model.player.Players
 import com.ort.firewolf.domain.model.skill.Skill
 import com.ort.firewolf.domain.model.skill.Skills
-import com.ort.firewolf.domain.model.village.Village
-import com.ort.firewolf.domain.model.village.VillageCharachipCreateResource
-import com.ort.firewolf.domain.model.village.VillageCreateResource
-import com.ort.firewolf.domain.model.village.VillageMessageRestrictCreateResource
-import com.ort.firewolf.domain.model.village.VillageOrganizationCreateResource
-import com.ort.firewolf.domain.model.village.VillageRuleCreateResource
-import com.ort.firewolf.domain.model.village.VillageSettingCreateResource
-import com.ort.firewolf.domain.model.village.VillageStatus
-import com.ort.firewolf.domain.model.village.VillageTimeCreateResource
-import com.ort.firewolf.domain.model.village.Villages
+import com.ort.firewolf.domain.model.village.*
 import com.ort.firewolf.domain.model.village.participant.coming_out.ComingOuts
 import com.ort.firewolf.fw.exception.FirewolfBusinessException
 import com.ort.firewolf.fw.security.FirewolfUser
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.WebDataBinder
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.InitBinder
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.ResponseBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
@@ -120,7 +81,7 @@ class VillageController(
     @GetMapping("/village/{villageId}")
     fun village(@PathVariable("villageId") villageId: Int): VillageView {
         val village: Village = villageService.findVillage(villageId)
-        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipId)
+        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipIds)
         val players: Players = playerService.findPlayers(villageId)
         val createPlayer: Player = playerService.findPlayer(village.creatorPlayerId)
         return VillageView(
@@ -148,7 +109,7 @@ class VillageController(
         val village: Village = villageService.findVillage(villageId, false)
         val message: Message? = messageCoordinator.findMessage(village, messageType, messageNumber, user)
         val players: Players = playerService.findPlayers(villageId)
-        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipId)
+        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipIds)
         return VillageAnchorMessageView(
             message = message,
             village = village,
@@ -188,7 +149,7 @@ class VillageController(
             participantIdList = form.participant_id_list?.filterNotNull() // [null]で来る問題に対応
         )
         val players: Players = playerService.findPlayers(villageId)
-        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipId)
+        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipIds)
         val villageDayId: Int = village.day.dayList.first { it.day == day && it.noonnight == noonnight }.id
         val todayMessages =
             messageService.findMessages(village.id, villageDayId, MessageQuery(listOf(CDef.MessageType.通常発言)))
@@ -266,7 +227,7 @@ class VillageController(
         @AuthenticationPrincipal user: FirewolfUser?
     ): SituationAsParticipantView {
         val village: Village = villageService.findVillage(villageId)
-        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipId)
+        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipIds)
         val players: Players = playerService.findPlayers(villageId)
         return SituationAsParticipantView(
             situation = villageCoordinator.findActionSituation(village, user, players, charas),
@@ -414,7 +375,7 @@ class VillageController(
         )
         val village = villageService.findVillage(villageId)
         val participant = villageCoordinator.findParticipant(village, user)
-        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipId)
+        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipIds)
         val players: Players = playerService.findPlayers(villageId)
         return MessageView(
             message = Message(
@@ -469,7 +430,7 @@ class VillageController(
         villageCoordinator.confirmToSay(villageId, user, body.message!!, CDef.MessageType.アクション.code(), null)
         val village = villageService.findVillage(villageId)
         val participant = villageCoordinator.findParticipant(village, user)
-        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipId)
+        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipIds)
         val players: Players = playerService.findPlayers(villageId)
         return MessageView(
             message = Message(
@@ -663,7 +624,7 @@ class VillageController(
     private fun convertToVillageCharachipCreateResource(
         body: VillageCharachipCreateBody
     ): VillageCharachipCreateResource = VillageCharachipCreateResource(
-        charachipId = body.charachipId!!,
+        charachipIds = body.charachipIds!!,
         dummyCharaId = body.dummyCharaId!!
     )
 

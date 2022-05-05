@@ -36,13 +36,13 @@ import com.ort.dbflute.exentity.*;
  *     PLAYER, VILLAGE_STATUS, CAMP
  *
  * [referrer table]
- *     MESSAGE_RESTRICTION, VILLAGE_DAY, VILLAGE_PLAYER, VILLAGE_SETTING
+ *     MESSAGE_RESTRICTION, VILLAGE_CHARA_GROUP, VILLAGE_DAY, VILLAGE_PLAYER, VILLAGE_SETTING
  *
  * [foreign property]
  *     player, villageStatus, camp
  *
  * [referrer property]
- *     messageRestrictionList, villageDayList, villagePlayerList, villageSettingList
+ *     messageRestrictionList, villageCharaGroupList, villageDayList, villagePlayerList, villageSettingList
  *
  * [get/set template]
  * /= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -445,6 +445,26 @@ public abstract class BsVillage extends AbstractEntity implements DomainEntity, 
         _messageRestrictionList = messageRestrictionList;
     }
 
+    /** VILLAGE_CHARA_GROUP by VILLAGE_ID, named 'villageCharaGroupList'. */
+    protected List<VillageCharaGroup> _villageCharaGroupList;
+
+    /**
+     * [get] VILLAGE_CHARA_GROUP by VILLAGE_ID, named 'villageCharaGroupList'.
+     * @return The entity list of referrer property 'villageCharaGroupList'. (NotNull: even if no loading, returns empty list)
+     */
+    public List<VillageCharaGroup> getVillageCharaGroupList() {
+        if (_villageCharaGroupList == null) { _villageCharaGroupList = newReferrerList(); }
+        return _villageCharaGroupList;
+    }
+
+    /**
+     * [set] VILLAGE_CHARA_GROUP by VILLAGE_ID, named 'villageCharaGroupList'.
+     * @param villageCharaGroupList The entity list of referrer property 'villageCharaGroupList'. (NullAllowed)
+     */
+    public void setVillageCharaGroupList(List<VillageCharaGroup> villageCharaGroupList) {
+        _villageCharaGroupList = villageCharaGroupList;
+    }
+
     /** VILLAGE_DAY by VILLAGE_ID, named 'villageDayList'. */
     protected List<VillageDay> _villageDayList;
 
@@ -542,6 +562,8 @@ public abstract class BsVillage extends AbstractEntity implements DomainEntity, 
         { sb.append(li).append(xbRDS(_camp, "camp")); }
         if (_messageRestrictionList != null) { for (MessageRestriction et : _messageRestrictionList)
         { if (et != null) { sb.append(li).append(xbRDS(et, "messageRestrictionList")); } } }
+        if (_villageCharaGroupList != null) { for (VillageCharaGroup et : _villageCharaGroupList)
+        { if (et != null) { sb.append(li).append(xbRDS(et, "villageCharaGroupList")); } } }
         if (_villageDayList != null) { for (VillageDay et : _villageDayList)
         { if (et != null) { sb.append(li).append(xbRDS(et, "villageDayList")); } } }
         if (_villagePlayerList != null) { for (VillagePlayer et : _villagePlayerList)
@@ -585,6 +607,8 @@ public abstract class BsVillage extends AbstractEntity implements DomainEntity, 
         { sb.append(dm).append("camp"); }
         if (_messageRestrictionList != null && !_messageRestrictionList.isEmpty())
         { sb.append(dm).append("messageRestrictionList"); }
+        if (_villageCharaGroupList != null && !_villageCharaGroupList.isEmpty())
+        { sb.append(dm).append("villageCharaGroupList"); }
         if (_villageDayList != null && !_villageDayList.isEmpty())
         { sb.append(dm).append("villageDayList"); }
         if (_villagePlayerList != null && !_villagePlayerList.isEmpty())

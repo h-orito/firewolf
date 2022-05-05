@@ -15,15 +15,7 @@ import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 import com.ort.firewolf.domain.model.village.participant.VillageParticipants
 import com.ort.firewolf.domain.model.village.participant.coming_out.ComingOut
 import com.ort.firewolf.domain.model.village.participant.coming_out.ComingOuts
-import com.ort.firewolf.domain.model.village.setting.PersonCapacity
-import com.ort.firewolf.domain.model.village.setting.VillageCharachip
-import com.ort.firewolf.domain.model.village.setting.VillageMessageRestrict
-import com.ort.firewolf.domain.model.village.setting.VillageMessageRestricts
-import com.ort.firewolf.domain.model.village.setting.VillageOrganizations
-import com.ort.firewolf.domain.model.village.setting.VillagePassword
-import com.ort.firewolf.domain.model.village.setting.VillageRules
-import com.ort.firewolf.domain.model.village.setting.VillageSettings
-import com.ort.firewolf.domain.model.village.setting.VillageTime
+import com.ort.firewolf.domain.model.village.setting.*
 import org.dbflute.cbean.result.ListResultBean
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -125,7 +117,7 @@ object VillageDataConverter {
             ),
             charachip = VillageCharachip.invoke(
                 dummyCharaId = detectItemText(settingList, CDef.VillageSettingItem.ダミーキャラid)?.toInt(),
-                charachipId = detectItemText(settingList, CDef.VillageSettingItem.キャラクターグループid)?.toInt()
+                charachipIds = village.villageCharaGroupList.map { it.charaGroupId }
             ),
             organizations = VillageOrganizations.invoke(detectItemText(settingList, CDef.VillageSettingItem.構成)),
             rules = VillageRules.invoke(

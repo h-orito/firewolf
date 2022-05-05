@@ -1,5 +1,6 @@
 package com.ort.firewolf.api.controller
 
+import com.ort.firewolf.api.form.CharachipsForm
 import com.ort.firewolf.api.view.charachip.CharachipView
 import com.ort.firewolf.api.view.charachip.CharachipsView
 import com.ort.firewolf.application.service.CharachipService
@@ -29,7 +30,17 @@ class CharachipController(
         )
     }
 
-    @GetMapping("/charachip/{charaChipId}")
+    @GetMapping("/charachips")
+    fun charachips(form: CharachipsForm): CharachipsView {
+        val charachips: Charachips = charachipService.findCharachips(form.charachipIds!!)
+        val charas: Charas = charachipService.findCharas(charachips)
+        return CharachipsView(
+            charachips = charachips,
+            charas = charas
+        )
+    }
+
+    @GetMapping("/charachips/{charaChipId}")
     fun charachip(@PathVariable("charaChipId") charaChipId: Int): CharachipView {
         val charachip: Charachip = charachipService.findCharaChip(charaChipId)
         val charas: Charas = charachipService.findCharas(charachip.id)
@@ -37,6 +48,11 @@ class CharachipController(
             charachip = charachip,
             charas = charas
         )
+    }
+
+    @GetMapping("/charas")
+    fun charas(form: CharachipsForm): Charas {
+        return charachipService.findCharas(form.charachipIds!!)
     }
 
     @GetMapping("/chara/{charaId}")

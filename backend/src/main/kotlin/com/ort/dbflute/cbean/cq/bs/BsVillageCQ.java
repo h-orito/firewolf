@@ -82,6 +82,9 @@ public class BsVillageCQ extends AbstractBsVillageCQ {
     public Map<String, MessageRestrictionCQ> xdfgetVillageId_ExistsReferrer_MessageRestrictionList() { return xgetSQueMap("villageId_ExistsReferrer_MessageRestrictionList"); }
     public String keepVillageId_ExistsReferrer_MessageRestrictionList(MessageRestrictionCQ sq) { return xkeepSQue("villageId_ExistsReferrer_MessageRestrictionList", sq); }
 
+    public Map<String, VillageCharaGroupCQ> xdfgetVillageId_ExistsReferrer_VillageCharaGroupList() { return xgetSQueMap("villageId_ExistsReferrer_VillageCharaGroupList"); }
+    public String keepVillageId_ExistsReferrer_VillageCharaGroupList(VillageCharaGroupCQ sq) { return xkeepSQue("villageId_ExistsReferrer_VillageCharaGroupList", sq); }
+
     public Map<String, VillageDayCQ> xdfgetVillageId_ExistsReferrer_VillageDayList() { return xgetSQueMap("villageId_ExistsReferrer_VillageDayList"); }
     public String keepVillageId_ExistsReferrer_VillageDayList(VillageDayCQ sq) { return xkeepSQue("villageId_ExistsReferrer_VillageDayList", sq); }
 
@@ -94,6 +97,9 @@ public class BsVillageCQ extends AbstractBsVillageCQ {
     public Map<String, MessageRestrictionCQ> xdfgetVillageId_NotExistsReferrer_MessageRestrictionList() { return xgetSQueMap("villageId_NotExistsReferrer_MessageRestrictionList"); }
     public String keepVillageId_NotExistsReferrer_MessageRestrictionList(MessageRestrictionCQ sq) { return xkeepSQue("villageId_NotExistsReferrer_MessageRestrictionList", sq); }
 
+    public Map<String, VillageCharaGroupCQ> xdfgetVillageId_NotExistsReferrer_VillageCharaGroupList() { return xgetSQueMap("villageId_NotExistsReferrer_VillageCharaGroupList"); }
+    public String keepVillageId_NotExistsReferrer_VillageCharaGroupList(VillageCharaGroupCQ sq) { return xkeepSQue("villageId_NotExistsReferrer_VillageCharaGroupList", sq); }
+
     public Map<String, VillageDayCQ> xdfgetVillageId_NotExistsReferrer_VillageDayList() { return xgetSQueMap("villageId_NotExistsReferrer_VillageDayList"); }
     public String keepVillageId_NotExistsReferrer_VillageDayList(VillageDayCQ sq) { return xkeepSQue("villageId_NotExistsReferrer_VillageDayList", sq); }
 
@@ -105,6 +111,9 @@ public class BsVillageCQ extends AbstractBsVillageCQ {
 
     public Map<String, MessageRestrictionCQ> xdfgetVillageId_SpecifyDerivedReferrer_MessageRestrictionList() { return xgetSQueMap("villageId_SpecifyDerivedReferrer_MessageRestrictionList"); }
     public String keepVillageId_SpecifyDerivedReferrer_MessageRestrictionList(MessageRestrictionCQ sq) { return xkeepSQue("villageId_SpecifyDerivedReferrer_MessageRestrictionList", sq); }
+
+    public Map<String, VillageCharaGroupCQ> xdfgetVillageId_SpecifyDerivedReferrer_VillageCharaGroupList() { return xgetSQueMap("villageId_SpecifyDerivedReferrer_VillageCharaGroupList"); }
+    public String keepVillageId_SpecifyDerivedReferrer_VillageCharaGroupList(VillageCharaGroupCQ sq) { return xkeepSQue("villageId_SpecifyDerivedReferrer_VillageCharaGroupList", sq); }
 
     public Map<String, VillageDayCQ> xdfgetVillageId_SpecifyDerivedReferrer_VillageDayList() { return xgetSQueMap("villageId_SpecifyDerivedReferrer_VillageDayList"); }
     public String keepVillageId_SpecifyDerivedReferrer_VillageDayList(VillageDayCQ sq) { return xkeepSQue("villageId_SpecifyDerivedReferrer_VillageDayList", sq); }
@@ -119,6 +128,11 @@ public class BsVillageCQ extends AbstractBsVillageCQ {
     public String keepVillageId_QueryDerivedReferrer_MessageRestrictionList(MessageRestrictionCQ sq) { return xkeepSQue("villageId_QueryDerivedReferrer_MessageRestrictionList", sq); }
     public Map<String, Object> xdfgetVillageId_QueryDerivedReferrer_MessageRestrictionListParameter() { return xgetSQuePmMap("villageId_QueryDerivedReferrer_MessageRestrictionList"); }
     public String keepVillageId_QueryDerivedReferrer_MessageRestrictionListParameter(Object pm) { return xkeepSQuePm("villageId_QueryDerivedReferrer_MessageRestrictionList", pm); }
+
+    public Map<String, VillageCharaGroupCQ> xdfgetVillageId_QueryDerivedReferrer_VillageCharaGroupList() { return xgetSQueMap("villageId_QueryDerivedReferrer_VillageCharaGroupList"); }
+    public String keepVillageId_QueryDerivedReferrer_VillageCharaGroupList(VillageCharaGroupCQ sq) { return xkeepSQue("villageId_QueryDerivedReferrer_VillageCharaGroupList", sq); }
+    public Map<String, Object> xdfgetVillageId_QueryDerivedReferrer_VillageCharaGroupListParameter() { return xgetSQuePmMap("villageId_QueryDerivedReferrer_VillageCharaGroupList"); }
+    public String keepVillageId_QueryDerivedReferrer_VillageCharaGroupListParameter(Object pm) { return xkeepSQuePm("villageId_QueryDerivedReferrer_VillageCharaGroupList", pm); }
 
     public Map<String, VillageDayCQ> xdfgetVillageId_QueryDerivedReferrer_VillageDayList() { return xgetSQueMap("villageId_QueryDerivedReferrer_VillageDayList"); }
     public String keepVillageId_QueryDerivedReferrer_VillageDayList(VillageDayCQ sq) { return xkeepSQue("villageId_QueryDerivedReferrer_VillageDayList", sq); }

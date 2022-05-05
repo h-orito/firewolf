@@ -2,18 +2,18 @@ package com.ort.firewolf.domain.model.village.setting
 
 data class VillageCharachip(
     val dummyCharaId: Int,
-    val charachipId: Int
+    val charachipIds: List<Int>
 ) {
     companion object {
         operator fun invoke(
             dummyCharaId: Int?,
-            charachipId: Int?
+            charachipIds: List<Int>?
         ): VillageCharachip {
             requireNotNull(dummyCharaId)
-            requireNotNull(charachipId)
+            requireNotNull(charachipIds)
             return VillageCharachip(
                 dummyCharaId = dummyCharaId,
-                charachipId = charachipId
+                charachipIds = charachipIds
             )
         }
     }

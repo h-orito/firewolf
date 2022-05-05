@@ -59,7 +59,7 @@ data class VillageCharachipCreateBody(
     val dummyCharaId: Int?,
 
     @field:NotNull
-    val charachipId: Int?
+    val charachipIds: List<Int>?
 ) {
     constructor() : this(null, null)
 }

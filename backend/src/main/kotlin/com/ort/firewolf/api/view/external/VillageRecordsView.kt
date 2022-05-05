@@ -57,7 +57,8 @@ data class VillageRecordView(
         winCampName = if (village.status.isCanceled()) null
         else village.winCamp!!.name,
         participantList = (village.participant.memberList + village.spectator.memberList).map {
-            val charaList = charas.list.filter { chara -> chara.charachipId == village.setting.charachip.charachipId }
+            val charaList =
+                charas.list.filter { chara -> village.setting.charachip.charachipIds.contains(chara.charachipId) }
             VillageParticipantRecordView(it, charaList, players)
         }
     )

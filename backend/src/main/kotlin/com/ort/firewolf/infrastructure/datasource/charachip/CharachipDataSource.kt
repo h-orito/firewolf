@@ -9,11 +9,20 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class CharachipDataSource(
-    val charaGroupBhv: CharaGroupBhv
+    private val charaGroupBhv: CharaGroupBhv
 ) {
     fun findCharachips(): Charachips {
         val charaGroupList = charaGroupBhv.selectList {
             it.setupSelect_Designer()
+            it.query().addOrderBy_CharaGroupId_Asc()
+        }
+        return convertCharaGroupListToCharaChips(charaGroupList)
+    }
+
+    fun findCharachips(ids: List<Int>): Charachips {
+        val charaGroupList = charaGroupBhv.selectList {
+            it.setupSelect_Designer()
+            it.query().setCharaGroupId_InScope(ids)
             it.query().addOrderBy_CharaGroupId_Asc()
         }
         return convertCharaGroupListToCharaChips(charaGroupList)

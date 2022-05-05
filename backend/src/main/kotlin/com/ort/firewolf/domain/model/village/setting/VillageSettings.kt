@@ -36,7 +36,7 @@ data class VillageSettings(
                 ),
                 charachip = VillageCharachip(
                     dummyCharaId = resource.charachip.dummyCharaId,
-                    charachipId = resource.charachip.charachipId
+                    charachipIds = resource.charachip.charachipIds
                 ),
                 organizations = org,
                 rules = VillageRules(

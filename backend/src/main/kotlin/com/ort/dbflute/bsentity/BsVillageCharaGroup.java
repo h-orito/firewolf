@@ -13,50 +13,48 @@ import com.ort.dbflute.allcommon.DBMetaInstanceHandler;
 import com.ort.dbflute.exentity.*;
 
 /**
- * The entity of CHARA_GROUP as TABLE. <br>
- * キャラクターグループ
+ * The entity of VILLAGE_CHARA_GROUP as TABLE. <br>
+ * 村キャラクターグループ
  * <pre>
  * [primary-key]
- *     CHARA_GROUP_ID
+ *     VILLAGE_CHARA_GROUP_ID
  *
  * [column]
- *     CHARA_GROUP_ID, CHARA_GROUP_NAME, DESIGNER_ID, DESCRIPTION_URL, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
+ *     VILLAGE_CHARA_GROUP_ID, VILLAGE_ID, CHARA_GROUP_ID, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
  *
  * [sequence]
  *     
  *
  * [identity]
- *     CHARA_GROUP_ID
+ *     VILLAGE_CHARA_GROUP_ID
  *
  * [version-no]
  *     
  *
  * [foreign table]
- *     DESIGNER
+ *     CHARA_GROUP, VILLAGE
  *
  * [referrer table]
- *     CHARA, VILLAGE_CHARA_GROUP
+ *     
  *
  * [foreign property]
- *     designer
+ *     charaGroup, village
  *
  * [referrer property]
- *     charaList, villageCharaGroupList
+ *     
  *
  * [get/set template]
  * /= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+ * Integer villageCharaGroupId = entity.getVillageCharaGroupId();
+ * Integer villageId = entity.getVillageId();
  * Integer charaGroupId = entity.getCharaGroupId();
- * String charaGroupName = entity.getCharaGroupName();
- * Integer designerId = entity.getDesignerId();
- * String descriptionUrl = entity.getDescriptionUrl();
  * java.time.LocalDateTime registerDatetime = entity.getRegisterDatetime();
  * String registerTrace = entity.getRegisterTrace();
  * java.time.LocalDateTime updateDatetime = entity.getUpdateDatetime();
  * String updateTrace = entity.getUpdateTrace();
+ * entity.setVillageCharaGroupId(villageCharaGroupId);
+ * entity.setVillageId(villageId);
  * entity.setCharaGroupId(charaGroupId);
- * entity.setCharaGroupName(charaGroupName);
- * entity.setDesignerId(designerId);
- * entity.setDescriptionUrl(descriptionUrl);
  * entity.setRegisterDatetime(registerDatetime);
  * entity.setRegisterTrace(registerTrace);
  * entity.setUpdateDatetime(updateDatetime);
@@ -65,7 +63,7 @@ import com.ort.dbflute.exentity.*;
  * </pre>
  * @author DBFlute(AutoGenerator)
  */
-public abstract class BsCharaGroup extends AbstractEntity implements DomainEntity, EntityDefinedCommonColumn {
+public abstract class BsVillageCharaGroup extends AbstractEntity implements DomainEntity, EntityDefinedCommonColumn {
 
     // ===================================================================================
     //                                                                          Definition
@@ -76,17 +74,14 @@ public abstract class BsCharaGroup extends AbstractEntity implements DomainEntit
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
-    /** CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)} */
+    /** VILLAGE_CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)} */
+    protected Integer _villageCharaGroupId;
+
+    /** VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village} */
+    protected Integer _villageId;
+
+    /** CHARA_GROUP_ID: {IX, NotNull, INT UNSIGNED(10), FK to chara_group} */
     protected Integer _charaGroupId;
-
-    /** CHARA_GROUP_NAME: {NotNull, VARCHAR(40)} */
-    protected String _charaGroupName;
-
-    /** DESIGNER_ID: {IX, NotNull, INT UNSIGNED(10), FK to designer} */
-    protected Integer _designerId;
-
-    /** DESCRIPTION_URL: {TEXT(65535)} */
-    protected String _descriptionUrl;
 
     /** REGISTER_DATETIME: {NotNull, DATETIME(19)} */
     protected java.time.LocalDateTime _registerDatetime;
@@ -110,7 +105,7 @@ public abstract class BsCharaGroup extends AbstractEntity implements DomainEntit
 
     /** {@inheritDoc} */
     public String asTableDbName() {
-        return "chara_group";
+        return "village_chara_group";
     }
 
     // ===================================================================================
@@ -118,77 +113,58 @@ public abstract class BsCharaGroup extends AbstractEntity implements DomainEntit
     //                                                                        ============
     /** {@inheritDoc} */
     public boolean hasPrimaryKeyValue() {
-        if (_charaGroupId == null) { return false; }
+        if (_villageCharaGroupId == null) { return false; }
         return true;
     }
 
     // ===================================================================================
     //                                                                    Foreign Property
     //                                                                    ================
-    /** DESIGNER by my DESIGNER_ID, named 'designer'. */
-    protected OptionalEntity<Designer> _designer;
+    /** CHARA_GROUP by my CHARA_GROUP_ID, named 'charaGroup'. */
+    protected OptionalEntity<CharaGroup> _charaGroup;
 
     /**
-     * [get] DESIGNER by my DESIGNER_ID, named 'designer'. <br>
+     * [get] CHARA_GROUP by my CHARA_GROUP_ID, named 'charaGroup'. <br>
      * Optional: alwaysPresent(), ifPresent().orElse(), get(), ...
-     * @return The entity of foreign property 'designer'. (NotNull, EmptyAllowed: when e.g. null FK column, no setupSelect)
+     * @return The entity of foreign property 'charaGroup'. (NotNull, EmptyAllowed: when e.g. null FK column, no setupSelect)
      */
-    public OptionalEntity<Designer> getDesigner() {
-        if (_designer == null) { _designer = OptionalEntity.relationEmpty(this, "designer"); }
-        return _designer;
+    public OptionalEntity<CharaGroup> getCharaGroup() {
+        if (_charaGroup == null) { _charaGroup = OptionalEntity.relationEmpty(this, "charaGroup"); }
+        return _charaGroup;
     }
 
     /**
-     * [set] DESIGNER by my DESIGNER_ID, named 'designer'.
-     * @param designer The entity of foreign property 'designer'. (NullAllowed)
+     * [set] CHARA_GROUP by my CHARA_GROUP_ID, named 'charaGroup'.
+     * @param charaGroup The entity of foreign property 'charaGroup'. (NullAllowed)
      */
-    public void setDesigner(OptionalEntity<Designer> designer) {
-        _designer = designer;
+    public void setCharaGroup(OptionalEntity<CharaGroup> charaGroup) {
+        _charaGroup = charaGroup;
+    }
+
+    /** VILLAGE by my VILLAGE_ID, named 'village'. */
+    protected OptionalEntity<Village> _village;
+
+    /**
+     * [get] VILLAGE by my VILLAGE_ID, named 'village'. <br>
+     * Optional: alwaysPresent(), ifPresent().orElse(), get(), ...
+     * @return The entity of foreign property 'village'. (NotNull, EmptyAllowed: when e.g. null FK column, no setupSelect)
+     */
+    public OptionalEntity<Village> getVillage() {
+        if (_village == null) { _village = OptionalEntity.relationEmpty(this, "village"); }
+        return _village;
+    }
+
+    /**
+     * [set] VILLAGE by my VILLAGE_ID, named 'village'.
+     * @param village The entity of foreign property 'village'. (NullAllowed)
+     */
+    public void setVillage(OptionalEntity<Village> village) {
+        _village = village;
     }
 
     // ===================================================================================
     //                                                                   Referrer Property
     //                                                                   =================
-    /** CHARA by CHARA_GROUP_ID, named 'charaList'. */
-    protected List<Chara> _charaList;
-
-    /**
-     * [get] CHARA by CHARA_GROUP_ID, named 'charaList'.
-     * @return The entity list of referrer property 'charaList'. (NotNull: even if no loading, returns empty list)
-     */
-    public List<Chara> getCharaList() {
-        if (_charaList == null) { _charaList = newReferrerList(); }
-        return _charaList;
-    }
-
-    /**
-     * [set] CHARA by CHARA_GROUP_ID, named 'charaList'.
-     * @param charaList The entity list of referrer property 'charaList'. (NullAllowed)
-     */
-    public void setCharaList(List<Chara> charaList) {
-        _charaList = charaList;
-    }
-
-    /** VILLAGE_CHARA_GROUP by CHARA_GROUP_ID, named 'villageCharaGroupList'. */
-    protected List<VillageCharaGroup> _villageCharaGroupList;
-
-    /**
-     * [get] VILLAGE_CHARA_GROUP by CHARA_GROUP_ID, named 'villageCharaGroupList'.
-     * @return The entity list of referrer property 'villageCharaGroupList'. (NotNull: even if no loading, returns empty list)
-     */
-    public List<VillageCharaGroup> getVillageCharaGroupList() {
-        if (_villageCharaGroupList == null) { _villageCharaGroupList = newReferrerList(); }
-        return _villageCharaGroupList;
-    }
-
-    /**
-     * [set] VILLAGE_CHARA_GROUP by CHARA_GROUP_ID, named 'villageCharaGroupList'.
-     * @param villageCharaGroupList The entity list of referrer property 'villageCharaGroupList'. (NullAllowed)
-     */
-    public void setVillageCharaGroupList(List<VillageCharaGroup> villageCharaGroupList) {
-        _villageCharaGroupList = villageCharaGroupList;
-    }
-
     protected <ELEMENT> List<ELEMENT> newReferrerList() { // overriding to import
         return new ArrayList<ELEMENT>();
     }
@@ -198,9 +174,9 @@ public abstract class BsCharaGroup extends AbstractEntity implements DomainEntit
     //                                                                      ==============
     @Override
     protected boolean doEquals(Object obj) {
-        if (obj instanceof BsCharaGroup) {
-            BsCharaGroup other = (BsCharaGroup)obj;
-            if (!xSV(_charaGroupId, other._charaGroupId)) { return false; }
+        if (obj instanceof BsVillageCharaGroup) {
+            BsVillageCharaGroup other = (BsVillageCharaGroup)obj;
+            if (!xSV(_villageCharaGroupId, other._villageCharaGroupId)) { return false; }
             return true;
         } else {
             return false;
@@ -211,19 +187,17 @@ public abstract class BsCharaGroup extends AbstractEntity implements DomainEntit
     protected int doHashCode(int initial) {
         int hs = initial;
         hs = xCH(hs, asTableDbName());
-        hs = xCH(hs, _charaGroupId);
+        hs = xCH(hs, _villageCharaGroupId);
         return hs;
     }
 
     @Override
     protected String doBuildStringWithRelation(String li) {
         StringBuilder sb = new StringBuilder();
-        if (_designer != null && _designer.isPresent())
-        { sb.append(li).append(xbRDS(_designer, "designer")); }
-        if (_charaList != null) { for (Chara et : _charaList)
-        { if (et != null) { sb.append(li).append(xbRDS(et, "charaList")); } } }
-        if (_villageCharaGroupList != null) { for (VillageCharaGroup et : _villageCharaGroupList)
-        { if (et != null) { sb.append(li).append(xbRDS(et, "villageCharaGroupList")); } } }
+        if (_charaGroup != null && _charaGroup.isPresent())
+        { sb.append(li).append(xbRDS(_charaGroup, "charaGroup")); }
+        if (_village != null && _village.isPresent())
+        { sb.append(li).append(xbRDS(_village, "village")); }
         return sb.toString();
     }
     protected <ET extends Entity> String xbRDS(org.dbflute.optional.OptionalEntity<ET> et, String name) { // buildRelationDisplayString()
@@ -233,10 +207,9 @@ public abstract class BsCharaGroup extends AbstractEntity implements DomainEntit
     @Override
     protected String doBuildColumnString(String dm) {
         StringBuilder sb = new StringBuilder();
+        sb.append(dm).append(xfND(_villageCharaGroupId));
+        sb.append(dm).append(xfND(_villageId));
         sb.append(dm).append(xfND(_charaGroupId));
-        sb.append(dm).append(xfND(_charaGroupName));
-        sb.append(dm).append(xfND(_designerId));
-        sb.append(dm).append(xfND(_descriptionUrl));
         sb.append(dm).append(xfND(_registerDatetime));
         sb.append(dm).append(xfND(_registerTrace));
         sb.append(dm).append(xfND(_updateDatetime));
@@ -251,12 +224,10 @@ public abstract class BsCharaGroup extends AbstractEntity implements DomainEntit
     @Override
     protected String doBuildRelationString(String dm) {
         StringBuilder sb = new StringBuilder();
-        if (_designer != null && _designer.isPresent())
-        { sb.append(dm).append("designer"); }
-        if (_charaList != null && !_charaList.isEmpty())
-        { sb.append(dm).append("charaList"); }
-        if (_villageCharaGroupList != null && !_villageCharaGroupList.isEmpty())
-        { sb.append(dm).append("villageCharaGroupList"); }
+        if (_charaGroup != null && _charaGroup.isPresent())
+        { sb.append(dm).append("charaGroup"); }
+        if (_village != null && _village.isPresent())
+        { sb.append(dm).append("village"); }
         if (sb.length() > dm.length()) {
             sb.delete(0, dm.length()).insert(0, "(").append(")");
         }
@@ -264,15 +235,55 @@ public abstract class BsCharaGroup extends AbstractEntity implements DomainEntit
     }
 
     @Override
-    public CharaGroup clone() {
-        return (CharaGroup)super.clone();
+    public VillageCharaGroup clone() {
+        return (VillageCharaGroup)super.clone();
     }
 
     // ===================================================================================
     //                                                                            Accessor
     //                                                                            ========
     /**
-     * [get] CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)} <br>
+     * [get] VILLAGE_CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)} <br>
+     * 村キャラクターグループID
+     * @return The value of the column 'VILLAGE_CHARA_GROUP_ID'. (basically NotNull if selected: for the constraint)
+     */
+    public Integer getVillageCharaGroupId() {
+        checkSpecifiedProperty("villageCharaGroupId");
+        return _villageCharaGroupId;
+    }
+
+    /**
+     * [set] VILLAGE_CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)} <br>
+     * 村キャラクターグループID
+     * @param villageCharaGroupId The value of the column 'VILLAGE_CHARA_GROUP_ID'. (basically NotNull if update: for the constraint)
+     */
+    public void setVillageCharaGroupId(Integer villageCharaGroupId) {
+        registerModifiedProperty("villageCharaGroupId");
+        _villageCharaGroupId = villageCharaGroupId;
+    }
+
+    /**
+     * [get] VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village} <br>
+     * 村ID
+     * @return The value of the column 'VILLAGE_ID'. (basically NotNull if selected: for the constraint)
+     */
+    public Integer getVillageId() {
+        checkSpecifiedProperty("villageId");
+        return _villageId;
+    }
+
+    /**
+     * [set] VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village} <br>
+     * 村ID
+     * @param villageId The value of the column 'VILLAGE_ID'. (basically NotNull if update: for the constraint)
+     */
+    public void setVillageId(Integer villageId) {
+        registerModifiedProperty("villageId");
+        _villageId = villageId;
+    }
+
+    /**
+     * [get] CHARA_GROUP_ID: {IX, NotNull, INT UNSIGNED(10), FK to chara_group} <br>
      * キャラクターグループID
      * @return The value of the column 'CHARA_GROUP_ID'. (basically NotNull if selected: for the constraint)
      */
@@ -282,73 +293,13 @@ public abstract class BsCharaGroup extends AbstractEntity implements DomainEntit
     }
 
     /**
-     * [set] CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)} <br>
+     * [set] CHARA_GROUP_ID: {IX, NotNull, INT UNSIGNED(10), FK to chara_group} <br>
      * キャラクターグループID
      * @param charaGroupId The value of the column 'CHARA_GROUP_ID'. (basically NotNull if update: for the constraint)
      */
     public void setCharaGroupId(Integer charaGroupId) {
         registerModifiedProperty("charaGroupId");
         _charaGroupId = charaGroupId;
-    }
-
-    /**
-     * [get] CHARA_GROUP_NAME: {NotNull, VARCHAR(40)} <br>
-     * キャラクターグループ名
-     * @return The value of the column 'CHARA_GROUP_NAME'. (basically NotNull if selected: for the constraint)
-     */
-    public String getCharaGroupName() {
-        checkSpecifiedProperty("charaGroupName");
-        return convertEmptyToNull(_charaGroupName);
-    }
-
-    /**
-     * [set] CHARA_GROUP_NAME: {NotNull, VARCHAR(40)} <br>
-     * キャラクターグループ名
-     * @param charaGroupName The value of the column 'CHARA_GROUP_NAME'. (basically NotNull if update: for the constraint)
-     */
-    public void setCharaGroupName(String charaGroupName) {
-        registerModifiedProperty("charaGroupName");
-        _charaGroupName = charaGroupName;
-    }
-
-    /**
-     * [get] DESIGNER_ID: {IX, NotNull, INT UNSIGNED(10), FK to designer} <br>
-     * デザイナーID
-     * @return The value of the column 'DESIGNER_ID'. (basically NotNull if selected: for the constraint)
-     */
-    public Integer getDesignerId() {
-        checkSpecifiedProperty("designerId");
-        return _designerId;
-    }
-
-    /**
-     * [set] DESIGNER_ID: {IX, NotNull, INT UNSIGNED(10), FK to designer} <br>
-     * デザイナーID
-     * @param designerId The value of the column 'DESIGNER_ID'. (basically NotNull if update: for the constraint)
-     */
-    public void setDesignerId(Integer designerId) {
-        registerModifiedProperty("designerId");
-        _designerId = designerId;
-    }
-
-    /**
-     * [get] DESCRIPTION_URL: {TEXT(65535)} <br>
-     * キャラチップURL : キャラチップの利用規約や配布サイトのURL
-     * @return The value of the column 'DESCRIPTION_URL'. (NullAllowed even if selected: for no constraint)
-     */
-    public String getDescriptionUrl() {
-        checkSpecifiedProperty("descriptionUrl");
-        return convertEmptyToNull(_descriptionUrl);
-    }
-
-    /**
-     * [set] DESCRIPTION_URL: {TEXT(65535)} <br>
-     * キャラチップURL : キャラチップの利用規約や配布サイトのURL
-     * @param descriptionUrl The value of the column 'DESCRIPTION_URL'. (NullAllowed: null update allowed for no constraint)
-     */
-    public void setDescriptionUrl(String descriptionUrl) {
-        registerModifiedProperty("descriptionUrl");
-        _descriptionUrl = descriptionUrl;
     }
 
     /**

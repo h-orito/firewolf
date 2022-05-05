@@ -1,15 +1,7 @@
 package com.ort.firewolf.application.coordinator
 
 import com.ort.dbflute.allcommon.CDef
-import com.ort.firewolf.application.service.AbilityService
-import com.ort.firewolf.application.service.CharachipService
-import com.ort.firewolf.application.service.ComingOutService
-import com.ort.firewolf.application.service.CommitService
-import com.ort.firewolf.application.service.MessageService
-import com.ort.firewolf.application.service.PlayerService
-import com.ort.firewolf.application.service.SlackService
-import com.ort.firewolf.application.service.VillageService
-import com.ort.firewolf.application.service.VoteService
+import com.ort.firewolf.application.service.*
 import com.ort.firewolf.domain.model.ability.AbilityType
 import com.ort.firewolf.domain.model.charachip.Chara
 import com.ort.firewolf.domain.model.charachip.Charas
@@ -172,7 +164,7 @@ class VillageCoordinator(
         // 参加できない状況ならエラー
         val village: Village = villageService.findVillage(villageId)
         val player: Player = playerService.findPlayer(user)
-        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipId)
+        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipIds)
 
         if (isSpectate) {
             participateDomainService.assertSpectate(
@@ -433,7 +425,7 @@ class VillageCoordinator(
         // 能力セット
         val villageAbility = VillageAbility(village.day.latestDay().id, myselfId ?: myself!!.id, targetId, abilityType)
         abilityService.updateAbility(villageAbility)
-        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipId)
+        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipIds)
         val participant = myselfId?.let { village.participant.member(it) } ?: myself!!
         messageService.registerAbilitySetMessage(village, participant, targetId, abilityType, charas)
     }

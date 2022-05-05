@@ -1,13 +1,7 @@
 package com.ort.firewolf.application.coordinator
 
 import com.ort.dbflute.allcommon.CDef
-import com.ort.firewolf.application.service.AbilityService
-import com.ort.firewolf.application.service.CharachipService
-import com.ort.firewolf.application.service.CommitService
-import com.ort.firewolf.application.service.MessageService
-import com.ort.firewolf.application.service.PlayerService
-import com.ort.firewolf.application.service.VillageService
-import com.ort.firewolf.application.service.VoteService
+import com.ort.firewolf.application.service.*
 import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.commit.Commits
 import com.ort.firewolf.domain.model.daychange.DayChange
@@ -45,8 +39,12 @@ class DayChangeCoordinator(
         val abilities: VillageAbilities = abilityService.findVillageAbilities(village.id)
         val commits: Commits = commitService.findCommits(village.id)
         // 最新日の通常発言
-        val todayMessages = messageService.findMessages(village.id, village.day.latestDay().id, MessageQuery(listOf(CDef.MessageType.通常発言)))
-        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipId)
+        val todayMessages = messageService.findMessages(
+            village.id,
+            village.day.latestDay().id,
+            MessageQuery(listOf(CDef.MessageType.通常発言))
+        )
+        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipIds)
         val players: Players = playerService.findPlayers(village.id)
 
         val beforeDayChange = DayChange(village.copy(

@@ -16,15 +16,15 @@ import com.ort.dbflute.cbean.*;
 import com.ort.dbflute.cbean.cq.*;
 
 /**
- * The abstract condition-query of chara_group.
+ * The abstract condition-query of village_chara_group.
  * @author DBFlute(AutoGenerator)
  */
-public abstract class AbstractBsCharaGroupCQ extends AbstractConditionQuery {
+public abstract class AbstractBsVillageCharaGroupCQ extends AbstractConditionQuery {
 
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
-    public AbstractBsCharaGroupCQ(ConditionQuery referrerQuery, SqlClause sqlClause, String aliasName, int nestLevel) {
+    public AbstractBsVillageCharaGroupCQ(ConditionQuery referrerQuery, SqlClause sqlClause, String aliasName, int nestLevel) {
         super(referrerQuery, sqlClause, aliasName, nestLevel);
     }
 
@@ -37,7 +37,7 @@ public abstract class AbstractBsCharaGroupCQ extends AbstractConditionQuery {
     }
 
     public String asTableDbName() {
-        return "chara_group";
+        return "village_chara_group";
     }
 
     // ===================================================================================
@@ -45,7 +45,253 @@ public abstract class AbstractBsCharaGroupCQ extends AbstractConditionQuery {
     //                                                                               =====
     /**
      * Equal(=). And NullIgnored, OnlyOnceRegistered. <br>
-     * CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
+     * VILLAGE_CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
+     * @param villageCharaGroupId The value of villageCharaGroupId as equal. (basically NotNull: error as default, or no condition as option)
+     */
+    public void setVillageCharaGroupId_Equal(Integer villageCharaGroupId) {
+        doSetVillageCharaGroupId_Equal(villageCharaGroupId);
+    }
+
+    protected void doSetVillageCharaGroupId_Equal(Integer villageCharaGroupId) {
+        regVillageCharaGroupId(CK_EQ, villageCharaGroupId);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). And NullIgnored, OnlyOnceRegistered. <br>
+     * VILLAGE_CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
+     * @param villageCharaGroupId The value of villageCharaGroupId as notEqual. (basically NotNull: error as default, or no condition as option)
+     */
+    public void setVillageCharaGroupId_NotEqual(Integer villageCharaGroupId) {
+        doSetVillageCharaGroupId_NotEqual(villageCharaGroupId);
+    }
+
+    protected void doSetVillageCharaGroupId_NotEqual(Integer villageCharaGroupId) {
+        regVillageCharaGroupId(CK_NES, villageCharaGroupId);
+    }
+
+    /**
+     * GreaterThan(&gt;). And NullIgnored, OnlyOnceRegistered. <br>
+     * VILLAGE_CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
+     * @param villageCharaGroupId The value of villageCharaGroupId as greaterThan. (basically NotNull: error as default, or no condition as option)
+     */
+    public void setVillageCharaGroupId_GreaterThan(Integer villageCharaGroupId) {
+        regVillageCharaGroupId(CK_GT, villageCharaGroupId);
+    }
+
+    /**
+     * LessThan(&lt;). And NullIgnored, OnlyOnceRegistered. <br>
+     * VILLAGE_CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
+     * @param villageCharaGroupId The value of villageCharaGroupId as lessThan. (basically NotNull: error as default, or no condition as option)
+     */
+    public void setVillageCharaGroupId_LessThan(Integer villageCharaGroupId) {
+        regVillageCharaGroupId(CK_LT, villageCharaGroupId);
+    }
+
+    /**
+     * GreaterEqual(&gt;=). And NullIgnored, OnlyOnceRegistered. <br>
+     * VILLAGE_CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
+     * @param villageCharaGroupId The value of villageCharaGroupId as greaterEqual. (basically NotNull: error as default, or no condition as option)
+     */
+    public void setVillageCharaGroupId_GreaterEqual(Integer villageCharaGroupId) {
+        regVillageCharaGroupId(CK_GE, villageCharaGroupId);
+    }
+
+    /**
+     * LessEqual(&lt;=). And NullIgnored, OnlyOnceRegistered. <br>
+     * VILLAGE_CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
+     * @param villageCharaGroupId The value of villageCharaGroupId as lessEqual. (basically NotNull: error as default, or no condition as option)
+     */
+    public void setVillageCharaGroupId_LessEqual(Integer villageCharaGroupId) {
+        regVillageCharaGroupId(CK_LE, villageCharaGroupId);
+    }
+
+    /**
+     * RangeOf with various options. (versatile) <br>
+     * {(default) minNumber &lt;= column &lt;= maxNumber} <br>
+     * And NullIgnored, OnlyOnceRegistered. <br>
+     * VILLAGE_CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
+     * @param minNumber The min number of villageCharaGroupId. (basically NotNull: if op.allowOneSide(), null allowed)
+     * @param maxNumber The max number of villageCharaGroupId. (basically NotNull: if op.allowOneSide(), null allowed)
+     * @param opLambda The callback for option of range-of. (NotNull)
+     */
+    public void setVillageCharaGroupId_RangeOf(Integer minNumber, Integer maxNumber, ConditionOptionCall<RangeOfOption> opLambda) {
+        setVillageCharaGroupId_RangeOf(minNumber, maxNumber, xcROOP(opLambda));
+    }
+
+    /**
+     * RangeOf with various options. (versatile) <br>
+     * {(default) minNumber &lt;= column &lt;= maxNumber} <br>
+     * And NullIgnored, OnlyOnceRegistered. <br>
+     * VILLAGE_CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
+     * @param minNumber The min number of villageCharaGroupId. (basically NotNull: if op.allowOneSide(), null allowed)
+     * @param maxNumber The max number of villageCharaGroupId. (basically NotNull: if op.allowOneSide(), null allowed)
+     * @param rangeOfOption The option of range-of. (NotNull)
+     */
+    protected void setVillageCharaGroupId_RangeOf(Integer minNumber, Integer maxNumber, RangeOfOption rangeOfOption) {
+        regROO(minNumber, maxNumber, xgetCValueVillageCharaGroupId(), "VILLAGE_CHARA_GROUP_ID", rangeOfOption);
+    }
+
+    /**
+     * InScope {in (1, 2)}. And NullIgnored, NullElementIgnored, SeveralRegistered. <br>
+     * VILLAGE_CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
+     * @param villageCharaGroupIdList The collection of villageCharaGroupId as inScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
+     */
+    public void setVillageCharaGroupId_InScope(Collection<Integer> villageCharaGroupIdList) {
+        doSetVillageCharaGroupId_InScope(villageCharaGroupIdList);
+    }
+
+    protected void doSetVillageCharaGroupId_InScope(Collection<Integer> villageCharaGroupIdList) {
+        regINS(CK_INS, cTL(villageCharaGroupIdList), xgetCValueVillageCharaGroupId(), "VILLAGE_CHARA_GROUP_ID");
+    }
+
+    /**
+     * NotInScope {not in (1, 2)}. And NullIgnored, NullElementIgnored, SeveralRegistered. <br>
+     * VILLAGE_CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
+     * @param villageCharaGroupIdList The collection of villageCharaGroupId as notInScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
+     */
+    public void setVillageCharaGroupId_NotInScope(Collection<Integer> villageCharaGroupIdList) {
+        doSetVillageCharaGroupId_NotInScope(villageCharaGroupIdList);
+    }
+
+    protected void doSetVillageCharaGroupId_NotInScope(Collection<Integer> villageCharaGroupIdList) {
+        regINS(CK_NINS, cTL(villageCharaGroupIdList), xgetCValueVillageCharaGroupId(), "VILLAGE_CHARA_GROUP_ID");
+    }
+
+    /**
+     * IsNull {is null}. And OnlyOnceRegistered. <br>
+     * VILLAGE_CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
+     */
+    public void setVillageCharaGroupId_IsNull() { regVillageCharaGroupId(CK_ISN, DOBJ); }
+
+    /**
+     * IsNotNull {is not null}. And OnlyOnceRegistered. <br>
+     * VILLAGE_CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
+     */
+    public void setVillageCharaGroupId_IsNotNull() { regVillageCharaGroupId(CK_ISNN, DOBJ); }
+
+    protected void regVillageCharaGroupId(ConditionKey ky, Object vl) { regQ(ky, vl, xgetCValueVillageCharaGroupId(), "VILLAGE_CHARA_GROUP_ID"); }
+    protected abstract ConditionValue xgetCValueVillageCharaGroupId();
+
+    /**
+     * Equal(=). And NullIgnored, OnlyOnceRegistered. <br>
+     * VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village}
+     * @param villageId The value of villageId as equal. (basically NotNull: error as default, or no condition as option)
+     */
+    public void setVillageId_Equal(Integer villageId) {
+        doSetVillageId_Equal(villageId);
+    }
+
+    protected void doSetVillageId_Equal(Integer villageId) {
+        regVillageId(CK_EQ, villageId);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). And NullIgnored, OnlyOnceRegistered. <br>
+     * VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village}
+     * @param villageId The value of villageId as notEqual. (basically NotNull: error as default, or no condition as option)
+     */
+    public void setVillageId_NotEqual(Integer villageId) {
+        doSetVillageId_NotEqual(villageId);
+    }
+
+    protected void doSetVillageId_NotEqual(Integer villageId) {
+        regVillageId(CK_NES, villageId);
+    }
+
+    /**
+     * GreaterThan(&gt;). And NullIgnored, OnlyOnceRegistered. <br>
+     * VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village}
+     * @param villageId The value of villageId as greaterThan. (basically NotNull: error as default, or no condition as option)
+     */
+    public void setVillageId_GreaterThan(Integer villageId) {
+        regVillageId(CK_GT, villageId);
+    }
+
+    /**
+     * LessThan(&lt;). And NullIgnored, OnlyOnceRegistered. <br>
+     * VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village}
+     * @param villageId The value of villageId as lessThan. (basically NotNull: error as default, or no condition as option)
+     */
+    public void setVillageId_LessThan(Integer villageId) {
+        regVillageId(CK_LT, villageId);
+    }
+
+    /**
+     * GreaterEqual(&gt;=). And NullIgnored, OnlyOnceRegistered. <br>
+     * VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village}
+     * @param villageId The value of villageId as greaterEqual. (basically NotNull: error as default, or no condition as option)
+     */
+    public void setVillageId_GreaterEqual(Integer villageId) {
+        regVillageId(CK_GE, villageId);
+    }
+
+    /**
+     * LessEqual(&lt;=). And NullIgnored, OnlyOnceRegistered. <br>
+     * VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village}
+     * @param villageId The value of villageId as lessEqual. (basically NotNull: error as default, or no condition as option)
+     */
+    public void setVillageId_LessEqual(Integer villageId) {
+        regVillageId(CK_LE, villageId);
+    }
+
+    /**
+     * RangeOf with various options. (versatile) <br>
+     * {(default) minNumber &lt;= column &lt;= maxNumber} <br>
+     * And NullIgnored, OnlyOnceRegistered. <br>
+     * VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village}
+     * @param minNumber The min number of villageId. (basically NotNull: if op.allowOneSide(), null allowed)
+     * @param maxNumber The max number of villageId. (basically NotNull: if op.allowOneSide(), null allowed)
+     * @param opLambda The callback for option of range-of. (NotNull)
+     */
+    public void setVillageId_RangeOf(Integer minNumber, Integer maxNumber, ConditionOptionCall<RangeOfOption> opLambda) {
+        setVillageId_RangeOf(minNumber, maxNumber, xcROOP(opLambda));
+    }
+
+    /**
+     * RangeOf with various options. (versatile) <br>
+     * {(default) minNumber &lt;= column &lt;= maxNumber} <br>
+     * And NullIgnored, OnlyOnceRegistered. <br>
+     * VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village}
+     * @param minNumber The min number of villageId. (basically NotNull: if op.allowOneSide(), null allowed)
+     * @param maxNumber The max number of villageId. (basically NotNull: if op.allowOneSide(), null allowed)
+     * @param rangeOfOption The option of range-of. (NotNull)
+     */
+    protected void setVillageId_RangeOf(Integer minNumber, Integer maxNumber, RangeOfOption rangeOfOption) {
+        regROO(minNumber, maxNumber, xgetCValueVillageId(), "VILLAGE_ID", rangeOfOption);
+    }
+
+    /**
+     * InScope {in (1, 2)}. And NullIgnored, NullElementIgnored, SeveralRegistered. <br>
+     * VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village}
+     * @param villageIdList The collection of villageId as inScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
+     */
+    public void setVillageId_InScope(Collection<Integer> villageIdList) {
+        doSetVillageId_InScope(villageIdList);
+    }
+
+    protected void doSetVillageId_InScope(Collection<Integer> villageIdList) {
+        regINS(CK_INS, cTL(villageIdList), xgetCValueVillageId(), "VILLAGE_ID");
+    }
+
+    /**
+     * NotInScope {not in (1, 2)}. And NullIgnored, NullElementIgnored, SeveralRegistered. <br>
+     * VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village}
+     * @param villageIdList The collection of villageId as notInScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
+     */
+    public void setVillageId_NotInScope(Collection<Integer> villageIdList) {
+        doSetVillageId_NotInScope(villageIdList);
+    }
+
+    protected void doSetVillageId_NotInScope(Collection<Integer> villageIdList) {
+        regINS(CK_NINS, cTL(villageIdList), xgetCValueVillageId(), "VILLAGE_ID");
+    }
+
+    protected void regVillageId(ConditionKey ky, Object vl) { regQ(ky, vl, xgetCValueVillageId(), "VILLAGE_ID"); }
+    protected abstract ConditionValue xgetCValueVillageId();
+
+    /**
+     * Equal(=). And NullIgnored, OnlyOnceRegistered. <br>
+     * CHARA_GROUP_ID: {IX, NotNull, INT UNSIGNED(10), FK to chara_group}
      * @param charaGroupId The value of charaGroupId as equal. (basically NotNull: error as default, or no condition as option)
      */
     public void setCharaGroupId_Equal(Integer charaGroupId) {
@@ -58,7 +304,7 @@ public abstract class AbstractBsCharaGroupCQ extends AbstractConditionQuery {
 
     /**
      * NotEqual(&lt;&gt;). And NullIgnored, OnlyOnceRegistered. <br>
-     * CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
+     * CHARA_GROUP_ID: {IX, NotNull, INT UNSIGNED(10), FK to chara_group}
      * @param charaGroupId The value of charaGroupId as notEqual. (basically NotNull: error as default, or no condition as option)
      */
     public void setCharaGroupId_NotEqual(Integer charaGroupId) {
@@ -71,7 +317,7 @@ public abstract class AbstractBsCharaGroupCQ extends AbstractConditionQuery {
 
     /**
      * GreaterThan(&gt;). And NullIgnored, OnlyOnceRegistered. <br>
-     * CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
+     * CHARA_GROUP_ID: {IX, NotNull, INT UNSIGNED(10), FK to chara_group}
      * @param charaGroupId The value of charaGroupId as greaterThan. (basically NotNull: error as default, or no condition as option)
      */
     public void setCharaGroupId_GreaterThan(Integer charaGroupId) {
@@ -80,7 +326,7 @@ public abstract class AbstractBsCharaGroupCQ extends AbstractConditionQuery {
 
     /**
      * LessThan(&lt;). And NullIgnored, OnlyOnceRegistered. <br>
-     * CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
+     * CHARA_GROUP_ID: {IX, NotNull, INT UNSIGNED(10), FK to chara_group}
      * @param charaGroupId The value of charaGroupId as lessThan. (basically NotNull: error as default, or no condition as option)
      */
     public void setCharaGroupId_LessThan(Integer charaGroupId) {
@@ -89,7 +335,7 @@ public abstract class AbstractBsCharaGroupCQ extends AbstractConditionQuery {
 
     /**
      * GreaterEqual(&gt;=). And NullIgnored, OnlyOnceRegistered. <br>
-     * CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
+     * CHARA_GROUP_ID: {IX, NotNull, INT UNSIGNED(10), FK to chara_group}
      * @param charaGroupId The value of charaGroupId as greaterEqual. (basically NotNull: error as default, or no condition as option)
      */
     public void setCharaGroupId_GreaterEqual(Integer charaGroupId) {
@@ -98,7 +344,7 @@ public abstract class AbstractBsCharaGroupCQ extends AbstractConditionQuery {
 
     /**
      * LessEqual(&lt;=). And NullIgnored, OnlyOnceRegistered. <br>
-     * CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
+     * CHARA_GROUP_ID: {IX, NotNull, INT UNSIGNED(10), FK to chara_group}
      * @param charaGroupId The value of charaGroupId as lessEqual. (basically NotNull: error as default, or no condition as option)
      */
     public void setCharaGroupId_LessEqual(Integer charaGroupId) {
@@ -109,7 +355,7 @@ public abstract class AbstractBsCharaGroupCQ extends AbstractConditionQuery {
      * RangeOf with various options. (versatile) <br>
      * {(default) minNumber &lt;= column &lt;= maxNumber} <br>
      * And NullIgnored, OnlyOnceRegistered. <br>
-     * CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
+     * CHARA_GROUP_ID: {IX, NotNull, INT UNSIGNED(10), FK to chara_group}
      * @param minNumber The min number of charaGroupId. (basically NotNull: if op.allowOneSide(), null allowed)
      * @param maxNumber The max number of charaGroupId. (basically NotNull: if op.allowOneSide(), null allowed)
      * @param opLambda The callback for option of range-of. (NotNull)
@@ -122,7 +368,7 @@ public abstract class AbstractBsCharaGroupCQ extends AbstractConditionQuery {
      * RangeOf with various options. (versatile) <br>
      * {(default) minNumber &lt;= column &lt;= maxNumber} <br>
      * And NullIgnored, OnlyOnceRegistered. <br>
-     * CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
+     * CHARA_GROUP_ID: {IX, NotNull, INT UNSIGNED(10), FK to chara_group}
      * @param minNumber The min number of charaGroupId. (basically NotNull: if op.allowOneSide(), null allowed)
      * @param maxNumber The max number of charaGroupId. (basically NotNull: if op.allowOneSide(), null allowed)
      * @param rangeOfOption The option of range-of. (NotNull)
@@ -133,7 +379,7 @@ public abstract class AbstractBsCharaGroupCQ extends AbstractConditionQuery {
 
     /**
      * InScope {in (1, 2)}. And NullIgnored, NullElementIgnored, SeveralRegistered. <br>
-     * CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
+     * CHARA_GROUP_ID: {IX, NotNull, INT UNSIGNED(10), FK to chara_group}
      * @param charaGroupIdList The collection of charaGroupId as inScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     public void setCharaGroupId_InScope(Collection<Integer> charaGroupIdList) {
@@ -146,7 +392,7 @@ public abstract class AbstractBsCharaGroupCQ extends AbstractConditionQuery {
 
     /**
      * NotInScope {not in (1, 2)}. And NullIgnored, NullElementIgnored, SeveralRegistered. <br>
-     * CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
+     * CHARA_GROUP_ID: {IX, NotNull, INT UNSIGNED(10), FK to chara_group}
      * @param charaGroupIdList The collection of charaGroupId as notInScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     public void setCharaGroupId_NotInScope(Collection<Integer> charaGroupIdList) {
@@ -157,571 +403,8 @@ public abstract class AbstractBsCharaGroupCQ extends AbstractConditionQuery {
         regINS(CK_NINS, cTL(charaGroupIdList), xgetCValueCharaGroupId(), "CHARA_GROUP_ID");
     }
 
-    /**
-     * Set up ExistsReferrer (correlated sub-query). <br>
-     * {exists (select CHARA_GROUP_ID from chara where ...)} <br>
-     * chara by CHARA_GROUP_ID, named 'charaAsOne'.
-     * <pre>
-     * cb.query().<span style="color: #CC4747">existsChara</span>(charaCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-     *     charaCB.query().set...
-     * });
-     * </pre>
-     * @param subCBLambda The callback for sub-query of CharaList for 'exists'. (NotNull)
-     */
-    public void existsChara(SubQuery<CharaCB> subCBLambda) {
-        assertObjectNotNull("subCBLambda", subCBLambda);
-        CharaCB cb = new CharaCB(); cb.xsetupForExistsReferrer(this);
-        lockCall(() -> subCBLambda.query(cb)); String pp = keepCharaGroupId_ExistsReferrer_CharaList(cb.query());
-        registerExistsReferrer(cb.query(), "CHARA_GROUP_ID", "CHARA_GROUP_ID", pp, "charaList");
-    }
-    public abstract String keepCharaGroupId_ExistsReferrer_CharaList(CharaCQ sq);
-
-    /**
-     * Set up ExistsReferrer (correlated sub-query). <br>
-     * {exists (select CHARA_GROUP_ID from village_chara_group where ...)} <br>
-     * village_chara_group by CHARA_GROUP_ID, named 'villageCharaGroupAsOne'.
-     * <pre>
-     * cb.query().<span style="color: #CC4747">existsVillageCharaGroup</span>(groupCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-     *     groupCB.query().set...
-     * });
-     * </pre>
-     * @param subCBLambda The callback for sub-query of VillageCharaGroupList for 'exists'. (NotNull)
-     */
-    public void existsVillageCharaGroup(SubQuery<VillageCharaGroupCB> subCBLambda) {
-        assertObjectNotNull("subCBLambda", subCBLambda);
-        VillageCharaGroupCB cb = new VillageCharaGroupCB(); cb.xsetupForExistsReferrer(this);
-        lockCall(() -> subCBLambda.query(cb)); String pp = keepCharaGroupId_ExistsReferrer_VillageCharaGroupList(cb.query());
-        registerExistsReferrer(cb.query(), "CHARA_GROUP_ID", "CHARA_GROUP_ID", pp, "villageCharaGroupList");
-    }
-    public abstract String keepCharaGroupId_ExistsReferrer_VillageCharaGroupList(VillageCharaGroupCQ sq);
-
-    /**
-     * Set up NotExistsReferrer (correlated sub-query). <br>
-     * {not exists (select CHARA_GROUP_ID from chara where ...)} <br>
-     * chara by CHARA_GROUP_ID, named 'charaAsOne'.
-     * <pre>
-     * cb.query().<span style="color: #CC4747">notExistsChara</span>(charaCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-     *     charaCB.query().set...
-     * });
-     * </pre>
-     * @param subCBLambda The callback for sub-query of CharaGroupId_NotExistsReferrer_CharaList for 'not exists'. (NotNull)
-     */
-    public void notExistsChara(SubQuery<CharaCB> subCBLambda) {
-        assertObjectNotNull("subCBLambda", subCBLambda);
-        CharaCB cb = new CharaCB(); cb.xsetupForExistsReferrer(this);
-        lockCall(() -> subCBLambda.query(cb)); String pp = keepCharaGroupId_NotExistsReferrer_CharaList(cb.query());
-        registerNotExistsReferrer(cb.query(), "CHARA_GROUP_ID", "CHARA_GROUP_ID", pp, "charaList");
-    }
-    public abstract String keepCharaGroupId_NotExistsReferrer_CharaList(CharaCQ sq);
-
-    /**
-     * Set up NotExistsReferrer (correlated sub-query). <br>
-     * {not exists (select CHARA_GROUP_ID from village_chara_group where ...)} <br>
-     * village_chara_group by CHARA_GROUP_ID, named 'villageCharaGroupAsOne'.
-     * <pre>
-     * cb.query().<span style="color: #CC4747">notExistsVillageCharaGroup</span>(groupCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-     *     groupCB.query().set...
-     * });
-     * </pre>
-     * @param subCBLambda The callback for sub-query of CharaGroupId_NotExistsReferrer_VillageCharaGroupList for 'not exists'. (NotNull)
-     */
-    public void notExistsVillageCharaGroup(SubQuery<VillageCharaGroupCB> subCBLambda) {
-        assertObjectNotNull("subCBLambda", subCBLambda);
-        VillageCharaGroupCB cb = new VillageCharaGroupCB(); cb.xsetupForExistsReferrer(this);
-        lockCall(() -> subCBLambda.query(cb)); String pp = keepCharaGroupId_NotExistsReferrer_VillageCharaGroupList(cb.query());
-        registerNotExistsReferrer(cb.query(), "CHARA_GROUP_ID", "CHARA_GROUP_ID", pp, "villageCharaGroupList");
-    }
-    public abstract String keepCharaGroupId_NotExistsReferrer_VillageCharaGroupList(VillageCharaGroupCQ sq);
-
-    public void xsderiveCharaList(String fn, SubQuery<CharaCB> sq, String al, DerivedReferrerOption op) {
-        assertObjectNotNull("subQuery", sq);
-        CharaCB cb = new CharaCB(); cb.xsetupForDerivedReferrer(this);
-        lockCall(() -> sq.query(cb)); String pp = keepCharaGroupId_SpecifyDerivedReferrer_CharaList(cb.query());
-        registerSpecifyDerivedReferrer(fn, cb.query(), "CHARA_GROUP_ID", "CHARA_GROUP_ID", pp, "charaList", al, op);
-    }
-    public abstract String keepCharaGroupId_SpecifyDerivedReferrer_CharaList(CharaCQ sq);
-
-    public void xsderiveVillageCharaGroupList(String fn, SubQuery<VillageCharaGroupCB> sq, String al, DerivedReferrerOption op) {
-        assertObjectNotNull("subQuery", sq);
-        VillageCharaGroupCB cb = new VillageCharaGroupCB(); cb.xsetupForDerivedReferrer(this);
-        lockCall(() -> sq.query(cb)); String pp = keepCharaGroupId_SpecifyDerivedReferrer_VillageCharaGroupList(cb.query());
-        registerSpecifyDerivedReferrer(fn, cb.query(), "CHARA_GROUP_ID", "CHARA_GROUP_ID", pp, "villageCharaGroupList", al, op);
-    }
-    public abstract String keepCharaGroupId_SpecifyDerivedReferrer_VillageCharaGroupList(VillageCharaGroupCQ sq);
-
-    /**
-     * Prepare for (Query)DerivedReferrer (correlated sub-query). <br>
-     * {FOO &lt;= (select max(BAR) from chara where ...)} <br>
-     * chara by CHARA_GROUP_ID, named 'charaAsOne'.
-     * <pre>
-     * cb.query().<span style="color: #CC4747">derivedChara()</span>.<span style="color: #CC4747">max</span>(charaCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-     *     charaCB.specify().<span style="color: #CC4747">columnFoo...</span> <span style="color: #3F7E5E">// derived column by function</span>
-     *     charaCB.query().setBar... <span style="color: #3F7E5E">// referrer condition</span>
-     * }).<span style="color: #CC4747">greaterEqual</span>(123); <span style="color: #3F7E5E">// condition to derived column</span>
-     * </pre>
-     * @return The object to set up a function for referrer table. (NotNull)
-     */
-    public HpQDRFunction<CharaCB> derivedChara() {
-        return xcreateQDRFunctionCharaList();
-    }
-    protected HpQDRFunction<CharaCB> xcreateQDRFunctionCharaList() {
-        return xcQDRFunc((fn, sq, rd, vl, op) -> xqderiveCharaList(fn, sq, rd, vl, op));
-    }
-    public void xqderiveCharaList(String fn, SubQuery<CharaCB> sq, String rd, Object vl, DerivedReferrerOption op) {
-        assertObjectNotNull("subQuery", sq);
-        CharaCB cb = new CharaCB(); cb.xsetupForDerivedReferrer(this);
-        lockCall(() -> sq.query(cb)); String sqpp = keepCharaGroupId_QueryDerivedReferrer_CharaList(cb.query()); String prpp = keepCharaGroupId_QueryDerivedReferrer_CharaListParameter(vl);
-        registerQueryDerivedReferrer(fn, cb.query(), "CHARA_GROUP_ID", "CHARA_GROUP_ID", sqpp, "charaList", rd, vl, prpp, op);
-    }
-    public abstract String keepCharaGroupId_QueryDerivedReferrer_CharaList(CharaCQ sq);
-    public abstract String keepCharaGroupId_QueryDerivedReferrer_CharaListParameter(Object vl);
-
-    /**
-     * Prepare for (Query)DerivedReferrer (correlated sub-query). <br>
-     * {FOO &lt;= (select max(BAR) from village_chara_group where ...)} <br>
-     * village_chara_group by CHARA_GROUP_ID, named 'villageCharaGroupAsOne'.
-     * <pre>
-     * cb.query().<span style="color: #CC4747">derivedVillageCharaGroup()</span>.<span style="color: #CC4747">max</span>(groupCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-     *     groupCB.specify().<span style="color: #CC4747">columnFoo...</span> <span style="color: #3F7E5E">// derived column by function</span>
-     *     groupCB.query().setBar... <span style="color: #3F7E5E">// referrer condition</span>
-     * }).<span style="color: #CC4747">greaterEqual</span>(123); <span style="color: #3F7E5E">// condition to derived column</span>
-     * </pre>
-     * @return The object to set up a function for referrer table. (NotNull)
-     */
-    public HpQDRFunction<VillageCharaGroupCB> derivedVillageCharaGroup() {
-        return xcreateQDRFunctionVillageCharaGroupList();
-    }
-    protected HpQDRFunction<VillageCharaGroupCB> xcreateQDRFunctionVillageCharaGroupList() {
-        return xcQDRFunc((fn, sq, rd, vl, op) -> xqderiveVillageCharaGroupList(fn, sq, rd, vl, op));
-    }
-    public void xqderiveVillageCharaGroupList(String fn, SubQuery<VillageCharaGroupCB> sq, String rd, Object vl, DerivedReferrerOption op) {
-        assertObjectNotNull("subQuery", sq);
-        VillageCharaGroupCB cb = new VillageCharaGroupCB(); cb.xsetupForDerivedReferrer(this);
-        lockCall(() -> sq.query(cb)); String sqpp = keepCharaGroupId_QueryDerivedReferrer_VillageCharaGroupList(cb.query()); String prpp = keepCharaGroupId_QueryDerivedReferrer_VillageCharaGroupListParameter(vl);
-        registerQueryDerivedReferrer(fn, cb.query(), "CHARA_GROUP_ID", "CHARA_GROUP_ID", sqpp, "villageCharaGroupList", rd, vl, prpp, op);
-    }
-    public abstract String keepCharaGroupId_QueryDerivedReferrer_VillageCharaGroupList(VillageCharaGroupCQ sq);
-    public abstract String keepCharaGroupId_QueryDerivedReferrer_VillageCharaGroupListParameter(Object vl);
-
-    /**
-     * IsNull {is null}. And OnlyOnceRegistered. <br>
-     * CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
-     */
-    public void setCharaGroupId_IsNull() { regCharaGroupId(CK_ISN, DOBJ); }
-
-    /**
-     * IsNotNull {is not null}. And OnlyOnceRegistered. <br>
-     * CHARA_GROUP_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
-     */
-    public void setCharaGroupId_IsNotNull() { regCharaGroupId(CK_ISNN, DOBJ); }
-
     protected void regCharaGroupId(ConditionKey ky, Object vl) { regQ(ky, vl, xgetCValueCharaGroupId(), "CHARA_GROUP_ID"); }
     protected abstract ConditionValue xgetCValueCharaGroupId();
-
-    /**
-     * Equal(=). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * CHARA_GROUP_NAME: {NotNull, VARCHAR(40)}
-     * @param charaGroupName The value of charaGroupName as equal. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setCharaGroupName_Equal(String charaGroupName) {
-        doSetCharaGroupName_Equal(fRES(charaGroupName));
-    }
-
-    protected void doSetCharaGroupName_Equal(String charaGroupName) {
-        regCharaGroupName(CK_EQ, charaGroupName);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * CHARA_GROUP_NAME: {NotNull, VARCHAR(40)}
-     * @param charaGroupName The value of charaGroupName as notEqual. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setCharaGroupName_NotEqual(String charaGroupName) {
-        doSetCharaGroupName_NotEqual(fRES(charaGroupName));
-    }
-
-    protected void doSetCharaGroupName_NotEqual(String charaGroupName) {
-        regCharaGroupName(CK_NES, charaGroupName);
-    }
-
-    /**
-     * GreaterThan(&gt;). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * CHARA_GROUP_NAME: {NotNull, VARCHAR(40)}
-     * @param charaGroupName The value of charaGroupName as greaterThan. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setCharaGroupName_GreaterThan(String charaGroupName) {
-        regCharaGroupName(CK_GT, fRES(charaGroupName));
-    }
-
-    /**
-     * LessThan(&lt;). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * CHARA_GROUP_NAME: {NotNull, VARCHAR(40)}
-     * @param charaGroupName The value of charaGroupName as lessThan. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setCharaGroupName_LessThan(String charaGroupName) {
-        regCharaGroupName(CK_LT, fRES(charaGroupName));
-    }
-
-    /**
-     * GreaterEqual(&gt;=). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * CHARA_GROUP_NAME: {NotNull, VARCHAR(40)}
-     * @param charaGroupName The value of charaGroupName as greaterEqual. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setCharaGroupName_GreaterEqual(String charaGroupName) {
-        regCharaGroupName(CK_GE, fRES(charaGroupName));
-    }
-
-    /**
-     * LessEqual(&lt;=). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * CHARA_GROUP_NAME: {NotNull, VARCHAR(40)}
-     * @param charaGroupName The value of charaGroupName as lessEqual. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setCharaGroupName_LessEqual(String charaGroupName) {
-        regCharaGroupName(CK_LE, fRES(charaGroupName));
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * CHARA_GROUP_NAME: {NotNull, VARCHAR(40)}
-     * @param charaGroupNameList The collection of charaGroupName as inScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setCharaGroupName_InScope(Collection<String> charaGroupNameList) {
-        doSetCharaGroupName_InScope(charaGroupNameList);
-    }
-
-    protected void doSetCharaGroupName_InScope(Collection<String> charaGroupNameList) {
-        regINS(CK_INS, cTL(charaGroupNameList), xgetCValueCharaGroupName(), "CHARA_GROUP_NAME");
-    }
-
-    /**
-     * NotInScope {not in ('a', 'b')}. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * CHARA_GROUP_NAME: {NotNull, VARCHAR(40)}
-     * @param charaGroupNameList The collection of charaGroupName as notInScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setCharaGroupName_NotInScope(Collection<String> charaGroupNameList) {
-        doSetCharaGroupName_NotInScope(charaGroupNameList);
-    }
-
-    protected void doSetCharaGroupName_NotInScope(Collection<String> charaGroupNameList) {
-        regINS(CK_NINS, cTL(charaGroupNameList), xgetCValueCharaGroupName(), "CHARA_GROUP_NAME");
-    }
-
-    /**
-     * LikeSearch with various options. (versatile) {like '%xxx%' escape ...}. And NullOrEmptyIgnored, SeveralRegistered. <br>
-     * CHARA_GROUP_NAME: {NotNull, VARCHAR(40)} <br>
-     * <pre>e.g. setCharaGroupName_LikeSearch("xxx", op <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> op.<span style="color: #CC4747">likeContain()</span>);</pre>
-     * @param charaGroupName The value of charaGroupName as likeSearch. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     * @param opLambda The callback for option of like-search. (NotNull)
-     */
-    public void setCharaGroupName_LikeSearch(String charaGroupName, ConditionOptionCall<LikeSearchOption> opLambda) {
-        setCharaGroupName_LikeSearch(charaGroupName, xcLSOP(opLambda));
-    }
-
-    /**
-     * LikeSearch with various options. (versatile) {like '%xxx%' escape ...}. And NullOrEmptyIgnored, SeveralRegistered. <br>
-     * CHARA_GROUP_NAME: {NotNull, VARCHAR(40)} <br>
-     * <pre>e.g. setCharaGroupName_LikeSearch("xxx", new <span style="color: #CC4747">LikeSearchOption</span>().likeContain());</pre>
-     * @param charaGroupName The value of charaGroupName as likeSearch. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     * @param likeSearchOption The option of like-search. (NotNull)
-     */
-    protected void setCharaGroupName_LikeSearch(String charaGroupName, LikeSearchOption likeSearchOption) {
-        regLSQ(CK_LS, fRES(charaGroupName), xgetCValueCharaGroupName(), "CHARA_GROUP_NAME", likeSearchOption);
-    }
-
-    /**
-     * NotLikeSearch with various options. (versatile) {not like 'xxx%' escape ...} <br>
-     * And NullOrEmptyIgnored, SeveralRegistered. <br>
-     * CHARA_GROUP_NAME: {NotNull, VARCHAR(40)}
-     * @param charaGroupName The value of charaGroupName as notLikeSearch. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     * @param opLambda The callback for option of like-search. (NotNull)
-     */
-    public void setCharaGroupName_NotLikeSearch(String charaGroupName, ConditionOptionCall<LikeSearchOption> opLambda) {
-        setCharaGroupName_NotLikeSearch(charaGroupName, xcLSOP(opLambda));
-    }
-
-    /**
-     * NotLikeSearch with various options. (versatile) {not like 'xxx%' escape ...} <br>
-     * And NullOrEmptyIgnored, SeveralRegistered. <br>
-     * CHARA_GROUP_NAME: {NotNull, VARCHAR(40)}
-     * @param charaGroupName The value of charaGroupName as notLikeSearch. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     * @param likeSearchOption The option of not-like-search. (NotNull)
-     */
-    protected void setCharaGroupName_NotLikeSearch(String charaGroupName, LikeSearchOption likeSearchOption) {
-        regLSQ(CK_NLS, fRES(charaGroupName), xgetCValueCharaGroupName(), "CHARA_GROUP_NAME", likeSearchOption);
-    }
-
-    protected void regCharaGroupName(ConditionKey ky, Object vl) { regQ(ky, vl, xgetCValueCharaGroupName(), "CHARA_GROUP_NAME"); }
-    protected abstract ConditionValue xgetCValueCharaGroupName();
-
-    /**
-     * Equal(=). And NullIgnored, OnlyOnceRegistered. <br>
-     * DESIGNER_ID: {IX, NotNull, INT UNSIGNED(10), FK to designer}
-     * @param designerId The value of designerId as equal. (basically NotNull: error as default, or no condition as option)
-     */
-    public void setDesignerId_Equal(Integer designerId) {
-        doSetDesignerId_Equal(designerId);
-    }
-
-    protected void doSetDesignerId_Equal(Integer designerId) {
-        regDesignerId(CK_EQ, designerId);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). And NullIgnored, OnlyOnceRegistered. <br>
-     * DESIGNER_ID: {IX, NotNull, INT UNSIGNED(10), FK to designer}
-     * @param designerId The value of designerId as notEqual. (basically NotNull: error as default, or no condition as option)
-     */
-    public void setDesignerId_NotEqual(Integer designerId) {
-        doSetDesignerId_NotEqual(designerId);
-    }
-
-    protected void doSetDesignerId_NotEqual(Integer designerId) {
-        regDesignerId(CK_NES, designerId);
-    }
-
-    /**
-     * GreaterThan(&gt;). And NullIgnored, OnlyOnceRegistered. <br>
-     * DESIGNER_ID: {IX, NotNull, INT UNSIGNED(10), FK to designer}
-     * @param designerId The value of designerId as greaterThan. (basically NotNull: error as default, or no condition as option)
-     */
-    public void setDesignerId_GreaterThan(Integer designerId) {
-        regDesignerId(CK_GT, designerId);
-    }
-
-    /**
-     * LessThan(&lt;). And NullIgnored, OnlyOnceRegistered. <br>
-     * DESIGNER_ID: {IX, NotNull, INT UNSIGNED(10), FK to designer}
-     * @param designerId The value of designerId as lessThan. (basically NotNull: error as default, or no condition as option)
-     */
-    public void setDesignerId_LessThan(Integer designerId) {
-        regDesignerId(CK_LT, designerId);
-    }
-
-    /**
-     * GreaterEqual(&gt;=). And NullIgnored, OnlyOnceRegistered. <br>
-     * DESIGNER_ID: {IX, NotNull, INT UNSIGNED(10), FK to designer}
-     * @param designerId The value of designerId as greaterEqual. (basically NotNull: error as default, or no condition as option)
-     */
-    public void setDesignerId_GreaterEqual(Integer designerId) {
-        regDesignerId(CK_GE, designerId);
-    }
-
-    /**
-     * LessEqual(&lt;=). And NullIgnored, OnlyOnceRegistered. <br>
-     * DESIGNER_ID: {IX, NotNull, INT UNSIGNED(10), FK to designer}
-     * @param designerId The value of designerId as lessEqual. (basically NotNull: error as default, or no condition as option)
-     */
-    public void setDesignerId_LessEqual(Integer designerId) {
-        regDesignerId(CK_LE, designerId);
-    }
-
-    /**
-     * RangeOf with various options. (versatile) <br>
-     * {(default) minNumber &lt;= column &lt;= maxNumber} <br>
-     * And NullIgnored, OnlyOnceRegistered. <br>
-     * DESIGNER_ID: {IX, NotNull, INT UNSIGNED(10), FK to designer}
-     * @param minNumber The min number of designerId. (basically NotNull: if op.allowOneSide(), null allowed)
-     * @param maxNumber The max number of designerId. (basically NotNull: if op.allowOneSide(), null allowed)
-     * @param opLambda The callback for option of range-of. (NotNull)
-     */
-    public void setDesignerId_RangeOf(Integer minNumber, Integer maxNumber, ConditionOptionCall<RangeOfOption> opLambda) {
-        setDesignerId_RangeOf(minNumber, maxNumber, xcROOP(opLambda));
-    }
-
-    /**
-     * RangeOf with various options. (versatile) <br>
-     * {(default) minNumber &lt;= column &lt;= maxNumber} <br>
-     * And NullIgnored, OnlyOnceRegistered. <br>
-     * DESIGNER_ID: {IX, NotNull, INT UNSIGNED(10), FK to designer}
-     * @param minNumber The min number of designerId. (basically NotNull: if op.allowOneSide(), null allowed)
-     * @param maxNumber The max number of designerId. (basically NotNull: if op.allowOneSide(), null allowed)
-     * @param rangeOfOption The option of range-of. (NotNull)
-     */
-    protected void setDesignerId_RangeOf(Integer minNumber, Integer maxNumber, RangeOfOption rangeOfOption) {
-        regROO(minNumber, maxNumber, xgetCValueDesignerId(), "DESIGNER_ID", rangeOfOption);
-    }
-
-    /**
-     * InScope {in (1, 2)}. And NullIgnored, NullElementIgnored, SeveralRegistered. <br>
-     * DESIGNER_ID: {IX, NotNull, INT UNSIGNED(10), FK to designer}
-     * @param designerIdList The collection of designerId as inScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setDesignerId_InScope(Collection<Integer> designerIdList) {
-        doSetDesignerId_InScope(designerIdList);
-    }
-
-    protected void doSetDesignerId_InScope(Collection<Integer> designerIdList) {
-        regINS(CK_INS, cTL(designerIdList), xgetCValueDesignerId(), "DESIGNER_ID");
-    }
-
-    /**
-     * NotInScope {not in (1, 2)}. And NullIgnored, NullElementIgnored, SeveralRegistered. <br>
-     * DESIGNER_ID: {IX, NotNull, INT UNSIGNED(10), FK to designer}
-     * @param designerIdList The collection of designerId as notInScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setDesignerId_NotInScope(Collection<Integer> designerIdList) {
-        doSetDesignerId_NotInScope(designerIdList);
-    }
-
-    protected void doSetDesignerId_NotInScope(Collection<Integer> designerIdList) {
-        regINS(CK_NINS, cTL(designerIdList), xgetCValueDesignerId(), "DESIGNER_ID");
-    }
-
-    protected void regDesignerId(ConditionKey ky, Object vl) { regQ(ky, vl, xgetCValueDesignerId(), "DESIGNER_ID"); }
-    protected abstract ConditionValue xgetCValueDesignerId();
-
-    /**
-     * Equal(=). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * DESCRIPTION_URL: {TEXT(65535)}
-     * @param descriptionUrl The value of descriptionUrl as equal. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setDescriptionUrl_Equal(String descriptionUrl) {
-        doSetDescriptionUrl_Equal(fRES(descriptionUrl));
-    }
-
-    protected void doSetDescriptionUrl_Equal(String descriptionUrl) {
-        regDescriptionUrl(CK_EQ, descriptionUrl);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * DESCRIPTION_URL: {TEXT(65535)}
-     * @param descriptionUrl The value of descriptionUrl as notEqual. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setDescriptionUrl_NotEqual(String descriptionUrl) {
-        doSetDescriptionUrl_NotEqual(fRES(descriptionUrl));
-    }
-
-    protected void doSetDescriptionUrl_NotEqual(String descriptionUrl) {
-        regDescriptionUrl(CK_NES, descriptionUrl);
-    }
-
-    /**
-     * GreaterThan(&gt;). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * DESCRIPTION_URL: {TEXT(65535)}
-     * @param descriptionUrl The value of descriptionUrl as greaterThan. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setDescriptionUrl_GreaterThan(String descriptionUrl) {
-        regDescriptionUrl(CK_GT, fRES(descriptionUrl));
-    }
-
-    /**
-     * LessThan(&lt;). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * DESCRIPTION_URL: {TEXT(65535)}
-     * @param descriptionUrl The value of descriptionUrl as lessThan. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setDescriptionUrl_LessThan(String descriptionUrl) {
-        regDescriptionUrl(CK_LT, fRES(descriptionUrl));
-    }
-
-    /**
-     * GreaterEqual(&gt;=). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * DESCRIPTION_URL: {TEXT(65535)}
-     * @param descriptionUrl The value of descriptionUrl as greaterEqual. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setDescriptionUrl_GreaterEqual(String descriptionUrl) {
-        regDescriptionUrl(CK_GE, fRES(descriptionUrl));
-    }
-
-    /**
-     * LessEqual(&lt;=). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * DESCRIPTION_URL: {TEXT(65535)}
-     * @param descriptionUrl The value of descriptionUrl as lessEqual. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setDescriptionUrl_LessEqual(String descriptionUrl) {
-        regDescriptionUrl(CK_LE, fRES(descriptionUrl));
-    }
-
-    /**
-     * InScope {in ('a', 'b')}. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * DESCRIPTION_URL: {TEXT(65535)}
-     * @param descriptionUrlList The collection of descriptionUrl as inScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setDescriptionUrl_InScope(Collection<String> descriptionUrlList) {
-        doSetDescriptionUrl_InScope(descriptionUrlList);
-    }
-
-    protected void doSetDescriptionUrl_InScope(Collection<String> descriptionUrlList) {
-        regINS(CK_INS, cTL(descriptionUrlList), xgetCValueDescriptionUrl(), "DESCRIPTION_URL");
-    }
-
-    /**
-     * NotInScope {not in ('a', 'b')}. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * DESCRIPTION_URL: {TEXT(65535)}
-     * @param descriptionUrlList The collection of descriptionUrl as notInScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     */
-    public void setDescriptionUrl_NotInScope(Collection<String> descriptionUrlList) {
-        doSetDescriptionUrl_NotInScope(descriptionUrlList);
-    }
-
-    protected void doSetDescriptionUrl_NotInScope(Collection<String> descriptionUrlList) {
-        regINS(CK_NINS, cTL(descriptionUrlList), xgetCValueDescriptionUrl(), "DESCRIPTION_URL");
-    }
-
-    /**
-     * LikeSearch with various options. (versatile) {like '%xxx%' escape ...}. And NullOrEmptyIgnored, SeveralRegistered. <br>
-     * DESCRIPTION_URL: {TEXT(65535)} <br>
-     * <pre>e.g. setDescriptionUrl_LikeSearch("xxx", op <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> op.<span style="color: #CC4747">likeContain()</span>);</pre>
-     * @param descriptionUrl The value of descriptionUrl as likeSearch. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     * @param opLambda The callback for option of like-search. (NotNull)
-     */
-    public void setDescriptionUrl_LikeSearch(String descriptionUrl, ConditionOptionCall<LikeSearchOption> opLambda) {
-        setDescriptionUrl_LikeSearch(descriptionUrl, xcLSOP(opLambda));
-    }
-
-    /**
-     * LikeSearch with various options. (versatile) {like '%xxx%' escape ...}. And NullOrEmptyIgnored, SeveralRegistered. <br>
-     * DESCRIPTION_URL: {TEXT(65535)} <br>
-     * <pre>e.g. setDescriptionUrl_LikeSearch("xxx", new <span style="color: #CC4747">LikeSearchOption</span>().likeContain());</pre>
-     * @param descriptionUrl The value of descriptionUrl as likeSearch. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     * @param likeSearchOption The option of like-search. (NotNull)
-     */
-    protected void setDescriptionUrl_LikeSearch(String descriptionUrl, LikeSearchOption likeSearchOption) {
-        regLSQ(CK_LS, fRES(descriptionUrl), xgetCValueDescriptionUrl(), "DESCRIPTION_URL", likeSearchOption);
-    }
-
-    /**
-     * NotLikeSearch with various options. (versatile) {not like 'xxx%' escape ...} <br>
-     * And NullOrEmptyIgnored, SeveralRegistered. <br>
-     * DESCRIPTION_URL: {TEXT(65535)}
-     * @param descriptionUrl The value of descriptionUrl as notLikeSearch. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     * @param opLambda The callback for option of like-search. (NotNull)
-     */
-    public void setDescriptionUrl_NotLikeSearch(String descriptionUrl, ConditionOptionCall<LikeSearchOption> opLambda) {
-        setDescriptionUrl_NotLikeSearch(descriptionUrl, xcLSOP(opLambda));
-    }
-
-    /**
-     * NotLikeSearch with various options. (versatile) {not like 'xxx%' escape ...} <br>
-     * And NullOrEmptyIgnored, SeveralRegistered. <br>
-     * DESCRIPTION_URL: {TEXT(65535)}
-     * @param descriptionUrl The value of descriptionUrl as notLikeSearch. (basically NotNull, NotEmpty: error as default, or no condition as option)
-     * @param likeSearchOption The option of not-like-search. (NotNull)
-     */
-    protected void setDescriptionUrl_NotLikeSearch(String descriptionUrl, LikeSearchOption likeSearchOption) {
-        regLSQ(CK_NLS, fRES(descriptionUrl), xgetCValueDescriptionUrl(), "DESCRIPTION_URL", likeSearchOption);
-    }
-
-    /**
-     * IsNull {is null}. And OnlyOnceRegistered. <br>
-     * DESCRIPTION_URL: {TEXT(65535)}
-     */
-    public void setDescriptionUrl_IsNull() { regDescriptionUrl(CK_ISN, DOBJ); }
-
-    /**
-     * IsNullOrEmpty {is null or empty}. And OnlyOnceRegistered. <br>
-     * DESCRIPTION_URL: {TEXT(65535)}
-     */
-    public void setDescriptionUrl_IsNullOrEmpty() { regDescriptionUrl(CK_ISNOE, DOBJ); }
-
-    /**
-     * IsNotNull {is not null}. And OnlyOnceRegistered. <br>
-     * DESCRIPTION_URL: {TEXT(65535)}
-     */
-    public void setDescriptionUrl_IsNotNull() { regDescriptionUrl(CK_ISNN, DOBJ); }
-
-    protected void regDescriptionUrl(ConditionKey ky, Object vl) { regQ(ky, vl, xgetCValueDescriptionUrl(), "DESCRIPTION_URL"); }
-    protected abstract ConditionValue xgetCValueDescriptionUrl();
 
     /**
      * Equal(=). And NullIgnored, OnlyOnceRegistered. <br>
@@ -1157,8 +840,8 @@ public abstract class AbstractBsCharaGroupCQ extends AbstractConditionQuery {
      * </pre>
      * @return The object to set up a function. (NotNull)
      */
-    public HpSLCFunction<CharaGroupCB> scalar_Equal() {
-        return xcreateSLCFunction(CK_EQ, CharaGroupCB.class);
+    public HpSLCFunction<VillageCharaGroupCB> scalar_Equal() {
+        return xcreateSLCFunction(CK_EQ, VillageCharaGroupCB.class);
     }
 
     /**
@@ -1172,8 +855,8 @@ public abstract class AbstractBsCharaGroupCQ extends AbstractConditionQuery {
      * </pre>
      * @return The object to set up a function. (NotNull)
      */
-    public HpSLCFunction<CharaGroupCB> scalar_NotEqual() {
-        return xcreateSLCFunction(CK_NES, CharaGroupCB.class);
+    public HpSLCFunction<VillageCharaGroupCB> scalar_NotEqual() {
+        return xcreateSLCFunction(CK_NES, VillageCharaGroupCB.class);
     }
 
     /**
@@ -1187,8 +870,8 @@ public abstract class AbstractBsCharaGroupCQ extends AbstractConditionQuery {
      * </pre>
      * @return The object to set up a function. (NotNull)
      */
-    public HpSLCFunction<CharaGroupCB> scalar_GreaterThan() {
-        return xcreateSLCFunction(CK_GT, CharaGroupCB.class);
+    public HpSLCFunction<VillageCharaGroupCB> scalar_GreaterThan() {
+        return xcreateSLCFunction(CK_GT, VillageCharaGroupCB.class);
     }
 
     /**
@@ -1202,8 +885,8 @@ public abstract class AbstractBsCharaGroupCQ extends AbstractConditionQuery {
      * </pre>
      * @return The object to set up a function. (NotNull)
      */
-    public HpSLCFunction<CharaGroupCB> scalar_LessThan() {
-        return xcreateSLCFunction(CK_LT, CharaGroupCB.class);
+    public HpSLCFunction<VillageCharaGroupCB> scalar_LessThan() {
+        return xcreateSLCFunction(CK_LT, VillageCharaGroupCB.class);
     }
 
     /**
@@ -1217,16 +900,16 @@ public abstract class AbstractBsCharaGroupCQ extends AbstractConditionQuery {
      * </pre>
      * @return The object to set up a function. (NotNull)
      */
-    public HpSLCFunction<CharaGroupCB> scalar_GreaterEqual() {
-        return xcreateSLCFunction(CK_GE, CharaGroupCB.class);
+    public HpSLCFunction<VillageCharaGroupCB> scalar_GreaterEqual() {
+        return xcreateSLCFunction(CK_GE, VillageCharaGroupCB.class);
     }
 
     /**
      * Prepare ScalarCondition as lessEqual. <br>
      * {where FOO &lt;= (select max(BAR) from ...)}
      * <pre>
-     * cb.query().<span style="color: #CC4747">scalar_LessEqual()</span>.max(new SubQuery&lt;CharaGroupCB&gt;() {
-     *     public void query(CharaGroupCB subCB) {
+     * cb.query().<span style="color: #CC4747">scalar_LessEqual()</span>.max(new SubQuery&lt;VillageCharaGroupCB&gt;() {
+     *     public void query(VillageCharaGroupCB subCB) {
      *         subCB.specify().setFoo... <span style="color: #3F7E5E">// derived column for function</span>
      *         subCB.query().setBar...
      *     }
@@ -1234,56 +917,56 @@ public abstract class AbstractBsCharaGroupCQ extends AbstractConditionQuery {
      * </pre>
      * @return The object to set up a function. (NotNull)
      */
-    public HpSLCFunction<CharaGroupCB> scalar_LessEqual() {
-        return xcreateSLCFunction(CK_LE, CharaGroupCB.class);
+    public HpSLCFunction<VillageCharaGroupCB> scalar_LessEqual() {
+        return xcreateSLCFunction(CK_LE, VillageCharaGroupCB.class);
     }
 
     @SuppressWarnings("unchecked")
     protected <CB extends ConditionBean> void xscalarCondition(String fn, SubQuery<CB> sq, String rd, HpSLCCustomized<CB> cs, ScalarConditionOption op) {
         assertObjectNotNull("subQuery", sq);
-        CharaGroupCB cb = xcreateScalarConditionCB(); sq.query((CB)cb);
+        VillageCharaGroupCB cb = xcreateScalarConditionCB(); sq.query((CB)cb);
         String pp = keepScalarCondition(cb.query()); // for saving query-value
         cs.setPartitionByCBean((CB)xcreateScalarConditionPartitionByCB()); // for using partition-by
         registerScalarCondition(fn, cb.query(), pp, rd, cs, op);
     }
-    public abstract String keepScalarCondition(CharaGroupCQ sq);
+    public abstract String keepScalarCondition(VillageCharaGroupCQ sq);
 
-    protected CharaGroupCB xcreateScalarConditionCB() {
-        CharaGroupCB cb = newMyCB(); cb.xsetupForScalarCondition(this); return cb;
+    protected VillageCharaGroupCB xcreateScalarConditionCB() {
+        VillageCharaGroupCB cb = newMyCB(); cb.xsetupForScalarCondition(this); return cb;
     }
 
-    protected CharaGroupCB xcreateScalarConditionPartitionByCB() {
-        CharaGroupCB cb = newMyCB(); cb.xsetupForScalarConditionPartitionBy(this); return cb;
+    protected VillageCharaGroupCB xcreateScalarConditionPartitionByCB() {
+        VillageCharaGroupCB cb = newMyCB(); cb.xsetupForScalarConditionPartitionBy(this); return cb;
     }
 
     // ===================================================================================
     //                                                                       MyselfDerived
     //                                                                       =============
-    public void xsmyselfDerive(String fn, SubQuery<CharaGroupCB> sq, String al, DerivedReferrerOption op) {
+    public void xsmyselfDerive(String fn, SubQuery<VillageCharaGroupCB> sq, String al, DerivedReferrerOption op) {
         assertObjectNotNull("subQuery", sq);
-        CharaGroupCB cb = new CharaGroupCB(); cb.xsetupForDerivedReferrer(this);
-        lockCall(() -> sq.query(cb)); String pp = keepSpecifyMyselfDerived(cb.query()); String pk = "CHARA_GROUP_ID";
+        VillageCharaGroupCB cb = new VillageCharaGroupCB(); cb.xsetupForDerivedReferrer(this);
+        lockCall(() -> sq.query(cb)); String pp = keepSpecifyMyselfDerived(cb.query()); String pk = "VILLAGE_CHARA_GROUP_ID";
         registerSpecifyMyselfDerived(fn, cb.query(), pk, pk, pp, "myselfDerived", al, op);
     }
-    public abstract String keepSpecifyMyselfDerived(CharaGroupCQ sq);
+    public abstract String keepSpecifyMyselfDerived(VillageCharaGroupCQ sq);
 
     /**
      * Prepare for (Query)MyselfDerived (correlated sub-query).
      * @return The object to set up a function for myself table. (NotNull)
      */
-    public HpQDRFunction<CharaGroupCB> myselfDerived() {
-        return xcreateQDRFunctionMyselfDerived(CharaGroupCB.class);
+    public HpQDRFunction<VillageCharaGroupCB> myselfDerived() {
+        return xcreateQDRFunctionMyselfDerived(VillageCharaGroupCB.class);
     }
     @SuppressWarnings("unchecked")
     protected <CB extends ConditionBean> void xqderiveMyselfDerived(String fn, SubQuery<CB> sq, String rd, Object vl, DerivedReferrerOption op) {
         assertObjectNotNull("subQuery", sq);
-        CharaGroupCB cb = new CharaGroupCB(); cb.xsetupForDerivedReferrer(this); sq.query((CB)cb);
-        String pk = "CHARA_GROUP_ID";
+        VillageCharaGroupCB cb = new VillageCharaGroupCB(); cb.xsetupForDerivedReferrer(this); sq.query((CB)cb);
+        String pk = "VILLAGE_CHARA_GROUP_ID";
         String sqpp = keepQueryMyselfDerived(cb.query()); // for saving query-value.
         String prpp = keepQueryMyselfDerivedParameter(vl);
         registerQueryMyselfDerived(fn, cb.query(), pk, pk, sqpp, "myselfDerived", rd, vl, prpp, op);
     }
-    public abstract String keepQueryMyselfDerived(CharaGroupCQ sq);
+    public abstract String keepQueryMyselfDerived(VillageCharaGroupCQ sq);
     public abstract String keepQueryMyselfDerivedParameter(Object vl);
 
     // ===================================================================================
@@ -1293,13 +976,13 @@ public abstract class AbstractBsCharaGroupCQ extends AbstractConditionQuery {
      * Prepare for MyselfExists (correlated sub-query).
      * @param subCBLambda The implementation of sub-query. (NotNull)
      */
-    public void myselfExists(SubQuery<CharaGroupCB> subCBLambda) {
+    public void myselfExists(SubQuery<VillageCharaGroupCB> subCBLambda) {
         assertObjectNotNull("subCBLambda", subCBLambda);
-        CharaGroupCB cb = new CharaGroupCB(); cb.xsetupForMyselfExists(this);
+        VillageCharaGroupCB cb = new VillageCharaGroupCB(); cb.xsetupForMyselfExists(this);
         lockCall(() -> subCBLambda.query(cb)); String pp = keepMyselfExists(cb.query());
         registerMyselfExists(cb.query(), pp);
     }
-    public abstract String keepMyselfExists(CharaGroupCQ sq);
+    public abstract String keepMyselfExists(VillageCharaGroupCQ sq);
 
     // ===================================================================================
     //                                                                        Manual Order
@@ -1343,12 +1026,12 @@ public abstract class AbstractBsCharaGroupCQ extends AbstractConditionQuery {
     // ===================================================================================
     //                                                                       Very Internal
     //                                                                       =============
-    protected CharaGroupCB newMyCB() {
-        return new CharaGroupCB();
+    protected VillageCharaGroupCB newMyCB() {
+        return new VillageCharaGroupCB();
     }
     // very internal (for suppressing warn about 'Not Use Import')
     protected String xabUDT() { return Date.class.getName(); }
-    protected String xabCQ() { return CharaGroupCQ.class.getName(); }
+    protected String xabCQ() { return VillageCharaGroupCQ.class.getName(); }
     protected String xabLSO() { return LikeSearchOption.class.getName(); }
     protected String xabSLCS() { return HpSLCSetupper.class.getName(); }
     protected String xabSCP() { return SubQuery.class.getName(); }

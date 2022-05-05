@@ -16,11 +16,7 @@ import com.ort.firewolf.fw.security.FirewolfUser
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 
 @RestController
@@ -70,13 +66,15 @@ class PlayerController(
     }
 
     private val logger = LoggerFactory.getLogger(PlayerController::class.java)
+
     @GetMapping("/player/{playerId}/record")
     fun stats(
         @PathVariable("playerId") playerId: Int
     ): PlayerRecordsView {
         val player: Player = playerService.findPlayer(playerId)
         val playerRecords = playerCoordinator.findPlayerRecords(player)
-        val charachipIdList = playerRecords.participateVillageList.map { it.village.setting.charachip.charachipId }.distinct()
+        val charachipIdList =
+            playerRecords.participateVillageList.flatMap { it.village.setting.charachip.charachipIds }.distinct()
         val charas: Charas = charachipService.findCharas(charachipIdList)
         val playerIdList =
             playerRecords.participateVillageList.flatMap {

@@ -52,7 +52,7 @@ class ExternalController(
         form.vid?.let { vid -> villageIdList = villageIdList.filter { vid.contains(it) } }
         if (villageIdList.isEmpty()) return VillageRecordsView(listOf())
         val villageList = villageService.findVillagesAsDetail(villageIdList).list.sortedBy { it.id }
-        val charas = charachipService.findCharas(villageList.map { it.setting.charachip.charachipId }.distinct())
+        val charas = charachipService.findCharas(villageList.flatMap { it.setting.charachip.charachipIds }.distinct())
         val players = playerService.findPlayers(
             playerIdList = villageList.flatMap {
                 (it.participant.memberList + it.spectator.memberList).map { member -> member.playerId!! }

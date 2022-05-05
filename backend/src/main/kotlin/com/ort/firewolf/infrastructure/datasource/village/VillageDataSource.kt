@@ -5,6 +5,7 @@ import com.ort.dbflute.exbhv.*
 import com.ort.dbflute.exentity.*
 import com.ort.firewolf.domain.model.village.Villages
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
+import com.ort.firewolf.domain.model.village.setting.VillageCharachip
 import com.ort.firewolf.domain.model.village.setting.VillageMessageRestrict
 import com.ort.firewolf.domain.model.village.setting.VillageSettings
 import com.ort.firewolf.fw.security.FirewolfUser
@@ -16,6 +17,7 @@ import java.time.LocalDateTime
 class VillageDataSource(
     private val villageBhv: VillageBhv,
     private val villageSettingBhv: VillageSettingBhv,
+    private val villageCharaGroupBhv: VillageCharaGroupBhv,
     private val villageDayBhv: VillageDayBhv,
     private val villagePlayerBhv: VillagePlayerBhv,
     private val villagePlayerAccessInfoBhv: VillagePlayerAccessInfoBhv,
@@ -34,6 +36,8 @@ class VillageDataSource(
         val villageId = insertVillage(paramVillage)
         // 村設定
         insertVillageSettings(villageId, paramVillage.setting)
+        // キャラチップ
+        insertVillageCharaGroups(villageId, paramVillage.setting.charachip)
         // 発言制限
         insertMessageRestrictionList(villageId, paramVillage.setting)
         // 村日付
@@ -99,6 +103,7 @@ class VillageDataSource(
                 it.query().queryNoonnight().addOrderBy_DispOrder_Desc()
             }
             loader.loadMessageRestriction { }
+            loader.loadVillageCharaGroup { }
         }
         return VillageDataConverter.convertVillageListToVillages(villageList)
     }
@@ -132,6 +137,7 @@ class VillageDataSource(
                 it.query().queryNoonnight().addOrderBy_DispOrder_Desc()
             }
             loader.loadMessageRestriction { }
+            loader.loadVillageCharaGroup { }
         }
 
         return VillageDataConverter.convertVillageListToVillages(villageList)
@@ -173,6 +179,7 @@ class VillageDataSource(
                 it.query().queryNoonnight().addOrderBy_DispOrder_Asc()
             }
             loader.loadMessageRestriction { }
+            loader.loadVillageCharaGroup { }
         }
 
         return Villages(villageList.map { VillageDataConverter.convertVillageToVillage(it) })
@@ -204,6 +211,7 @@ class VillageDataSource(
                 it.query().queryNoonnight().addOrderBy_DispOrder_Asc()
             }
             loader.loadMessageRestriction { }
+            loader.loadVillageCharaGroup { }
         }
 
         return VillageDataConverter.convertVillageToVillage(village)
@@ -533,7 +541,6 @@ class VillageDataSource(
             settings.time.dayChangeIntervalSeconds.toString()
         )
         insertVillageSetting(villageId, CDef.VillageSettingItem.ダミーキャラid, settings.charachip.dummyCharaId.toString())
-        insertVillageSetting(villageId, CDef.VillageSettingItem.キャラクターグループid, settings.charachip.charachipId.toString())
         insertVillageSetting(villageId, CDef.VillageSettingItem.構成, settings.organizations.toString())
         insertVillageSetting(villageId, CDef.VillageSettingItem.記名投票か, toFlg(settings.rules.openVote))
         insertVillageSetting(villageId, CDef.VillageSettingItem.役職希望可能か, toFlg(settings.rules.availableSkillRequest))
@@ -568,6 +575,19 @@ class VillageDataSource(
             it.query().setVillageId_Equal(villageId)
             it.query().setVillageSettingItemCode_Equal_AsVillageSettingItem(item)
         }
+    }
+
+    private fun insertVillageCharaGroups(villageId: Int, charachip: VillageCharachip) {
+        charachip.charachipIds.forEach {
+            insertVillageCharaGroup(villageId, it)
+        }
+    }
+
+    private fun insertVillageCharaGroup(villageId: Int, charachipId: Int) {
+        val v = VillageCharaGroup()
+        v.villageId = villageId
+        v.charaGroupId = charachipId
+        villageCharaGroupBhv.insert(v)
     }
 
     // ===================================================================================
