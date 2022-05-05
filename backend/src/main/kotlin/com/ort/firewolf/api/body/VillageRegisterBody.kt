@@ -123,11 +123,11 @@ data class VillageMessageRestrictCreateBody(
     val type: String?,
 
     @field:NotNull
-    @field:Max(100, message = "回数は100回以下にしてください")
+    @field:Max(1000, message = "回数は1000回以下にしてください")
     val count: Int?,
 
     @field:NotNull
-    @field:Max(400, message = "文字数は400以下にしてください")
+    @field:Max(1000, message = "文字数は1000以下にしてください")
     val length: Int?
 ) {
     constructor() : this(null, null, null)
