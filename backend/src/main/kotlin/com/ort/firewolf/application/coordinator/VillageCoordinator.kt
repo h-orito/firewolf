@@ -32,6 +32,7 @@ import com.ort.firewolf.domain.service.village.VillageSettingDomainService
 import com.ort.firewolf.domain.service.vote.VoteDomainService
 import com.ort.firewolf.fw.exception.FirewolfBusinessException
 import com.ort.firewolf.fw.security.FirewolfUser
+import com.ort.firewolf.infrastructure.repository.DiscordRepository
 import com.ort.firewolf.infrastructure.repository.SlackRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -62,7 +63,8 @@ class VillageCoordinator(
     private val comingOutDomainService: ComingOutDomainService,
     private val adminDomainService: AdminDomainService,
     // repository
-    private val slackRepository: SlackRepository
+    private val slackRepository: SlackRepository,
+    private val discordRepository: DiscordRepository
 ) {
 
     /**
@@ -245,6 +247,7 @@ class VillageCoordinator(
             .contains(ipAddress)
         if (isContain) {
             slackRepository.postToSlack(villageId, "IPアドレス重複検出: $ipAddress")
+            discordRepository.post(villageId, "IPアドレス重複検出: $ipAddress")
         }
     }
 
@@ -350,6 +353,7 @@ class VillageCoordinator(
         // 特定の文字列が含まれていたら通知
         if (messageText.contains("@国主") || messageText.contains("＠国主")) {
             slackService.postToSlack(villageId, messageText)
+            discordRepository.post(villageId, messageText)
         }
         // IPアドレス更新
         val ipAddress = user.ipAddress!!
@@ -363,6 +367,7 @@ class VillageCoordinator(
             .contains(ipAddress)
         if (isContain) {
             slackRepository.postToSlack(villageId, "IPアドレス重複検出: $ipAddress")
+            discordRepository.post(villageId, "IPアドレス重複検出: $ipAddress")
         }
     }
 
