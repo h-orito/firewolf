@@ -1,6 +1,7 @@
 package com.ort.firewolf.fw.security
 
 import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
@@ -16,7 +17,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
  */
 @EnableWebSecurity
 @ConfigurationProperties(prefix = "security")
-class FirewolfSecurityConfig() : WebSecurityConfigurerAdapter() {
+class FirewolfSecurityConfig(
+    private val authenticationProvider: FireWolfAuthenticationProvider
+) : WebSecurityConfigurerAdapter() {
 
     // ===================================================================================
     //                                                                           Attribute
@@ -58,6 +61,11 @@ class FirewolfSecurityConfig() : WebSecurityConfigurerAdapter() {
 
     internal fun accessDeniedHandler(): AccessDeniedHandler {
         return FirewolfAccessDeniedHandler()
+    }
+
+    @Throws(Exception::class)
+    override fun configure(auth: AuthenticationManagerBuilder) {
+        auth.authenticationProvider(authenticationProvider)
     }
 
     /**
