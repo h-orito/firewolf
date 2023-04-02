@@ -37,8 +37,12 @@ class TweetService {
 
     fun getUserIdByUsername(username: String): String? {
         if (consumerKey.isNullOrEmpty()) return null
-        val client = createClient()
-        return client.getUserFromUserName(username)?.id
+        return try {
+            val client = createClient()
+            client.getUserFromUserName(username)?.id
+        } catch (e: Exception) {
+            null
+        }
     }
 
     private fun createClient(): TwitterClient {

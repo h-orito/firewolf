@@ -21,7 +21,9 @@ class FirewolfUserDetailService(
     override fun loadUserByUsername(uid: String?): UserDetails {
         uid ?: throw UsernameNotFoundException("uid is empty")
 
-        val optPlayer = playerBhv.selectEntity { cb -> cb.query().setUid_Equal(uid) }
+        val optPlayer = playerBhv.selectEntity {
+            it.query().setUid_Equal(uid)
+        }
 
         return optPlayer.map {
             FirewolfUser(
@@ -43,10 +45,11 @@ class FirewolfUserDetailService(
         player.uid = uid
         player.authorityCodeAsAuthority = CDef.Authority.プレイヤー
         player.nickname = "名無し"
-        player.twitterUserName = "未設定"
         player.isRestrictedParticipation = false
         player.shouldCheckAccessInfo = true
         playerBhv.insert(player)
+
+
         return FirewolfUser(
             uid = uid,
             authority = CDef.Authority.プレイヤー

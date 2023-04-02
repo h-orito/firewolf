@@ -2,19 +2,23 @@ package com.ort.firewolf.infrastructure.datasource.player
 
 import com.ort.dbflute.exbhv.PlayerBhv
 import com.ort.dbflute.exbhv.PlayerDetailBhv
+import com.ort.dbflute.exbhv.TwitterUserBhv
 import com.ort.dbflute.exentity.Player
 import com.ort.dbflute.exentity.PlayerDetail
+import com.ort.dbflute.exentity.TwitterUser
 import com.ort.firewolf.domain.model.player.Players
 import org.springframework.stereotype.Repository
 
 @Repository
 class PlayerDataSource(
     private val playerBhv: PlayerBhv,
-    private val playerDetailBhv: PlayerDetailBhv
+    private val playerDetailBhv: PlayerDetailBhv,
+    private val twitterUserBhv: TwitterUserBhv
 ) {
 
     fun findPlayer(id: Int): com.ort.firewolf.domain.model.player.Player {
         val player = playerBhv.selectEntityWithDeletedCheck {
+            it.setupSelect_TwitterUserAsOne()
             it.setupSelect_PlayerDetailAsOne()
             it.query().setPlayerId_Equal(id)
         }
@@ -30,6 +34,7 @@ class PlayerDataSource(
 
     fun findPlayer(uid: String): com.ort.firewolf.domain.model.player.Player {
         val player = playerBhv.selectEntityWithDeletedCheck {
+            it.setupSelect_TwitterUserAsOne()
             it.setupSelect_PlayerDetailAsOne()
             it.query().setUid_Equal(uid)
         }
@@ -45,6 +50,7 @@ class PlayerDataSource(
 
     fun findPlayers(villageId: Int): Players {
         val playerList = playerBhv.selectList {
+            it.setupSelect_TwitterUserAsOne()
             it.setupSelect_PlayerDetailAsOne()
             it.query().existsVillagePlayer {
                 it.query().setVillageId_Equal(villageId)
@@ -56,6 +62,7 @@ class PlayerDataSource(
     fun findPlayers(playerIdList: List<Int>): Players {
         if (playerIdList.isEmpty()) return Players(listOf())
         val playerList = playerBhv.selectList {
+            it.setupSelect_TwitterUserAsOne()
             it.setupSelect_PlayerDetailAsOne()
             it.query().existsVillagePlayer {
                 it.query().setPlayerId_InScope(playerIdList)
@@ -64,16 +71,41 @@ class PlayerDataSource(
         return Players(list = playerList.map { convertPlayerToSimplePlayer(it) })
     }
 
-    fun update(uid: String, nickname: String, twitterUserName: String, twitterUserId: String?) {
-        val player = Player()
-        player.uniqueBy(uid)
-        player.nickname = removeSurrogate(nickname).ifEmpty { "名無し" }
-        player.twitterUserName = twitterUserName
-        twitterUserId?.let { player.registerTrace = "twitterId: $it" }
-        playerBhv.update(player)
+    fun update(uid: String, nickname: String, twitterUserName: String?, twitterUserId: String?) {
+        val existingPlayer = findPlayer(uid)
+        // 既に自分で変更している可能性があるので、名無しのままの場合のみ変更する
+        if (existingPlayer.nickname == "名無し") {
+            val player = Player()
+            player.uniqueBy(uid)
+            player.nickname = nickname.ifEmpty { "名無し" }
+            twitterUserId?.let { player.registerTrace = "twitterId: $it" }
+            playerBhv.update(player)
+        }
+        twitterUserName?.let {
+            val twitterUser = TwitterUser()
+            twitterUser.playerId = existingPlayer.id
+            twitterUser.twitterUserName = twitterUserName
+
+            val existing = twitterUserBhv.selectByPK(existingPlayer.id)
+            if (existing.isPresent) {
+                twitterUserBhv.update(twitterUser)
+            } else {
+                twitterUserBhv.insert(twitterUser)
+            }
+        }
     }
 
-    fun updateDetail(uid: String, otherSiteName: String?, introduction: String?) {
+    fun updateDetail(
+        uid: String,
+        nickname: String,
+        otherSiteName: String?,
+        introduction: String?
+    ) {
+        val player = Player()
+        player.uniqueBy(uid)
+        player.nickname = nickname.ifEmpty { "名無し" }
+        playerBhv.update(player)
+
         val detail = PlayerDetail()
         detail.otherSiteName = otherSiteName
         detail.introduction = introduction
@@ -111,7 +143,7 @@ class PlayerDataSource(
         return com.ort.firewolf.domain.model.player.Player(
             id = player.playerId,
             nickname = player.nickname,
-            twitterUserName = player.twitterUserName,
+            twitterUserName = player.twitterUserAsOne.map { it.twitterUserName }.orElse(null),
             otherSiteName = player.playerDetailAsOne.map { it.otherSiteName }.orElse(null),
             introduction = player.playerDetailAsOne.map { it.introduction }.orElse(null),
             isRestrictedParticipation = player.isRestrictedParticipation,
@@ -135,7 +167,7 @@ class PlayerDataSource(
         return com.ort.firewolf.domain.model.player.Player(
             id = player.playerId,
             nickname = player.nickname,
-            twitterUserName = player.twitterUserName,
+            twitterUserName = player.twitterUserAsOne.map { it.twitterUserName }.orElse(null),
             otherSiteName = player.playerDetailAsOne.map { it.otherSiteName }.orElse(null),
             introduction = player.playerDetailAsOne.map { it.introduction }.orElse(null),
             isRestrictedParticipation = player.isRestrictedParticipation,

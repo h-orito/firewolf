@@ -20,13 +20,18 @@ class PlayerService(
 
     fun findPlayers(playerIdList: List<Int>): Players = playerDataSource.findPlayers(playerIdList)
 
-    fun updateNickname(user: FirewolfUser, nickname: String, twitterUserName: String) {
-        val twitterUserId = tweetService.getUserIdByUsername(twitterUserName)
+    fun updateNickname(user: FirewolfUser, nickname: String, twitterUserName: String?) {
+        val twitterUserId = twitterUserName?.let { tweetService.getUserIdByUsername(twitterUserName) }
         playerDataSource.update(user.uid, nickname, twitterUserName, twitterUserId)
     }
 
-    fun updateDetail(uid: String, otherSiteName: String?, introduction: String?) {
-        playerDataSource.updateDetail(uid, otherSiteName, introduction)
+    fun updateDetail(
+        uid: String,
+        nickname: String,
+        otherSiteName: String?,
+        introduction: String?
+    ) {
+        playerDataSource.updateDetail(uid, nickname, otherSiteName, introduction)
     }
 
     fun updateDifference(before: Players, after: Players) = playerDataSource.updateDifference(before, after)

@@ -12,21 +12,21 @@ import com.ort.dbflute.cbean.cq.bs.*;
 import com.ort.dbflute.cbean.cq.*;
 
 /**
- * The condition-query for in-line of player.
+ * The condition-query for in-line of twitter_user.
  * @author DBFlute(AutoGenerator)
  */
-public class PlayerCIQ extends AbstractBsPlayerCQ {
+public class TwitterUserCIQ extends AbstractBsTwitterUserCQ {
 
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
-    protected BsPlayerCQ _myCQ;
+    protected BsTwitterUserCQ _myCQ;
 
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
-    public PlayerCIQ(ConditionQuery referrerQuery, SqlClause sqlClause
-                        , String aliasName, int nestLevel, BsPlayerCQ myCQ) {
+    public TwitterUserCIQ(ConditionQuery referrerQuery, SqlClause sqlClause
+                        , String aliasName, int nestLevel, BsTwitterUserCQ myCQ) {
         super(referrerQuery, sqlClause, aliasName, nestLevel);
         _myCQ = myCQ;
         _foreignPropertyName = _myCQ.xgetForeignPropertyName(); // accept foreign property name
@@ -62,45 +62,21 @@ public class PlayerCIQ extends AbstractBsPlayerCQ {
     //                                                                Override about Query
     //                                                                ====================
     protected ConditionValue xgetCValuePlayerId() { return _myCQ.xdfgetPlayerId(); }
-    public String keepPlayerId_ExistsReferrer_VillageList(VillageCQ sq)
-    { throwIICBOE("ExistsReferrer"); return null; }
-    public String keepPlayerId_ExistsReferrer_VillagePlayerList(VillagePlayerCQ sq)
-    { throwIICBOE("ExistsReferrer"); return null; }
-    public String keepPlayerId_NotExistsReferrer_VillageList(VillageCQ sq)
-    { throwIICBOE("NotExistsReferrer"); return null; }
-    public String keepPlayerId_NotExistsReferrer_VillagePlayerList(VillagePlayerCQ sq)
-    { throwIICBOE("NotExistsReferrer"); return null; }
-    public String keepPlayerId_SpecifyDerivedReferrer_VillageList(VillageCQ sq)
-    { throwIICBOE("(Specify)DerivedReferrer"); return null; }
-    public String keepPlayerId_SpecifyDerivedReferrer_VillagePlayerList(VillagePlayerCQ sq)
-    { throwIICBOE("(Specify)DerivedReferrer"); return null; }
-    public String keepPlayerId_QueryDerivedReferrer_VillageList(VillageCQ sq)
-    { throwIICBOE("(Query)DerivedReferrer"); return null; }
-    public String keepPlayerId_QueryDerivedReferrer_VillageListParameter(Object vl)
-    { throwIICBOE("(Query)DerivedReferrer"); return null; }
-    public String keepPlayerId_QueryDerivedReferrer_VillagePlayerList(VillagePlayerCQ sq)
-    { throwIICBOE("(Query)DerivedReferrer"); return null; }
-    public String keepPlayerId_QueryDerivedReferrer_VillagePlayerListParameter(Object vl)
-    { throwIICBOE("(Query)DerivedReferrer"); return null; }
-    protected ConditionValue xgetCValueUid() { return _myCQ.xdfgetUid(); }
-    protected ConditionValue xgetCValueNickname() { return _myCQ.xdfgetNickname(); }
-    protected ConditionValue xgetCValueAuthorityCode() { return _myCQ.xdfgetAuthorityCode(); }
-    protected ConditionValue xgetCValueIsRestrictedParticipation() { return _myCQ.xdfgetIsRestrictedParticipation(); }
-    protected ConditionValue xgetCValueShouldCheckAccessInfo() { return _myCQ.xdfgetShouldCheckAccessInfo(); }
+    protected ConditionValue xgetCValueTwitterUserName() { return _myCQ.xdfgetTwitterUserName(); }
     protected ConditionValue xgetCValueRegisterDatetime() { return _myCQ.xdfgetRegisterDatetime(); }
     protected ConditionValue xgetCValueRegisterTrace() { return _myCQ.xdfgetRegisterTrace(); }
     protected ConditionValue xgetCValueUpdateDatetime() { return _myCQ.xdfgetUpdateDatetime(); }
     protected ConditionValue xgetCValueUpdateTrace() { return _myCQ.xdfgetUpdateTrace(); }
     protected Map<String, Object> xfindFixedConditionDynamicParameterMap(String pp) { return null; }
-    public String keepScalarCondition(PlayerCQ sq)
+    public String keepScalarCondition(TwitterUserCQ sq)
     { throwIICBOE("ScalarCondition"); return null; }
-    public String keepSpecifyMyselfDerived(PlayerCQ sq)
+    public String keepSpecifyMyselfDerived(TwitterUserCQ sq)
     { throwIICBOE("(Specify)MyselfDerived"); return null;}
-    public String keepQueryMyselfDerived(PlayerCQ sq)
+    public String keepQueryMyselfDerived(TwitterUserCQ sq)
     { throwIICBOE("(Query)MyselfDerived"); return null;}
     public String keepQueryMyselfDerivedParameter(Object vl)
     { throwIICBOE("(Query)MyselfDerived"); return null;}
-    public String keepMyselfExists(PlayerCQ sq)
+    public String keepMyselfExists(TwitterUserCQ sq)
     { throwIICBOE("MyselfExists"); return null;}
 
     protected void throwIICBOE(String name)
@@ -110,6 +86,6 @@ public class PlayerCIQ extends AbstractBsPlayerCQ {
     //                                                                       Very Internal
     //                                                                       =============
     // very internal (for suppressing warn about 'Not Use Import')
-    protected String xinCB() { return PlayerCB.class.getName(); }
-    protected String xinCQ() { return PlayerCQ.class.getName(); }
+    protected String xinCB() { return TwitterUserCB.class.getName(); }
+    protected String xinCQ() { return TwitterUserCQ.class.getName(); }
 }

@@ -21,7 +21,7 @@ import com.ort.dbflute.exentity.*;
  *     PLAYER_ID
  *
  * [column]
- *     PLAYER_ID, UID, NICKNAME, TWITTER_USER_NAME, AUTHORITY_CODE, IS_RESTRICTED_PARTICIPATION, SHOULD_CHECK_ACCESS_INFO, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
+ *     PLAYER_ID, UID, NICKNAME, AUTHORITY_CODE, IS_RESTRICTED_PARTICIPATION, SHOULD_CHECK_ACCESS_INFO, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
  *
  * [sequence]
  *     
@@ -33,13 +33,13 @@ import com.ort.dbflute.exentity.*;
  *     
  *
  * [foreign table]
- *     AUTHORITY, PLAYER_DETAIL(AsOne)
+ *     AUTHORITY, PLAYER_DETAIL(AsOne), TWITTER_USER(AsOne)
  *
  * [referrer table]
- *     VILLAGE, VILLAGE_PLAYER, PLAYER_DETAIL
+ *     VILLAGE, VILLAGE_PLAYER, PLAYER_DETAIL, TWITTER_USER
  *
  * [foreign property]
- *     authority, playerDetailAsOne
+ *     authority, playerDetailAsOne, twitterUserAsOne
  *
  * [referrer property]
  *     villageList, villagePlayerList
@@ -49,7 +49,6 @@ import com.ort.dbflute.exentity.*;
  * Integer playerId = entity.getPlayerId();
  * String uid = entity.getUid();
  * String nickname = entity.getNickname();
- * String twitterUserName = entity.getTwitterUserName();
  * String authorityCode = entity.getAuthorityCode();
  * Boolean isRestrictedParticipation = entity.getIsRestrictedParticipation();
  * Boolean shouldCheckAccessInfo = entity.getShouldCheckAccessInfo();
@@ -60,7 +59,6 @@ import com.ort.dbflute.exentity.*;
  * entity.setPlayerId(playerId);
  * entity.setUid(uid);
  * entity.setNickname(nickname);
- * entity.setTwitterUserName(twitterUserName);
  * entity.setAuthorityCode(authorityCode);
  * entity.setIsRestrictedParticipation(isRestrictedParticipation);
  * entity.setShouldCheckAccessInfo(shouldCheckAccessInfo);
@@ -91,9 +89,6 @@ public abstract class BsPlayer extends AbstractEntity implements DomainEntity, E
 
     /** NICKNAME: {NotNull, VARCHAR(50)} */
     protected String _nickname;
-
-    /** TWITTER_USER_NAME: {NotNull, VARCHAR(15)} */
-    protected String _twitterUserName;
 
     /** AUTHORITY_CODE: {IX, NotNull, VARCHAR(20), FK to authority, classification=Authority} */
     protected String _authorityCode;
@@ -262,6 +257,27 @@ public abstract class BsPlayer extends AbstractEntity implements DomainEntity, E
         _playerDetailAsOne = playerDetailAsOne;
     }
 
+    /** twitter_user by player_id, named 'twitterUserAsOne'. */
+    protected OptionalEntity<TwitterUser> _twitterUserAsOne;
+
+    /**
+     * [get] twitter_user by player_id, named 'twitterUserAsOne'.
+     * Optional: alwaysPresent(), ifPresent().orElse(), get(), ...
+     * @return the entity of foreign property(referrer-as-one) 'twitterUserAsOne'. (NotNull, EmptyAllowed: when e.g. no data, no setupSelect)
+     */
+    public OptionalEntity<TwitterUser> getTwitterUserAsOne() {
+        if (_twitterUserAsOne == null) { _twitterUserAsOne = OptionalEntity.relationEmpty(this, "twitterUserAsOne"); }
+        return _twitterUserAsOne;
+    }
+
+    /**
+     * [set] twitter_user by player_id, named 'twitterUserAsOne'.
+     * @param twitterUserAsOne The entity of foreign property(referrer-as-one) 'twitterUserAsOne'. (NullAllowed)
+     */
+    public void setTwitterUserAsOne(OptionalEntity<TwitterUser> twitterUserAsOne) {
+        _twitterUserAsOne = twitterUserAsOne;
+    }
+
     // ===================================================================================
     //                                                                   Referrer Property
     //                                                                   =================
@@ -338,6 +354,8 @@ public abstract class BsPlayer extends AbstractEntity implements DomainEntity, E
         { sb.append(li).append(xbRDS(_authority, "authority")); }
         if (_playerDetailAsOne != null && _playerDetailAsOne.isPresent())
         { sb.append(li).append(xbRDS(_playerDetailAsOne, "playerDetailAsOne")); }
+        if (_twitterUserAsOne != null && _twitterUserAsOne.isPresent())
+        { sb.append(li).append(xbRDS(_twitterUserAsOne, "twitterUserAsOne")); }
         if (_villageList != null) { for (Village et : _villageList)
         { if (et != null) { sb.append(li).append(xbRDS(et, "villageList")); } } }
         if (_villagePlayerList != null) { for (VillagePlayer et : _villagePlayerList)
@@ -354,7 +372,6 @@ public abstract class BsPlayer extends AbstractEntity implements DomainEntity, E
         sb.append(dm).append(xfND(_playerId));
         sb.append(dm).append(xfND(_uid));
         sb.append(dm).append(xfND(_nickname));
-        sb.append(dm).append(xfND(_twitterUserName));
         sb.append(dm).append(xfND(_authorityCode));
         sb.append(dm).append(xfND(_isRestrictedParticipation));
         sb.append(dm).append(xfND(_shouldCheckAccessInfo));
@@ -376,6 +393,8 @@ public abstract class BsPlayer extends AbstractEntity implements DomainEntity, E
         { sb.append(dm).append("authority"); }
         if (_playerDetailAsOne != null && _playerDetailAsOne.isPresent())
         { sb.append(dm).append("playerDetailAsOne"); }
+        if (_twitterUserAsOne != null && _twitterUserAsOne.isPresent())
+        { sb.append(dm).append("twitterUserAsOne"); }
         if (_villageList != null && !_villageList.isEmpty())
         { sb.append(dm).append("villageList"); }
         if (_villagePlayerList != null && !_villagePlayerList.isEmpty())
@@ -452,26 +471,6 @@ public abstract class BsPlayer extends AbstractEntity implements DomainEntity, E
     public void setNickname(String nickname) {
         registerModifiedProperty("nickname");
         _nickname = nickname;
-    }
-
-    /**
-     * [get] TWITTER_USER_NAME: {NotNull, VARCHAR(15)} <br>
-     * twitterのusername
-     * @return The value of the column 'TWITTER_USER_NAME'. (basically NotNull if selected: for the constraint)
-     */
-    public String getTwitterUserName() {
-        checkSpecifiedProperty("twitterUserName");
-        return convertEmptyToNull(_twitterUserName);
-    }
-
-    /**
-     * [set] TWITTER_USER_NAME: {NotNull, VARCHAR(15)} <br>
-     * twitterのusername
-     * @param twitterUserName The value of the column 'TWITTER_USER_NAME'. (basically NotNull if update: for the constraint)
-     */
-    public void setTwitterUserName(String twitterUserName) {
-        registerModifiedProperty("twitterUserName");
-        _twitterUserName = twitterUserName;
     }
 
     /**

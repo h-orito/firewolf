@@ -54,7 +54,7 @@ class PlayerController(
         @AuthenticationPrincipal user: FirewolfUser,
         @RequestBody @Validated body: PlayerUpdateNicknameBody
     ) {
-        playerService.updateNickname(user, body.nickname!!, body.twitterUserName!!)
+        playerService.updateNickname(user, body.nickname!!, body.twitterUserName)
     }
 
     @PostMapping("/player/detail")
@@ -62,7 +62,7 @@ class PlayerController(
         @AuthenticationPrincipal user: FirewolfUser,
         @RequestBody @Validated body: PlayerUpdateDetailBody
     ) {
-        playerService.updateDetail(user.uid, body.otherSiteName, body.introduction)
+        playerService.updateDetail(user.uid, body.nickname, body.otherSiteName, body.introduction)
     }
 
     private val logger = LoggerFactory.getLogger(PlayerController::class.java)

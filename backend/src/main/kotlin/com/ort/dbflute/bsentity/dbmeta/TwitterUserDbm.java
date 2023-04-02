@@ -14,17 +14,17 @@ import com.ort.dbflute.allcommon.*;
 import com.ort.dbflute.exentity.*;
 
 /**
- * The DB meta of player. (Singleton)
+ * The DB meta of twitter_user. (Singleton)
  * @author DBFlute(AutoGenerator)
  */
-public class PlayerDbm extends AbstractDBMeta {
+public class TwitterUserDbm extends AbstractDBMeta {
 
     // ===================================================================================
     //                                                                           Singleton
     //                                                                           =========
-    private static final PlayerDbm _instance = new PlayerDbm();
-    private PlayerDbm() {}
-    public static PlayerDbm getInstance() { return _instance; }
+    private static final TwitterUserDbm _instance = new TwitterUserDbm();
+    private TwitterUserDbm() {}
+    public static TwitterUserDbm getInstance() { return _instance; }
 
     // ===================================================================================
     //                                                                       Current DBDef
@@ -43,23 +43,12 @@ public class PlayerDbm extends AbstractDBMeta {
     protected final Map<String, PropertyGateway> _epgMap = newHashMap();
     { xsetupEpg(); }
     protected void xsetupEpg() {
-        setupEpg(_epgMap, et -> ((Player)et).getPlayerId(), (et, vl) -> ((Player)et).setPlayerId(cti(vl)), "playerId");
-        setupEpg(_epgMap, et -> ((Player)et).getUid(), (et, vl) -> ((Player)et).setUid((String)vl), "uid");
-        setupEpg(_epgMap, et -> ((Player)et).getNickname(), (et, vl) -> ((Player)et).setNickname((String)vl), "nickname");
-        setupEpg(_epgMap, et -> ((Player)et).getAuthorityCode(), (et, vl) -> {
-            CDef.Authority cls = (CDef.Authority)gcls(et, columnAuthorityCode(), vl);
-            if (cls != null) {
-                ((Player)et).setAuthorityCodeAsAuthority(cls);
-            } else {
-                ((Player)et).mynativeMappingAuthorityCode((String)vl);
-            }
-        }, "authorityCode");
-        setupEpg(_epgMap, et -> ((Player)et).getIsRestrictedParticipation(), (et, vl) -> ((Player)et).setIsRestrictedParticipation((Boolean)vl), "isRestrictedParticipation");
-        setupEpg(_epgMap, et -> ((Player)et).getShouldCheckAccessInfo(), (et, vl) -> ((Player)et).setShouldCheckAccessInfo((Boolean)vl), "shouldCheckAccessInfo");
-        setupEpg(_epgMap, et -> ((Player)et).getRegisterDatetime(), (et, vl) -> ((Player)et).setRegisterDatetime(ctldt(vl)), "registerDatetime");
-        setupEpg(_epgMap, et -> ((Player)et).getRegisterTrace(), (et, vl) -> ((Player)et).setRegisterTrace((String)vl), "registerTrace");
-        setupEpg(_epgMap, et -> ((Player)et).getUpdateDatetime(), (et, vl) -> ((Player)et).setUpdateDatetime(ctldt(vl)), "updateDatetime");
-        setupEpg(_epgMap, et -> ((Player)et).getUpdateTrace(), (et, vl) -> ((Player)et).setUpdateTrace((String)vl), "updateTrace");
+        setupEpg(_epgMap, et -> ((TwitterUser)et).getPlayerId(), (et, vl) -> ((TwitterUser)et).setPlayerId(cti(vl)), "playerId");
+        setupEpg(_epgMap, et -> ((TwitterUser)et).getTwitterUserName(), (et, vl) -> ((TwitterUser)et).setTwitterUserName((String)vl), "twitterUserName");
+        setupEpg(_epgMap, et -> ((TwitterUser)et).getRegisterDatetime(), (et, vl) -> ((TwitterUser)et).setRegisterDatetime(ctldt(vl)), "registerDatetime");
+        setupEpg(_epgMap, et -> ((TwitterUser)et).getRegisterTrace(), (et, vl) -> ((TwitterUser)et).setRegisterTrace((String)vl), "registerTrace");
+        setupEpg(_epgMap, et -> ((TwitterUser)et).getUpdateDatetime(), (et, vl) -> ((TwitterUser)et).setUpdateDatetime(ctldt(vl)), "updateDatetime");
+        setupEpg(_epgMap, et -> ((TwitterUser)et).getUpdateTrace(), (et, vl) -> ((TwitterUser)et).setUpdateTrace((String)vl), "updateTrace");
     }
     public PropertyGateway findPropertyGateway(String prop)
     { return doFindEpg(_epgMap, prop); }
@@ -71,9 +60,7 @@ public class PlayerDbm extends AbstractDBMeta {
     { xsetupEfpg(); }
     @SuppressWarnings("unchecked")
     protected void xsetupEfpg() {
-        setupEfpg(_efpgMap, et -> ((Player)et).getAuthority(), (et, vl) -> ((Player)et).setAuthority((OptionalEntity<Authority>)vl), "authority");
-        setupEfpg(_efpgMap, et -> ((Player)et).getPlayerDetailAsOne(), (et, vl) -> ((Player)et).setPlayerDetailAsOne((OptionalEntity<PlayerDetail>)vl), "playerDetailAsOne");
-        setupEfpg(_efpgMap, et -> ((Player)et).getTwitterUserAsOne(), (et, vl) -> ((Player)et).setTwitterUserAsOne((OptionalEntity<TwitterUser>)vl), "twitterUserAsOne");
+        setupEfpg(_efpgMap, et -> ((TwitterUser)et).getPlayer(), (et, vl) -> ((TwitterUser)et).setPlayer((OptionalEntity<Player>)vl), "player");
     }
     public PropertyGateway findForeignPropertyGateway(String prop)
     { return doFindEfpg(_efpgMap, prop); }
@@ -81,10 +68,10 @@ public class PlayerDbm extends AbstractDBMeta {
     // ===================================================================================
     //                                                                          Table Info
     //                                                                          ==========
-    protected final String _tableDbName = "player";
-    protected final String _tableDispName = "PLAYER";
-    protected final String _tablePropertyName = "player";
-    protected final TableSqlName _tableSqlName = new TableSqlName("PLAYER", _tableDbName);
+    protected final String _tableDbName = "twitter_user";
+    protected final String _tableDispName = "TWITTER_USER";
+    protected final String _tablePropertyName = "twitterUser";
+    protected final TableSqlName _tableSqlName = new TableSqlName("TWITTER_USER", _tableDbName);
     { _tableSqlName.xacceptFilter(DBFluteConfig.getInstance().getTableSqlNameFilter()); }
     public String getTableDbName() { return _tableDbName; }
     public String getTableDispName() { return _tableDispName; }
@@ -94,47 +81,23 @@ public class PlayerDbm extends AbstractDBMeta {
     // ===================================================================================
     //                                                                         Column Info
     //                                                                         ===========
-    protected final ColumnInfo _columnPlayerId = cci("PLAYER_ID", "PLAYER_ID", null, null, Integer.class, "playerId", null, true, true, true, "INT UNSIGNED", 10, 0, null, null, false, null, null, null, "villageList,villagePlayerList", null, false);
-    protected final ColumnInfo _columnUid = cci("UID", "UID", null, null, String.class, "uid", null, false, false, true, "VARCHAR", 100, 0, null, null, false, null, null, null, null, null, false);
-    protected final ColumnInfo _columnNickname = cci("NICKNAME", "NICKNAME", null, null, String.class, "nickname", null, false, false, true, "VARCHAR", 50, 0, null, null, false, null, null, null, null, null, false);
-    protected final ColumnInfo _columnAuthorityCode = cci("AUTHORITY_CODE", "AUTHORITY_CODE", null, null, String.class, "authorityCode", null, false, false, true, "VARCHAR", 20, 0, null, null, false, null, null, "authority", null, CDef.DefMeta.Authority, false);
-    protected final ColumnInfo _columnIsRestrictedParticipation = cci("IS_RESTRICTED_PARTICIPATION", "IS_RESTRICTED_PARTICIPATION", null, null, Boolean.class, "isRestrictedParticipation", null, false, false, true, "BIT", null, null, null, null, false, null, null, null, null, null, false);
-    protected final ColumnInfo _columnShouldCheckAccessInfo = cci("SHOULD_CHECK_ACCESS_INFO", "SHOULD_CHECK_ACCESS_INFO", null, null, Boolean.class, "shouldCheckAccessInfo", null, false, false, true, "BIT", null, null, null, null, false, null, null, null, null, null, false);
+    protected final ColumnInfo _columnPlayerId = cci("player_id", "player_id", null, null, Integer.class, "playerId", null, true, false, true, "INT UNSIGNED", 10, 0, null, null, false, null, null, "player", null, null, false);
+    protected final ColumnInfo _columnTwitterUserName = cci("TWITTER_USER_NAME", "TWITTER_USER_NAME", null, null, String.class, "twitterUserName", null, false, false, true, "VARCHAR", 15, 0, null, null, false, null, null, null, null, null, false);
     protected final ColumnInfo _columnRegisterDatetime = cci("REGISTER_DATETIME", "REGISTER_DATETIME", null, null, java.time.LocalDateTime.class, "registerDatetime", null, false, false, true, "DATETIME", 19, 0, null, null, true, null, null, null, null, null, false);
     protected final ColumnInfo _columnRegisterTrace = cci("REGISTER_TRACE", "REGISTER_TRACE", null, null, String.class, "registerTrace", null, false, false, true, "VARCHAR", 64, 0, null, null, true, null, null, null, null, null, false);
     protected final ColumnInfo _columnUpdateDatetime = cci("UPDATE_DATETIME", "UPDATE_DATETIME", null, null, java.time.LocalDateTime.class, "updateDatetime", null, false, false, true, "DATETIME", 19, 0, null, null, true, null, null, null, null, null, false);
     protected final ColumnInfo _columnUpdateTrace = cci("UPDATE_TRACE", "UPDATE_TRACE", null, null, String.class, "updateTrace", null, false, false, true, "VARCHAR", 64, 0, null, null, true, null, null, null, null, null, false);
 
     /**
-     * PLAYER_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
+     * player_id: {PK, NotNull, INT UNSIGNED(10), FK to player}
      * @return The information object of specified column. (NotNull)
      */
     public ColumnInfo columnPlayerId() { return _columnPlayerId; }
     /**
-     * UID: {UQ, NotNull, VARCHAR(100)}
+     * TWITTER_USER_NAME: {NotNull, VARCHAR(15)}
      * @return The information object of specified column. (NotNull)
      */
-    public ColumnInfo columnUid() { return _columnUid; }
-    /**
-     * NICKNAME: {NotNull, VARCHAR(50)}
-     * @return The information object of specified column. (NotNull)
-     */
-    public ColumnInfo columnNickname() { return _columnNickname; }
-    /**
-     * AUTHORITY_CODE: {IX, NotNull, VARCHAR(20), FK to authority, classification=Authority}
-     * @return The information object of specified column. (NotNull)
-     */
-    public ColumnInfo columnAuthorityCode() { return _columnAuthorityCode; }
-    /**
-     * IS_RESTRICTED_PARTICIPATION: {NotNull, BIT}
-     * @return The information object of specified column. (NotNull)
-     */
-    public ColumnInfo columnIsRestrictedParticipation() { return _columnIsRestrictedParticipation; }
-    /**
-     * SHOULD_CHECK_ACCESS_INFO: {NotNull, BIT}
-     * @return The information object of specified column. (NotNull)
-     */
-    public ColumnInfo columnShouldCheckAccessInfo() { return _columnShouldCheckAccessInfo; }
+    public ColumnInfo columnTwitterUserName() { return _columnTwitterUserName; }
     /**
      * REGISTER_DATETIME: {NotNull, DATETIME(19)}
      * @return The information object of specified column. (NotNull)
@@ -159,11 +122,7 @@ public class PlayerDbm extends AbstractDBMeta {
     protected List<ColumnInfo> ccil() {
         List<ColumnInfo> ls = newArrayList();
         ls.add(columnPlayerId());
-        ls.add(columnUid());
-        ls.add(columnNickname());
-        ls.add(columnAuthorityCode());
-        ls.add(columnIsRestrictedParticipation());
-        ls.add(columnShouldCheckAccessInfo());
+        ls.add(columnTwitterUserName());
         ls.add(columnRegisterDatetime());
         ls.add(columnRegisterTrace());
         ls.add(columnUpdateDatetime());
@@ -183,11 +142,6 @@ public class PlayerDbm extends AbstractDBMeta {
     public boolean hasPrimaryKey() { return true; }
     public boolean hasCompoundPrimaryKey() { return false; }
 
-    // -----------------------------------------------------
-    //                                        Unique Element
-    //                                        --------------
-    public UniqueInfo uniqueOf() { return hpcui(columnUid()); }
-
     // ===================================================================================
     //                                                                       Relation Info
     //                                                                       =============
@@ -197,54 +151,21 @@ public class PlayerDbm extends AbstractDBMeta {
     //                                      Foreign Property
     //                                      ----------------
     /**
-     * AUTHORITY by my AUTHORITY_CODE, named 'authority'.
+     * PLAYER by my player_id, named 'player'.
      * @return The information object of foreign property. (NotNull)
      */
-    public ForeignInfo foreignAuthority() {
-        Map<ColumnInfo, ColumnInfo> mp = newLinkedHashMap(columnAuthorityCode(), AuthorityDbm.getInstance().columnAuthorityCode());
-        return cfi("FK_PLAYER_AUTHORITY", "authority", this, AuthorityDbm.getInstance(), mp, 0, org.dbflute.optional.OptionalEntity.class, false, false, false, false, null, null, false, "playerList", false);
-    }
-    /**
-     * player_detail by PLAYER_ID, named 'playerDetailAsOne'.
-     * @return The information object of foreign property(referrer-as-one). (NotNull)
-     */
-    public ForeignInfo foreignPlayerDetailAsOne() {
-        Map<ColumnInfo, ColumnInfo> mp = newLinkedHashMap(columnPlayerId(), PlayerDetailDbm.getInstance().columnPlayerId());
-        return cfi("FK_PLAYER_DETAIL_PLAYER", "playerDetailAsOne", this, PlayerDetailDbm.getInstance(), mp, 1, org.dbflute.optional.OptionalEntity.class, true, false, true, false, null, null, false, "player", false);
-    }
-    /**
-     * twitter_user by player_id, named 'twitterUserAsOne'.
-     * @return The information object of foreign property(referrer-as-one). (NotNull)
-     */
-    public ForeignInfo foreignTwitterUserAsOne() {
-        Map<ColumnInfo, ColumnInfo> mp = newLinkedHashMap(columnPlayerId(), TwitterUserDbm.getInstance().columnPlayerId());
-        return cfi("fk_twitter_user_player", "twitterUserAsOne", this, TwitterUserDbm.getInstance(), mp, 2, org.dbflute.optional.OptionalEntity.class, true, false, true, false, null, null, false, "player", false);
+    public ForeignInfo foreignPlayer() {
+        Map<ColumnInfo, ColumnInfo> mp = newLinkedHashMap(columnPlayerId(), PlayerDbm.getInstance().columnPlayerId());
+        return cfi("fk_twitter_user_player", "player", this, PlayerDbm.getInstance(), mp, 0, org.dbflute.optional.OptionalEntity.class, true, false, false, false, null, null, false, "twitterUserAsOne", false);
     }
 
     // -----------------------------------------------------
     //                                     Referrer Property
     //                                     -----------------
-    /**
-     * VILLAGE by CREATE_PLAYER_ID, named 'villageList'.
-     * @return The information object of referrer property. (NotNull)
-     */
-    public ReferrerInfo referrerVillageList() {
-        Map<ColumnInfo, ColumnInfo> mp = newLinkedHashMap(columnPlayerId(), VillageDbm.getInstance().columnCreatePlayerId());
-        return cri("FK_VILLAGE_PLAYER", "villageList", this, VillageDbm.getInstance(), mp, false, "player");
-    }
-    /**
-     * VILLAGE_PLAYER by PLAYER_ID, named 'villagePlayerList'.
-     * @return The information object of referrer property. (NotNull)
-     */
-    public ReferrerInfo referrerVillagePlayerList() {
-        Map<ColumnInfo, ColumnInfo> mp = newLinkedHashMap(columnPlayerId(), VillagePlayerDbm.getInstance().columnPlayerId());
-        return cri("FK_VILLAGE_PLAYER_PLAYER", "villagePlayerList", this, VillagePlayerDbm.getInstance(), mp, false, "player");
-    }
 
     // ===================================================================================
     //                                                                        Various Info
     //                                                                        ============
-    public boolean hasIdentity() { return true; }
     public boolean hasCommonColumn() { return true; }
     public List<ColumnInfo> getCommonColumnInfoList()
     { return newArrayList(columnRegisterDatetime(), columnRegisterTrace(), columnUpdateDatetime(), columnUpdateTrace()); }
@@ -256,27 +177,27 @@ public class PlayerDbm extends AbstractDBMeta {
     // ===================================================================================
     //                                                                           Type Name
     //                                                                           =========
-    public String getEntityTypeName() { return "com.ort.dbflute.exentity.Player"; }
-    public String getConditionBeanTypeName() { return "com.ort.dbflute.cbean.PlayerCB"; }
-    public String getBehaviorTypeName() { return "com.ort.dbflute.exbhv.PlayerBhv"; }
+    public String getEntityTypeName() { return "com.ort.dbflute.exentity.TwitterUser"; }
+    public String getConditionBeanTypeName() { return "com.ort.dbflute.cbean.TwitterUserCB"; }
+    public String getBehaviorTypeName() { return "com.ort.dbflute.exbhv.TwitterUserBhv"; }
 
     // ===================================================================================
     //                                                                         Object Type
     //                                                                         ===========
-    public Class<Player> getEntityType() { return Player.class; }
+    public Class<TwitterUser> getEntityType() { return TwitterUser.class; }
 
     // ===================================================================================
     //                                                                     Object Instance
     //                                                                     ===============
-    public Player newEntity() { return new Player(); }
+    public TwitterUser newEntity() { return new TwitterUser(); }
 
     // ===================================================================================
     //                                                                   Map Communication
     //                                                                   =================
     public void acceptPrimaryKeyMap(Entity et, Map<String, ? extends Object> mp)
-    { doAcceptPrimaryKeyMap((Player)et, mp); }
+    { doAcceptPrimaryKeyMap((TwitterUser)et, mp); }
     public void acceptAllColumnMap(Entity et, Map<String, ? extends Object> mp)
-    { doAcceptAllColumnMap((Player)et, mp); }
+    { doAcceptAllColumnMap((TwitterUser)et, mp); }
     public Map<String, Object> extractPrimaryKeyMap(Entity et) { return doExtractPrimaryKeyMap(et); }
     public Map<String, Object> extractAllColumnMap(Entity et) { return doExtractAllColumnMap(et); }
 }
