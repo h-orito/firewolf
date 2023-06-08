@@ -21,7 +21,8 @@ class PlayerService(
     fun findPlayers(playerIdList: List<Int>): Players = playerDataSource.findPlayers(playerIdList)
 
     fun updateNickname(user: FirewolfUser, nickname: String, twitterUserName: String?) {
-        val twitterUserId = twitterUserName?.let { tweetService.getUserIdByUsername(twitterUserName) }
+//        val twitterUserId = twitterUserName?.let { tweetService.getUserIdByUsername(twitterUserName) }
+        val twitterUserId = null
         playerDataSource.update(user.uid, nickname, twitterUserName, twitterUserId)
     }
 
