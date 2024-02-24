@@ -201,7 +201,7 @@ class MessageDataSourceTest : FirewolfTest() {
             pageSize = null,
             pageNum = null,
             keyword = null,
-            participantIdList = null
+            fromParticipantIdList = null
         )
         var messages = messageDataSource.findMessages(
             villageId = village.id,
@@ -223,7 +223,7 @@ class MessageDataSourceTest : FirewolfTest() {
             pageSize = null,
             pageNum = null,
             keyword = null,
-            participantIdList = null
+            fromParticipantIdList = null
         )
         messages = messageDataSource.findMessages(
             villageId = village.id,
@@ -246,7 +246,7 @@ class MessageDataSourceTest : FirewolfTest() {
             pageSize = null,
             pageNum = null,
             keyword = null,
-            participantIdList = null
+            fromParticipantIdList = null
         )
         messages = messageDataSource.findMessages(
             villageId = village.id,
@@ -268,7 +268,7 @@ class MessageDataSourceTest : FirewolfTest() {
             pageSize = null,
             pageNum = null,
             keyword = null,
-            participantIdList = null
+            fromParticipantIdList = null
         )
         messages = messageDataSource.findMessages(
             villageId = village.id,
@@ -290,7 +290,7 @@ class MessageDataSourceTest : FirewolfTest() {
             pageSize = null,
             pageNum = null,
             keyword = "message text aaaaa",
-            participantIdList = null
+            fromParticipantIdList = null
         )
         messages = messageDataSource.findMessages(
             villageId = village.id,

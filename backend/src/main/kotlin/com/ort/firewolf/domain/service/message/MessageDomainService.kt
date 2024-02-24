@@ -4,14 +4,7 @@ import com.ort.dbflute.allcommon.CDef
 import com.ort.firewolf.domain.model.message.MessageQuery
 import com.ort.firewolf.domain.model.village.Village
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
-import com.ort.firewolf.domain.service.say.ActionSayDomainService
-import com.ort.firewolf.domain.service.say.GraveSayDomainService
-import com.ort.firewolf.domain.service.say.MonologueSayDomainService
-import com.ort.firewolf.domain.service.say.NormalSayDomainService
-import com.ort.firewolf.domain.service.say.SecretSayDomainService
-import com.ort.firewolf.domain.service.say.SpectateSayDomainService
-import com.ort.firewolf.domain.service.say.SympathizeSayDomainService
-import com.ort.firewolf.domain.service.say.WerewolfSayDomainService
+import com.ort.firewolf.domain.service.say.*
 import org.springframework.stereotype.Service
 
 @Service
@@ -128,7 +121,8 @@ class MessageDomainService(
         pageNum: Int?,
         keyword: String?,
         isLatest: Boolean,
-        participantIdList: List<Int>?
+        fromParticipantIdList: List<Int>?,
+        toParticipantIdList: List<Int>?
     ): MessageQuery {
         val availableMessageTypeList = viewableMessageTypeList(village, participant, day, authority)
         val requestMessageTypeList =
@@ -141,16 +135,18 @@ class MessageDomainService(
             keyword = if (keyword.isNullOrBlank()) null else keyword,
             participant = participant,
             messageTypeList = queryMessageTypeList,
-            participantIdList = participantIdList,
+            fromParticipantIdList = fromParticipantIdList,
+            toParticipantIdList = toParticipantIdList,
             includeMonologue = isIncludeMonologue(
                 participant,
-                participantIdList,
+                fromParticipantIdList,
                 requestMessageTypeList,
                 queryMessageTypeList
             ),
             includeSecret = isIncludeSecret(
                 participant,
-                participantIdList,
+                fromParticipantIdList,
+                toParticipantIdList,
                 requestMessageTypeList,
                 queryMessageTypeList
             ),
@@ -178,7 +174,8 @@ class MessageDomainService(
 
     private fun isIncludeSecret(
         participant: VillageParticipant?,
-        participantIdList: List<Int>?,
+        fromParticipantIdList: List<Int>?,
+        toParticipantIdList: List<Int>?,
         requestMessageTypeList: List<CDef.MessageType>,
         queryMessageTypeList: List<CDef.MessageType>
     ): Boolean {
@@ -186,7 +183,9 @@ class MessageDomainService(
         if (queryMessageTypeList.contains(CDef.MessageType.秘話)) return false
         // 自分が取得対象になっていなければ不要
         participant ?: return false
-        if (participantIdList != null && !participantIdList.contains(participant.id)) return false
+        val containFrom = fromParticipantIdList.isNullOrEmpty() || fromParticipantIdList.contains(participant.id)
+        val containTo = toParticipantIdList.isNullOrEmpty() || toParticipantIdList.contains(participant.id)
+        if (!containFrom && !containTo) return false
         // 求めていなければ不要
         if (!requestMessageTypeList.contains(CDef.MessageType.秘話)) return false
 

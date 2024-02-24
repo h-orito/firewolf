@@ -32,7 +32,8 @@ class MessageCoordinator(
         keyword: String?,
         messageTypeList: List<CDef.MessageType>?,
         isLatest: Boolean,
-        participantIdList: List<Int>?
+        fromParticipantIdList: List<Int>?,
+        toParticipantIdList: List<Int>?
     ): Messages {
         val participant: VillageParticipant? = villageCoordinator.findParticipant(village, user)
         val query = messageDomainService.createQuery(
@@ -46,7 +47,8 @@ class MessageCoordinator(
             pageNum = pageNum,
             keyword = keyword,
             isLatest = isLatest,
-            participantIdList = participantIdList
+            fromParticipantIdList = fromParticipantIdList,
+            toParticipantIdList = toParticipantIdList,
         )
         val villageDayId: Int = village.day.dayList.first { it.day == day && it.noonnight == noonnight }.id
         val messages: Messages = messageService.findMessages(
@@ -70,7 +72,12 @@ class MessageCoordinator(
     ): Long {
         val participant: VillageParticipant? = villageCoordinator.findParticipant(village, user)
         val messageTypeList: List<CDef.MessageType> =
-            messageDomainService.viewableMessageTypeList(village, participant, village.day.latestDay().day, user?.authority)
+            messageDomainService.viewableMessageTypeList(
+                village,
+                participant,
+                village.day.latestDay().day,
+                user?.authority
+            )
         return messageService.findLatestMessagesUnixTimeMilli(village.id, messageTypeList, participant)
     }
 }

@@ -3,13 +3,11 @@ package com.ort.firewolf.infrastructure.datasource.message
 import com.ort.dbflute.allcommon.CDef
 import com.ort.dbflute.cbean.MessageCB
 import com.ort.dbflute.exbhv.MessageBhv
+import com.ort.dbflute.exbhv.MessageSendtoBhv
 import com.ort.dbflute.exentity.Message
+import com.ort.dbflute.exentity.MessageSendto
 import com.ort.firewolf.api.controller.VillageController
-import com.ort.firewolf.domain.model.message.MessageContent
-import com.ort.firewolf.domain.model.message.MessageQuery
-import com.ort.firewolf.domain.model.message.MessageTime
-import com.ort.firewolf.domain.model.message.MessageType
-import com.ort.firewolf.domain.model.message.Messages
+import com.ort.firewolf.domain.model.message.*
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 import com.ort.firewolf.fw.FirewolfDateUtil
 import com.ort.firewolf.fw.exception.FirewolfBusinessException
@@ -17,20 +15,30 @@ import org.dbflute.cbean.result.PagingResultBean
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Repository
 import java.time.ZoneOffset
+import java.util.regex.Pattern
 
 @Repository
 class MessageDataSource(
-    val messageBhv: MessageBhv
+    private val messageBhv: MessageBhv,
+    private val messageSendtoBhv: MessageSendtoBhv
 ) {
 
-    // ===================================================================================
-    //                                                                          Definition
-    //                                                                          ==========
     private val logger = LoggerFactory.getLogger(VillageController::class.java)
 
-    // ===================================================================================
-    //                                                                             Execute
-    //                                                                           =========
+    companion object {
+        val patternMessageTypeMap = mapOf(
+            Pattern.compile("^(?![\\+=\\?@\\-\\*a_])(\\d{1,5})") to CDef.MessageType.通常発言,
+            Pattern.compile("^\\+(\\d{1,5})") to CDef.MessageType.死者の呻き,
+            Pattern.compile("^=(\\d{1,5})") to CDef.MessageType.共鳴発言,
+//            Pattern.compile("^\\?(\\d{1,5})") to CDef.MessageType.恋人発言,
+            Pattern.compile("^@(\\d{1,5})") to CDef.MessageType.見学発言,
+            Pattern.compile("^-(\\d{1,5})") to CDef.MessageType.独り言,
+            Pattern.compile("^\\*(\\d{1,5})") to CDef.MessageType.人狼の囁き,
+            Pattern.compile("^a(\\d{1,5})") to CDef.MessageType.アクション,
+//            Pattern.compile("^_(\\d{1,5})") to CDef.MessageType.念話
+        )
+    }
+
     /**
      * 発言取得
      *
@@ -108,7 +116,8 @@ class MessageDataSource(
             keyword = null,
             participant = participant,
             messageTypeList = messageTypeList,
-            participantIdList = null,
+            fromParticipantIdList = null,
+            toParticipantIdList = null,
             includeMonologue = false,
             includeSecret = false,
             includePrivateAbility = false,
@@ -195,6 +204,7 @@ class MessageDataSource(
             try {
                 mes.messageNumber = selectNextMessageNumber(villageId, message.content.type.code)
                 messageBhv.insert(mes)
+                insertMessageSendTo(mes)
                 return
             } catch (e: RuntimeException) {
                 logger.error(e.message, e)
@@ -203,6 +213,44 @@ class MessageDataSource(
         throw FirewolfBusinessException("混み合っているため発言に失敗しました。再度発言してください。")
     }
 
+    private fun insertMessageSendTo(m: Message) {
+        val splitted = m.messageContent.split(">>")
+        if (splitted.size <= 1) {
+            return  // >>が含まれていない
+        }
+        splitted.drop(1).forEach { str ->
+            patternMessageTypeMap.forEach { (pattern: Pattern, messageType: CDef.MessageType) ->
+                val matcher = pattern.matcher(str)
+                if (matcher.find()) {
+                    val number = matcher.group(1).toInt()
+                    val optMessage =
+                        messageBhv.selectEntity {
+                            it.query().setVillageId_Equal(m.villageId)
+                            it.query().setMessageTypeCode_Equal(messageType.code())
+                            it.query().setMessageNumber_Equal(number)
+                        }
+                    if (!optMessage.isPresent || optMessage.get().villagePlayerId == null) {
+                        return@forEach
+                    }
+                    val sendTo = MessageSendto()
+                    sendTo.villageId = m.villageId
+                    sendTo.messageTypeCode = m.messageTypeCode
+                    sendTo.messageNumber = m.messageNumber
+                    sendTo.villagePlayerId = optMessage.get().villagePlayerId
+                    val optEntity =
+                        messageSendtoBhv.selectEntity {
+                            it.query().setVillageId_Equal(sendTo.villageId)
+                            it.query().setMessageTypeCode_Equal(sendTo.messageTypeCode)
+                            it.query().setMessageNumber_Equal(sendTo.messageNumber)
+                            it.query().setVillagePlayerId_Equal(sendTo.villagePlayerId)
+                        }
+                    if (!optEntity.isPresent) {
+                        messageSendtoBhv.insert(sendTo)
+                    }
+                }
+            }
+        }
+    }
 
     /**
      * 差分更新
@@ -273,38 +321,50 @@ class MessageDataSource(
     ) {
         cb.query().setVillageId_Equal(villageId)
         if (villageDayId != null) cb.query().setVillageDayId_Equal(villageDayId)
-        // 参加していない場合は特に考慮不要
-        if (query.participant == null) {
-            cb.query().setMessageTypeCode_InScope(query.messageTypeList.map { type -> type.code() })
-        } else {
-            val participantId = query.participant.id
-            // 進行中で独り言や秘話だけを見たい場合
-            if (query.messageTypeList.isEmpty()) {
-                if (!query.includeMonologue && !query.includeSecret && !query.includePrivateAbility) {
-                    // 何もしない
-                } else {
-                    cb.orScopeQuery { orCB ->
-                        queryMyself(cb, query, query.participant)
-                    }
-                }
-            }
-            // エピローグなど、全部見える状況の場合はorでなくて良い
-            else if (!query.includeMonologue && !query.includeSecret && !query.includePrivateAbility) {
-                cb.query().setMessageTypeCode_InScope(query.messageTypeList.map { type -> type.code() })
-            }
-            // その他
-            else {
-                cb.orScopeQuery { orCB ->
-                    orCB.query().setMessageTypeCode_InScope(query.messageTypeList.map { type -> type.code() })
-                    queryMyself(cb, query, query.participant)
-                }
-            }
-        }
+        // 発言種別
+        queryMessageType(cb, query)
+
         query.from?.let { cb.query().setMessageUnixtimestampMilli_GreaterThan(it) }
         query.keyword?.let {
             cb.query().setMessageContent_LikeSearch(it) { op -> op.splitByBlank().likeContain().asOrSplit() }
         }
-        if (!query.participantIdList.isNullOrEmpty()) cb.query().setVillagePlayerId_InScope(query.participantIdList)
+        if (!query.fromParticipantIdList.isNullOrEmpty()) {
+            cb.query().setVillagePlayerId_InScope(query.fromParticipantIdList)
+        }
+        if (!query.toParticipantIdList.isNullOrEmpty()) {
+            cb.orScopeQuery { orCB ->
+                orCB.query().existsMessageSendto { sendToCB ->
+                    sendToCB.query().setVillagePlayerId_InScope(query.toParticipantIdList)
+                }
+                orCB.query().setToVillagePlayerId_InScope(query.toParticipantIdList)
+            }
+        }
+    }
+
+    private fun queryMessageType(
+        cb: MessageCB,
+        query: MessageQuery,
+    ) {
+        if (query.participant == null) {
+            if (query.messageTypeList.isNotEmpty()) {
+                cb.query().setMessageTypeCode_InScope(query.messageTypeList.map { it.code() })
+            }
+            return
+        }
+        if (query.messageTypeList.isNotEmpty()) {
+            if (query.includeMonologue || query.includeSecret || query.includePrivateAbility) {
+                cb.orScopeQuery { orCB ->
+                    orCB.query().setMessageTypeCode_InScope(query.messageTypeList.map { it.code() })
+                    queryMyself(orCB, query, query.participant)
+                }
+            } else {
+                cb.query().setMessageTypeCode_InScope(query.messageTypeList.map { it.code() })
+            }
+        } else {
+            if (query.includeMonologue || query.includeSecret || query.includePrivateAbility) {
+                cb.orScopeQuery { orCB -> queryMyself(orCB, query, query.participant) }
+            }
+        }
     }
 
     private fun queryMyself(cb: MessageCB, query: MessageQuery, myself: VillageParticipant) {

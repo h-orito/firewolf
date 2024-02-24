@@ -18,22 +18,23 @@ import com.ort.dbflute.allcommon.ImplementedInvokerAssistant;
 import com.ort.dbflute.allcommon.ImplementedSqlClauseCreator;
 import com.ort.dbflute.cbean.*;
 import com.ort.dbflute.cbean.cq.*;
+import com.ort.dbflute.cbean.nss.*;
 
 /**
- * The base condition-bean of message.
+ * The base condition-bean of message_sendto.
  * @author DBFlute(AutoGenerator)
  */
-public class BsMessageCB extends AbstractConditionBean {
+public class BsMessageSendtoCB extends AbstractConditionBean {
 
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
-    protected MessageCQ _conditionQuery;
+    protected MessageSendtoCQ _conditionQuery;
 
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
-    public BsMessageCB() {
+    public BsMessageSendtoCB() {
         if (DBFluteConfig.getInstance().isPagingCountLater()) {
             enablePagingCountLater();
         }
@@ -76,7 +77,7 @@ public class BsMessageCB extends AbstractConditionBean {
     }
 
     public String asTableDbName() {
-        return "message";
+        return "message_sendto";
     }
 
     // ===================================================================================
@@ -84,29 +85,23 @@ public class BsMessageCB extends AbstractConditionBean {
     //                                                                 ===================
     /**
      * Accept the query condition of primary key as equal.
-     * @param villageId : PK, NotNull, INT UNSIGNED(10). (NotNull)
-     * @param messageNumber : PK, NotNull, INT UNSIGNED(10). (NotNull)
-     * @param messageTypeCode : PK, IX, NotNull, VARCHAR(20). (NotNull)
+     * @param messageSendtoId : PK, ID, NotNull, INT UNSIGNED(10). (NotNull)
      * @return this. (NotNull)
      */
-    public MessageCB acceptPK(Integer villageId, Integer messageNumber, String messageTypeCode) {
-        assertObjectNotNull("villageId", villageId);assertObjectNotNull("messageNumber", messageNumber);assertObjectNotNull("messageTypeCode", messageTypeCode);
-        BsMessageCB cb = this;
-        cb.query().setVillageId_Equal(villageId);cb.query().setMessageNumber_Equal(messageNumber);cb.query().setMessageTypeCode_Equal(messageTypeCode);
-        return (MessageCB)this;
+    public MessageSendtoCB acceptPK(Integer messageSendtoId) {
+        assertObjectNotNull("messageSendtoId", messageSendtoId);
+        BsMessageSendtoCB cb = this;
+        cb.query().setMessageSendtoId_Equal(messageSendtoId);
+        return (MessageSendtoCB)this;
     }
 
     public ConditionBean addOrderBy_PK_Asc() {
-        query().addOrderBy_VillageId_Asc();
-        query().addOrderBy_MessageNumber_Asc();
-        query().addOrderBy_MessageTypeCode_Asc();
+        query().addOrderBy_MessageSendtoId_Asc();
         return this;
     }
 
     public ConditionBean addOrderBy_PK_Desc() {
-        query().addOrderBy_VillageId_Desc();
-        query().addOrderBy_MessageNumber_Desc();
-        query().addOrderBy_MessageTypeCode_Desc();
+        query().addOrderBy_MessageSendtoId_Desc();
         return this;
     }
 
@@ -170,34 +165,34 @@ public class BsMessageCB extends AbstractConditionBean {
      * </pre>
      * @return The instance of condition-query for base-point table to set up query. (NotNull)
      */
-    public MessageCQ query() {
+    public MessageSendtoCQ query() {
         assertQueryPurpose(); // assert only when user-public query
         return doGetConditionQuery();
     }
 
-    public MessageCQ xdfgetConditionQuery() { // public for parameter comment and internal
+    public MessageSendtoCQ xdfgetConditionQuery() { // public for parameter comment and internal
         return doGetConditionQuery();
     }
 
-    protected MessageCQ doGetConditionQuery() {
+    protected MessageSendtoCQ doGetConditionQuery() {
         if (_conditionQuery == null) {
             _conditionQuery = createLocalCQ();
         }
         return _conditionQuery;
     }
 
-    protected MessageCQ createLocalCQ() {
+    protected MessageSendtoCQ createLocalCQ() {
         return xcreateCQ(null, getSqlClause(), getSqlClause().getBasePointAliasName(), 0);
     }
 
-    protected MessageCQ xcreateCQ(ConditionQuery childQuery, SqlClause sqlClause, String aliasName, int nestLevel) {
-        MessageCQ cq = xnewCQ(childQuery, sqlClause, aliasName, nestLevel);
+    protected MessageSendtoCQ xcreateCQ(ConditionQuery childQuery, SqlClause sqlClause, String aliasName, int nestLevel) {
+        MessageSendtoCQ cq = xnewCQ(childQuery, sqlClause, aliasName, nestLevel);
         cq.xsetBaseCB(this);
         return cq;
     }
 
-    protected MessageCQ xnewCQ(ConditionQuery childQuery, SqlClause sqlClause, String aliasName, int nestLevel) {
-        return new MessageCQ(childQuery, sqlClause, aliasName, nestLevel);
+    protected MessageSendtoCQ xnewCQ(ConditionQuery childQuery, SqlClause sqlClause, String aliasName, int nestLevel) {
+        return new MessageSendtoCQ(childQuery, sqlClause, aliasName, nestLevel);
     }
 
     /**
@@ -221,10 +216,10 @@ public class BsMessageCB extends AbstractConditionBean {
      * </pre>
      * @param unionCBLambda The callback for query of 'union'. (NotNull)
      */
-    public void union(UnionQuery<MessageCB> unionCBLambda) {
-        final MessageCB cb = new MessageCB(); cb.xsetupForUnion(this); xsyncUQ(cb);
+    public void union(UnionQuery<MessageSendtoCB> unionCBLambda) {
+        final MessageSendtoCB cb = new MessageSendtoCB(); cb.xsetupForUnion(this); xsyncUQ(cb);
         try { lock(); unionCBLambda.query(cb); } finally { unlock(); } xsaveUCB(cb);
-        final MessageCQ cq = cb.query(); query().xsetUnionQuery(cq);
+        final MessageSendtoCQ cq = cb.query(); query().xsetUnionQuery(cq);
     }
 
     /**
@@ -238,15 +233,66 @@ public class BsMessageCB extends AbstractConditionBean {
      * </pre>
      * @param unionCBLambda The callback for query of 'union all'. (NotNull)
      */
-    public void unionAll(UnionQuery<MessageCB> unionCBLambda) {
-        final MessageCB cb = new MessageCB(); cb.xsetupForUnion(this); xsyncUQ(cb);
+    public void unionAll(UnionQuery<MessageSendtoCB> unionCBLambda) {
+        final MessageSendtoCB cb = new MessageSendtoCB(); cb.xsetupForUnion(this); xsyncUQ(cb);
         try { lock(); unionCBLambda.query(cb); } finally { unlock(); } xsaveUCB(cb);
-        final MessageCQ cq = cb.query(); query().xsetUnionAllQuery(cq);
+        final MessageSendtoCQ cq = cb.query(); query().xsetUnionAllQuery(cq);
     }
 
     // ===================================================================================
     //                                                                         SetupSelect
     //                                                                         ===========
+    protected VillagePlayerNss _nssVillagePlayer;
+    public VillagePlayerNss xdfgetNssVillagePlayer() {
+        if (_nssVillagePlayer == null) { _nssVillagePlayer = new VillagePlayerNss(null); }
+        return _nssVillagePlayer;
+    }
+    /**
+     * Set up relation columns to select clause. <br>
+     * VILLAGE_PLAYER by my VILLAGE_PLAYER_ID, named 'villagePlayer'.
+     * <pre>
+     * <span style="color: #0000C0">messageSendtoBhv</span>.selectEntity(<span style="color: #553000">cb</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+     *     <span style="color: #553000">cb</span>.<span style="color: #CC4747">setupSelect_VillagePlayer()</span>; <span style="color: #3F7E5E">// ...().with[nested-relation]()</span>
+     *     <span style="color: #553000">cb</span>.query().set...
+     * }).alwaysPresent(<span style="color: #553000">messageSendto</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+     *     ... = <span style="color: #553000">messageSendto</span>.<span style="color: #CC4747">getVillagePlayer()</span>; <span style="color: #3F7E5E">// you can get by using SetupSelect</span>
+     * });
+     * </pre>
+     * @return The set-upper of nested relation. {setupSelect...().with[nested-relation]} (NotNull)
+     */
+    public VillagePlayerNss setupSelect_VillagePlayer() {
+        assertSetupSelectPurpose("villagePlayer");
+        if (hasSpecifiedLocalColumn()) {
+            specify().columnVillagePlayerId();
+        }
+        doSetupSelect(() -> query().queryVillagePlayer());
+        if (_nssVillagePlayer == null || !_nssVillagePlayer.hasConditionQuery())
+        { _nssVillagePlayer = new VillagePlayerNss(query().queryVillagePlayer()); }
+        return _nssVillagePlayer;
+    }
+
+    /**
+     * Set up relation columns to select clause. <br>
+     * MESSAGE by my VILLAGE_ID, MESSAGE_TYPE_CODE, MESSAGE_NUMBER, named 'message'.
+     * <pre>
+     * <span style="color: #0000C0">messageSendtoBhv</span>.selectEntity(<span style="color: #553000">cb</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+     *     <span style="color: #553000">cb</span>.<span style="color: #CC4747">setupSelect_Message()</span>; <span style="color: #3F7E5E">// ...().with[nested-relation]()</span>
+     *     <span style="color: #553000">cb</span>.query().set...
+     * }).alwaysPresent(<span style="color: #553000">messageSendto</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+     *     ... = <span style="color: #553000">messageSendto</span>.<span style="color: #CC4747">getMessage()</span>; <span style="color: #3F7E5E">// you can get by using SetupSelect</span>
+     * });
+     * </pre>
+     */
+    public void setupSelect_Message() {
+        assertSetupSelectPurpose("message");
+        if (hasSpecifiedLocalColumn()) {
+            specify().columnVillageId();
+            specify().columnMessageTypeCode();
+            specify().columnMessageNumber();
+        }
+        doSetupSelect(() -> query().queryMessage());
+    }
+
     // [DBFlute-0.7.4]
     // ===================================================================================
     //                                                                             Specify
@@ -287,83 +333,45 @@ public class BsMessageCB extends AbstractConditionBean {
         return _specification != null && _specification.hasSpecifiedColumn();
     }
 
-    public static class HpSpecification extends HpAbstractSpecification<MessageCQ> {
-        public HpSpecification(ConditionBean baseCB, HpSpQyCall<MessageCQ> qyCall
+    public static class HpSpecification extends HpAbstractSpecification<MessageSendtoCQ> {
+        protected VillagePlayerCB.HpSpecification _villagePlayer;
+        protected MessageCB.HpSpecification _message;
+        public HpSpecification(ConditionBean baseCB, HpSpQyCall<MessageSendtoCQ> qyCall
                              , HpCBPurpose purpose, DBMetaProvider dbmetaProvider
                              , HpSDRFunctionFactory sdrFuncFactory)
         { super(baseCB, qyCall, purpose, dbmetaProvider, sdrFuncFactory); }
         /**
-         * VILLAGE_ID: {PK, NotNull, INT UNSIGNED(10)}
+         * MESSAGE_SENDTO_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
+         * @return The information object of specified column. (NotNull)
+         */
+        public SpecifiedColumn columnMessageSendtoId() { return doColumn("MESSAGE_SENDTO_ID"); }
+        /**
+         * VILLAGE_ID: {IX+, NotNull, INT UNSIGNED(10), FK to MESSAGE}
          * @return The information object of specified column. (NotNull)
          */
         public SpecifiedColumn columnVillageId() { return doColumn("VILLAGE_ID"); }
         /**
-         * MESSAGE_NUMBER: {PK, NotNull, INT UNSIGNED(10)}
+         * MESSAGE_NUMBER: {NotNull, INT UNSIGNED(10), FK to MESSAGE}
          * @return The information object of specified column. (NotNull)
          */
         public SpecifiedColumn columnMessageNumber() { return doColumn("MESSAGE_NUMBER"); }
         /**
-         * MESSAGE_TYPE_CODE: {PK, IX, NotNull, VARCHAR(20)}
+         * MESSAGE_TYPE_CODE: {NotNull, VARCHAR(20), FK to MESSAGE}
          * @return The information object of specified column. (NotNull)
          */
         public SpecifiedColumn columnMessageTypeCode() { return doColumn("MESSAGE_TYPE_CODE"); }
         /**
-         * MESSAGE_UNIXTIMESTAMP_MILLI: {IX, NotNull, BIGINT UNSIGNED(20)}
-         * @return The information object of specified column. (NotNull)
-         */
-        public SpecifiedColumn columnMessageUnixtimestampMilli() { return doColumn("MESSAGE_UNIXTIMESTAMP_MILLI"); }
-        /**
-         * VILLAGE_DAY_ID: {IX, NotNull, INT UNSIGNED(10)}
-         * @return The information object of specified column. (NotNull)
-         */
-        public SpecifiedColumn columnVillageDayId() { return doColumn("VILLAGE_DAY_ID"); }
-        /**
-         * VILLAGE_PLAYER_ID: {IX, INT UNSIGNED(10)}
+         * VILLAGE_PLAYER_ID: {IX, NotNull, INT UNSIGNED(10), FK to village_player}
          * @return The information object of specified column. (NotNull)
          */
         public SpecifiedColumn columnVillagePlayerId() { return doColumn("VILLAGE_PLAYER_ID"); }
-        /**
-         * TO_VILLAGE_PLAYER_ID: {IX, INT UNSIGNED(10)}
-         * @return The information object of specified column. (NotNull)
-         */
-        public SpecifiedColumn columnToVillagePlayerId() { return doColumn("TO_VILLAGE_PLAYER_ID"); }
-        /**
-         * PLAYER_ID: {IX, INT UNSIGNED(10)}
-         * @return The information object of specified column. (NotNull)
-         */
-        public SpecifiedColumn columnPlayerId() { return doColumn("PLAYER_ID"); }
-        /**
-         * MESSAGE_CONTENT: {NotNull, VARCHAR(10000)}
-         * @return The information object of specified column. (NotNull)
-         */
-        public SpecifiedColumn columnMessageContent() { return doColumn("MESSAGE_CONTENT"); }
-        /**
-         * MESSAGE_DATETIME: {NotNull, DATETIME(19)}
-         * @return The information object of specified column. (NotNull)
-         */
-        public SpecifiedColumn columnMessageDatetime() { return doColumn("MESSAGE_DATETIME"); }
-        /**
-         * MESSAGE_COUNT: {INT UNSIGNED(10)}
-         * @return The information object of specified column. (NotNull)
-         */
-        public SpecifiedColumn columnMessageCount() { return doColumn("MESSAGE_COUNT"); }
-        /**
-         * IS_CONVERT_DISABLE: {NotNull, BIT}
-         * @return The information object of specified column. (NotNull)
-         */
-        public SpecifiedColumn columnIsConvertDisable() { return doColumn("IS_CONVERT_DISABLE"); }
-        /**
-         * FACE_TYPE_CODE: {IX, VARCHAR(20)}
-         * @return The information object of specified column. (NotNull)
-         */
-        public SpecifiedColumn columnFaceTypeCode() { return doColumn("FACE_TYPE_CODE"); }
         /**
          * REGISTER_DATETIME: {NotNull, DATETIME(19)}
          * @return The information object of specified column. (NotNull)
          */
         public SpecifiedColumn columnRegisterDatetime() { return doColumn("REGISTER_DATETIME"); }
         /**
-         * REGISTER_TRACE: {NotNull, VARCHAR(64)}
+         * REGISTER_TRACE: {NotNull, VARCHAR(255)}
          * @return The information object of specified column. (NotNull)
          */
         public SpecifiedColumn columnRegisterTrace() { return doColumn("REGISTER_TRACE"); }
@@ -373,7 +381,7 @@ public class BsMessageCB extends AbstractConditionBean {
          */
         public SpecifiedColumn columnUpdateDatetime() { return doColumn("UPDATE_DATETIME"); }
         /**
-         * UPDATE_TRACE: {NotNull, VARCHAR(64)}
+         * UPDATE_TRACE: {NotNull, VARCHAR(255)}
          * @return The information object of specified column. (NotNull)
          */
         public SpecifiedColumn columnUpdateTrace() { return doColumn("UPDATE_TRACE"); }
@@ -381,28 +389,68 @@ public class BsMessageCB extends AbstractConditionBean {
         public void exceptRecordMetaColumn() { doExceptRecordMetaColumn(); }
         @Override
         protected void doSpecifyRequiredColumn() {
-            columnVillageId(); // PK
-            columnMessageNumber(); // PK
-            columnMessageTypeCode(); // PK
+            columnMessageSendtoId(); // PK
+            if (qyCall().qy().hasConditionQueryVillagePlayer()
+                    || qyCall().qy().xgetReferrerQuery() instanceof VillagePlayerCQ) {
+                columnVillagePlayerId(); // FK or one-to-one referrer
+            }
+            if (qyCall().qy().hasConditionQueryMessage()
+                    || qyCall().qy().xgetReferrerQuery() instanceof MessageCQ) {
+                columnVillageId(); // FK or one-to-one referrer
+                columnMessageTypeCode(); // FK or one-to-one referrer
+                columnMessageNumber(); // FK or one-to-one referrer
+            }
         }
         @Override
-        protected String getTableDbName() { return "message"; }
+        protected String getTableDbName() { return "message_sendto"; }
         /**
-         * Prepare for (Specify)DerivedReferrer (correlated sub-query). <br>
-         * {select max(FOO) from message_sendto where ...) as FOO_MAX} <br>
-         * MESSAGE_SENDTO by VILLAGE_ID, MESSAGE_TYPE_CODE, MESSAGE_NUMBER, named 'messageSendtoList'.
-         * <pre>
-         * cb.specify().<span style="color: #CC4747">derived${relationMethodIdentityName}()</span>.<span style="color: #CC4747">max</span>(sendtoCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-         *     sendtoCB.specify().<span style="color: #CC4747">column...</span> <span style="color: #3F7E5E">// derived column by function</span>
-         *     sendtoCB.query().set... <span style="color: #3F7E5E">// referrer condition</span>
-         * }, MessageSendto.<span style="color: #CC4747">ALIAS_foo...</span>);
-         * </pre>
-         * @return The object to set up a function for referrer table. (NotNull)
+         * Prepare to specify functions about relation table. <br>
+         * VILLAGE_PLAYER by my VILLAGE_PLAYER_ID, named 'villagePlayer'.
+         * @return The instance for specification for relation table to specify. (NotNull)
          */
-        public HpSDRFunction<MessageSendtoCB, MessageCQ> derivedMessageSendto() {
-            assertDerived("messageSendtoList"); if (xhasSyncQyCall()) { xsyncQyCall().qy(); } // for sync (for example, this in ColumnQuery)
-            return cHSDRF(_baseCB, _qyCall.qy(), (String fn, SubQuery<MessageSendtoCB> sq, MessageCQ cq, String al, DerivedReferrerOption op)
-                    -> cq.xsderiveMessageSendtoList(fn, sq, al, op), _dbmetaProvider);
+        public VillagePlayerCB.HpSpecification specifyVillagePlayer() {
+            assertRelation("villagePlayer");
+            if (_villagePlayer == null) {
+                _villagePlayer = new VillagePlayerCB.HpSpecification(_baseCB
+                    , xcreateSpQyCall(() -> _qyCall.has() && _qyCall.qy().hasConditionQueryVillagePlayer()
+                                    , () -> _qyCall.qy().queryVillagePlayer())
+                    , _purpose, _dbmetaProvider, xgetSDRFnFc());
+                if (xhasSyncQyCall()) { // inherits it
+                    _villagePlayer.xsetSyncQyCall(xcreateSpQyCall(
+                        () -> xsyncQyCall().has() && xsyncQyCall().qy().hasConditionQueryVillagePlayer()
+                      , () -> xsyncQyCall().qy().queryVillagePlayer()));
+                }
+            }
+            return _villagePlayer;
+        }
+        /**
+         * Prepare to specify functions about relation table. <br>
+         * MESSAGE by my VILLAGE_ID, MESSAGE_TYPE_CODE, MESSAGE_NUMBER, named 'message'.
+         * @return The instance for specification for relation table to specify. (NotNull)
+         */
+        public MessageCB.HpSpecification specifyMessage() {
+            assertRelation("message");
+            if (_message == null) {
+                _message = new MessageCB.HpSpecification(_baseCB
+                    , xcreateSpQyCall(() -> _qyCall.has() && _qyCall.qy().hasConditionQueryMessage()
+                                    , () -> _qyCall.qy().queryMessage())
+                    , _purpose, _dbmetaProvider, xgetSDRFnFc());
+                if (xhasSyncQyCall()) { // inherits it
+                    _message.xsetSyncQyCall(xcreateSpQyCall(
+                        () -> xsyncQyCall().has() && xsyncQyCall().qy().hasConditionQueryMessage()
+                      , () -> xsyncQyCall().qy().queryMessage()));
+                }
+            }
+            return _message;
+        }
+        /**
+         * Prepare for (Specify)MyselfDerived (SubQuery).
+         * @return The object to set up a function for myself table. (NotNull)
+         */
+        public HpSDRFunction<MessageSendtoCB, MessageSendtoCQ> myselfDerived() {
+            assertDerived("myselfDerived"); if (xhasSyncQyCall()) { xsyncQyCall().qy(); } // for sync (for example, this in ColumnQuery)
+            return cHSDRF(_baseCB, _qyCall.qy(), (String fn, SubQuery<MessageSendtoCB> sq, MessageSendtoCQ cq, String al, DerivedReferrerOption op)
+                    -> cq.xsmyselfDerive(fn, sq, al, op), _dbmetaProvider);
         }
     }
 
@@ -414,9 +462,9 @@ public class BsMessageCB extends AbstractConditionBean {
      * This is very specialty so you can get the frontier spirit. Bon voyage!
      * @return The condition-bean for dream cruise, which is linked to main condition-bean.
      */
-    public MessageCB dreamCruiseCB() {
-        MessageCB cb = new MessageCB();
-        cb.xsetupForDreamCruise((MessageCB) this);
+    public MessageSendtoCB dreamCruiseCB() {
+        MessageSendtoCB cb = new MessageSendtoCB();
+        cb.xsetupForDreamCruise((MessageSendtoCB) this);
         return cb;
     }
 
@@ -441,15 +489,15 @@ public class BsMessageCB extends AbstractConditionBean {
      * @param colCBLambda The callback for specify-query of left column. (NotNull)
      * @return The object for setting up operand and right column. (NotNull)
      */
-    public HpColQyOperand<MessageCB> columnQuery(final SpecifyQuery<MessageCB> colCBLambda) {
+    public HpColQyOperand<MessageSendtoCB> columnQuery(final SpecifyQuery<MessageSendtoCB> colCBLambda) {
         return xcreateColQyOperand((rightSp, operand) -> {
             return xcolqy(xcreateColumnQueryCB(), xcreateColumnQueryCB(), colCBLambda, rightSp, operand);
         });
     }
 
-    protected MessageCB xcreateColumnQueryCB() {
-        MessageCB cb = new MessageCB();
-        cb.xsetupForColumnQuery((MessageCB)this);
+    protected MessageSendtoCB xcreateColumnQueryCB() {
+        MessageSendtoCB cb = new MessageSendtoCB();
+        cb.xsetupForColumnQuery((MessageSendtoCB)this);
         return cb;
     }
 
@@ -469,8 +517,8 @@ public class BsMessageCB extends AbstractConditionBean {
      * </pre>
      * @param orCBLambda The callback for query of or-condition. (NotNull)
      */
-    public void orScopeQuery(OrQuery<MessageCB> orCBLambda) {
-        xorSQ((MessageCB)this, orCBLambda);
+    public void orScopeQuery(OrQuery<MessageSendtoCB> orCBLambda) {
+        xorSQ((MessageSendtoCB)this, orCBLambda);
     }
 
     /**
@@ -488,8 +536,8 @@ public class BsMessageCB extends AbstractConditionBean {
      * </pre>
      * @param andCBLambda The callback for query of and-condition. (NotNull)
      */
-    public void orScopeQueryAndPart(AndQuery<MessageCB> andCBLambda) {
-        xorSQAP((MessageCB)this, andCBLambda);
+    public void orScopeQueryAndPart(AndQuery<MessageSendtoCB> andCBLambda) {
+        xorSQAP((MessageSendtoCB)this, andCBLambda);
     }
 
     // ===================================================================================
@@ -519,11 +567,11 @@ public class BsMessageCB extends AbstractConditionBean {
     //                                                                        ============
     @Override
     protected void xprepareSyncQyCall(ConditionBean mainCB) {
-        final MessageCB cb;
+        final MessageSendtoCB cb;
         if (mainCB != null) {
-            cb = (MessageCB)mainCB;
+            cb = (MessageSendtoCB)mainCB;
         } else {
-            cb = new MessageCB();
+            cb = new MessageSendtoCB();
         }
         specify().xsetSyncQyCall(xcreateSpQyCall(() -> true, () -> cb.query()));
     }
@@ -532,8 +580,8 @@ public class BsMessageCB extends AbstractConditionBean {
     //                                                                            Internal
     //                                                                            ========
     // very internal (for suppressing warn about 'Not Use Import')
-    protected String xgetConditionBeanClassNameInternally() { return MessageCB.class.getName(); }
-    protected String xgetConditionQueryClassNameInternally() { return MessageCQ.class.getName(); }
+    protected String xgetConditionBeanClassNameInternally() { return MessageSendtoCB.class.getName(); }
+    protected String xgetConditionQueryClassNameInternally() { return MessageSendtoCQ.class.getName(); }
     protected String xgetSubQueryClassNameInternally() { return SubQuery.class.getName(); }
     protected String xgetConditionOptionClassNameInternally() { return ConditionOption.class.getName(); }
 }

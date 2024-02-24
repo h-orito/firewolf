@@ -146,7 +146,8 @@ class VillageController(
             keyword = form.keyword,
             messageTypeList = messageTypeList,
             isLatest = form.is_disp_latest ?: false,
-            participantIdList = form.participant_id_list?.filterNotNull() // [null]で来る問題に対応
+            fromParticipantIdList = form.participant_id_list?.filterNotNull(), // [null]で来る問題に対応
+            toParticipantIdList = form.to_participant_id_list?.filterNotNull() // [null]で来る問題に対応
         )
         val players: Players = playerService.findPlayers(villageId)
         val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipIds)
