@@ -5,6 +5,7 @@ import com.ort.dbflute.exbhv.*
 import com.ort.dbflute.exentity.*
 import com.ort.firewolf.domain.model.village.Villages
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
+import com.ort.firewolf.domain.model.village.participant.VillageParticipantNotificationCondition
 import com.ort.firewolf.domain.model.village.setting.VillageCharachip
 import com.ort.firewolf.domain.model.village.setting.VillageMessageRestrict
 import com.ort.firewolf.domain.model.village.setting.VillageSettings
@@ -21,7 +22,8 @@ class VillageDataSource(
     private val villageDayBhv: VillageDayBhv,
     private val villagePlayerBhv: VillagePlayerBhv,
     private val villagePlayerAccessInfoBhv: VillagePlayerAccessInfoBhv,
-    private val messageRestrictionBhv: MessageRestrictionBhv
+    private val messageRestrictionBhv: MessageRestrictionBhv,
+    private val villagePlayerNotificationBhv: VillagePlayerNotificationBhv
 ) {
 
     /**
@@ -197,6 +199,7 @@ class VillageDataSource(
         villageBhv.load(village) { loader ->
             loader.loadVillagePlayer { vpCB ->
                 vpCB.setupSelect_VillageDay()
+                vpCB.setupSelect_VillagePlayerNotificationAsOne()
                 if (excludeGonePlayer) {
                     vpCB.query().setIsGone_Equal(false)
                 }
@@ -353,7 +356,11 @@ class VillageDataSource(
         after.setting.rules.let(fun(afterRules) {
             if (!before.setting.rules.existsDifference(afterRules)) return
             updateVillageSetting(villageId, CDef.VillageSettingItem.記名投票か, toFlg(afterRules.openVote))
-            updateVillageSetting(villageId, CDef.VillageSettingItem.役職希望可能か, toFlg(afterRules.availableSkillRequest))
+            updateVillageSetting(
+                villageId,
+                CDef.VillageSettingItem.役職希望可能か,
+                toFlg(afterRules.availableSkillRequest)
+            )
             updateVillageSetting(villageId, CDef.VillageSettingItem.見学可能か, toFlg(afterRules.availableSpectate))
             updateVillageSetting(villageId, CDef.VillageSettingItem.墓下役職公開ありか, toFlg(afterRules.openSkillInGrave))
             updateVillageSetting(
@@ -469,6 +476,27 @@ class VillageDataSource(
         villagePlayerBhv.update(villagePlayer)
     }
 
+    fun updateVillagePlayerNotification(
+        participantId: Int,
+        notification: VillageParticipantNotificationCondition
+    ) {
+        villagePlayerNotificationBhv.queryDelete { it.query().setVillagePlayerId_Equal(participantId) }
+        val n = VillagePlayerNotification()
+        n.villagePlayerId = participantId
+        n.discordWebhookUrl = notification.discordWebhookUrl
+        n.villageStart = notification.village.start
+        n.villageDaychange = notification.village.dayChange
+        n.villageEpilogue = notification.village.epilogue
+        n.receiveSecretSay = notification.message.secretSay
+        n.receiveAbilitySay = notification.message.abilitySay
+        n.receiveAnchorSay = notification.message.anchor
+        n.keyword = notification.message.keywords.let {
+            if (it.isEmpty()) null
+            else it.joinToString(separator = " ")
+        }
+        villagePlayerNotificationBhv.insert(n)
+    }
+
     private fun insertVillagePlayerAccessInfos(participantId: Int, ipAddresses: List<String>) {
         val exists = villagePlayerAccessInfoBhv.selectList {
             it.query().setVillagePlayerId_Equal(participantId)
@@ -543,7 +571,11 @@ class VillageDataSource(
         insertVillageSetting(villageId, CDef.VillageSettingItem.ダミーキャラid, settings.charachip.dummyCharaId.toString())
         insertVillageSetting(villageId, CDef.VillageSettingItem.構成, settings.organizations.toString())
         insertVillageSetting(villageId, CDef.VillageSettingItem.記名投票か, toFlg(settings.rules.openVote))
-        insertVillageSetting(villageId, CDef.VillageSettingItem.役職希望可能か, toFlg(settings.rules.availableSkillRequest))
+        insertVillageSetting(
+            villageId,
+            CDef.VillageSettingItem.役職希望可能か,
+            toFlg(settings.rules.availableSkillRequest)
+        )
         insertVillageSetting(villageId, CDef.VillageSettingItem.見学可能か, toFlg(settings.rules.availableSpectate))
         insertVillageSetting(villageId, CDef.VillageSettingItem.墓下役職公開ありか, toFlg(settings.rules.openSkillInGrave))
         insertVillageSetting(

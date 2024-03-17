@@ -42,6 +42,8 @@ data class MessageContent(
         }
     }
 
+    fun shouldNotify(): Boolean = text.contains("@国主") || text.contains("＠国主")
+
     fun assertMessageLength(maxLength: Int = defaultLengthMax, lineMax: Int = defaultLineMax) {
         // 行数
         if (text.replace("\r\n", "\n").split("\n").size > lineMax) throw FirewolfBadRequestException("行数オーバーです")

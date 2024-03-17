@@ -2,21 +2,17 @@ package com.ort.firewolf.domain.service.message
 
 import com.ort.dbflute.allcommon.CDef
 import com.ort.firewolf.domain.model.message.MessageQuery
+import com.ort.firewolf.domain.model.message.MessageType
+import com.ort.firewolf.domain.model.player.Player
 import com.ort.firewolf.domain.model.village.Village
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
-import com.ort.firewolf.domain.service.say.*
+import com.ort.firewolf.domain.service.message.say.SayDomainService
+import com.ort.firewolf.domain.service.message.system.*
 import org.springframework.stereotype.Service
 
 @Service
 class MessageDomainService(
-    private val normalSayDomainService: NormalSayDomainService,
-    private val werewolfSayDomainService: WerewolfSayDomainService,
-    private val sympathizeSayDomainService: SympathizeSayDomainService,
-    private val graveSayDomainService: GraveSayDomainService,
-    private val spectateSayDomainService: SpectateSayDomainService,
-    private val monologueSayDomainService: MonologueSayDomainService,
-    private val actionSayDomainService: ActionSayDomainService,
-    private val secretSayDomainService: SecretSayDomainService,
+    private val sayDomainService: SayDomainService,
     private val psychicMessageDomainService: PsychicMessageDomainService,
     private val guruPsychicMessageDomainService: GuruPsychicMessageDomainService,
     private val attackMessageDomainService: AttackMessageDomainService,
@@ -24,27 +20,17 @@ class MessageDomainService(
     private val masonMessageDomainService: MasonMessageDomainService,
     private val sympathizerMessageDomainService: SympathizerMessageDomainService,
     private val foxMessageDomainService: FoxMessageDomainService,
-    private val fanaticMessageDomainService: FanaticMessageDomainService
+    private val fanaticMessageDomainService: FanaticMessageDomainService,
+    private val privateSystemMessageDomainService: PrivateSystemMessageDomainService
 ) {
-
-    private val everyoneAllowedMessageTypeList = listOf(
-        CDef.MessageType.公開システムメッセージ,
-        CDef.MessageType.通常発言,
-        CDef.MessageType.村建て発言,
-        CDef.MessageType.アクション
-    )
 
     /**
      * 閲覧できる発言種別リスト
-     *
-     * @param participant 参加情報
-     * @param day 何日目か
-     * @param authority ユーザの権限
-     * @return 閲覧できる発言種別
      */
     fun viewableMessageTypeList(
         village: Village,
         participant: VillageParticipant?,
+        player: Player?,
         day: Int,
         authority: CDef.Authority?
     ): List<CDef.MessageType> {
@@ -54,65 +40,29 @@ class MessageDomainService(
         if (village.status.isSolved()) return CDef.MessageType.listAll()
 
         val allowedTypeList: MutableList<CDef.MessageType> = mutableListOf()
-        allowedTypeList.addAll(everyoneAllowedMessageTypeList)
+        allowedTypeList.addAll(MessageType.everyoneAllowedMessageTypeList)
         // 権限に応じて追加していく（独り言と秘話はここでは追加しない）
-        listOf(
-            CDef.MessageType.死者の呻き,
-            CDef.MessageType.見学発言,
-            CDef.MessageType.人狼の囁き,
-            CDef.MessageType.共鳴発言,
-            CDef.MessageType.白黒霊視結果,
-            CDef.MessageType.役職霊視結果,
-            CDef.MessageType.襲撃結果,
-            CDef.MessageType.共有相互確認メッセージ,
-            CDef.MessageType.共鳴相互確認メッセージ,
-            CDef.MessageType.狂信者人狼確認メッセージ,
-            CDef.MessageType.妖狐メッセージ,
-            CDef.MessageType.検死結果
-        ).forEach {
-            if (isViewableMessage(village, participant, it.code(), day)) allowedTypeList.add(it)
+        (MessageType.sayTypeList + MessageType.commonSystemTypeList).forEach {
+            if (isViewableMessage(village, participant, player, it, day)) allowedTypeList.add(it)
         }
         return allowedTypeList
     }
 
-    /**
-     * 閲覧できるか
-     *
-     * @param participant 参加情報
-     * @param messageType 発言種別
-     * @param day 何日目か
-     * @return 閲覧できるか
-     */
     fun isViewableMessage(
         village: Village,
-        participant: VillageParticipant?,
-        messageType: String,
+        myself: VillageParticipant?,
+        player: Player?,
+        messageType: CDef.MessageType,
         day: Int = 1
     ): Boolean {
-        return when (CDef.MessageType.codeOf(messageType) ?: return false) {
-            CDef.MessageType.通常発言 -> normalSayDomainService.isViewable(village, participant)
-            CDef.MessageType.人狼の囁き -> werewolfSayDomainService.isViewable(village, participant)
-            CDef.MessageType.死者の呻き -> graveSayDomainService.isViewable(village, participant)
-            CDef.MessageType.共鳴発言 -> sympathizeSayDomainService.isViewable(village, participant)
-            CDef.MessageType.見学発言 -> spectateSayDomainService.isViewable(village, participant, day)
-            CDef.MessageType.独り言 -> monologueSayDomainService.isViewable(village, participant)
-            CDef.MessageType.秘話 -> secretSayDomainService.isViewable(village, participant)
-            CDef.MessageType.白黒霊視結果 -> psychicMessageDomainService.isViewable(village, participant)
-            CDef.MessageType.役職霊視結果 -> guruPsychicMessageDomainService.isViewable(village, participant)
-            CDef.MessageType.襲撃結果 -> attackMessageDomainService.isViewable(village, participant)
-            CDef.MessageType.共有相互確認メッセージ -> masonMessageDomainService.isViewable(village, participant)
-            CDef.MessageType.共鳴相互確認メッセージ -> sympathizerMessageDomainService.isViewable(village, participant)
-            CDef.MessageType.狂信者人狼確認メッセージ -> fanaticMessageDomainService.isViewable(village, participant)
-            CDef.MessageType.妖狐メッセージ -> foxMessageDomainService.isViewable(village, participant)
-            CDef.MessageType.検死結果 -> autopsyMessageDomainService.isViewable(village, participant)
-            CDef.MessageType.アクション -> actionSayDomainService.isViewable(village, participant)
-            else -> return false
-        }
+        return if (messageType == CDef.MessageType.村建て発言) true
+        else detectMessageTypeDomainService(messageType).isViewable(village, myself, player, day)
     }
 
     fun createQuery(
         village: Village,
         participant: VillageParticipant?,
+        player: Player?,
         day: Int,
         authority: CDef.Authority?,
         messageTypeList: List<CDef.MessageType>?,
@@ -124,7 +74,7 @@ class MessageDomainService(
         fromParticipantIdList: List<Int>?,
         toParticipantIdList: List<Int>?
     ): MessageQuery {
-        val availableMessageTypeList = viewableMessageTypeList(village, participant, day, authority)
+        val availableMessageTypeList = viewableMessageTypeList(village, participant, player, day, authority)
         val requestMessageTypeList =
             if (messageTypeList.isNullOrEmpty()) CDef.MessageType.listAll() else messageTypeList
         val queryMessageTypeList = requestMessageTypeList.filter { availableMessageTypeList.contains(it) }
@@ -199,5 +149,21 @@ class MessageDomainService(
     ): Boolean {
         participant ?: return false
         return requestMessageTypeList.contains(CDef.MessageType.公開システムメッセージ)
+    }
+
+    private fun detectMessageTypeDomainService(messageType: CDef.MessageType): MessageTypeDomainService {
+        if (MessageType(messageType).isSayType()) return sayDomainService.detectSayTypeService(messageType)
+        return when (messageType) {
+            CDef.MessageType.白黒霊視結果 -> psychicMessageDomainService
+            CDef.MessageType.役職霊視結果 -> guruPsychicMessageDomainService
+            CDef.MessageType.検死結果 -> autopsyMessageDomainService
+            CDef.MessageType.襲撃結果 -> attackMessageDomainService
+            CDef.MessageType.共有相互確認メッセージ -> masonMessageDomainService
+            CDef.MessageType.共鳴相互確認メッセージ -> sympathizerMessageDomainService
+            CDef.MessageType.妖狐メッセージ -> foxMessageDomainService
+            CDef.MessageType.狂信者人狼確認メッセージ -> fanaticMessageDomainService
+            CDef.MessageType.非公開システムメッセージ -> privateSystemMessageDomainService
+            else -> throw IllegalStateException("service not found.")
+        }
     }
 }

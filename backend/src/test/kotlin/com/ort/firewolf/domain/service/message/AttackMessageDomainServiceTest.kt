@@ -3,6 +3,7 @@ package com.ort.firewolf.domain.service.message
 import com.ort.dbflute.allcommon.CDef
 import com.ort.firewolf.FirewolfTest
 import com.ort.firewolf.domain.model.village.VillageStatus
+import com.ort.firewolf.domain.service.message.system.AttackMessageDomainService
 import com.ort.firewolf.dummy.DummyDomainModelCreator
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test

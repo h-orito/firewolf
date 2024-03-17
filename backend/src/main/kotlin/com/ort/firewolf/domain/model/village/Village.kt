@@ -5,6 +5,7 @@ import com.ort.firewolf.domain.model.camp.Camp
 import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.message.Message
 import com.ort.firewolf.domain.model.message.MessageContent
+import com.ort.firewolf.domain.model.player.Player
 import com.ort.firewolf.domain.model.skill.Skill
 import com.ort.firewolf.domain.model.skill.SkillRequest
 import com.ort.firewolf.domain.model.skill.Skills
@@ -14,7 +15,6 @@ import com.ort.firewolf.domain.model.village.setting.VillageSettings
 import com.ort.firewolf.fw.FirewolfDateUtil
 import com.ort.firewolf.fw.exception.FirewolfBusinessException
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 data class Village(
     val id: Int,
@@ -163,21 +163,6 @@ data class Village(
         )
     }
 
-    fun createTweetMessage(): String {
-        val organization = setting.organizations.organization[setting.capacity.max]!!
-        val startDatetime = setting.time.startDatetime.format(DateTimeFormatter.ofPattern("uuuu/MM/dd HH:mm"))
-        val silentHoursStr = setting.time.silentHours?.let {
-            if (it == 0) "" else "更新後沈黙時間：${it}時間\r\n"
-        } ?: ""
-
-        return "新しい村が作成されました。\r\n" +
-                "村名：$name\r\n" +
-                "編成：$organization\r\n" +
-                "開始予定：$startDatetime\r\n" +
-                silentHoursStr +
-                "https://howling-wolf.com/village?id=$id"
-    }
-
     fun createExtendPrologueMessage(): Message =
         Message.createPublicSystemMessage(extendPrologueMessage, day.latestDay().id)
 
@@ -185,6 +170,7 @@ data class Village(
     //                                                                                read
     //                                                                           =========
     fun dummyChara(): VillageParticipant = participant.memberList.first { it.charaId == setting.charachip.dummyCharaId }
+    fun isCreator(player: Player?): Boolean = player?.id == creatorPlayerId
 
     fun notDummyParticipant(): VillageParticipants {
         val notDummyMembers = participant.memberList.filter { it.charaId != setting.charachip.dummyCharaId }
@@ -313,15 +299,15 @@ data class Village(
     fun isAvailableComingOut(): Boolean = !isSilentTime() && status.isProgress()
     fun isAvailableSay(): Boolean = !status.toCdef().isFinishedVillage
     fun isSayableNormalSay(): Boolean = !status.isFinished() && !isSilentTime()
-    fun isViewableWerewolfSay(): Boolean = status.isSolved()
+    fun isViewableWerewolfSay(player: Player?): Boolean = status.isSolved()
     fun isSayableWerewolfSay(): Boolean = status.isProgress()
-    fun isViewableSympathizeSay(): Boolean = status.isSolved()
+    fun isViewableSympathizeSay(player: Player?): Boolean = status.isSolved()
     fun isSayableSympathizeSay(): Boolean = status.isProgress()
-    fun isViewableGraveSay(): Boolean = status.isSolved() || setting.rules.visibleGraveMessage
+    fun isViewableGraveSay(player: Player?): Boolean = status.isSolved() || setting.rules.visibleGraveMessage
     fun isSayableGraveSay(): Boolean = status.isProgress()
-    fun isViewableMonologueSay(): Boolean = status.isSolved()
+    fun isViewableMonologueSay(player: Player?): Boolean = status.isSolved()
     fun isSayableMonologueSay(): Boolean = true
-    fun isViewableSpectateSay(): Boolean = !status.isProgress() || setting.rules.visibleGraveMessage
+    fun isViewableSpectateSay(player: Player?): Boolean = !status.isProgress() || setting.rules.visibleGraveMessage
     fun isSayableActionSay(): Boolean = !status.isFinished() && setting.rules.availableAction
     fun isSayableSpectateSay(): Boolean = true
     fun isViewableAttackMessage(): Boolean = status.isSolved()
@@ -332,17 +318,16 @@ data class Village(
     fun isViewableFanaticMessage(): Boolean = status.isSolved()
     fun isViewablePsychicMessage(): Boolean = status.isSolved()
     fun isViewableGuruPsychicMessage(): Boolean = status.isSolved()
-    fun isViewableSecretSay(): Boolean = status.isSolved()
+    fun isViewableSecretSay(player: Player?): Boolean = status.isSolved()
     fun isSayableSecretSay(): Boolean = !status.isFinished() && setting.rules.availableSecretSay
+    fun isViewablePrivateSystemMessage(): Boolean = status.isSolved()
 
     /**
      * 発言制限チェック
-     * @param messageContent 発言内容
-     * @param latestDayMessageList 本日の発言
      */
-    fun assertMessageRestrict(messageContent: MessageContent, latestDayMessageList: List<Message>) {
+    fun assertMessageRestrict(messageContent: MessageContent, latestDayMessageCountMap: Map<CDef.MessageType, Int>) {
         val restrict = setting.rules.messageRestrict.restrict(messageContent.type.toCdef()) ?: return // 制限なし
-        restrict.assertSay(messageContent, status.toCdef(), latestDayMessageList)
+        restrict.assertSay(messageContent, status.toCdef(), latestDayMessageCountMap)
     }
 
     /** 村として能力を行使できるか */

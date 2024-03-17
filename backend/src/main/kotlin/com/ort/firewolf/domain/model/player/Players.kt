@@ -4,6 +4,8 @@ data class Players(
     val list: List<Player>
 ) {
 
+    fun player(id: Int): Player = list.first { it.id == id }
+
     fun restrictParticipation(playerId: Int?): Players {
         return Players(
             list = this.list.map { player ->

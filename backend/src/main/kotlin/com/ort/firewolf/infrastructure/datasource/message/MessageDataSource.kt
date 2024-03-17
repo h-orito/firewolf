@@ -70,6 +70,7 @@ class MessageDataSource(
                 it.query().addOrderBy_MessageUnixtimestampMilli_Asc()
             }
         }
+        messageBhv.load(messagePage) { it.loadMessageSendto { } }
         return if (query.isLatest) mapMessagesWithLatest(messagePage)
         else mapMessagesWithPaging(messagePage)
     }
@@ -148,7 +149,10 @@ class MessageDataSource(
             it.query().setMessageNumber_Equal(messageNumber)
             it.query().setMessageTypeCode_Equal(messageType.code())
         }
-        return optMessage.map { convertMessageToMessage(it) }.orElse(null)
+        return optMessage.map {
+            messageBhv.load(it) { it.loadMessageSendto { } }
+            convertMessageToMessage(it)
+        }.orElse(null)
     }
 
     /**
@@ -163,16 +167,19 @@ class MessageDataSource(
         villageId: Int,
         villageDayId: Int,
         participant: VillageParticipant
-    ): List<com.ort.firewolf.domain.model.message.Message> {
+    ): Map<CDef.MessageType, Int> {
         val messageList = messageBhv.selectList {
             it.query().setVillageId_Equal(villageId)
             it.query().setVillagePlayerId_Equal(participant.id)
             it.query().setVillageDayId_Equal(villageDayId)
         }
-        return messageList.map { convertMessageToMessage(it) }
+        return messageList.groupBy { CDef.MessageType.codeOf(it.messageTypeCode) }.mapValues { it.value.size }
     }
 
-    fun registerMessage(villageId: Int, message: com.ort.firewolf.domain.model.message.Message) {
+    fun registerMessage(
+        villageId: Int,
+        message: com.ort.firewolf.domain.model.message.Message
+    ): com.ort.firewolf.domain.model.message.Message {
         val mes = Message()
         val messageTypeCode = message.content.type.code
         mes.villageId = villageId
@@ -205,7 +212,11 @@ class MessageDataSource(
                 mes.messageNumber = selectNextMessageNumber(villageId, message.content.type.code)
                 messageBhv.insert(mes)
                 insertMessageSendTo(mes)
-                return
+                return findMessage(
+                    villageId = villageId,
+                    messageType = CDef.MessageType.codeOf(messageTypeCode),
+                    messageNumber = mes.messageNumber
+                )!!
             } catch (e: RuntimeException) {
                 logger.error(e.message, e)
             }
@@ -309,7 +320,8 @@ class MessageDataSource(
                 count = message.messageCount,
                 text = message.messageContent,
                 faceCode = message.faceTypeCode
-            )
+            ),
+            sendToParticipantIds = message.messageSendtoList.map { it.villagePlayerId }
         )
     }
 

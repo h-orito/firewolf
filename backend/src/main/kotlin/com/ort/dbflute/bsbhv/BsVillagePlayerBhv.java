@@ -40,13 +40,13 @@ import com.ort.dbflute.cbean.*;
  *     
  *
  * [foreign table]
- *     CHARA, DEAD_REASON, VILLAGE_DAY, PLAYER, SKILL, VILLAGE
+ *     CHARA, DEAD_REASON, VILLAGE_DAY, PLAYER, SKILL, VILLAGE, VILLAGE_PLAYER_NOTIFICATION(AsOne)
  *
  * [referrer table]
- *     ABILITY, COMING_OUT, COMMIT, MESSAGE_SENDTO, VILLAGE_PLAYER_ACCESS_INFO, VOTE
+ *     ABILITY, COMING_OUT, COMMIT, MESSAGE_SENDTO, VILLAGE_PLAYER_ACCESS_INFO, VOTE, VILLAGE_PLAYER_NOTIFICATION
  *
  * [foreign property]
- *     chara, deadReason, villageDay, player, skillByRequestSkillCode, skillBySecondRequestSkillCode, skillBySkillCode, village
+ *     chara, deadReason, villageDay, player, skillByRequestSkillCode, skillBySecondRequestSkillCode, skillBySkillCode, village, villagePlayerNotificationAsOne
  *
  * [referrer property]
  *     abilityByTargetVillagePlayerIdList, abilityByVillagePlayerIdList, comingOutList, commitList, messageSendtoList, villagePlayerAccessInfoList, voteByTargetVillagePlayerIdList, voteByVillagePlayerIdList
@@ -939,6 +939,14 @@ public abstract class BsVillagePlayerBhv extends AbstractBehaviorWritable<Villag
      */
     public List<Village> pulloutVillage(List<VillagePlayer> villagePlayerList)
     { return helpPulloutInternally(villagePlayerList, "village"); }
+
+    /**
+     * Pull out the list of referrer-as-one table 'VillagePlayerNotification'.
+     * @param villagePlayerList The list of villagePlayer. (NotNull, EmptyAllowed)
+     * @return The list of referrer-as-one table. (NotNull, EmptyAllowed, NotNullElement)
+     */
+    public List<VillagePlayerNotification> pulloutVillagePlayerNotificationAsOne(List<VillagePlayer> villagePlayerList)
+    { return helpPulloutInternally(villagePlayerList, "villagePlayerNotificationAsOne"); }
 
     // ===================================================================================
     //                                                                      Extract Column

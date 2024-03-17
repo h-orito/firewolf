@@ -3,6 +3,7 @@ package com.ort.firewolf.application.service
 import com.ort.firewolf.domain.model.village.Village
 import com.ort.firewolf.domain.model.village.VillageStatus
 import com.ort.firewolf.domain.model.village.Villages
+import com.ort.firewolf.domain.model.village.participant.VillageParticipantNotificationCondition
 import com.ort.firewolf.fw.security.FirewolfUser
 import com.ort.firewolf.infrastructure.datasource.village.VillageDataSource
 import org.springframework.stereotype.Service
@@ -58,5 +59,16 @@ class VillageService(
      * @param before village
      * @param after village
      */
-    fun updateVillageDifference(before: Village, after: Village): Village = villageDataSource.updateDifference(before, after)
+    fun updateVillageDifference(before: Village, after: Village): Village =
+        villageDataSource.updateDifference(before, after)
+
+    /**
+     * 通知設定保存
+     */
+    fun registerParticipantNotificationSetting(
+        participantId: Int,
+        notificaiton: VillageParticipantNotificationCondition
+    ) {
+        villageDataSource.updateVillagePlayerNotification(participantId, notificaiton)
+    }
 }

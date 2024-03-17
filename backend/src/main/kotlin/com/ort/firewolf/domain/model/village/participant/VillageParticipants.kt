@@ -40,7 +40,8 @@ data class VillageParticipants(
                 skillRequest = skillRequest,
                 isWin = null,
                 commigOuts = ComingOuts(),
-                ipAddresses = listOf(ipAddress)
+                ipAddresses = listOf(ipAddress),
+                notification = null
             )
         )
     }

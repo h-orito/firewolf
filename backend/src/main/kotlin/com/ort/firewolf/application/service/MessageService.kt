@@ -24,7 +24,8 @@ class MessageService(
     private val abilityDomainService: AbilityDomainService,
     private val participateDomainService: ParticipateDomainService,
     private val commitDomainService: CommitDomainService,
-    private val comingOutDomainService: ComingOutDomainService
+    private val comingOutDomainService: ComingOutDomainService,
+    private val notificationService: NotificationService,
 ) {
     /**
      * 発言取得
@@ -71,19 +72,14 @@ class MessageService(
     }
 
     /**
-     * 参加者のその日の発言を取得
-     *
-     * @param villageId villageId
-     * @param villageDay 村日付
-     * @param participant 参加情報
-     * @return 発言
+     * 参加者のその日の発言数を取得
      */
     fun findParticipateDayMessageList(
         villageId: Int,
         villageDay: com.ort.firewolf.domain.model.village.VillageDay,
         participant: VillageParticipant?
-    ): List<Message> {
-        participant ?: return listOf()
+    ): Map<CDef.MessageType, Int> {
+        participant ?: return mapOf()
         return messageDataSource.selectParticipateDayMessageList(villageId, villageDay.id, participant)
     }
 
@@ -93,7 +89,11 @@ class MessageService(
      * @param villageId villageId
      * @param message 発言内容
      */
-    fun registerMessage(villageId: Int, message: Message) = messageDataSource.registerMessage(villageId, message)
+    fun registerMessage(villageId: Int, message: Message): Message {
+        val registered = messageDataSource.registerMessage(villageId, message)
+        notificationService.notifyToDeveloperIfNeeded(villageId, registered)
+        return registered
+    }
 
     /**
      * 村作成時のシステムメッセージ登録

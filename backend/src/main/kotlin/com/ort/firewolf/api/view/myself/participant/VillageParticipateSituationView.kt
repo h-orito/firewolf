@@ -32,7 +32,8 @@ data class VillageParticipateSituationView(
                 villageParticipantId = it.id,
                 players = players,
                 charas = charas,
-                shouldHidePlayer = false // 自分自身なので見えても問題なし
+                shouldHidePlayer = false, // 自分自身なので見えても問題なし
+                shouldHideNotificationSetting = false // 自分自身なので
             )
         }
     )

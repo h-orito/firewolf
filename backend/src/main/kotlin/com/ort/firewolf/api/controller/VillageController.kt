@@ -25,6 +25,7 @@ import com.ort.firewolf.domain.model.player.Players
 import com.ort.firewolf.domain.model.skill.Skill
 import com.ort.firewolf.domain.model.skill.Skills
 import com.ort.firewolf.domain.model.village.*
+import com.ort.firewolf.domain.model.village.participant.VillageParticipantNotificationCondition
 import com.ort.firewolf.domain.model.village.participant.coming_out.ComingOuts
 import com.ort.firewolf.fw.exception.FirewolfBusinessException
 import com.ort.firewolf.fw.security.FirewolfUser
@@ -277,7 +278,8 @@ class VillageController(
                 skill = null,
                 skillRequest = null,
                 win = null,
-                commingOuts = ComingOuts()
+                commingOuts = ComingOuts(),
+                notification = null
             ),
             to = null,
             time = MessageTimeView(
@@ -534,6 +536,33 @@ class VillageController(
             villageId,
             user,
             skills
+        )
+    }
+
+    // 設定保存
+    @PostMapping("/village/{villageId}/notification-setting")
+    fun saveNotification(
+        @PathVariable("villageId") villageId: Int,
+        @AuthenticationPrincipal user: FirewolfUser,
+        @RequestBody @Validated body: VillageNotificationBody,  //
+    ) {
+        villageCoordinator.saveNotification(
+            villageId,
+            user,
+            VillageParticipantNotificationCondition(
+                discordWebhookUrl = body.webhookUrl!!,
+                village = VillageParticipantNotificationCondition.VillageCondition(
+                    start = body.villageStart ?: false,
+                    dayChange = body.villageDaychange ?: false,
+                    epilogue = body.villageEpilogue ?: false
+                ),
+                message = VillageParticipantNotificationCondition.MessageCondition(
+                    secretSay = body.secretSay ?: false,
+                    abilitySay = body.abilitySay ?: false,
+                    anchor = body.anchorSay ?: false,
+                    keywords = body.keyword?.trim()?.replace("　", " ")?.split(" ") ?: emptyList()
+                )
+            )
         )
     }
 

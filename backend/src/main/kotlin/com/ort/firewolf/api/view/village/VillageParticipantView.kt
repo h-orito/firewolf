@@ -8,6 +8,7 @@ import com.ort.firewolf.domain.model.player.Players
 import com.ort.firewolf.domain.model.skill.Skill
 import com.ort.firewolf.domain.model.skill.SkillRequest
 import com.ort.firewolf.domain.model.village.Village
+import com.ort.firewolf.domain.model.village.participant.VillageParticipantNotificationCondition
 import com.ort.firewolf.domain.model.village.participant.coming_out.ComingOuts
 
 data class VillageParticipantView(
@@ -19,14 +20,16 @@ data class VillageParticipantView(
     val skill: Skill?,
     val skillRequest: SkillRequest?,
     val win: Boolean?,
-    val commingOuts: ComingOuts
+    val commingOuts: ComingOuts,
+    val notification: VillageParticipantNotificationCondition?
 ) {
     constructor(
         village: Village,
         villageParticipantId: Int,
         players: Players,
         charas: Charas,
-        shouldHidePlayer: Boolean
+        shouldHidePlayer: Boolean,
+        shouldHideNotificationSetting: Boolean = true
     ) : this(
         id = village.memberById(villageParticipantId).id,
         chara = CharaView(charas.chara(village.memberById(villageParticipantId).charaId)),
@@ -37,6 +40,7 @@ data class VillageParticipantView(
         skill = if (shouldHidePlayer) null else village.memberById(villageParticipantId).skill,
         skillRequest = if (shouldHidePlayer) null else village.memberById(villageParticipantId).skillRequest,
         win = village.memberById(villageParticipantId).isWin,
-        commingOuts = village.memberById(villageParticipantId).commigOuts
+        commingOuts = village.memberById(villageParticipantId).commigOuts,
+        notification = if (shouldHideNotificationSetting) null else village.memberById(villageParticipantId).notification
     )
 }

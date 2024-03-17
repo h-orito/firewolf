@@ -18,6 +18,7 @@ import com.ort.firewolf.domain.model.village.VillageCreateResource
 import com.ort.firewolf.domain.model.village.ability.VillageAbilities
 import com.ort.firewolf.domain.model.village.ability.VillageAbility
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
+import com.ort.firewolf.domain.model.village.participant.VillageParticipantNotificationCondition
 import com.ort.firewolf.domain.model.village.vote.VillageVote
 import com.ort.firewolf.domain.model.village.vote.VillageVotes
 import com.ort.firewolf.domain.service.ability.AbilityDomainService
@@ -25,15 +26,13 @@ import com.ort.firewolf.domain.service.admin.AdminDomainService
 import com.ort.firewolf.domain.service.coming_out.ComingOutDomainService
 import com.ort.firewolf.domain.service.commit.CommitDomainService
 import com.ort.firewolf.domain.service.creator.CreatorDomainService
+import com.ort.firewolf.domain.service.message.say.SayDomainService
 import com.ort.firewolf.domain.service.participate.ParticipateDomainService
-import com.ort.firewolf.domain.service.say.SayDomainService
 import com.ort.firewolf.domain.service.skill.SkillRequestDomainService
 import com.ort.firewolf.domain.service.village.VillageSettingDomainService
 import com.ort.firewolf.domain.service.vote.VoteDomainService
 import com.ort.firewolf.fw.exception.FirewolfBusinessException
 import com.ort.firewolf.fw.security.FirewolfUser
-import com.ort.firewolf.infrastructure.repository.DiscordRepository
-import com.ort.firewolf.infrastructure.repository.SlackRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -42,6 +41,7 @@ import org.springframework.transaction.annotation.Transactional
 class VillageCoordinator(
     // application service
     private val dayChangeCoordinator: DayChangeCoordinator,
+    private val accessInfoCoordinator: AccessInfoCoordinator,
     private val villageService: VillageService,
     private val playerService: PlayerService,
     private val messageService: MessageService,
@@ -50,7 +50,7 @@ class VillageCoordinator(
     private val voteService: VoteService,
     private val commitService: CommitService,
     private val comingOutService: ComingOutService,
-    private val slackService: SlackService,
+    private val notificationService: NotificationService,
     // domain service
     private val participateDomainService: ParticipateDomainService,
     private val skillRequestDomainService: SkillRequestDomainService,
@@ -62,9 +62,6 @@ class VillageCoordinator(
     private val villageSettingDomainService: VillageSettingDomainService,
     private val comingOutDomainService: ComingOutDomainService,
     private val adminDomainService: AdminDomainService,
-    // repository
-    private val slackRepository: SlackRepository,
-    private val discordRepository: DiscordRepository
 ) {
 
     /**
@@ -229,26 +226,18 @@ class VillageCoordinator(
             ipAddress = ipAddress
         )
         village = villageService.updateVillageDifference(village, changedVillage)
-        val participant: VillageParticipant = village.memberByPlayerId(playerId)
+        val myself: VillageParticipant = village.memberByPlayerId(playerId)
         val chara: Chara = charachipService.findChara(charaId)
         // {N}人目、{キャラ名} とユーザー入力の発言
         messageService.registerParticipateMessage(
             village = village,
-            participant = village.findMemberById(participant.id)!!,
+            participant = village.findMemberById(myself.id)!!,
             chara = chara,
             message = message,
             isSpectate = isSpectate
         )
         // IPアドレスが重複している人がいたら通知
-        if (!playerService.findPlayer(participant.playerId!!).shouldCheckAccessInfo) return
-        val isContain = village.allParticipants().memberList
-            .filterNot { it.id == participant.id || it.playerId == 1 }
-            .flatMap { it.ipAddresses }.distinct()
-            .contains(ipAddress)
-        if (isContain) {
-            slackRepository.postToSlack(villageId, "IPアドレス重複検出: $ipAddress")
-            discordRepository.post(villageId, "IPアドレス重複検出: $ipAddress")
-        }
+        accessInfoCoordinator.registerAccessInfo(village, myself, ipAddress)
     }
 
     /**
@@ -344,31 +333,18 @@ class VillageCoordinator(
         // 発言できない状況ならエラー
         assertSay(villageId, user, messageContent, targetId)
         // 発言
-        var village: Village = villageService.findVillage(villageId)
-        val participant: VillageParticipant = findParticipant(village, user)!!
+        val village: Village = villageService.findVillage(villageId)
+        val myself: VillageParticipant = findParticipant(village, user)!!
         val toParticipant: VillageParticipant? = targetId?.let { village.allParticipants().member(targetId) }
         val message: Message =
-            Message.createSayMessage(participant, village.day.latestDay().id, messageContent, toParticipant)
-        messageService.registerMessage(villageId, message)
-        // 特定の文字列が含まれていたら通知
-        if (messageText.contains("@国主") || messageText.contains("＠国主")) {
-            slackService.postToSlack(villageId, messageText)
-            discordRepository.post(villageId, messageText)
-        }
+            Message.createSayMessage(myself, village.day.latestDay().id, messageContent, toParticipant)
+        val registered = messageService.registerMessage(villageId, message)
+        // 通知
+        val players = playerService.findPlayers(village.id)
+        val charas = charachipService.findCharas(village.setting.charachip.charachipIds)
+        notificationService.notifyReceiveMessageToCustomerIfNeeded(village, players, charas, registered)
         // IPアドレス更新
-        val ipAddress = user.ipAddress!!
-        val changedVillage: Village = village.addParticipantIpAddress(participant.id, ipAddress)
-        village = villageService.updateVillageDifference(village, changedVillage)
-        // IPアドレスが重複している人がいたら通知
-        if (!playerService.findPlayer(participant.playerId!!).shouldCheckAccessInfo) return
-        val isContain = village.allParticipants().memberList
-            .filterNot { it.id == participant.id || it.playerId == 1 }
-            .flatMap { it.ipAddresses }.distinct()
-            .contains(ipAddress)
-        if (isContain) {
-            slackRepository.postToSlack(villageId, "IPアドレス重複検出: $ipAddress")
-            discordRepository.post(villageId, "IPアドレス重複検出: $ipAddress")
-        }
+        accessInfoCoordinator.registerAccessInfo(village, myself, user.ipAddress!!)
     }
 
     /**
@@ -386,18 +362,20 @@ class VillageCoordinator(
         assertSay(villageId, user, MessageContent.invoke(CDef.MessageType.アクション.code(), messageText, null), null)
         // 発言
         val village: Village = villageService.findVillage(villageId)
-        val participant: VillageParticipant = findParticipant(village, user)!!
+        val myself: VillageParticipant = findParticipant(village, user)!!
         val text = "${myselfText}${targetText ?: ""}${messageText}"
         val message: Message = Message.createSayMessage(
-            participant,
+            myself,
             village.day.latestDay().id,
             MessageContent.invoke(CDef.MessageType.アクション.code(), text, null)
         )
-        messageService.registerMessage(villageId, message)
-        // 特定の文字列が含まれていたら通知
-        if (messageText.contains("@国主") || messageText.contains("＠国主")) {
-            slackService.postToSlack(villageId, text)
-        }
+        val registered = messageService.registerMessage(villageId, message)
+        // 通知
+        val players = playerService.findPlayers(village.id)
+        val charas = charachipService.findCharas(village.setting.charachip.charachipIds)
+        notificationService.notifyReceiveMessageToCustomerIfNeeded(village, players, charas, registered)
+        // IPアドレス更新
+        accessInfoCoordinator.registerAccessInfo(village, myself, user.ipAddress!!)
     }
 
     @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
@@ -407,7 +385,11 @@ class VillageCoordinator(
         sayDomainService.assertCreatorSay(village, messageContent)
         // 発言
         val message: Message = Message.createCreatorSayMessage(messageText, village.day.latestDay().id)
-        messageService.registerMessage(village.id, message)
+        val registered = messageService.registerMessage(village.id, message)
+        // 通知
+        val players = playerService.findPlayers(village.id)
+        val charas = charachipService.findCharas(village.setting.charachip.charachipIds)
+        notificationService.notifyReceiveMessageToCustomerIfNeeded(village, players, charas, registered)
     }
 
     /**
@@ -504,6 +486,20 @@ class VillageCoordinator(
     }
 
     /**
+     * 通知設定保存
+     */
+    @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
+    fun registerNotification(
+        villageId: Int,
+        user: FirewolfUser,
+        notificationCondition: VillageParticipantNotificationCondition
+    ) {
+        val village = villageService.findVillage(villageId)
+        val participant = findParticipant(village, user) ?: return
+        villageService.registerParticipantNotificationSetting(participant.id, notificationCondition)
+    }
+
+    /**
      * 参加状況や可能なアクションを取得
      * @param village village
      * @param user user
@@ -523,7 +519,7 @@ class VillageCoordinator(
         val abilities: VillageAbilities = abilityService.findVillageAbilities(village.id)
         val votes: VillageVotes = voteService.findVillageVotes(village.id)
         val commit: Commit? = commitService.findCommit(village, participant)
-        val latestDayMessageList: List<Message> =
+        val latestDayMessageCountMap =
             messageService.findParticipateDayMessageList(village.id, village.day.latestDay(), participant)
 
         return SituationAsParticipant(
@@ -533,7 +529,7 @@ class VillageCoordinator(
             skillRequest = skillRequestDomainService.convertToSituation(village, participant, skillRequest),
             commit = commitDomainService.convertToSituation(village, participant, commit),
             comingOut = comingOutDomainService.convertToSituation(village, participant),
-            say = sayDomainService.convertToSituation(village, participant, charas, latestDayMessageList),
+            say = sayDomainService.convertToSituation(village, player, participant, charas, latestDayMessageCountMap),
             ability = abilityDomainService.convertToSituationList(village, participant, abilities),
             vote = voteDomainService.convertToSituation(village, participant, votes),
             creator = creatorDomainService.convertToSituation(village, player),
@@ -576,10 +572,26 @@ class VillageCoordinator(
         targetId: Int?
     ) {
         val village: Village = villageService.findVillage(villageId)
-        val participant: VillageParticipant? = findParticipant(village, user)
-        val chara: Chara? = if (participant == null) null else charachipService.findChara(participant.charaId)
-        val latestDayMessageList: List<Message> =
+        val player = user?.let { playerService.findPlayer(it) } ?: throw FirewolfBusinessException("発言できません")
+        val participant = findParticipant(village, user) ?: throw FirewolfBusinessException("発言できません")
+        val chara = charachipService.findChara(participant.charaId)
+        val latestDayMessageCountMap =
             messageService.findParticipateDayMessageList(villageId, village.day.latestDay(), participant)
-        sayDomainService.assertSay(village, participant, chara, latestDayMessageList, messageContent, targetId)
+        sayDomainService.assertSay(village, participant, player, chara, latestDayMessageCountMap, messageContent)
+    }
+
+    fun saveNotification(
+        villageId: Int,
+        user: FirewolfUser,
+        notificationCondition: VillageParticipantNotificationCondition
+    ) {
+        val village = villageService.findVillage(villageId)
+        val myself = findParticipant(village, user) ?: throw FirewolfBusinessException("保存できません")
+        villageService.registerParticipantNotificationSetting(myself.id, notificationCondition)
+        if (notificationCondition.discordWebhookUrl.isNotEmpty() &&
+            myself.notification?.discordWebhookUrl != notificationCondition.discordWebhookUrl
+        ) {
+            notificationService.notifyTest(notificationCondition.discordWebhookUrl, village.id)
+        }
     }
 }

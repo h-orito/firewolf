@@ -11,6 +11,7 @@ import com.ort.firewolf.domain.model.village.VillageDays
 import com.ort.firewolf.domain.model.village.VillageStatus
 import com.ort.firewolf.domain.model.village.setting.VillageMessageRestrict
 import com.ort.firewolf.domain.model.village.setting.VillageMessageRestricts
+import com.ort.firewolf.domain.service.message.say.SayDomainService
 import com.ort.firewolf.dummy.DummyDomainModelCreator
 import com.ort.firewolf.fw.exception.FirewolfBadRequestException
 import com.ort.firewolf.fw.exception.FirewolfBusinessException

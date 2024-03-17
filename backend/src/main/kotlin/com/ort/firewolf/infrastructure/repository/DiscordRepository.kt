@@ -39,7 +39,32 @@ class DiscordRepository {
         }
     }
 
+    fun postToWebhook(
+        webhookUrl: String,
+        villageId: Int,
+        message: String,
+        shouldContainVillageUrl: Boolean = true
+    ) {
+        try {
+            val restTemplate = RestTemplate()
+            val content =
+                if (shouldContainVillageUrl) "https://firewolf.netlify.app/village?id=$villageId\n$message"
+                else message
+            val request = Request(
+                content = content,
+                username = "FIREWOLF ${villageId}村通知"
+            )
+            val formHeaders = HttpHeaders()
+            formHeaders.contentType = MediaType.APPLICATION_JSON
+            val formEntity = HttpEntity(request, formHeaders)
+            restTemplate.exchange(webhookUrl, HttpMethod.POST, formEntity, String::class.java)
+        } catch (e: Exception) {
+            logger.error("discord投稿に失敗しました", e)
+        }
+    }
+
     data class Request(
-        val content: String
+        val content: String,
+        val username: String? = null,
     ) : java.io.Serializable
 }

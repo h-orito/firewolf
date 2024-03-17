@@ -24,6 +24,7 @@ class DayChangeCoordinator(
     val messageService: MessageService,
     val charachipService: CharachipService,
     val playerService: PlayerService,
+    val notificationService: NotificationService,
     // domain service
     val dayChangeDomainService: DayChangeDomainService
 ) {
@@ -72,6 +73,7 @@ class DayChangeCoordinator(
         // 日付更新
         dayChangeDomainService.process(dayChange, todayMessages, charas, commits).also {
             updateIfNeeded(dayChange, it)
+            notifyIfNeeded(beforeDayChange, it)
         }
     }
 
@@ -104,6 +106,19 @@ class DayChangeCoordinator(
         // abilities
         if (before.abilities.existsDifference(after.abilities)) {
             abilityService.updateDifference(before.abilities, after.abilities)
+        }
+    }
+
+    private fun notifyIfNeeded(current: DayChange, changed: DayChange) {
+        if (current.village.status.isPrologue() && changed.village.status.isProgress()) {
+            notificationService.notifyVillageStartToCustomerIfNeeded(changed.village)
+        } else if (current.village.status.isProgress() && changed.village.status.isEpilogue()) {
+            notificationService.notifyVillageEpilogueToCustomerIfNeeded(changed.village)
+        } else if (
+            !current.village.status.isEpilogue() &&
+            current.village.day.latestDay().day != changed.village.day.latestDay().day
+        ) {
+            notificationService.notifyVillageDaychangeToCustomerIfNeeded(changed.village)
         }
     }
 }
