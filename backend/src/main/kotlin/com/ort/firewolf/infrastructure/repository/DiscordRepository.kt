@@ -56,6 +56,7 @@ class DiscordRepository {
             )
             val formHeaders = HttpHeaders()
             formHeaders.contentType = MediaType.APPLICATION_JSON
+            formHeaders.add(HttpHeaders.USER_AGENT, "RestTemplate")
             val formEntity = HttpEntity(request, formHeaders)
             restTemplate.exchange(webhookUrl, HttpMethod.POST, formEntity, String::class.java)
         } catch (e: Exception) {
