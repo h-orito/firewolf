@@ -9,7 +9,6 @@ import com.ort.firewolf.application.service.CharachipService
 import com.ort.firewolf.application.service.MessageService
 import com.ort.firewolf.application.service.PlayerService
 import com.ort.firewolf.application.service.VillageService
-import com.ort.firewolf.domain.model.charachip.Chara
 import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.message.Message
 import com.ort.firewolf.domain.model.message.MessageContent
@@ -52,9 +51,8 @@ class CreatorController(
         val participant = village.memberById(body.targetId)
         if (participant.playerId == 1) return // ダミーはキックできない
         // シスメ
-        val chara: Chara = charachipService.findChara(participant.charaId)
         val updatedVillage = villageService.updateVillageDifference(village, changedVillage)
-        messageService.registerLeaveMessage(updatedVillage, chara)
+        messageService.registerLeaveMessage(updatedVillage, participant)
     }
 
     @PostMapping("/creator/village/{villageId}/cancel")
@@ -71,7 +69,7 @@ class CreatorController(
         val changedVillage = village.changeStatus(CDef.VillageStatus.廃村)
         villageService.updateVillageDifference(village, changedVillage)
         val message = village.createCreatorCancelVillageMessage()
-        messageService.registerMessage(villageId, message)
+        messageService.registerMessage(village, message)
     }
 
     @PostMapping("/creator/village/{villageId}/say-confirm")
@@ -90,7 +88,9 @@ class CreatorController(
         return MessageView(
             message = Message(
                 fromVillageParticipantId = null,
+                fromCharacterName = null,
                 toVillageParticipantId = null,
+                toCharacterName = null,
                 time = MessageTime(
                     villageDayId = village.day.latestDay().id,
                     datetime = LocalDateTime.now(),
@@ -139,6 +139,6 @@ class CreatorController(
         val changedVillage = village.extendEpilogue()
         villageService.updateVillageDifference(village, changedVillage)
         val message = village.createCreatorExtendEpilogueMessage()
-        messageService.registerMessage(villageId, message)
+        messageService.registerMessage(village, message)
     }
 }

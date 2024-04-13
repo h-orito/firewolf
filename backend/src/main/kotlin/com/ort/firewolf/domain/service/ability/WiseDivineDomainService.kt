@@ -1,7 +1,5 @@
 package com.ort.firewolf.domain.service.ability
 
-import com.ort.firewolf.domain.model.charachip.Chara
-import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.daychange.DayChange
 import com.ort.firewolf.domain.model.message.Message
 import com.ort.firewolf.domain.model.village.Village
@@ -13,7 +11,7 @@ import org.springframework.stereotype.Service
 @Service
 class WiseDivineDomainService : DivineDomainService() {
 
-    override fun processDayChangeAction(dayChange: DayChange, charas: Charas): DayChange {
+    override fun processDayChangeAction(dayChange: DayChange): DayChange {
         val latestDay = dayChange.village.day.latestDay()
         var messages = dayChange.messages.copy()
         var village = dayChange.village.copy()
@@ -24,11 +22,13 @@ class WiseDivineDomainService : DivineDomainService() {
             dayChange.abilities.filterYesterday(village).list.find {
                 it.myselfId == wise.id
             }?.let { ability ->
-                messages = messages.add(createWiseDivineMessage(dayChange.village, charas, ability, wise))
+                messages = messages.add(createWiseDivineMessage(dayChange.village, ability, wise))
                 // 呪殺対象なら死亡
-                if (isDivineKill(dayChange, ability.targetId!!)) village = village.divineKillParticipant(ability.targetId, latestDay)
+                if (isDivineKill(dayChange, ability.targetId!!)) village =
+                    village.divineKillParticipant(ability.targetId, latestDay)
                 // 逆呪殺対象なら自分が死亡
-                if (isCounterDivineKill(dayChange, ability.targetId)) village = village.divineKillParticipant(wise.id, latestDay)
+                if (isCounterDivineKill(dayChange, ability.targetId)) village =
+                    village.divineKillParticipant(wise.id, latestDay)
             }
         }
 
@@ -68,20 +68,22 @@ class WiseDivineDomainService : DivineDomainService() {
     //                                                                        ============
     private fun createWiseDivineMessage(
         village: Village,
-        charas: Charas,
         ability: VillageAbility,
         wise: VillageParticipant
     ): Message {
         val myself = village.participant.member(ability.myselfId)
-        val myChara = charas.chara(myself.charaId)
-        val targetChara = charas.chara(village.participant, ability.targetId!!)
-        val skill = village.participant.member(ability.targetId).skill!!.name
-        val text = createDivineMessageString(myChara, targetChara, skill)
+        val target = village.participant.member(ability.targetId!!)
+        val skill = target.skill!!.name
+        val text = createDivineMessageString(myself, target, skill)
         return Message.createWisePrivateMessage(text, village.day.latestDay().id, wise)
     }
 
-    private fun createDivineMessageString(chara: Chara, targetChara: Chara, skill: String): String =
-        "${chara.charaName.fullName()}は、${targetChara.charaName.fullName()}を占った。\n${targetChara.charaName.fullName()}は${skill}のようだ。"
+    private fun createDivineMessageString(
+        myself: VillageParticipant,
+        target: VillageParticipant,
+        skill: String
+    ): String =
+        "${myself.name()}は、${target.name()}を占った。\n${target.name()}は${skill}のようだ。"
 
     private fun isDivineKill(dayChange: DayChange, targetId: Int): Boolean {
         // 対象が既に死亡していたら呪殺ではない

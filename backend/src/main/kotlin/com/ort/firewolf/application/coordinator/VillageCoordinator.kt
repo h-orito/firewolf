@@ -1,7 +1,15 @@
 package com.ort.firewolf.application.coordinator
 
 import com.ort.dbflute.allcommon.CDef
-import com.ort.firewolf.application.service.*
+import com.ort.firewolf.application.service.AbilityService
+import com.ort.firewolf.application.service.CharachipService
+import com.ort.firewolf.application.service.ComingOutService
+import com.ort.firewolf.application.service.CommitService
+import com.ort.firewolf.application.service.MessageService
+import com.ort.firewolf.application.service.NotificationService
+import com.ort.firewolf.application.service.PlayerService
+import com.ort.firewolf.application.service.VillageService
+import com.ort.firewolf.application.service.VoteService
 import com.ort.firewolf.domain.model.ability.AbilityType
 import com.ort.firewolf.domain.model.charachip.Chara
 import com.ort.firewolf.domain.model.charachip.Charas
@@ -28,6 +36,7 @@ import com.ort.firewolf.domain.service.commit.CommitDomainService
 import com.ort.firewolf.domain.service.creator.CreatorDomainService
 import com.ort.firewolf.domain.service.message.say.SayDomainService
 import com.ort.firewolf.domain.service.participate.ParticipateDomainService
+import com.ort.firewolf.domain.service.rp.RpDomainService
 import com.ort.firewolf.domain.service.skill.SkillRequestDomainService
 import com.ort.firewolf.domain.service.village.VillageSettingDomainService
 import com.ort.firewolf.domain.service.vote.VoteDomainService
@@ -62,6 +71,7 @@ class VillageCoordinator(
     private val villageSettingDomainService: VillageSettingDomainService,
     private val comingOutDomainService: ComingOutDomainService,
     private val adminDomainService: AdminDomainService,
+    private val rpDomainService: RpDomainService
 ) {
 
     /**
@@ -130,7 +140,7 @@ class VillageCoordinator(
         assertModifySetting(village, player, resource)
         // 変更なしの場合もある
         villageSettingDomainService.createModifyMessage(village, resource)?.let { message ->
-            messageService.registerMessage(village.id, message)
+            messageService.registerMessage(village, message)
             var changedVillage = Village.createForUpdate(village, resource)
             if (!resource.setting.rule.isAvailableSkillRequest) {
                 changedVillage = changedVillage.changeAllSkillRequestLeftover()
@@ -217,9 +227,10 @@ class VillageCoordinator(
     ) {
         // 村参加者登録
         var village: Village = villageService.findVillage(villageId)
+        val chara: Chara = charachipService.findChara(charaId)
         val changedVillage: Village = village.participate(
             playerId = playerId,
-            charaId = charaId,
+            chara = chara,
             firstRequestSkill = firstRequestSkill,
             secondRequestSkill = secondRequestSkill,
             isSpectate = isSpectate,
@@ -227,7 +238,7 @@ class VillageCoordinator(
         )
         village = villageService.updateVillageDifference(village, changedVillage)
         val myself: VillageParticipant = village.memberByPlayerId(playerId)
-        val chara: Chara = charachipService.findChara(charaId)
+
         // {N}人目、{キャラ名} とユーザー入力の発言
         messageService.registerParticipateMessage(
             village = village,
@@ -262,6 +273,27 @@ class VillageCoordinator(
     }
 
     /**
+     * 名前変更
+     */
+    fun changeName(villageId: Int, user: FirewolfUser, name: String, shortName: String) {
+        val village: Village = villageService.findVillage(villageId)
+        val participant: VillageParticipant? = findParticipant(village, user)
+        // 名前変更
+        val changedVillage: Village = village.changeName(
+            participant!!.id,
+            name,
+            shortName
+        )
+        villageService.updateVillageDifference(village, changedVillage)
+        // システムメッセージ
+        messageService.registerChangeNameMessage(
+            village = village,
+            before = participant,
+            after = changedVillage.memberById(participant.id),
+        )
+    }
+
+    /**
      * 退村
      * @param villageId villageId
      * @param user user
@@ -278,8 +310,7 @@ class VillageCoordinator(
             village.leaveParticipant(participant!!.id)
         )
         // 退村メッセージ
-        val chara: Chara = charachipService.findChara(participant.charaId)
-        messageService.registerLeaveMessage(updatedVillage, chara)
+        messageService.registerLeaveMessage(updatedVillage, participant)
     }
 
     /**
@@ -338,11 +369,11 @@ class VillageCoordinator(
         val toParticipant: VillageParticipant? = targetId?.let { village.allParticipants().member(targetId) }
         val message: Message =
             Message.createSayMessage(myself, village.day.latestDay().id, messageContent, toParticipant)
-        val registered = messageService.registerMessage(villageId, message)
+        val registered = messageService.registerMessage(village, message)
         // 通知
         val players = playerService.findPlayers(village.id)
         val charas = charachipService.findCharas(village.setting.charachip.charachipIds)
-        notificationService.notifyReceiveMessageToCustomerIfNeeded(village, players, charas, registered)
+        notificationService.notifyReceiveMessageToCustomerIfNeeded(village, players, registered)
         // IPアドレス更新
         accessInfoCoordinator.registerAccessInfo(village, myself, user.ipAddress!!)
     }
@@ -369,11 +400,11 @@ class VillageCoordinator(
             village.day.latestDay().id,
             MessageContent.invoke(CDef.MessageType.アクション.code(), text, null)
         )
-        val registered = messageService.registerMessage(villageId, message)
+        val registered = messageService.registerMessage(village, message)
         // 通知
         val players = playerService.findPlayers(village.id)
         val charas = charachipService.findCharas(village.setting.charachip.charachipIds)
-        notificationService.notifyReceiveMessageToCustomerIfNeeded(village, players, charas, registered)
+        notificationService.notifyReceiveMessageToCustomerIfNeeded(village, players, registered)
         // IPアドレス更新
         accessInfoCoordinator.registerAccessInfo(village, myself, user.ipAddress!!)
     }
@@ -385,11 +416,11 @@ class VillageCoordinator(
         sayDomainService.assertCreatorSay(village, messageContent)
         // 発言
         val message: Message = Message.createCreatorSayMessage(messageText, village.day.latestDay().id)
-        val registered = messageService.registerMessage(village.id, message)
+        val registered = messageService.registerMessage(village, message)
         // 通知
         val players = playerService.findPlayers(village.id)
         val charas = charachipService.findCharas(village.setting.charachip.charachipIds)
-        notificationService.notifyReceiveMessageToCustomerIfNeeded(village, players, charas, registered)
+        notificationService.notifyReceiveMessageToCustomerIfNeeded(village, players, registered)
     }
 
     /**
@@ -455,8 +486,7 @@ class VillageCoordinator(
         // コミット
         val commit = Commit(village.day.latestDay().id, participant!!.id, doCommit)
         commitService.updateCommit(commit)
-        val chara: Chara = charachipService.findChara(participant.charaId)
-        messageService.registerCommitMessage(village, chara, doCommit)
+        messageService.registerCommitMessage(village, participant, doCommit)
         // 日付更新
         if (doCommit) dayChangeCoordinator.dayChangeIfNeeded(village)
     }
@@ -481,8 +511,7 @@ class VillageCoordinator(
             participant!!.id,
             skills.list
         )
-        val chara: Chara = charachipService.findChara(participant.charaId)
-        messageService.registerComingOutMessage(village, chara, skills)
+        messageService.registerComingOutMessage(village, participant, skills)
     }
 
     /**
@@ -521,6 +550,7 @@ class VillageCoordinator(
         val commit: Commit? = commitService.findCommit(village, participant)
         val latestDayMessageCountMap =
             messageService.findParticipateDayMessageList(village.id, village.day.latestDay(), participant)
+        val charachips = charachipService.findCharachips(village.setting.charachip.charachipIds)
 
         return SituationAsParticipant(
             participate = participateDomainService.convertToSituation(
@@ -530,10 +560,11 @@ class VillageCoordinator(
             commit = commitDomainService.convertToSituation(village, participant, commit),
             comingOut = comingOutDomainService.convertToSituation(village, participant),
             say = sayDomainService.convertToSituation(village, player, participant, charas, latestDayMessageCountMap),
+            rp = rpDomainService.convertToSituation(village, participant, charachips, charas),
             ability = abilityDomainService.convertToSituationList(village, participant, abilities),
             vote = voteDomainService.convertToSituation(village, participant, votes),
             creator = creatorDomainService.convertToSituation(village, player),
-            admin = adminDomainService.convertToSituation(village, participant, players, charas)
+            admin = adminDomainService.convertToSituation(village, participant, players)
         )
     }
 

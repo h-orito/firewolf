@@ -43,7 +43,7 @@ class PrologueDomainService(
         // 役職構成メッセージ追加
         dayChange = addOrganizationMessage(dayChange)
         // 仲間把握メッセージ追加
-        dayChange = abilityDomainService.addRecongnizeMessages(dayChange, charas)
+        dayChange = abilityDomainService.addRecongnizeMessages(dayChange)
         // ステータス変更
         dayChange = dayChange.copy(village = dayChange.village.changeStatus(CDef.VillageStatus.進行中))
         // デフォルト能力行使指定

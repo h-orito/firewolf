@@ -14,7 +14,7 @@ import com.ort.dbflute.cbean.*;
 import com.ort.dbflute.cbean.cq.*;
 
 /**
- * The base condition-query of message.
+ * The base condition-query of MESSAGE.
  * @author DBFlute(AutoGenerator)
  */
 public class BsMessageCQ extends AbstractBsMessageCQ {
@@ -36,7 +36,7 @@ public class BsMessageCQ extends AbstractBsMessageCQ {
     //                                                                 ===================
     /**
      * Prepare InlineView query. <br>
-     * {select ... from ... left outer join (select * from message) where FOO = [value] ...}
+     * {select ... from ... left outer join (select * from MESSAGE) where FOO = [value] ...}
      * <pre>
      * cb.query().queryMemberStatus().<span style="color: #CC4747">inline()</span>.setFoo...;
      * </pre>
@@ -59,7 +59,7 @@ public class BsMessageCQ extends AbstractBsMessageCQ {
 
     /**
      * Prepare OnClause query. <br>
-     * {select ... from ... left outer join message on ... and FOO = [value] ...}
+     * {select ... from ... left outer join MESSAGE on ... and FOO = [value] ...}
      * <pre>
      * cb.query().queryMemberStatus().<span style="color: #CC4747">on()</span>.setFoo...;
      * </pre>
@@ -334,6 +334,86 @@ public class BsMessageCQ extends AbstractBsMessageCQ {
      */
     public BsMessageCQ addOrderBy_FaceTypeCode_Desc() { regOBD("FACE_TYPE_CODE"); return this; }
 
+    protected ConditionValue _charaName;
+    public ConditionValue xdfgetCharaName()
+    { if (_charaName == null) { _charaName = nCV(); }
+      return _charaName; }
+    protected ConditionValue xgetCValueCharaName() { return xdfgetCharaName(); }
+
+    /**
+     * Add order-by as ascend. <br>
+     * CHARA_NAME: {VARCHAR(40)}
+     * @return this. (NotNull)
+     */
+    public BsMessageCQ addOrderBy_CharaName_Asc() { regOBA("CHARA_NAME"); return this; }
+
+    /**
+     * Add order-by as descend. <br>
+     * CHARA_NAME: {VARCHAR(40)}
+     * @return this. (NotNull)
+     */
+    public BsMessageCQ addOrderBy_CharaName_Desc() { regOBD("CHARA_NAME"); return this; }
+
+    protected ConditionValue _charaShortName;
+    public ConditionValue xdfgetCharaShortName()
+    { if (_charaShortName == null) { _charaShortName = nCV(); }
+      return _charaShortName; }
+    protected ConditionValue xgetCValueCharaShortName() { return xdfgetCharaShortName(); }
+
+    /**
+     * Add order-by as ascend. <br>
+     * CHARA_SHORT_NAME: {CHAR(1)}
+     * @return this. (NotNull)
+     */
+    public BsMessageCQ addOrderBy_CharaShortName_Asc() { regOBA("CHARA_SHORT_NAME"); return this; }
+
+    /**
+     * Add order-by as descend. <br>
+     * CHARA_SHORT_NAME: {CHAR(1)}
+     * @return this. (NotNull)
+     */
+    public BsMessageCQ addOrderBy_CharaShortName_Desc() { regOBD("CHARA_SHORT_NAME"); return this; }
+
+    protected ConditionValue _toCharaName;
+    public ConditionValue xdfgetToCharaName()
+    { if (_toCharaName == null) { _toCharaName = nCV(); }
+      return _toCharaName; }
+    protected ConditionValue xgetCValueToCharaName() { return xdfgetToCharaName(); }
+
+    /**
+     * Add order-by as ascend. <br>
+     * TO_CHARA_NAME: {VARCHAR(40)}
+     * @return this. (NotNull)
+     */
+    public BsMessageCQ addOrderBy_ToCharaName_Asc() { regOBA("TO_CHARA_NAME"); return this; }
+
+    /**
+     * Add order-by as descend. <br>
+     * TO_CHARA_NAME: {VARCHAR(40)}
+     * @return this. (NotNull)
+     */
+    public BsMessageCQ addOrderBy_ToCharaName_Desc() { regOBD("TO_CHARA_NAME"); return this; }
+
+    protected ConditionValue _toCharaShortName;
+    public ConditionValue xdfgetToCharaShortName()
+    { if (_toCharaShortName == null) { _toCharaShortName = nCV(); }
+      return _toCharaShortName; }
+    protected ConditionValue xgetCValueToCharaShortName() { return xdfgetToCharaShortName(); }
+
+    /**
+     * Add order-by as ascend. <br>
+     * TO_CHARA_SHORT_NAME: {CHAR(1)}
+     * @return this. (NotNull)
+     */
+    public BsMessageCQ addOrderBy_ToCharaShortName_Asc() { regOBA("TO_CHARA_SHORT_NAME"); return this; }
+
+    /**
+     * Add order-by as descend. <br>
+     * TO_CHARA_SHORT_NAME: {CHAR(1)}
+     * @return this. (NotNull)
+     */
+    public BsMessageCQ addOrderBy_ToCharaShortName_Desc() { regOBD("TO_CHARA_SHORT_NAME"); return this; }
+
     protected ConditionValue _registerDatetime;
     public ConditionValue xdfgetRegisterDatetime()
     { if (_registerDatetime == null) { _registerDatetime = nCV(); }
@@ -473,7 +553,7 @@ public class BsMessageCQ extends AbstractBsMessageCQ {
     //                                                      ==============================
     /**
      * Set up ExistsReferrer (correlated sub-query by compound key). <br>
-     * {exists (select ... from message_sendto where ...)}
+     * {exists (select ... from MESSAGE_SENDTO where ...)}
      * @param subQuery The sub-query of MessageSendtoList for 'exists'. (NotNull)
      */
     public void existsMessageSendto(SubQuery<MessageSendtoCB> subQuery) {
@@ -488,7 +568,7 @@ public class BsMessageCQ extends AbstractBsMessageCQ {
 
     /**
      * Set up NotExistsReferrer (correlated sub-query by compound key). <br>
-     * {not exists (select ... from message_sendto where ...)}
+     * {not exists (select ... from MESSAGE_SENDTO where ...)}
      * @param subQuery The sub-query of MessageSendtoList for 'not exists'. (NotNull)
      */
     public void notExistsMessageSendto(SubQuery<MessageSendtoCB> subQuery) {
@@ -519,8 +599,8 @@ public class BsMessageCQ extends AbstractBsMessageCQ {
     //                                              ======================================
     /**
      * Prepare for (Query)DerivedReferrer (correlated sub-query). <br>
-     * {FOO &lt;= (select max(BAR) from message_sendto where ...)} <br>
-     * message_sendto by VILLAGE_ID, MESSAGE_TYPE_CODE, MESSAGE_NUMBER, named 'messageSendtoAsOne'.
+     * {FOO &lt;= (select max(BAR) from MESSAGE_SENDTO where ...)} <br>
+     * MESSAGE_SENDTO by VILLAGE_ID, MESSAGE_TYPE_CODE, MESSAGE_NUMBER, named 'messageSendtoAsOne'.
      * <pre>
      * cb.query().<span style="color: #CC4747">derivedMessageSendto()</span>.<span style="color: #CC4747">max</span>(new SubQuery&lt;MessageSendtoCB&gt;() {
      *     public void query(MessageSendtoCB subCB) {

@@ -20,7 +20,7 @@ import com.ort.dbflute.exentity.*;
  *     CHARA_GROUP_ID
  *
  * [column]
- *     CHARA_GROUP_ID, CHARA_GROUP_NAME, DESIGNER_ID, DESCRIPTION_URL, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
+ *     CHARA_GROUP_ID, CHARA_GROUP_NAME, DESIGNER_ID, DESCRIPTION_URL, IS_AVAILABLE_CHANGE_NAME, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
  *
  * [sequence]
  *     
@@ -49,6 +49,7 @@ import com.ort.dbflute.exentity.*;
  * String charaGroupName = entity.getCharaGroupName();
  * Integer designerId = entity.getDesignerId();
  * String descriptionUrl = entity.getDescriptionUrl();
+ * Boolean isAvailableChangeName = entity.getIsAvailableChangeName();
  * java.time.LocalDateTime registerDatetime = entity.getRegisterDatetime();
  * String registerTrace = entity.getRegisterTrace();
  * java.time.LocalDateTime updateDatetime = entity.getUpdateDatetime();
@@ -57,6 +58,7 @@ import com.ort.dbflute.exentity.*;
  * entity.setCharaGroupName(charaGroupName);
  * entity.setDesignerId(designerId);
  * entity.setDescriptionUrl(descriptionUrl);
+ * entity.setIsAvailableChangeName(isAvailableChangeName);
  * entity.setRegisterDatetime(registerDatetime);
  * entity.setRegisterTrace(registerTrace);
  * entity.setUpdateDatetime(updateDatetime);
@@ -82,11 +84,14 @@ public abstract class BsCharaGroup extends AbstractEntity implements DomainEntit
     /** CHARA_GROUP_NAME: {NotNull, VARCHAR(40)} */
     protected String _charaGroupName;
 
-    /** DESIGNER_ID: {IX, NotNull, INT UNSIGNED(10), FK to designer} */
+    /** DESIGNER_ID: {IX, NotNull, INT UNSIGNED(10), FK to DESIGNER} */
     protected Integer _designerId;
 
     /** DESCRIPTION_URL: {TEXT(65535)} */
     protected String _descriptionUrl;
+
+    /** IS_AVAILABLE_CHANGE_NAME: {NotNull, BIT} */
+    protected Boolean _isAvailableChangeName;
 
     /** REGISTER_DATETIME: {NotNull, DATETIME(19)} */
     protected java.time.LocalDateTime _registerDatetime;
@@ -110,7 +115,7 @@ public abstract class BsCharaGroup extends AbstractEntity implements DomainEntit
 
     /** {@inheritDoc} */
     public String asTableDbName() {
-        return "chara_group";
+        return "CHARA_GROUP";
     }
 
     // ===================================================================================
@@ -237,6 +242,7 @@ public abstract class BsCharaGroup extends AbstractEntity implements DomainEntit
         sb.append(dm).append(xfND(_charaGroupName));
         sb.append(dm).append(xfND(_designerId));
         sb.append(dm).append(xfND(_descriptionUrl));
+        sb.append(dm).append(xfND(_isAvailableChangeName));
         sb.append(dm).append(xfND(_registerDatetime));
         sb.append(dm).append(xfND(_registerTrace));
         sb.append(dm).append(xfND(_updateDatetime));
@@ -312,7 +318,7 @@ public abstract class BsCharaGroup extends AbstractEntity implements DomainEntit
     }
 
     /**
-     * [get] DESIGNER_ID: {IX, NotNull, INT UNSIGNED(10), FK to designer} <br>
+     * [get] DESIGNER_ID: {IX, NotNull, INT UNSIGNED(10), FK to DESIGNER} <br>
      * デザイナーID
      * @return The value of the column 'DESIGNER_ID'. (basically NotNull if selected: for the constraint)
      */
@@ -322,7 +328,7 @@ public abstract class BsCharaGroup extends AbstractEntity implements DomainEntit
     }
 
     /**
-     * [set] DESIGNER_ID: {IX, NotNull, INT UNSIGNED(10), FK to designer} <br>
+     * [set] DESIGNER_ID: {IX, NotNull, INT UNSIGNED(10), FK to DESIGNER} <br>
      * デザイナーID
      * @param designerId The value of the column 'DESIGNER_ID'. (basically NotNull if update: for the constraint)
      */
@@ -349,6 +355,26 @@ public abstract class BsCharaGroup extends AbstractEntity implements DomainEntit
     public void setDescriptionUrl(String descriptionUrl) {
         registerModifiedProperty("descriptionUrl");
         _descriptionUrl = descriptionUrl;
+    }
+
+    /**
+     * [get] IS_AVAILABLE_CHANGE_NAME: {NotNull, BIT} <br>
+     * 名称変更可能か
+     * @return The value of the column 'IS_AVAILABLE_CHANGE_NAME'. (basically NotNull if selected: for the constraint)
+     */
+    public Boolean getIsAvailableChangeName() {
+        checkSpecifiedProperty("isAvailableChangeName");
+        return _isAvailableChangeName;
+    }
+
+    /**
+     * [set] IS_AVAILABLE_CHANGE_NAME: {NotNull, BIT} <br>
+     * 名称変更可能か
+     * @param isAvailableChangeName The value of the column 'IS_AVAILABLE_CHANGE_NAME'. (basically NotNull if update: for the constraint)
+     */
+    public void setIsAvailableChangeName(Boolean isAvailableChangeName) {
+        registerModifiedProperty("isAvailableChangeName");
+        _isAvailableChangeName = isAvailableChangeName;
     }
 
     /**

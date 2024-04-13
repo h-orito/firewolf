@@ -1,6 +1,5 @@
 package com.ort.firewolf.domain.service.daychange
 
-import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.daychange.DayChange
 import com.ort.firewolf.domain.model.message.Message
 import com.ort.firewolf.domain.model.village.Village
@@ -16,7 +15,7 @@ class ExecuteDomainService(
     private val voteDomainService: VoteDomainService
 ) {
 
-    fun processDayChangeAction(dayChange: DayChange, charas: Charas): DayChange {
+    fun processDayChangeAction(dayChange: DayChange): DayChange {
         // 1→2日目は処刑なし
         if (dayChange.village.day.latestDay().day <= 2) {
             return dayChange
@@ -29,14 +28,14 @@ class ExecuteDomainService(
         val votedMap = dayChange.votes.list
             .filter {
                 it.villageDayId == village.day.yesterday().id &&
-                    village.participant.member(it.myselfId).isAlive()
+                        village.participant.member(it.myselfId).isAlive()
             }
             .groupBy { it.targetId }
 
         if (votedMap.isEmpty()) return dayChange // 全員突然死
 
         // 個別投票メッセージ
-        messages = messages.add(voteDomainService.createEachVoteMessage(village, charas, votedMap))
+        messages = messages.add(voteDomainService.createEachVoteMessage(village, votedMap))
 
         // 得票数トップの参加者リスト
         val maxVotedParticipantIdList = filterMaxVotedParticipantList(votedMap)
@@ -49,13 +48,14 @@ class ExecuteDomainService(
             village = village.executeParticipant(executedParticipantId, village.day.latestDay())
         }
         // 処刑メッセージ
-        messages = messages.add(createExecuteMessage(village, executedParticipantId, votedMap, charas))
+        messages = messages.add(createExecuteMessage(village, executedParticipantId, votedMap))
 
         // 猫又による道連れ
         if (executedParticipant.isAlive()) {
             forceSuicidedParticipant(village, dayChange.votes, executedParticipant)?.let {
                 village = village.divineKillParticipant(it.id, village.day.latestDay())
-                messages = messages.add(createForceSuicideMessage(executedParticipant, it, village.day.latestDay(), charas))
+                messages =
+                    messages.add(createForceSuicideMessage(executedParticipant, it, village.day.latestDay()))
             }
         }
         return dayChange.copy(
@@ -87,14 +87,13 @@ class ExecuteDomainService(
         village: Village,
         participantId: Int,
         votedMap: Map<Int, List<VillageVote>>,
-        charas: Charas
     ): Message {
-        val executedCharaName = charas.chara(village.participant, participantId).charaName.fullName()
+        val executedCharaName = village.participant.member(participantId).name()
         val message = votedMap.entries.sortedBy { it.value.size }.reversed().joinToString(
             separator = "\n",
             postfix = "\n\n${executedCharaName}は村人達の手により処刑された。"
         ) { entry ->
-            val votedCharaName = charas.chara(village.participant, entry.key).charaName.fullName()
+            val votedCharaName = village.participant.member(entry.key).name()
             "${votedCharaName}、${entry.value.size}票"
         }
         return Message.createPublicSystemMessage(
@@ -120,10 +119,9 @@ class ExecuteDomainService(
         executedParticipant: VillageParticipant,
         forceSuicidedParticipant: VillageParticipant,
         latestDay: VillageDay,
-        charas: Charas
     ): Message {
-        val executedCharaName = charas.chara(executedParticipant.charaId).charaName.fullName()
-        val forceSuicidedCharaName = charas.chara(forceSuicidedParticipant.charaId).charaName.fullName()
+        val executedCharaName = executedParticipant.name()
+        val forceSuicidedCharaName = forceSuicidedParticipant.name()
         val message = "${executedCharaName}は、${forceSuicidedCharaName}を道連れにした。"
         return Message.createPrivateSystemMessage(
             message,
@@ -133,7 +131,8 @@ class ExecuteDomainService(
 
     private fun getExecutedParticipantId(maxVotedParticipantIdList: List<Int>, village: Village): Int {
         // 強運者を除いて1名以上存在したら強運者以外から選択
-        val excludeLuckyManList = maxVotedParticipantIdList.filterNot { village.participant.member(it).skill!!.toCdef().isHasLuckyAbility }
+        val excludeLuckyManList =
+            maxVotedParticipantIdList.filterNot { village.participant.member(it).skill!!.toCdef().isHasLuckyAbility }
         return if (excludeLuckyManList.isNotEmpty()) excludeLuckyManList.shuffled().first()
         // 全員強運者
         else maxVotedParticipantIdList.shuffled().first()

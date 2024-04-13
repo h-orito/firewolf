@@ -2,6 +2,7 @@ package com.ort.firewolf.domain.model.village.participant
 
 import com.ort.dbflute.allcommon.CDef
 import com.ort.firewolf.domain.model.camp.Camp
+import com.ort.firewolf.domain.model.charachip.Chara
 import com.ort.firewolf.domain.model.skill.Skill
 import com.ort.firewolf.domain.model.skill.SkillRequest
 import com.ort.firewolf.domain.model.village.VillageDay
@@ -21,7 +22,7 @@ data class VillageParticipants(
     }
 
     fun addParticipant(
-        charaId: Int,
+        chara: Chara,
         playerId: Int,
         skillRequest: SkillRequest,
         isSpectator: Boolean,
@@ -31,7 +32,11 @@ data class VillageParticipants(
             count = count + 1,
             memberList = memberList + VillageParticipant(
                 id = -1, // dummy
-                charaId = charaId,
+                charaId = chara.id,
+                charaName = VillageParticipantName(
+                    name = chara.charaName.name,
+                    shortName = chara.charaName.shortName
+                ),
                 playerId = playerId,
                 dead = null,
                 isSpectator = isSpectator,
@@ -50,6 +55,16 @@ data class VillageParticipants(
         return this.copy(
             memberList = this.memberList.map {
                 if (it.id == participantId) it.changeSkillRequest(first, second)
+                else it.copy()
+            }
+        )
+    }
+
+    // 名前変更
+    fun changeName(participantId: Int, name: String, shortName: String): VillageParticipants {
+        return this.copy(
+            memberList = this.memberList.map {
+                if (it.id == participantId) it.changeName(name, shortName)
                 else it.copy()
             }
         )

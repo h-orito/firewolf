@@ -2,8 +2,6 @@ package com.ort.firewolf.domain.service.ability
 
 import com.ort.dbflute.allcommon.CDef
 import com.ort.firewolf.domain.model.ability.AbilityType
-import com.ort.firewolf.domain.model.charachip.Chara
-import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.daychange.DayChange
 import com.ort.firewolf.domain.model.message.Message
 import com.ort.firewolf.domain.model.village.Village
@@ -46,8 +44,8 @@ open class DivineDomainService : IAbilityDomainService {
         return village.participant.member(targetVillageParticipantId)
     }
 
-    override fun createSetMessage(myChara: Chara, targetChara: Chara?): String {
-        return "${myChara.charaName.fullName()}が占い対象を${targetChara?.charaName?.fullName() ?: "なし"}に設定しました。"
+    override fun createSetMessage(myself: VillageParticipant, target: VillageParticipant?): String {
+        return "${myself.name()}が占い対象を${target?.name() ?: "なし"}に設定しました。"
     }
 
     override fun getDefaultAbilityList(
@@ -75,7 +73,7 @@ open class DivineDomainService : IAbilityDomainService {
         }
     }
 
-    override fun processDayChangeAction(dayChange: DayChange, charas: Charas): DayChange {
+    override fun processDayChangeAction(dayChange: DayChange): DayChange {
         val latestDay = dayChange.village.day.latestDay()
         var messages = dayChange.messages.copy()
         var village = dayChange.village.copy()
@@ -86,11 +84,13 @@ open class DivineDomainService : IAbilityDomainService {
             dayChange.abilities.filterYesterday(village).list.find {
                 it.myselfId == seer.id
             }?.let { ability ->
-                messages = messages.add(createDivineMessage(dayChange.village, charas, ability, seer))
+                messages = messages.add(createDivineMessage(dayChange.village, ability, seer))
                 // 呪殺対象なら死亡
-                if (isDivineKill(dayChange, ability.targetId!!)) village = village.divineKillParticipant(ability.targetId, latestDay)
+                if (isDivineKill(dayChange, ability.targetId!!)) village =
+                    village.divineKillParticipant(ability.targetId, latestDay)
                 // 逆呪殺対象なら自分が死亡
-                if (isCounterDivineKill(dayChange, ability.targetId)) village = village.divineKillParticipant(seer.id, latestDay)
+                if (isCounterDivineKill(dayChange, ability.targetId)) village =
+                    village.divineKillParticipant(seer.id, latestDay)
             }
         }
 
@@ -112,20 +112,22 @@ open class DivineDomainService : IAbilityDomainService {
     //                                                                        ============
     private fun createDivineMessage(
         village: Village,
-        charas: Charas,
         ability: VillageAbility,
         seer: VillageParticipant
     ): Message {
         val myself = village.participant.member(ability.myselfId)
-        val myChara = charas.chara(myself.charaId)
-        val targetChara = charas.chara(village.participant, ability.targetId!!)
-        val isWolf = village.participant.member(ability.targetId).skill!!.toCdef().isDivineResultWolf
-        val text = createDivineMessageString(myChara, targetChara, isWolf)
+        val target = village.participant.member(ability.targetId!!)
+        val isWolf = target.skill!!.toCdef().isDivineResultWolf
+        val text = createDivineMessageString(myself, target, isWolf)
         return Message.createSeerPrivateMessage(text, village.day.latestDay().id, seer)
     }
 
-    private fun createDivineMessageString(chara: Chara, targetChara: Chara, isWolf: Boolean): String =
-        "${chara.charaName.fullName()}は、${targetChara.charaName.fullName()}を占った。\n${targetChara.charaName.fullName()}は人狼${if (isWolf) "の" else "ではない"}ようだ。"
+    private fun createDivineMessageString(
+        seer: VillageParticipant,
+        target: VillageParticipant,
+        isWolf: Boolean
+    ): String =
+        "${seer.name()}は、${target.name()}を占った。\n${target.name()}は人狼${if (isWolf) "の" else "ではない"}ようだ。"
 
     private fun isDivineKill(dayChange: DayChange, targetId: Int): Boolean {
         // 対象が既に死亡していたら呪殺ではない

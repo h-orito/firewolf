@@ -1,7 +1,5 @@
 package com.ort.firewolf.domain.service.ability
 
-import com.ort.firewolf.domain.model.charachip.Chara
-import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.daychange.DayChange
 import com.ort.firewolf.domain.model.message.Message
 import com.ort.firewolf.domain.model.village.Village
@@ -11,16 +9,18 @@ import org.springframework.stereotype.Service
 @Service
 class GuruDomainService {
 
-    fun processDayChangeAction(dayChange: DayChange, charas: Charas): DayChange {
+    fun processDayChangeAction(dayChange: DayChange): DayChange {
         // 導師がいない、または処刑・突然死がいない場合は何もしない
-        val existsAliveGuru = dayChange.village.participant.filterAlive().memberList.any { it.skill!!.toCdef().isHasGuruPsychicAbility }
+        val existsAliveGuru =
+            dayChange.village.participant.filterAlive().memberList.any { it.skill!!.toCdef().isHasGuruPsychicAbility }
         if (!existsAliveGuru) return dayChange
-        val todayDeadParticipants = dayChange.village.todayDeadParticipants().memberList.filter { it.dead!!.toCdef().isPsychicableDeath }
+        val todayDeadParticipants =
+            dayChange.village.todayDeadParticipants().memberList.filter { it.dead!!.toCdef().isPsychicableDeath }
         if (todayDeadParticipants.isEmpty()) return dayChange
 
         var messages = dayChange.messages.copy()
         todayDeadParticipants.forEach { deadParticipant ->
-            messages = messages.add(createGuruPrivateMessage(dayChange.village, charas, deadParticipant))
+            messages = messages.add(createGuruPrivateMessage(dayChange.village, deadParticipant))
         }
         return dayChange.copy(messages = messages).setIsChange(dayChange)
     }
@@ -30,15 +30,13 @@ class GuruDomainService {
     //                                                                        ============
     private fun createGuruPrivateMessage(
         village: Village,
-        charas: Charas,
         deadParticipant: VillageParticipant
     ): Message {
-        val chara = charas.chara(deadParticipant.charaId)
         val skill = village.participant.member(deadParticipant.id).skill!!.name
-        val text = createGuruPrivateMessageString(chara, skill)
+        val text = createGuruPrivateMessageString(deadParticipant, skill)
         return Message.createGuruPsychicPrivateMessage(text, village.day.latestDay().id)
     }
 
-    private fun createGuruPrivateMessageString(chara: Chara, skill: String): String =
-        "${chara.charaName.fullName()}は${skill}のようだ。"
+    private fun createGuruPrivateMessageString(target: VillageParticipant, skill: String): String =
+        "${target.name()}は${skill}のようだ。"
 }

@@ -12,11 +12,20 @@ import com.ort.firewolf.domain.model.village.VillageDays
 import com.ort.firewolf.domain.model.village.VillageStatus
 import com.ort.firewolf.domain.model.village.Villages
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
+import com.ort.firewolf.domain.model.village.participant.VillageParticipantName
 import com.ort.firewolf.domain.model.village.participant.VillageParticipantNotificationCondition
 import com.ort.firewolf.domain.model.village.participant.VillageParticipants
 import com.ort.firewolf.domain.model.village.participant.coming_out.ComingOut
 import com.ort.firewolf.domain.model.village.participant.coming_out.ComingOuts
-import com.ort.firewolf.domain.model.village.setting.*
+import com.ort.firewolf.domain.model.village.setting.PersonCapacity
+import com.ort.firewolf.domain.model.village.setting.VillageCharachip
+import com.ort.firewolf.domain.model.village.setting.VillageMessageRestrict
+import com.ort.firewolf.domain.model.village.setting.VillageMessageRestricts
+import com.ort.firewolf.domain.model.village.setting.VillageOrganizations
+import com.ort.firewolf.domain.model.village.setting.VillagePassword
+import com.ort.firewolf.domain.model.village.setting.VillageRules
+import com.ort.firewolf.domain.model.village.setting.VillageSettings
+import com.ort.firewolf.domain.model.village.setting.VillageTime
 import org.dbflute.cbean.result.ListResultBean
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -183,6 +192,10 @@ object VillageDataConverter {
     private fun convertVillagePlayerToParticipant(vp: VillagePlayer, village: Village? = null): VillageParticipant {
         return VillageParticipant(
             id = vp.villagePlayerId,
+            charaName = VillageParticipantName(
+                name = vp.charaName,
+                shortName = vp.charaShortName
+            ),
             charaId = vp.charaId,
             playerId = vp.playerId,
             dead = if (vp.isDead) convertToDeadReasonToDead(vp) else null,

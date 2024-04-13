@@ -2,8 +2,6 @@ package com.ort.firewolf.domain.service.ability
 
 import com.ort.dbflute.allcommon.CDef
 import com.ort.firewolf.domain.model.ability.AbilityType
-import com.ort.firewolf.domain.model.charachip.Chara
-import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.daychange.DayChange
 import com.ort.firewolf.domain.model.message.Message
 import com.ort.firewolf.domain.model.village.Village
@@ -77,8 +75,8 @@ class AttackDomainService : IAbilityDomainService {
         return village.participant.filterAlive().memberList.filter { it.skill!!.hasAttackAbility() }
     }
 
-    override fun createSetMessage(myChara: Chara, targetChara: Chara?): String =
-        "襲撃者を${myChara.charaName.name}に、襲撃対象を${targetChara?.charaName?.name ?: "なし"}に設定しました。"
+    override fun createSetMessage(myself: VillageParticipant, target: VillageParticipant?): String =
+        "襲撃者を${myself.name()}に、襲撃対象を${target?.name() ?: "なし"}に設定しました。"
 
     override fun getDefaultAbilityList(
         village: Village,
@@ -107,7 +105,6 @@ class AttackDomainService : IAbilityDomainService {
 
     override fun processDayChangeAction(
         dayChange: DayChange,
-        charas: Charas
     ): DayChange {
         val latestDay = dayChange.village.day.latestDay()
         // 人狼が全員死亡していたら襲撃なし
@@ -124,14 +121,14 @@ class AttackDomainService : IAbilityDomainService {
             ?.let { ability ->
                 val attacker = village.participant.member(ability.myselfId)
                 // 襲撃メッセージ
-                messages = messages.add(createAttackMessage(village, charas, attacker, ability))
+                messages = messages.add(createAttackMessage(village, attacker, ability))
                 // 襲撃成功したら死亡
                 if (isAttackSuccess(dayChange, ability.targetId!!)) {
                     village = village.attackParticipant(ability.targetId, latestDay)
                     val target = village.participant.member(ability.targetId)
 
                     // 智狼がいれば追加メッセージ
-                    createWiseWolfMessage(village, charas, target)?.let {
+                    createWiseWolfMessage(village, target)?.let {
                         messages = messages.add(it)
                     }
                     // 猫又による道連れ
@@ -142,7 +139,6 @@ class AttackDomainService : IAbilityDomainService {
                                 village.participant.member(ability.targetId),
                                 it,
                                 village.day.latestDay(),
-                                charas
                             )
                         )
                     }
@@ -184,27 +180,23 @@ class AttackDomainService : IAbilityDomainService {
 
     private fun createAttackMessage(
         village: Village,
-        charas: Charas,
         wolf: VillageParticipant,
         ability: VillageAbility
     ): Message {
-        val fromChara = charas.chara(wolf.charaId)
-        val targetChara = charas.chara(village.participant, ability.targetId!!)
-        val text = createAttackMessageString(fromChara, targetChara)
+        val text = createAttackMessageString(wolf, village.participant.member(ability.targetId!!))
         return Message.createAttackPrivateMessage(text, village.day.latestDay().id)
     }
 
-    private fun createAttackMessageString(chara: Chara, targetChara: Chara): String =
-        "${chara.charaName.fullName()}達は、${targetChara.charaName.fullName()}を襲撃した。"
+    private fun createAttackMessageString(attacker: VillageParticipant, target: VillageParticipant): String =
+        "${attacker.name()}達は、${target.name()}を襲撃した。"
 
-    private fun createWiseWolfMessage(village: Village, charas: Charas, target: VillageParticipant): Message? {
+    private fun createWiseWolfMessage(village: Village, target: VillageParticipant): Message? {
         // 智狼がいなければ何もしない
         if (!village.participant.filterAlive().memberList.any { it.skill!!.toCdef().isHasWiseWolfAbility }) return null
         // 対象の役職を知られる
-        val targetChara = charas.chara(target.charaId)
         val skill = target.skill!!.name
         return Message.createAttackPrivateMessage(
-            "${targetChara.charaName.fullName()}は${skill}だったようだ。",
+            "${target.name()}は${skill}だったようだ。",
             village.day.latestDay().id
         )
     }
@@ -230,10 +222,9 @@ class AttackDomainService : IAbilityDomainService {
         attackedParticipant: VillageParticipant,
         forceSuicidedParticipant: VillageParticipant,
         latestDay: VillageDay,
-        charas: Charas
     ): Message {
-        val attackedCharaName = charas.chara(attackedParticipant.charaId).charaName.fullName()
-        val forceSuicidedCharaName = charas.chara(forceSuicidedParticipant.charaId).charaName.fullName()
+        val attackedCharaName = attackedParticipant.name()
+        val forceSuicidedCharaName = forceSuicidedParticipant.name()
         val message = "${attackedCharaName}は、${forceSuicidedCharaName}を道連れにした。"
         return Message.createPrivateSystemMessage(
             message,

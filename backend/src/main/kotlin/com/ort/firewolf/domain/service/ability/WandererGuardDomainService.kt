@@ -2,8 +2,6 @@ package com.ort.firewolf.domain.service.ability
 
 import com.ort.dbflute.allcommon.CDef
 import com.ort.firewolf.domain.model.ability.AbilityType
-import com.ort.firewolf.domain.model.charachip.Chara
-import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.daychange.DayChange
 import com.ort.firewolf.domain.model.message.Message
 import com.ort.firewolf.domain.model.village.Village
@@ -54,8 +52,8 @@ class WandererGuardDomainService : GuardDomainService() {
         return village.participant.member(targetVillageParticipantId)
     }
 
-    override fun createSetMessage(myChara: Chara, targetChara: Chara?): String {
-        return "${myChara.charaName.fullName()}が護衛対象を${targetChara?.charaName?.fullName() ?: "なし"}に設定しました。"
+    override fun createSetMessage(myself: VillageParticipant, target: VillageParticipant?): String {
+        return "${myself.name()}が護衛対象を${target?.name() ?: "なし"}に設定しました。"
     }
 
     override fun getDefaultAbilityList(
@@ -86,7 +84,7 @@ class WandererGuardDomainService : GuardDomainService() {
         }
     }
 
-    override fun processDayChangeAction(dayChange: DayChange, charas: Charas): DayChange {
+    override fun processDayChangeAction(dayChange: DayChange): DayChange {
         var messages = dayChange.messages.copy()
 
         dayChange.village.participant.memberList.filter {
@@ -95,7 +93,7 @@ class WandererGuardDomainService : GuardDomainService() {
             dayChange.abilities.list.find {
                 it.myselfId == hunter.id && it.villageDayId == dayChange.village.day.yesterday().id
             }?.let { ability ->
-                messages = messages.add(createGuardMessage(dayChange.village, charas, ability))
+                messages = messages.add(createGuardMessage(dayChange.village, ability))
             }
         }
 
@@ -114,13 +112,13 @@ class WandererGuardDomainService : GuardDomainService() {
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
-    private fun createGuardMessage(village: Village, charas: Charas, ability: VillageAbility): Message {
-        val myChara = charas.chara(village.participant, ability.myselfId)
-        val targetChara = charas.chara(village.participant, ability.targetId!!)
-        val text = createGuardMessageString(myChara, targetChara)
+    private fun createGuardMessage(village: Village, ability: VillageAbility): Message {
+        val hunter = village.participant.member(ability.myselfId)
+        val target = village.participant.member(ability.targetId!!)
+        val text = createGuardMessageString(hunter, target)
         return Message.createPrivateSystemMessage(text, village.day.latestDay().id)
     }
 
-    private fun createGuardMessageString(myChara: Chara, targetChara: Chara): String =
-        "${myChara.charaName.fullName()}は、${targetChara.charaName.fullName()}を護衛している。"
+    private fun createGuardMessageString(hunter: VillageParticipant, target: VillageParticipant): String =
+        "${hunter.name()}は、${target.name()}を護衛している。"
 }

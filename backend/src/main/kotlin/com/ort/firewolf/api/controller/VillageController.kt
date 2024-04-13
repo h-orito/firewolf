@@ -25,6 +25,7 @@ import com.ort.firewolf.domain.model.player.Players
 import com.ort.firewolf.domain.model.skill.Skill
 import com.ort.firewolf.domain.model.skill.Skills
 import com.ort.firewolf.domain.model.village.*
+import com.ort.firewolf.domain.model.village.participant.VillageParticipantName
 import com.ort.firewolf.domain.model.village.participant.VillageParticipantNotificationCondition
 import com.ort.firewolf.domain.model.village.participant.coming_out.ComingOuts
 import com.ort.firewolf.fw.exception.FirewolfBusinessException
@@ -271,6 +272,14 @@ class VillageController(
         return MessageView(
             from = VillageParticipantView(
                 id = 1, // dummy
+                name = VillageParticipantName(
+                    name = chara.charaName.name,
+                    shortName = chara.charaName.shortName
+                ).fullName(),
+                charaName = VillageParticipantName(
+                    name = chara.charaName.name,
+                    shortName = chara.charaName.shortName
+                ),
                 chara = CharaView(chara),
                 player = null,
                 dead = null,
@@ -343,6 +352,21 @@ class VillageController(
     }
 
     /**
+     * 名前変更
+     * @param villageId villageId
+     * @param user user
+     * @param body 役職
+     */
+    @PostMapping("/village/{villageId}/change-name")
+    fun changeName(
+        @PathVariable("villageId") villageId: Int,
+        @AuthenticationPrincipal user: FirewolfUser,
+        @RequestBody @Validated body: VillageChangeNameBody
+    ) {
+        villageCoordinator.changeName(villageId, user, body.name!!, body.shortName!!)
+    }
+
+    /**
      * 退村
      * @param villageId villageId
      * @param user user
@@ -380,10 +404,13 @@ class VillageController(
         val participant = villageCoordinator.findParticipant(village, user)
         val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipIds)
         val players: Players = playerService.findPlayers(villageId)
+        val target = body.targetId?.let { village.participant.member(it) }
         return MessageView(
             message = Message(
                 fromVillageParticipantId = participant!!.id,
+                fromCharacterName = participant.name(),
                 toVillageParticipantId = body.targetId,
+                toCharacterName = target?.name(),
                 time = MessageTime(
                     villageDayId = village.day.latestDay().id,
                     datetime = LocalDateTime.now(),
@@ -438,7 +465,9 @@ class VillageController(
         return MessageView(
             message = Message(
                 fromVillageParticipantId = participant!!.id,
+                fromCharacterName = participant.name(),
                 toVillageParticipantId = null,
+                toCharacterName = null,
                 time = MessageTime(
                     villageDayId = village.day.latestDay().id,
                     datetime = LocalDateTime.now(),

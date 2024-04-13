@@ -2,6 +2,7 @@ package com.ort.firewolf.domain.model.village
 
 import com.ort.dbflute.allcommon.CDef
 import com.ort.firewolf.domain.model.camp.Camp
+import com.ort.firewolf.domain.model.charachip.Chara
 import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.message.Message
 import com.ort.firewolf.domain.model.message.MessageContent
@@ -85,13 +86,13 @@ data class Village(
     }
 
     /** 人狼系の役職相互確認メッセージ */
-    fun createWolfsConfirmMessage(charas: Charas): Message {
-        val text = createRecognizeSkillMessageText(Skills.wolfs.list, charas)
+    fun createWolfsConfirmMessage(): Message {
+        val text = createRecognizeSkillMessageText(Skills.wolfs.list)
         return Message.createAttackPrivateMessage(text, day.latestDay().id)
     }
 
     /** 狂信者の役職確認メッセージ */
-    fun createFanaticConfirmMessage(charas: Charas): Message? {
+    fun createFanaticConfirmMessage(): Message? {
         // 狂信者がいなければなし
         if (participant.memberList.none { it.skill!!.canRecognizeWolf() }) return null
         // 襲撃役職を一括りにして人狼とする
@@ -99,45 +100,39 @@ data class Village(
             separator = "、",
             prefix = "この村の人狼は",
             postfix = "のようだ。"
-        ) {
-            charas.chara(it.charaId).charaName.fullName()
-        }
+        ) { it.name() }
         return Message.createFanaticPrivateMessage(text, day.latestDay().id)
     }
 
     /** 共有の役職相互確認メッセージ */
-    fun createMasonsConfirmMessage(charas: Charas): Message? {
+    fun createMasonsConfirmMessage(): Message? {
         // 共有がいなければなし
         if (participant.memberList.none { it.skill!!.canRecognizeEachMason() }) return null
-        val text = createRecognizeSkillMessageText(Skills.masons.list, charas)
+        val text = createRecognizeSkillMessageText(Skills.masons.list)
         return Message.createMasonPrivateMessage(text, day.latestDay().id)
     }
 
     /** 共鳴の役職相互確認メッセージ */
-    fun createSympathizersConfirmMessage(charas: Charas): Message? {
+    fun createSympathizersConfirmMessage(): Message? {
         // 共鳴がいなければなし
         if (participant.memberList.none { it.skill!!.canRecognizeEachSympathizer() }) return null
-        val text = createRecognizeSkillMessageText(Skills.sympathizers.list, charas)
+        val text = createRecognizeSkillMessageText(Skills.sympathizers.list)
         return Message.createSympathizerPrivateMessage(text, day.latestDay().id)
     }
 
     /** 妖狐系の役職相互確認メッセージ */
-    fun createFoxsConfirmMessage(charas: Charas): Message? {
+    fun createFoxsConfirmMessage(): Message? {
         // 妖狐がいなければなし
         if (participant.memberList.none { it.skill!!.canRecognizeFoxs() }) return null
-        val text = createRecognizeSkillMessageText(Skills.foxs.list, charas)
+        val text = createRecognizeSkillMessageText(Skills.foxs.list)
         return Message.createFoxPrivateMessage(text, day.latestDay().id)
     }
 
-    private fun createRecognizeSkillMessageText(skills: List<Skill>, charas: Charas): String {
+    private fun createRecognizeSkillMessageText(skills: List<Skill>): String {
         return skills.mapNotNull { skill ->
             val list = participant.filterBySkill(skill).memberList
             if (list.isEmpty()) null
-            else "${skill.name}は${
-                list.joinToString(separator = "、") {
-                    charas.chara(it.charaId).charaName.fullName()
-                }
-            }"
+            else "${skill.name}は${list.joinToString(separator = "、") { it.name() }}"
         }.joinToString(
             separator = "、\n",
             prefix = "この村の",
@@ -278,6 +273,9 @@ data class Village(
     /** 村として役職希望可能か */
     fun isAvailableSkillRequest(): Boolean = status.isPrologue() && setting.rules.availableSkillRequest
 
+    /** 名前変更可能か */
+    fun canChangeName(): Boolean = !status.isFinished()
+
     /**
      * 役職希望変更チェック
      * @param first 第1役職希望
@@ -360,7 +358,7 @@ data class Village(
     // 入村
     fun participate(
         playerId: Int,
-        charaId: Int,
+        chara: Chara,
         firstRequestSkill: CDef.Skill = CDef.Skill.おまかせ,
         secondRequestSkill: CDef.Skill = CDef.Skill.おまかせ,
         isSpectate: Boolean,
@@ -369,7 +367,7 @@ data class Village(
         return if (isSpectate) {
             this.copy(
                 spectator = spectator.addParticipant(
-                    charaId = charaId,
+                    chara = chara,
                     playerId = playerId,
                     skillRequest = SkillRequest(Skill(firstRequestSkill), Skill(secondRequestSkill)),
                     isSpectator = true,
@@ -379,7 +377,7 @@ data class Village(
         } else {
             this.copy(
                 participant = participant.addParticipant(
-                    charaId = charaId,
+                    chara = chara,
                     playerId = playerId,
                     skillRequest = SkillRequest(Skill(firstRequestSkill), Skill(secondRequestSkill)),
                     isSpectator = false,
@@ -392,6 +390,10 @@ data class Village(
     // 希望役職変更
     fun changeSkillRequest(participantId: Int, first: CDef.Skill, second: CDef.Skill): Village =
         this.copy(participant = participant.changeSkillRequest(participantId, first, second))
+
+    // 名前変更
+    fun changeName(participantId: Int, name: String, shortName: String): Village =
+        this.copy(participant = participant.changeName(participantId, name, shortName))
 
     // 全員おまかせに変更
     fun changeAllSkillRequestLeftover(): Village =

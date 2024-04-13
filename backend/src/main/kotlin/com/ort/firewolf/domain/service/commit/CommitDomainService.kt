@@ -1,6 +1,5 @@
 package com.ort.firewolf.domain.service.commit
 
-import com.ort.firewolf.domain.model.charachip.Chara
 import com.ort.firewolf.domain.model.commit.Commit
 import com.ort.firewolf.domain.model.message.Message
 import com.ort.firewolf.domain.model.myself.participant.VillageCommitSituation
@@ -53,17 +52,13 @@ class CommitDomainService {
 
     /**
      * コミットメッセージ
-     * @param chara chara
-     * @param doCommit コミット/取り消し
-     * @param villageDayId 村日付ID
-     * @return コミット時のメッセージ e.g. "{キャラ名}がコミットしました。"
      */
-    fun createCommitMessage(chara: Chara, doCommit: Boolean, villageDayId: Int): Message =
-        Message.createPrivateSystemMessage(getCommitSetMessage(doCommit, chara), villageDayId)
+    fun createCommitMessage(myself: VillageParticipant, doCommit: Boolean, villageDayId: Int): Message =
+        Message.createPrivateSystemMessage(getCommitSetMessage(doCommit, myself), villageDayId)
 
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
-    private fun getCommitSetMessage(doCommit: Boolean, chara: Chara): String =
-        if (doCommit) "${chara.charaName.fullName()}が時短希望しました。" else "${chara.charaName.fullName()}が時短希望を取り消しました。"
+    private fun getCommitSetMessage(doCommit: Boolean, myself: VillageParticipant): String =
+        if (doCommit) "${myself.name()}が時短希望しました。" else "${myself.name()}が時短希望を取り消しました。"
 }

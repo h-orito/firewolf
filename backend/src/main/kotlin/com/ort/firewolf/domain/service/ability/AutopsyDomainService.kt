@@ -1,6 +1,5 @@
 package com.ort.firewolf.domain.service.ability
 
-import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.daychange.DayChange
 import com.ort.firewolf.domain.model.message.Message
 import com.ort.firewolf.domain.model.village.Village
@@ -10,7 +9,7 @@ import org.springframework.stereotype.Service
 @Service
 class AutopsyDomainService {
 
-    fun addAutopsyMessage(dayChange: DayChange, charas: Charas): DayChange {
+    fun addAutopsyMessage(dayChange: DayChange): DayChange {
         // 検死官がいなければ何もしない
         val existsCoroner = dayChange.village.participant.filterAlive().memberList.any {
             it.skill!!.toCdef().isHasAutopsyAbility
@@ -25,15 +24,14 @@ class AutopsyDomainService {
 
         var messages = dayChange.messages.copy()
         todayMiserableDeathParticipantList.forEach { participant ->
-            messages = messages.add(createAutopsyMessage(dayChange.village, charas, participant))
+            messages = messages.add(createAutopsyMessage(dayChange.village, participant))
         }
         return dayChange.copy(messages = messages).setIsChange(dayChange)
     }
 
-    private fun createAutopsyMessage(village: Village, charas: Charas, participant: VillageParticipant): Message {
-        val chara = charas.chara(participant.charaId)
+    private fun createAutopsyMessage(village: Village, participant: VillageParticipant): Message {
         val reason = "${participant.dead!!.reason}死"
-        val text = "${chara.charaName.fullName()}の死因は、${reason}のようだ。"
+        val text = "${participant.name()}の死因は、${reason}のようだ。"
         return Message.createAutopsyPrivateMessage(text, village.day.latestDay().id)
     }
 }

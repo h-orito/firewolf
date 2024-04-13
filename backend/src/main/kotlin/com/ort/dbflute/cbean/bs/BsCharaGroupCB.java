@@ -20,7 +20,7 @@ import com.ort.dbflute.cbean.*;
 import com.ort.dbflute.cbean.cq.*;
 
 /**
- * The base condition-bean of chara_group.
+ * The base condition-bean of CHARA_GROUP.
  * @author DBFlute(AutoGenerator)
  */
 public class BsCharaGroupCB extends AbstractConditionBean {
@@ -76,7 +76,7 @@ public class BsCharaGroupCB extends AbstractConditionBean {
     }
 
     public String asTableDbName() {
-        return "chara_group";
+        return "CHARA_GROUP";
     }
 
     // ===================================================================================
@@ -318,7 +318,7 @@ public class BsCharaGroupCB extends AbstractConditionBean {
          */
         public SpecifiedColumn columnCharaGroupName() { return doColumn("CHARA_GROUP_NAME"); }
         /**
-         * DESIGNER_ID: {IX, NotNull, INT UNSIGNED(10), FK to designer}
+         * DESIGNER_ID: {IX, NotNull, INT UNSIGNED(10), FK to DESIGNER}
          * @return The information object of specified column. (NotNull)
          */
         public SpecifiedColumn columnDesignerId() { return doColumn("DESIGNER_ID"); }
@@ -327,6 +327,11 @@ public class BsCharaGroupCB extends AbstractConditionBean {
          * @return The information object of specified column. (NotNull)
          */
         public SpecifiedColumn columnDescriptionUrl() { return doColumn("DESCRIPTION_URL"); }
+        /**
+         * IS_AVAILABLE_CHANGE_NAME: {NotNull, BIT}
+         * @return The information object of specified column. (NotNull)
+         */
+        public SpecifiedColumn columnIsAvailableChangeName() { return doColumn("IS_AVAILABLE_CHANGE_NAME"); }
         /**
          * REGISTER_DATETIME: {NotNull, DATETIME(19)}
          * @return The information object of specified column. (NotNull)
@@ -358,7 +363,7 @@ public class BsCharaGroupCB extends AbstractConditionBean {
             }
         }
         @Override
-        protected String getTableDbName() { return "chara_group"; }
+        protected String getTableDbName() { return "CHARA_GROUP"; }
         /**
          * Prepare to specify functions about relation table. <br>
          * DESIGNER by my DESIGNER_ID, named 'designer'.
@@ -381,7 +386,7 @@ public class BsCharaGroupCB extends AbstractConditionBean {
         }
         /**
          * Prepare for (Specify)DerivedReferrer (correlated sub-query). <br>
-         * {select max(FOO) from chara where ...) as FOO_MAX} <br>
+         * {select max(FOO) from CHARA where ...) as FOO_MAX} <br>
          * CHARA by CHARA_GROUP_ID, named 'charaList'.
          * <pre>
          * cb.specify().<span style="color: #CC4747">derived${relationMethodIdentityName}()</span>.<span style="color: #CC4747">max</span>(charaCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
@@ -398,7 +403,7 @@ public class BsCharaGroupCB extends AbstractConditionBean {
         }
         /**
          * Prepare for (Specify)DerivedReferrer (correlated sub-query). <br>
-         * {select max(FOO) from village_chara_group where ...) as FOO_MAX} <br>
+         * {select max(FOO) from VILLAGE_CHARA_GROUP where ...) as FOO_MAX} <br>
          * VILLAGE_CHARA_GROUP by CHARA_GROUP_ID, named 'villageCharaGroupList'.
          * <pre>
          * cb.specify().<span style="color: #CC4747">derived${relationMethodIdentityName}()</span>.<span style="color: #CC4747">max</span>(groupCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {

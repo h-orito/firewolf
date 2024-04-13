@@ -18,7 +18,7 @@ import com.ort.dbflute.exentity.*;
  *     VILLAGE_ID, MESSAGE_NUMBER, MESSAGE_TYPE_CODE
  *
  * [column]
- *     VILLAGE_ID, MESSAGE_NUMBER, MESSAGE_TYPE_CODE, MESSAGE_UNIXTIMESTAMP_MILLI, VILLAGE_DAY_ID, VILLAGE_PLAYER_ID, TO_VILLAGE_PLAYER_ID, PLAYER_ID, MESSAGE_CONTENT, MESSAGE_DATETIME, MESSAGE_COUNT, IS_CONVERT_DISABLE, FACE_TYPE_CODE, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
+ *     VILLAGE_ID, MESSAGE_NUMBER, MESSAGE_TYPE_CODE, MESSAGE_UNIXTIMESTAMP_MILLI, VILLAGE_DAY_ID, VILLAGE_PLAYER_ID, TO_VILLAGE_PLAYER_ID, PLAYER_ID, MESSAGE_CONTENT, MESSAGE_DATETIME, MESSAGE_COUNT, IS_CONVERT_DISABLE, FACE_TYPE_CODE, CHARA_NAME, CHARA_SHORT_NAME, TO_CHARA_NAME, TO_CHARA_SHORT_NAME, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
  *
  * [sequence]
  *     
@@ -56,6 +56,10 @@ import com.ort.dbflute.exentity.*;
  * Integer messageCount = entity.getMessageCount();
  * Boolean isConvertDisable = entity.getIsConvertDisable();
  * String faceTypeCode = entity.getFaceTypeCode();
+ * String charaName = entity.getCharaName();
+ * String charaShortName = entity.getCharaShortName();
+ * String toCharaName = entity.getToCharaName();
+ * String toCharaShortName = entity.getToCharaShortName();
  * java.time.LocalDateTime registerDatetime = entity.getRegisterDatetime();
  * String registerTrace = entity.getRegisterTrace();
  * java.time.LocalDateTime updateDatetime = entity.getUpdateDatetime();
@@ -73,6 +77,10 @@ import com.ort.dbflute.exentity.*;
  * entity.setMessageCount(messageCount);
  * entity.setIsConvertDisable(isConvertDisable);
  * entity.setFaceTypeCode(faceTypeCode);
+ * entity.setCharaName(charaName);
+ * entity.setCharaShortName(charaShortName);
+ * entity.setToCharaName(toCharaName);
+ * entity.setToCharaShortName(toCharaShortName);
  * entity.setRegisterDatetime(registerDatetime);
  * entity.setRegisterTrace(registerTrace);
  * entity.setUpdateDatetime(updateDatetime);
@@ -131,6 +139,18 @@ public abstract class BsMessage extends AbstractEntity implements DomainEntity, 
     /** FACE_TYPE_CODE: {IX, VARCHAR(20)} */
     protected String _faceTypeCode;
 
+    /** CHARA_NAME: {VARCHAR(40)} */
+    protected String _charaName;
+
+    /** CHARA_SHORT_NAME: {CHAR(1)} */
+    protected String _charaShortName;
+
+    /** TO_CHARA_NAME: {VARCHAR(40)} */
+    protected String _toCharaName;
+
+    /** TO_CHARA_SHORT_NAME: {CHAR(1)} */
+    protected String _toCharaShortName;
+
     /** REGISTER_DATETIME: {NotNull, DATETIME(19)} */
     protected java.time.LocalDateTime _registerDatetime;
 
@@ -153,7 +173,7 @@ public abstract class BsMessage extends AbstractEntity implements DomainEntity, 
 
     /** {@inheritDoc} */
     public String asTableDbName() {
-        return "message";
+        return "MESSAGE";
     }
 
     // ===================================================================================
@@ -247,6 +267,10 @@ public abstract class BsMessage extends AbstractEntity implements DomainEntity, 
         sb.append(dm).append(xfND(_messageCount));
         sb.append(dm).append(xfND(_isConvertDisable));
         sb.append(dm).append(xfND(_faceTypeCode));
+        sb.append(dm).append(xfND(_charaName));
+        sb.append(dm).append(xfND(_charaShortName));
+        sb.append(dm).append(xfND(_toCharaName));
+        sb.append(dm).append(xfND(_toCharaShortName));
         sb.append(dm).append(xfND(_registerDatetime));
         sb.append(dm).append(xfND(_registerTrace));
         sb.append(dm).append(xfND(_updateDatetime));
@@ -535,6 +559,86 @@ public abstract class BsMessage extends AbstractEntity implements DomainEntity, 
     public void setFaceTypeCode(String faceTypeCode) {
         registerModifiedProperty("faceTypeCode");
         _faceTypeCode = faceTypeCode;
+    }
+
+    /**
+     * [get] CHARA_NAME: {VARCHAR(40)} <br>
+     * キャラクター名
+     * @return The value of the column 'CHARA_NAME'. (NullAllowed even if selected: for no constraint)
+     */
+    public String getCharaName() {
+        checkSpecifiedProperty("charaName");
+        return convertEmptyToNull(_charaName);
+    }
+
+    /**
+     * [set] CHARA_NAME: {VARCHAR(40)} <br>
+     * キャラクター名
+     * @param charaName The value of the column 'CHARA_NAME'. (NullAllowed: null update allowed for no constraint)
+     */
+    public void setCharaName(String charaName) {
+        registerModifiedProperty("charaName");
+        _charaName = charaName;
+    }
+
+    /**
+     * [get] CHARA_SHORT_NAME: {CHAR(1)} <br>
+     * キャラクター略称
+     * @return The value of the column 'CHARA_SHORT_NAME'. (NullAllowed even if selected: for no constraint)
+     */
+    public String getCharaShortName() {
+        checkSpecifiedProperty("charaShortName");
+        return convertEmptyToNull(_charaShortName);
+    }
+
+    /**
+     * [set] CHARA_SHORT_NAME: {CHAR(1)} <br>
+     * キャラクター略称
+     * @param charaShortName The value of the column 'CHARA_SHORT_NAME'. (NullAllowed: null update allowed for no constraint)
+     */
+    public void setCharaShortName(String charaShortName) {
+        registerModifiedProperty("charaShortName");
+        _charaShortName = charaShortName;
+    }
+
+    /**
+     * [get] TO_CHARA_NAME: {VARCHAR(40)} <br>
+     * 秘話相手のキャラクター名
+     * @return The value of the column 'TO_CHARA_NAME'. (NullAllowed even if selected: for no constraint)
+     */
+    public String getToCharaName() {
+        checkSpecifiedProperty("toCharaName");
+        return convertEmptyToNull(_toCharaName);
+    }
+
+    /**
+     * [set] TO_CHARA_NAME: {VARCHAR(40)} <br>
+     * 秘話相手のキャラクター名
+     * @param toCharaName The value of the column 'TO_CHARA_NAME'. (NullAllowed: null update allowed for no constraint)
+     */
+    public void setToCharaName(String toCharaName) {
+        registerModifiedProperty("toCharaName");
+        _toCharaName = toCharaName;
+    }
+
+    /**
+     * [get] TO_CHARA_SHORT_NAME: {CHAR(1)} <br>
+     * 秘話相手のキャラクター略称
+     * @return The value of the column 'TO_CHARA_SHORT_NAME'. (NullAllowed even if selected: for no constraint)
+     */
+    public String getToCharaShortName() {
+        checkSpecifiedProperty("toCharaShortName");
+        return convertEmptyToNull(_toCharaShortName);
+    }
+
+    /**
+     * [set] TO_CHARA_SHORT_NAME: {CHAR(1)} <br>
+     * 秘話相手のキャラクター略称
+     * @param toCharaShortName The value of the column 'TO_CHARA_SHORT_NAME'. (NullAllowed: null update allowed for no constraint)
+     */
+    public void setToCharaShortName(String toCharaShortName) {
+        registerModifiedProperty("toCharaShortName");
+        _toCharaShortName = toCharaShortName;
     }
 
     /**

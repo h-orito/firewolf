@@ -1,7 +1,14 @@
 package com.ort.firewolf.application.coordinator
 
 import com.ort.dbflute.allcommon.CDef
-import com.ort.firewolf.application.service.*
+import com.ort.firewolf.application.service.AbilityService
+import com.ort.firewolf.application.service.CharachipService
+import com.ort.firewolf.application.service.CommitService
+import com.ort.firewolf.application.service.MessageService
+import com.ort.firewolf.application.service.NotificationService
+import com.ort.firewolf.application.service.PlayerService
+import com.ort.firewolf.application.service.VillageService
+import com.ort.firewolf.application.service.VoteService
 import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.commit.Commits
 import com.ort.firewolf.domain.model.daychange.DayChange
@@ -97,7 +104,7 @@ class DayChangeCoordinator(
         }
         // message
         if (before.messages.existsDifference(after.messages)) {
-            messageService.updateDifference(before.village.id, before.messages, after.messages)
+            messageService.updateDifference(before.village, before.messages, after.messages)
         }
         // votes
         if (before.votes.existsDifference(after.votes)) {

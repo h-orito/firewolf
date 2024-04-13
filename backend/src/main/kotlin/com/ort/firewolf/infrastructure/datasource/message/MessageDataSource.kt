@@ -7,7 +7,12 @@ import com.ort.dbflute.exbhv.MessageSendtoBhv
 import com.ort.dbflute.exentity.Message
 import com.ort.dbflute.exentity.MessageSendto
 import com.ort.firewolf.api.controller.VillageController
-import com.ort.firewolf.domain.model.message.*
+import com.ort.firewolf.domain.model.message.MessageContent
+import com.ort.firewolf.domain.model.message.MessageQuery
+import com.ort.firewolf.domain.model.message.MessageTime
+import com.ort.firewolf.domain.model.message.MessageType
+import com.ort.firewolf.domain.model.message.Messages
+import com.ort.firewolf.domain.model.village.Village
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 import com.ort.firewolf.fw.FirewolfDateUtil
 import com.ort.firewolf.fw.exception.FirewolfBusinessException
@@ -177,12 +182,12 @@ class MessageDataSource(
     }
 
     fun registerMessage(
-        villageId: Int,
+        village: Village,
         message: com.ort.firewolf.domain.model.message.Message
     ): com.ort.firewolf.domain.model.message.Message {
         val mes = Message()
         val messageTypeCode = message.content.type.code
-        mes.villageId = villageId
+        mes.villageId = village.id
         mes.villageDayId = message.time.villageDayId
         mes.messageTypeCode = messageTypeCode
         mes.messageContent = message.content.text
@@ -194,11 +199,21 @@ class MessageDataSource(
         val now = FirewolfDateUtil.currentLocalDateTime()
         mes.messageDatetime = now
         mes.messageUnixtimestampMilli = now.toInstant(ZoneOffset.ofHours(+9)).toEpochMilli()
+        message.fromVillageParticipantId?.let { participantId ->
+            val participant = village.participant.member(participantId)
+            mes.charaName = participant.charaName.name
+            mes.charaShortName = participant.charaName.shortName
+        }
+        message.toVillageParticipantId?.let { participantId ->
+            val participant = village.participant.member(participantId)
+            mes.toCharaName = participant.charaName.name
+            mes.toCharaShortName = participant.charaName.shortName
+        }
 
         // 何回目の発言か
         if (message.content.type.shouldSetCount()) {
             val count: Int = selectMessageTypeCount(
-                villageId,
+                village.id,
                 message.time.villageDayId,
                 messageTypeCode,
                 message.fromVillageParticipantId
@@ -209,11 +224,11 @@ class MessageDataSource(
         // 発言番号の採番 & insert (3回チャレンジする)
         for (i in 1..3) {
             try {
-                mes.messageNumber = selectNextMessageNumber(villageId, message.content.type.code)
+                mes.messageNumber = selectNextMessageNumber(village.id, message.content.type.code)
                 messageBhv.insert(mes)
                 insertMessageSendTo(mes)
                 return findMessage(
-                    villageId = villageId,
+                    villageId = village.id,
                     messageType = CDef.MessageType.codeOf(messageTypeCode),
                     messageNumber = mes.messageNumber
                 )!!
@@ -265,14 +280,11 @@ class MessageDataSource(
 
     /**
      * 差分更新
-     * @param villageId villageId
-     * @param before messages
-     * @param after messages
      */
-    fun updateDifference(villageId: Int, before: Messages, after: Messages) {
+    fun updateDifference(village: Village, before: Messages, after: Messages) {
         // 追加しかないのでbeforeにないindexから追加していく
         after.list.drop(before.list.size).forEach {
-            registerMessage(villageId, it)
+            registerMessage(village, it)
         }
     }
 
@@ -305,7 +317,13 @@ class MessageDataSource(
     private fun convertMessageToMessage(message: Message): com.ort.firewolf.domain.model.message.Message {
         return com.ort.firewolf.domain.model.message.Message(
             fromVillageParticipantId = message.villagePlayerId,
+            fromCharacterName = message.charaName?.let {
+                "[${message.charaShortName}] $it"
+            },
             toVillageParticipantId = message.toVillagePlayerId,
+            toCharacterName = message.toCharaName?.let {
+                "[${message.toCharaShortName}] $it"
+            },
             time = MessageTime(
                 villageDayId = message.villageDayId,
                 datetime = message.messageDatetime,

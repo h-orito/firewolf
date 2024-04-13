@@ -57,37 +57,37 @@ class ProgressDomainService(
         var dayChange = suddenlyDeathDomainService.processDayChangeAction(beforeDayChange, todayMessages, charas, commits)
 
         // 処刑
-        dayChange = executeDomainService.processDayChangeAction(dayChange, charas)
+        dayChange = executeDomainService.processDayChangeAction(dayChange)
 
         // 霊能
-        dayChange = psychicDomainService.processDayChangeAction(dayChange, charas)
+        dayChange = psychicDomainService.processDayChangeAction(dayChange)
 
         // 導師
-        dayChange = guruDomainService.processDayChangeAction(dayChange, charas)
+        dayChange = guruDomainService.processDayChangeAction(dayChange)
 
         // 占い（呪殺、逆呪殺）
-        dayChange = divineDomainService.processDayChangeAction(dayChange, charas)
+        dayChange = divineDomainService.processDayChangeAction(dayChange)
 
         // 役職占い（呪殺、逆呪殺）
-        dayChange = wiseDivineDomainService.processDayChangeAction(dayChange, charas)
+        dayChange = wiseDivineDomainService.processDayChangeAction(dayChange)
 
         // 護衛
-        dayChange = guardDomainService.processDayChangeAction(dayChange, charas)
+        dayChange = guardDomainService.processDayChangeAction(dayChange)
 
         // 風来護衛
-        dayChange = wandererGuardDomainService.processDayChangeAction(dayChange, charas)
+        dayChange = wandererGuardDomainService.processDayChangeAction(dayChange)
 
         // 襲撃
-        dayChange = attackDomainService.processDayChangeAction(dayChange, charas)
+        dayChange = attackDomainService.processDayChangeAction(dayChange)
 
         // 無惨メッセージ
-        dayChange = miserableDeathDomainService.processDayChangeAction(dayChange, charas)
+        dayChange = miserableDeathDomainService.processDayChangeAction(dayChange)
 
         // 検死
-        dayChange = autopsyDomainService.addAutopsyMessage(dayChange, charas)
+        dayChange = autopsyDomainService.addAutopsyMessage(dayChange)
 
         // 後追い
-        dayChange = suicideDomainService.suicide(dayChange, charas)
+        dayChange = suicideDomainService.suicide(dayChange)
 
         // 2日目限定メッセージ
         dayChange = addDay2MessageIfNeeded(dayChange)

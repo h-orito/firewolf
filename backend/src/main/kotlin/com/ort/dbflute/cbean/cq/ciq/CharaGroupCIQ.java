@@ -12,7 +12,7 @@ import com.ort.dbflute.cbean.cq.bs.*;
 import com.ort.dbflute.cbean.cq.*;
 
 /**
- * The condition-query for in-line of chara_group.
+ * The condition-query for in-line of CHARA_GROUP.
  * @author DBFlute(AutoGenerator)
  */
 public class CharaGroupCIQ extends AbstractBsCharaGroupCQ {
@@ -85,6 +85,7 @@ public class CharaGroupCIQ extends AbstractBsCharaGroupCQ {
     protected ConditionValue xgetCValueCharaGroupName() { return _myCQ.xdfgetCharaGroupName(); }
     protected ConditionValue xgetCValueDesignerId() { return _myCQ.xdfgetDesignerId(); }
     protected ConditionValue xgetCValueDescriptionUrl() { return _myCQ.xdfgetDescriptionUrl(); }
+    protected ConditionValue xgetCValueIsAvailableChangeName() { return _myCQ.xdfgetIsAvailableChangeName(); }
     protected ConditionValue xgetCValueRegisterDatetime() { return _myCQ.xdfgetRegisterDatetime(); }
     protected ConditionValue xgetCValueRegisterTrace() { return _myCQ.xdfgetRegisterTrace(); }
     protected ConditionValue xgetCValueUpdateDatetime() { return _myCQ.xdfgetUpdateDatetime(); }

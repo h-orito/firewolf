@@ -13,7 +13,7 @@ import com.ort.dbflute.cbean.*;
 import com.ort.dbflute.cbean.cq.*;
 
 /**
- * The base condition-query of chara_group.
+ * The base condition-query of CHARA_GROUP.
  * @author DBFlute(AutoGenerator)
  */
 public class BsCharaGroupCQ extends AbstractBsCharaGroupCQ {
@@ -35,7 +35,7 @@ public class BsCharaGroupCQ extends AbstractBsCharaGroupCQ {
     //                                                                 ===================
     /**
      * Prepare InlineView query. <br>
-     * {select ... from ... left outer join (select * from chara_group) where FOO = [value] ...}
+     * {select ... from ... left outer join (select * from CHARA_GROUP) where FOO = [value] ...}
      * <pre>
      * cb.query().queryMemberStatus().<span style="color: #CC4747">inline()</span>.setFoo...;
      * </pre>
@@ -58,7 +58,7 @@ public class BsCharaGroupCQ extends AbstractBsCharaGroupCQ {
 
     /**
      * Prepare OnClause query. <br>
-     * {select ... from ... left outer join chara_group on ... and FOO = [value] ...}
+     * {select ... from ... left outer join CHARA_GROUP on ... and FOO = [value] ...}
      * <pre>
      * cb.query().queryMemberStatus().<span style="color: #CC4747">on()</span>.setFoo...;
      * </pre>
@@ -149,14 +149,14 @@ public class BsCharaGroupCQ extends AbstractBsCharaGroupCQ {
 
     /**
      * Add order-by as ascend. <br>
-     * DESIGNER_ID: {IX, NotNull, INT UNSIGNED(10), FK to designer}
+     * DESIGNER_ID: {IX, NotNull, INT UNSIGNED(10), FK to DESIGNER}
      * @return this. (NotNull)
      */
     public BsCharaGroupCQ addOrderBy_DesignerId_Asc() { regOBA("DESIGNER_ID"); return this; }
 
     /**
      * Add order-by as descend. <br>
-     * DESIGNER_ID: {IX, NotNull, INT UNSIGNED(10), FK to designer}
+     * DESIGNER_ID: {IX, NotNull, INT UNSIGNED(10), FK to DESIGNER}
      * @return this. (NotNull)
      */
     public BsCharaGroupCQ addOrderBy_DesignerId_Desc() { regOBD("DESIGNER_ID"); return this; }
@@ -180,6 +180,26 @@ public class BsCharaGroupCQ extends AbstractBsCharaGroupCQ {
      * @return this. (NotNull)
      */
     public BsCharaGroupCQ addOrderBy_DescriptionUrl_Desc() { regOBD("DESCRIPTION_URL"); return this; }
+
+    protected ConditionValue _isAvailableChangeName;
+    public ConditionValue xdfgetIsAvailableChangeName()
+    { if (_isAvailableChangeName == null) { _isAvailableChangeName = nCV(); }
+      return _isAvailableChangeName; }
+    protected ConditionValue xgetCValueIsAvailableChangeName() { return xdfgetIsAvailableChangeName(); }
+
+    /**
+     * Add order-by as ascend. <br>
+     * IS_AVAILABLE_CHANGE_NAME: {NotNull, BIT}
+     * @return this. (NotNull)
+     */
+    public BsCharaGroupCQ addOrderBy_IsAvailableChangeName_Asc() { regOBA("IS_AVAILABLE_CHANGE_NAME"); return this; }
+
+    /**
+     * Add order-by as descend. <br>
+     * IS_AVAILABLE_CHANGE_NAME: {NotNull, BIT}
+     * @return this. (NotNull)
+     */
+    public BsCharaGroupCQ addOrderBy_IsAvailableChangeName_Desc() { regOBD("IS_AVAILABLE_CHANGE_NAME"); return this; }
 
     protected ConditionValue _registerDatetime;
     public ConditionValue xdfgetRegisterDatetime()
@@ -324,7 +344,7 @@ public class BsCharaGroupCQ extends AbstractBsCharaGroupCQ {
         return xgetQueRlMap(prop);
     }
     protected DesignerCQ xcreateQueryDesigner() {
-        String nrp = xresolveNRP("chara_group", "designer"); String jan = xresolveJAN(nrp, xgetNNLvl());
+        String nrp = xresolveNRP("CHARA_GROUP", "designer"); String jan = xresolveJAN(nrp, xgetNNLvl());
         return xinitRelCQ(new DesignerCQ(this, xgetSqlClause(), jan, xgetNNLvl()), _baseCB, "designer", nrp);
     }
     protected void xsetupOuterJoinDesigner() { xregOutJo("designer"); }

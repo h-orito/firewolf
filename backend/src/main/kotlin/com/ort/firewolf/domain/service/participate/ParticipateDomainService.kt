@@ -107,7 +107,7 @@ class ParticipateDomainService {
     fun getSelectableCharaList(village: Village, charas: Charas): List<Chara> {
         return charas.list.filterNot { chara ->
             village.participant.memberList.any { it.charaId == chara.id }
-                || village.spectator.memberList.any { it.charaId == chara.id }
+                    || village.spectator.memberList.any { it.charaId == chara.id }
         }
     }
 
@@ -143,13 +143,22 @@ class ParticipateDomainService {
 
     /**
      * 退村メッセージ
-     * @param village village
-     * @param chara chara
-     * @return 退村時のメッセージ e.g. {キャラ名}は村を去った。
      */
-    fun createLeaveMessage(village: Village, chara: Chara): Message =
-        Message.createPublicSystemMessage(createLeaveMessageString(chara), village.day.latestDay().id)
+    fun createLeaveMessage(village: Village, participant: VillageParticipant): Message =
+        Message.createPublicSystemMessage(createLeaveMessageString(participant), village.day.latestDay().id)
 
+    /**
+     * 名前変更メッセージ
+     */
+    fun createChangeNameMessage(
+        village: Village,
+        before: VillageParticipant,
+        after: VillageParticipant
+    ): Message =
+        Message.createPublicSystemMessage(
+            createChangeNameMessageString(before, after),
+            village.day.latestDay().id
+        )
 
     // ===================================================================================
     //                                                                        Assist Logic
@@ -186,6 +195,9 @@ class ParticipateDomainService {
         return village.isAvailableSpectate(charachipCharaNum)
     }
 
-    private fun createLeaveMessageString(chara: Chara): String =
-        "${chara.charaName.fullName()}は村を去った。"
+    private fun createLeaveMessageString(participant: VillageParticipant): String =
+        "${participant.name()}は村を去った。"
+
+    private fun createChangeNameMessageString(before: VillageParticipant, after: VillageParticipant): String =
+        "名前を変更しました。\n${before.name()} → ${after.name()}"
 }

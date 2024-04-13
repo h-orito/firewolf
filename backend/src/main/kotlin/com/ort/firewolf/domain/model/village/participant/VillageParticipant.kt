@@ -10,6 +10,7 @@ import com.ort.firewolf.domain.model.village.participant.coming_out.ComingOuts
 
 data class VillageParticipant(
     val id: Int,
+    val charaName: VillageParticipantName,
     val charaId: Int,
     val playerId: Int?,
     val dead: Dead?,
@@ -25,6 +26,8 @@ data class VillageParticipant(
     // ===================================================================================
     //                                                                                read
     //                                                                           =========
+    fun name(): String = "[${shortName()}] ${charaName.name}"
+    fun shortName(): String = charaName.shortName
     fun isAdmin(): Boolean = playerId == 1
     fun isAlive(): Boolean = dead == null
     fun isDead(): Boolean = !isAlive()
@@ -61,9 +64,13 @@ data class VillageParticipant(
     // 投票可能か
     fun isAvailableVote(): Boolean = isAlive() && !isSpectator
 
+    // 名前変更可能か
+    fun canChangeName(isEpilogue: Boolean): Boolean = dead == null || !dead.isSuddenly() || isEpilogue
+
     // 差分有無
     fun existsDifference(participant: VillageParticipant): Boolean {
         if (id != participant.id) return true
+        if (charaName.existsDifference(participant.charaName)) return true
         if (charaId != participant.charaId) return true
         if (playerId != participant.playerId) return true
         if (dead?.code != participant.dead?.code) return true
@@ -105,6 +112,10 @@ data class VillageParticipant(
     // 希望役職
     fun changeSkillRequest(first: CDef.Skill, second: CDef.Skill): VillageParticipant =
         this.copy(skillRequest = SkillRequest(Skill(first), Skill(second)))
+
+    // 名前変更
+    fun changeName(name: String, shortName: String): VillageParticipant =
+        this.copy(charaName = VillageParticipantName(name = name, shortName = shortName))
 
     // 勝敗
     fun winLose(winCamp: Camp): VillageParticipant {

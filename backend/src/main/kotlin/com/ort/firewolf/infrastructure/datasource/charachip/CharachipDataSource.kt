@@ -25,6 +25,7 @@ class CharachipDataSource(
             it.query().setCharaGroupId_InScope(ids)
             it.query().addOrderBy_CharaGroupId_Asc()
         }
+
         return convertCharaGroupListToCharaChips(charaGroupList)
     }
 
@@ -54,7 +55,8 @@ class CharachipDataSource(
                 name = charaGroup.designer.get().designerName
             ),
             descriptionUrl = charaGroup.descriptionUrl,
-            charaIdList = listOf() // dummy
+            charaIdList = charaGroup.charaList.map { it.charaId },
+            isAvailableChangeName = charaGroup.isAvailableChangeName
         )
     }
 }

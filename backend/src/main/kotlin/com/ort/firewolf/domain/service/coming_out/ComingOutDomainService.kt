@@ -1,6 +1,5 @@
 package com.ort.firewolf.domain.service.coming_out
 
-import com.ort.firewolf.domain.model.charachip.Chara
 import com.ort.firewolf.domain.model.message.Message
 import com.ort.firewolf.domain.model.myself.participant.VillageComingOutSituation
 import com.ort.firewolf.domain.model.skill.Skill
@@ -29,8 +28,8 @@ class ComingOutDomainService {
         if (!isAvailableComingOut(village, participant)) throw FirewolfBusinessException("カミングアウトできません")
     }
 
-    fun createComingOutMessage(chara: Chara, skills: Skills, villageDayId: Int): Message {
-        return Message.createPublicSystemMessage(getComingOutSetMessage(chara, skills), villageDayId)
+    fun createComingOutMessage(myself: VillageParticipant, skills: Skills, villageDayId: Int): Message {
+        return Message.createPublicSystemMessage(getComingOutSetMessage(myself, skills), villageDayId)
     }
 
     // ===================================================================================
@@ -50,13 +49,12 @@ class ComingOutDomainService {
         return participant.isAvailableComingOut()
     }
 
-    private fun getComingOutSetMessage(chara: Chara, skills: Skills): String {
-        val name = chara.charaName.fullName()
+    private fun getComingOutSetMessage(myself: VillageParticipant, skills: Skills): String {
         return if (skills.list.isEmpty()) {
-            "${name}がカミングアウトを取り消しました。"
+            "${myself.name()}がカミングアウトを取り消しました。"
         } else {
-            val skills = skills.list.map { it.name }.joinToString("と")
-            "${name}が${skills}をカミングアウトしました。"
+            val skillNames = skills.list.joinToString("と") { it.name }
+            "${myself.name()}が${skillNames}をカミングアウトしました。"
         }
     }
 }

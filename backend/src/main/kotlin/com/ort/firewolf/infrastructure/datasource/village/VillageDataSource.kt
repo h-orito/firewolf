@@ -1,8 +1,22 @@
 package com.ort.firewolf.infrastructure.datasource.village
 
 import com.ort.dbflute.allcommon.CDef
-import com.ort.dbflute.exbhv.*
-import com.ort.dbflute.exentity.*
+import com.ort.dbflute.exbhv.MessageRestrictionBhv
+import com.ort.dbflute.exbhv.VillageBhv
+import com.ort.dbflute.exbhv.VillageCharaGroupBhv
+import com.ort.dbflute.exbhv.VillageDayBhv
+import com.ort.dbflute.exbhv.VillagePlayerAccessInfoBhv
+import com.ort.dbflute.exbhv.VillagePlayerBhv
+import com.ort.dbflute.exbhv.VillagePlayerNotificationBhv
+import com.ort.dbflute.exbhv.VillageSettingBhv
+import com.ort.dbflute.exentity.MessageRestriction
+import com.ort.dbflute.exentity.Village
+import com.ort.dbflute.exentity.VillageCharaGroup
+import com.ort.dbflute.exentity.VillageDay
+import com.ort.dbflute.exentity.VillagePlayer
+import com.ort.dbflute.exentity.VillagePlayerAccessInfo
+import com.ort.dbflute.exentity.VillagePlayerNotification
+import com.ort.dbflute.exentity.VillageSetting
 import com.ort.firewolf.domain.model.village.Villages
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 import com.ort.firewolf.domain.model.village.participant.VillageParticipantNotificationCondition
@@ -455,6 +469,8 @@ class VillageDataSource(
         vp.isGone = false
         vp.requestSkillCodeAsSkill = participant.skillRequest.first.toCdef()
         vp.secondRequestSkillCodeAsSkill = participant.skillRequest.second.toCdef()
+        vp.charaName = participant.charaName.name
+        vp.charaShortName = participant.charaName.shortName
         villagePlayerBhv.insert(vp)
         return vp.villagePlayerId
     }
@@ -473,6 +489,8 @@ class VillageDataSource(
         villagePlayer.skillCodeAsSkill = villagePlayerModel.skill?.toCdef()
         villagePlayer.requestSkillCodeAsSkill = villagePlayerModel.skillRequest.first.toCdef()
         villagePlayer.secondRequestSkillCodeAsSkill = villagePlayerModel.skillRequest.second.toCdef()
+        villagePlayer.charaName = villagePlayerModel.charaName.name
+        villagePlayer.charaShortName = villagePlayerModel.charaName.shortName
         villagePlayerBhv.update(villagePlayer)
     }
 

@@ -6,7 +6,9 @@ import com.ort.firewolf.fw.FirewolfDateUtil
 
 data class Message(
     val fromVillageParticipantId: Int?,
+    val fromCharacterName: String?,
     val toVillageParticipantId: Int?,
+    val toCharacterName: String?,
     val time: MessageTime,
     val content: MessageContent,
     val sendToParticipantIds: List<Int> = emptyList()
@@ -22,7 +24,9 @@ data class Message(
             to: VillageParticipant? = null
         ): Message = Message(
             fromVillageParticipantId = from.id,
+            fromCharacterName = from.name(),
             toVillageParticipantId = to?.id,
+            toCharacterName = to?.name(),
             time = MessageTime(
                 villageDayId = villageDayId,
                 datetime = FirewolfDateUtil.currentLocalDateTime(), // dummy
@@ -84,7 +88,9 @@ data class Message(
             from: VillageParticipant? = null
         ): Message = Message(
             fromVillageParticipantId = from?.id,
+            fromCharacterName = null,
             toVillageParticipantId = null,
+            toCharacterName = null,
             time = MessageTime(
                 villageDayId = villageDayId,
                 datetime = FirewolfDateUtil.currentLocalDateTime(), // dummy

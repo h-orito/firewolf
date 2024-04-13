@@ -1,8 +1,6 @@
 package com.ort.firewolf.domain.service.ability
 
 import com.ort.firewolf.domain.model.ability.AbilityType
-import com.ort.firewolf.domain.model.charachip.Chara
-import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.daychange.DayChange
 import com.ort.firewolf.domain.model.village.Village
 import com.ort.firewolf.domain.model.village.ability.VillageAbilities
@@ -26,8 +24,8 @@ interface IAbilityDomainService {
     ): VillageParticipant?
 
     fun createSetMessage(
-        myChara: Chara,
-        targetChara: Chara?
+        myself: VillageParticipant,
+        target: VillageParticipant?
     ): String
 
     fun getDefaultAbilityList(
@@ -35,10 +33,7 @@ interface IAbilityDomainService {
         villageAbilities: VillageAbilities
     ): List<VillageAbility>
 
-    fun processDayChangeAction(
-        dayChange: DayChange,
-        charas: Charas
-    ): DayChange
+    fun processDayChangeAction(dayChange: DayChange): DayChange
 
     fun isAvailableNoTarget(village: Village): Boolean
 

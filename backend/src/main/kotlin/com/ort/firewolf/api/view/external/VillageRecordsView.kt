@@ -1,7 +1,5 @@
 package com.ort.firewolf.api.view.external
 
-import com.ort.firewolf.domain.model.charachip.Chara
-import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.player.Players
 import com.ort.firewolf.domain.model.village.Village
 import com.ort.firewolf.domain.model.village.Villages
@@ -13,10 +11,9 @@ data class VillageRecordsView(
 ) {
     constructor(
         villages: Villages,
-        charas: Charas,
         players: Players
     ) : this(
-        list = villages.list.map { VillageRecordView(it, charas, players) }
+        list = villages.list.map { VillageRecordView(it, players) }
     )
 }
 
@@ -39,7 +36,6 @@ data class VillageRecordView(
 
     constructor(
         village: Village,
-        charas: Charas,
         players: Players
     ) : this(
         id = village.id,
@@ -57,9 +53,7 @@ data class VillageRecordView(
         winCampName = if (village.status.isCanceled()) null
         else village.winCamp!!.name,
         participantList = (village.participant.memberList + village.spectator.memberList).map {
-            val charaList =
-                charas.list.filter { chara -> village.setting.charachip.charachipIds.contains(chara.charachipId) }
-            VillageParticipantRecordView(it, charaList, players)
+            VillageParticipantRecordView(it, players)
         }
     )
 }
@@ -77,7 +71,6 @@ data class VillageParticipantRecordView(
 ) {
     constructor(
         participant: VillageParticipant,
-        charaList: List<Chara>,
         players: Players
     ) : this(
         twitterUserId =
@@ -85,7 +78,7 @@ data class VillageParticipantRecordView(
             it.twitterUserName ?: it.nickname
         },
         otherSiteUserId = players.list.first { it.id == participant.playerId }.otherSiteName,
-        characterName = charaList.first { it.id == participant.charaId }.charaName.name,
+        characterName = participant.name(),
         skillName = participant.skill?.name,
         isSpectator = participant.isSpectator,
         isWin = participant.isWin,

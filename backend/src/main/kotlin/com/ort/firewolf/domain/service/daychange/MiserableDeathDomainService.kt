@@ -1,25 +1,28 @@
 package com.ort.firewolf.domain.service.daychange
 
-import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.daychange.DayChange
 import com.ort.firewolf.domain.model.message.Message
 import com.ort.firewolf.domain.model.village.Village
+import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 import org.springframework.stereotype.Service
 
 @Service
 class MiserableDeathDomainService {
 
-    fun processDayChangeAction(dayChange: DayChange, charas: Charas): DayChange {
+    fun processDayChangeAction(dayChange: DayChange): DayChange {
         val latestDay = dayChange.village.day.latestDay()
 
-        val miserableDeathCharaList = dayChange.village.participant.memberList.filter {
+        val miserableDeathParticipantList = dayChange.village.participant.memberList.filter {
             !it.isAlive() && it.dead?.villageDay?.id == latestDay.id && it.dead.toCdef().isMiserableDeath
-        }.map { member ->
-            charas.chara(member.charaId)
         }
 
         return dayChange.copy(
-            messages = dayChange.messages.add(createMiserableDeathMessage(dayChange.village, Charas(miserableDeathCharaList)))
+            messages = dayChange.messages.add(
+                createMiserableDeathMessage(
+                    dayChange.village,
+                    miserableDeathParticipantList
+                )
+            )
         ).setIsChange(dayChange)
     }
 
@@ -28,21 +31,18 @@ class MiserableDeathDomainService {
     //                                                                        ============
     /**
      * 無惨メッセージ
-     * @param village village
-     * @param charas 犠牲者キャラ
-     * @return 無惨メッセージ
      */
     private fun createMiserableDeathMessage(
         village: Village,
-        charas: Charas
+        miserableDeathParticipantList: List<VillageParticipant>
     ): Message {
-        val text = if (charas.list.isEmpty()) {
+        val text = if (miserableDeathParticipantList.isEmpty()) {
             "今日は犠牲者がいないようだ。人狼は襲撃に失敗したのだろうか。"
         } else {
-            charas.list.shuffled().joinToString(
+            miserableDeathParticipantList.shuffled().joinToString(
                 prefix = "次の日の朝、以下の村人が無惨な姿で発見された。\n",
                 separator = "、\n"
-            ) { it.charaName.fullName() }
+            ) { it.name() }
         }
         return Message.createPublicSystemMessage(text, village.day.latestDay().id)
     }

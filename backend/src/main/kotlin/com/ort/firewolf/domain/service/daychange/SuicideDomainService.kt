@@ -1,6 +1,5 @@
 package com.ort.firewolf.domain.service.daychange
 
-import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.daychange.DayChange
 import com.ort.firewolf.domain.model.message.Message
 import com.ort.firewolf.domain.model.village.Village
@@ -10,13 +9,13 @@ import org.springframework.stereotype.Service
 @Service
 class SuicideDomainService {
 
-    fun suicide(daychange: DayChange, charas: Charas): DayChange {
+    fun suicide(daychange: DayChange): DayChange {
         var village = daychange.village.copy()
         var messages = daychange.messages.copy()
 
         while (existsSuicideTarget(village)) {
             val target = findSuicideTarget(village)!!
-            messages = messages.add(createImmoralSuicideMessage(village, target, charas))
+            messages = messages.add(createImmoralSuicideMessage(village, target))
             village = village.suicideParticipant(target.id)
         }
 
@@ -41,10 +40,9 @@ class SuicideDomainService {
             .firstOrNull { it.skill!!.camp().isFoxs() }
     }
 
-    private fun createImmoralSuicideMessage(village: Village, target: VillageParticipant, charas: Charas): Message {
-        val name = charas.chara(target.charaId).charaName.fullName()
+    private fun createImmoralSuicideMessage(village: Village, target: VillageParticipant): Message {
         return Message.createPublicSystemMessage(
-            text = "${name}は、妖狐の後を追い、いなくなってしまった。",
+            text = "${target.name()}は、妖狐の後を追い、いなくなってしまった。",
             villageDayId = village.day.latestDay().id
         )
     }

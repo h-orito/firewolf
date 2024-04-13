@@ -28,7 +28,7 @@ import com.ort.dbflute.cbean.*;
  *     CHARA_GROUP_ID
  *
  * [column]
- *     CHARA_GROUP_ID, CHARA_GROUP_NAME, DESIGNER_ID, DESCRIPTION_URL, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
+ *     CHARA_GROUP_ID, CHARA_GROUP_NAME, DESIGNER_ID, DESCRIPTION_URL, IS_AVAILABLE_CHANGE_NAME, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
  *
  * [sequence]
  *     
@@ -67,7 +67,7 @@ public abstract class BsCharaGroupBhv extends AbstractBehaviorWritable<CharaGrou
     /** {@inheritDoc} */
     public CharaGroupDbm asDBMeta() { return CharaGroupDbm.getInstance(); }
     /** {@inheritDoc} */
-    public String asTableDbName() { return "chara_group"; }
+    public String asTableDbName() { return "CHARA_GROUP"; }
 
     // ===================================================================================
     //                                                                        New Instance

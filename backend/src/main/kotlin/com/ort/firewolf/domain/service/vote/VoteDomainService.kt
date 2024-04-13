@@ -1,7 +1,5 @@
 package com.ort.firewolf.domain.service.vote
 
-import com.ort.firewolf.domain.model.charachip.Chara
-import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.daychange.DayChange
 import com.ort.firewolf.domain.model.message.Message
 import com.ort.firewolf.domain.model.myself.participant.VillageVoteSituation
@@ -29,36 +27,33 @@ class VoteDomainService {
 
     fun assertVote(village: Village, participant: VillageParticipant?, targetId: Int) {
         if (!isAvailableVote(village, participant)) throw FirewolfBusinessException("投票できません")
-        if (getSelectableTargetList(village, participant).none { it.id == targetId }) throw FirewolfBusinessException("投票できません")
+        if (getSelectableTargetList(
+                village,
+                participant
+            ).none { it.id == targetId }
+        ) throw FirewolfBusinessException("投票できません")
     }
 
     /**
      * 投票結果メッセージ
-     * @param village village
-     * @param charas charas
-     * @param votedMap key: 非投票参加者ID, value: 投票
-     * @return 投票結果メッセージ
      */
     fun createEachVoteMessage(
         village: Village,
-        charas: Charas,
         votedMap: Map<Int, List<VillageVote>>
     ): Message {
         val maxFromCharaNameLength = votedMap.values.flatten().map { vote ->
-            charas.chara(village.participant, vote.myselfId).charaName.fullName().length
+            village.participant.member(vote.myselfId).name().length
         }.max()!!
         val maxToCharaNameLength = votedMap.values.flatten().map { vote ->
-            charas.chara(village.participant, vote.targetId).charaName.fullName().length
+            village.participant.member(vote.targetId).name().length
         }.max()!!
 
         val text = votedMap.entries.sortedBy { it.value.size }.reversed().map { entry ->
             // 得票数が多い順
             entry.value.map { vote ->
-                val fromChara = charas.chara(village.participant, vote.myselfId)
-                val toChara = charas.chara(village.participant, vote.targetId)
                 createEachVoteResultString(
-                    fromChara,
-                    toChara,
+                    village.participant.member(vote.myselfId),
+                    village.participant.member(vote.targetId),
                     maxFromCharaNameLength,
                     maxToCharaNameLength,
                     entry.value.size
@@ -99,30 +94,24 @@ class VoteDomainService {
     //                                                                        Assist Logic
     //                                                                        ============
     /**
-     * @param fromChara 投票したキャラ
-     * @param toChara 投票されたキャラ
-     * @param maxFromCharaNameLength 投票したキャラの最大文字数
-     * @param maxToCharaNameLength 投票されたキャラの最大文字数
-     * @param count 得票数
      * @return {キャラ名} -> {キャラ名}（{N}票）
      */
     private fun createEachVoteResultString(
-        fromChara: Chara,
-        toChara: Chara,
+        from: VillageParticipant,
+        target: VillageParticipant,
         maxFromCharaNameLength: Int,
         maxToCharaNameLength: Int,
         count: Int
     ): String {
-        return fromChara.charaName.fullName().padEnd(
+        val fromString = from.name().padEnd(
             length = maxFromCharaNameLength,
             padChar = '　'
-        ) +
-            " → " +
-            toChara.charaName.fullName().padEnd(
-                length = maxToCharaNameLength,
-                padChar = '　'
-            ) +
-            "(${count}票)"
+        )
+        val toString = target.name().padEnd(
+            length = maxToCharaNameLength,
+            padChar = '　'
+        )
+        return "$fromString → ${toString}(${count}票)"
     }
 
     // ===================================================================================
@@ -141,11 +130,15 @@ class VoteDomainService {
         return village.participant.memberList.filter { it.isAlive() }
     }
 
-    fun getSelectingTarget(village: Village, participant: VillageParticipant?, votes: VillageVotes): VillageParticipant? {
+    fun getSelectingTarget(
+        village: Village,
+        participant: VillageParticipant?,
+        votes: VillageVotes
+    ): VillageParticipant? {
         if (!isAvailableVote(village, participant)) return null
         val voteTargetParticipantId = votes.list.find {
             it.villageDayId == village.day.latestDay().id
-                && it.myselfId == participant!!.id
+                    && it.myselfId == participant!!.id
         }?.targetId ?: return null
         return village.participant.member(voteTargetParticipantId)
     }

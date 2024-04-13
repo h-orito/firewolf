@@ -1,7 +1,6 @@
 package com.ort.firewolf.application.service
 
 import com.ort.dbflute.allcommon.CDef
-import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.message.Message
 import com.ort.firewolf.domain.model.player.Players
 import com.ort.firewolf.domain.model.village.Village
@@ -71,27 +70,25 @@ class NotificationService(
     fun notifyReceiveMessageToCustomerIfNeeded(
         village: Village,
         players: Players,
-        charas: Charas,
         message: Message
     ) {
         // 秘話→アンカー→キーワード→役職窓の順
         val alreadyNotifiedParticipantIds = mutableListOf<Int>()
-        notifyReceiveSecretSayToCustomerIfNeeded(village, message, charas)?.let {
+        notifyReceiveSecretSayToCustomerIfNeeded(village, message)?.let {
             alreadyNotifiedParticipantIds.add(it)
         }
         val idsByAnchor =
-            notifyReceiveAnchorToCustomerIfNeeded(village, players, charas, message, alreadyNotifiedParticipantIds)
+            notifyReceiveAnchorToCustomerIfNeeded(village, players, message, alreadyNotifiedParticipantIds)
         alreadyNotifiedParticipantIds.addAll(idsByAnchor)
         val idsByKeyword =
-            notifyReceiveKeywordToCustomerIfNeeded(village, players, charas, message, alreadyNotifiedParticipantIds)
+            notifyReceiveKeywordToCustomerIfNeeded(village, players, message, alreadyNotifiedParticipantIds)
         alreadyNotifiedParticipantIds.addAll(idsByKeyword)
-        notifyReceiveAbilitySayToCustomerIfNeeded(village, players, charas, message, alreadyNotifiedParticipantIds)
+        notifyReceiveAbilitySayToCustomerIfNeeded(village, players, message, alreadyNotifiedParticipantIds)
     }
 
     private fun notifyReceiveSecretSayToCustomerIfNeeded(
         village: Village,
         message: Message,
-        charas: Charas
     ): Int? {
         if (message.content.type.toCdef() != CDef.MessageType.秘話) return null
         val toParticipant =
@@ -103,7 +100,7 @@ class NotificationService(
             discordRepository.postToWebhook(
                 webhookUrl = it.discordWebhookUrl,
                 villageId = village.id,
-                message = "${charas.chara(fromParticipant.charaId).charaName.fullName()}から秘話が届きました。",
+                message = "${fromParticipant.name()}から秘話が届きました。",
                 shouldContainVillageUrl = false
             )
             return toParticipant.id
@@ -113,7 +110,6 @@ class NotificationService(
     private fun notifyReceiveAnchorToCustomerIfNeeded(
         village: Village,
         players: Players,
-        charas: Charas,
         message: Message,
         alreadyNotifiedParticipantIds: List<Int>
     ): List<Int> {
@@ -143,8 +139,7 @@ class NotificationService(
                 val text = if (fromParticipant == null) {
                     "${messageTypeName}であなたの発言がアンカー指定されました。"
                 } else {
-                    val fromParticipantName = charas.chara(fromParticipant.charaId).charaName.fullName()
-                    "${fromParticipantName}の${messageTypeName}であなたの発言がアンカー指定されました。"
+                    "${fromParticipant.name()}の${messageTypeName}であなたの発言がアンカー指定されました。"
                 }
                 discordRepository.postToWebhook(
                     webhookUrl = it.notification!!.discordWebhookUrl,
@@ -160,7 +155,6 @@ class NotificationService(
     private fun notifyReceiveKeywordToCustomerIfNeeded(
         village: Village,
         players: Players,
-        charas: Charas,
         message: Message,
         alreadyNotifiedParticipantIds: List<Int>
     ): List<Int> {
@@ -192,8 +186,7 @@ class NotificationService(
                 val text = if (fromParticipant == null) {
                     "${messageTypeName}に指定キーワードが含まれています。"
                 } else {
-                    val fromParticipantName = charas.chara(fromParticipant.charaId).charaName.fullName()
-                    "${fromParticipantName}の${messageTypeName}に指定キーワードが含まれています。"
+                    "${fromParticipant.name()}の${messageTypeName}に指定キーワードが含まれています。"
                 }
                 discordRepository.postToWebhook(
                     webhookUrl = it.notification!!.discordWebhookUrl,
@@ -209,7 +202,6 @@ class NotificationService(
     private fun notifyReceiveAbilitySayToCustomerIfNeeded(
         village: Village,
         players: Players,
-        charas: Charas,
         message: Message,
         alreadyNotifiedParticipantIds: List<Int>
     ) {
@@ -231,11 +223,10 @@ class NotificationService(
             }.filter {
                 it.notification?.message?.abilitySay ?: false
             }.forEach {
-                val fromParticipantName = charas.chara(fromParticipant.charaId).charaName.fullName()
                 discordRepository.postToWebhook(
                     webhookUrl = it.notification!!.discordWebhookUrl,
                     villageId = village.id,
-                    message = "${fromParticipantName}から${message.content.type.name}が届きました。",
+                    message = "${fromParticipant.name()}から${message.content.type.name}が届きました。",
                     shouldContainVillageUrl = false
                 )
             }

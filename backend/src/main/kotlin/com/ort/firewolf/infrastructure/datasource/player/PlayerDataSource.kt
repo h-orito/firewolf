@@ -64,9 +64,7 @@ class PlayerDataSource(
         val playerList = playerBhv.selectList {
             it.setupSelect_TwitterUserAsOne()
             it.setupSelect_PlayerDetailAsOne()
-            it.query().existsVillagePlayer {
-                it.query().setPlayerId_InScope(playerIdList)
-            }
+            it.query().setPlayerId_InScope(playerIdList)
         }
         return Players(list = playerList.map { convertPlayerToSimplePlayer(it) })
     }

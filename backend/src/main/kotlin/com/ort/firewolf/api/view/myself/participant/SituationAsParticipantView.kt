@@ -1,6 +1,7 @@
 package com.ort.firewolf.api.view.myself.participant
 
 import com.ort.firewolf.domain.model.charachip.Charas
+import com.ort.firewolf.domain.model.myself.participant.ParticipantRpSituation
 import com.ort.firewolf.domain.model.myself.participant.SituationAsParticipant
 import com.ort.firewolf.domain.model.myself.participant.VillageAdminSituation
 import com.ort.firewolf.domain.model.myself.participant.VillageComingOutSituation
@@ -16,6 +17,7 @@ data class SituationAsParticipantView(
     val commit: VillageCommitSituation,
     val comingOut: VillageComingOutSituation,
     val say: VillageSaySituationView,
+    val rp: ParticipantRpSituation,
     val ability: VillageAbilitySituationsView,
     val vote: VillageVoteSituationView,
     val creator: VillageCreatorSituation,
@@ -44,6 +46,7 @@ data class SituationAsParticipantView(
             charas = charas,
             shouldHidePlayer = !village.status.isSolved()
         ),
+        rp = situation.rp,
         ability = VillageAbilitySituationsView(
             situation = situation.ability,
             village = village,

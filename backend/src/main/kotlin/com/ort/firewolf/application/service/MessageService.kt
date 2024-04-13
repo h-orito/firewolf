@@ -85,13 +85,10 @@ class MessageService(
 
     /**
      * 発言登録
-     *
-     * @param villageId villageId
-     * @param message 発言内容
      */
-    fun registerMessage(villageId: Int, message: Message): Message {
-        val registered = messageDataSource.registerMessage(villageId, message)
-        notificationService.notifyToDeveloperIfNeeded(villageId, registered)
+    fun registerMessage(village: Village, message: Message): Message {
+        val registered = messageDataSource.registerMessage(village, message)
+        notificationService.notifyToDeveloperIfNeeded(village.id, registered)
         return registered
     }
 
@@ -99,7 +96,7 @@ class MessageService(
      * 村作成時のシステムメッセージ登録
      * @param village village
      */
-    fun registerInitialMessage(village: Village) = registerMessage(village.id, village.createVillagePrologueMessage())
+    fun registerInitialMessage(village: Village) = registerMessage(village, village.createVillagePrologueMessage())
 
     /**
      * 村に参加する際の発言を登録
@@ -118,7 +115,7 @@ class MessageService(
     ) {
         // {N}人目、{キャラ名}。
         messageDataSource.registerMessage(
-            village.id,
+            village,
             participateDomainService.createParticipateMessage(village, chara, isSpectate)
         )
         // 参加発言
@@ -128,20 +125,31 @@ class MessageService(
             CDef.FaceType.通常.code()
         )
         registerMessage(
-            village.id,
+            village,
             Message.createSayMessage(participant, village.day.prologueDay().id, messageContent)
         )
     }
 
     /**
-     * 退村する際のシステムメッセージを登録
-     * @param village village
-     * @param chara chara
+     * 名前変更する際のシステムメッセージを登録
      */
-    fun registerLeaveMessage(village: Village, chara: Chara) =
+    fun registerChangeNameMessage(
+        village: Village,
+        before: VillageParticipant,
+        after: VillageParticipant
+    ) =
         registerMessage(
-            village.id,
-            participateDomainService.createLeaveMessage(village, chara)
+            village,
+            participateDomainService.createChangeNameMessage(village, before, after)
+        )
+
+    /**
+     * 退村する際のシステムメッセージを登録
+     */
+    fun registerLeaveMessage(village: Village, participant: VillageParticipant) =
+        registerMessage(
+            village,
+            participateDomainService.createLeaveMessage(village, participant)
         )
 
     /**
@@ -159,40 +167,32 @@ class MessageService(
         abilityType: AbilityType,
         charas: Charas
     ) {
-        val myChara: Chara = charas.chara(participant.charaId)
-        val targetChara: Chara? = if (targetId == null) null else charas.chara(village.participant, targetId)
-        val message: Message = abilityDomainService.createAbilitySetMessage(village, myChara, targetChara, abilityType)
-        registerMessage(village.id, message)
+        val target = targetId?.let { village.participant.member(it) }
+        val message: Message = abilityDomainService.createAbilitySetMessage(village, participant, target, abilityType)
+        registerMessage(village, message)
     }
 
     /**
      * コミットする際のシステムメッセージを登録
-     *
-     * @param village village
-     * @param chara キャラ
-     * @param doCommit コミット/取り消し
      */
-    fun registerCommitMessage(village: Village, chara: Chara, doCommit: Boolean) {
+    fun registerCommitMessage(village: Village, myself: VillageParticipant, doCommit: Boolean) {
         registerMessage(
-            village.id,
-            commitDomainService.createCommitMessage(chara, doCommit, village.day.latestDay().id)
+            village,
+            commitDomainService.createCommitMessage(myself, doCommit, village.day.latestDay().id)
         )
     }
 
-    fun registerComingOutMessage(village: Village, chara: Chara, skills: Skills) {
+    fun registerComingOutMessage(village: Village, myself: VillageParticipant, skills: Skills) {
         registerMessage(
-            village.id,
-            comingOutDomainService.createComingOutMessage(chara, skills, village.day.latestDay().id)
+            village,
+            comingOutDomainService.createComingOutMessage(myself, skills, village.day.latestDay().id)
         )
     }
 
     /**
      * 差分更新
-     * @param villageId villageId
-     * @param before messages
-     * @param after messages
      */
-    fun updateDifference(villageId: Int, before: Messages, after: Messages) {
-        messageDataSource.updateDifference(villageId, before, after)
+    fun updateDifference(village: Village, before: Messages, after: Messages) {
+        messageDataSource.updateDifference(village, before, after)
     }
 }

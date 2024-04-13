@@ -3,7 +3,6 @@ package com.ort.firewolf.domain.service.ability
 import com.ort.dbflute.allcommon.CDef
 import com.ort.firewolf.domain.model.ability.AbilityType
 import com.ort.firewolf.domain.model.ability.AbilityTypes
-import com.ort.firewolf.domain.model.charachip.Chara
 import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.daychange.DayChange
 import com.ort.firewolf.domain.model.message.Message
@@ -51,11 +50,11 @@ class AbilityDomainService(
     // 能力セットメッセージ
     fun createAbilitySetMessage(
         village: Village,
-        myChara: Chara,
-        targetChara: Chara?,
+        myself: VillageParticipant,
+        target: VillageParticipant?,
         abilityType: AbilityType
     ): Message {
-        return detectDomainService(abilityType)?.createSetMessage(myChara, targetChara)?.let {
+        return detectDomainService(abilityType)?.createSetMessage(myself, target)?.let {
             Message.createPrivateSystemMessage(it, village.day.latestDay().id)
         } ?: throw IllegalStateException("想定外の能力")
     }
@@ -133,17 +132,17 @@ class AbilityDomainService(
         return dayChange.copy(abilities = abilities).setIsChange(dayChange)
     }
 
-    fun addRecongnizeMessages(orgDayChange: DayChange, charas: Charas): DayChange {
+    fun addRecongnizeMessages(orgDayChange: DayChange): DayChange {
         // 人狼系役職メッセージ追加
-        var dayChange = addWolfsConfirmMessage(orgDayChange, charas)
+        var dayChange = addWolfsConfirmMessage(orgDayChange)
         // 狂信者がいれば狂信者向けメッセージ追加
-        dayChange = addFanaticMessageIfNeeded(dayChange, charas)
+        dayChange = addFanaticMessageIfNeeded(dayChange)
         // 共有がいれば役職メッセージ追加
-        dayChange = addMasonsConfirmMessageIfNeeded(dayChange, charas)
+        dayChange = addMasonsConfirmMessageIfNeeded(dayChange)
         // 共鳴がいれば役職メッセージ追加
-        dayChange = addSympathizersConfirmMessageIfNeeded(dayChange, charas)
+        dayChange = addSympathizersConfirmMessageIfNeeded(dayChange)
         // 妖狐系がいれば役職メッセージ追加
-        dayChange = addFoxsConfirmMessageIfNeeded(dayChange, charas)
+        dayChange = addFoxsConfirmMessageIfNeeded(dayChange)
 
         return dayChange
     }
@@ -186,32 +185,32 @@ class AbilityDomainService(
         )
     }
 
-    private fun addWolfsConfirmMessage(dayChange: DayChange, charas: Charas): DayChange {
+    private fun addWolfsConfirmMessage(dayChange: DayChange): DayChange {
         return dayChange.copy(
-            messages = dayChange.messages.add(dayChange.village.createWolfsConfirmMessage(charas))
+            messages = dayChange.messages.add(dayChange.village.createWolfsConfirmMessage())
         )
     }
 
-    private fun addFanaticMessageIfNeeded(dayChange: DayChange, charas: Charas): DayChange {
-        return dayChange.village.createFanaticConfirmMessage(charas)?.let {
+    private fun addFanaticMessageIfNeeded(dayChange: DayChange): DayChange {
+        return dayChange.village.createFanaticConfirmMessage()?.let {
             dayChange.copy(messages = dayChange.messages.add(it))
         } ?: dayChange
     }
 
-    private fun addMasonsConfirmMessageIfNeeded(dayChange: DayChange, charas: Charas): DayChange {
-        return dayChange.village.createMasonsConfirmMessage(charas)?.let {
+    private fun addMasonsConfirmMessageIfNeeded(dayChange: DayChange): DayChange {
+        return dayChange.village.createMasonsConfirmMessage()?.let {
             dayChange.copy(messages = dayChange.messages.add(it))
         } ?: dayChange
     }
 
-    private fun addSympathizersConfirmMessageIfNeeded(dayChange: DayChange, charas: Charas): DayChange {
-        return dayChange.village.createSympathizersConfirmMessage(charas)?.let {
+    private fun addSympathizersConfirmMessageIfNeeded(dayChange: DayChange): DayChange {
+        return dayChange.village.createSympathizersConfirmMessage()?.let {
             dayChange.copy(messages = dayChange.messages.add(it))
         } ?: dayChange
     }
 
-    private fun addFoxsConfirmMessageIfNeeded(dayChange: DayChange, charas: Charas): DayChange {
-        return dayChange.village.createFoxsConfirmMessage(charas)?.let {
+    private fun addFoxsConfirmMessageIfNeeded(dayChange: DayChange): DayChange {
+        return dayChange.village.createFoxsConfirmMessage()?.let {
             dayChange.copy(messages = dayChange.messages.add(it))
         } ?: dayChange
     }

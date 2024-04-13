@@ -20,7 +20,7 @@ import com.ort.dbflute.cbean.*;
 import com.ort.dbflute.cbean.cq.*;
 
 /**
- * The base condition-bean of message.
+ * The base condition-bean of MESSAGE.
  * @author DBFlute(AutoGenerator)
  */
 public class BsMessageCB extends AbstractConditionBean {
@@ -76,7 +76,7 @@ public class BsMessageCB extends AbstractConditionBean {
     }
 
     public String asTableDbName() {
-        return "message";
+        return "MESSAGE";
     }
 
     // ===================================================================================
@@ -358,6 +358,26 @@ public class BsMessageCB extends AbstractConditionBean {
          */
         public SpecifiedColumn columnFaceTypeCode() { return doColumn("FACE_TYPE_CODE"); }
         /**
+         * CHARA_NAME: {VARCHAR(40)}
+         * @return The information object of specified column. (NotNull)
+         */
+        public SpecifiedColumn columnCharaName() { return doColumn("CHARA_NAME"); }
+        /**
+         * CHARA_SHORT_NAME: {CHAR(1)}
+         * @return The information object of specified column. (NotNull)
+         */
+        public SpecifiedColumn columnCharaShortName() { return doColumn("CHARA_SHORT_NAME"); }
+        /**
+         * TO_CHARA_NAME: {VARCHAR(40)}
+         * @return The information object of specified column. (NotNull)
+         */
+        public SpecifiedColumn columnToCharaName() { return doColumn("TO_CHARA_NAME"); }
+        /**
+         * TO_CHARA_SHORT_NAME: {CHAR(1)}
+         * @return The information object of specified column. (NotNull)
+         */
+        public SpecifiedColumn columnToCharaShortName() { return doColumn("TO_CHARA_SHORT_NAME"); }
+        /**
          * REGISTER_DATETIME: {NotNull, DATETIME(19)}
          * @return The information object of specified column. (NotNull)
          */
@@ -386,10 +406,10 @@ public class BsMessageCB extends AbstractConditionBean {
             columnMessageTypeCode(); // PK
         }
         @Override
-        protected String getTableDbName() { return "message"; }
+        protected String getTableDbName() { return "MESSAGE"; }
         /**
          * Prepare for (Specify)DerivedReferrer (correlated sub-query). <br>
-         * {select max(FOO) from message_sendto where ...) as FOO_MAX} <br>
+         * {select max(FOO) from MESSAGE_SENDTO where ...) as FOO_MAX} <br>
          * MESSAGE_SENDTO by VILLAGE_ID, MESSAGE_TYPE_CODE, MESSAGE_NUMBER, named 'messageSendtoList'.
          * <pre>
          * cb.specify().<span style="color: #CC4747">derived${relationMethodIdentityName}()</span>.<span style="color: #CC4747">max</span>(sendtoCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {

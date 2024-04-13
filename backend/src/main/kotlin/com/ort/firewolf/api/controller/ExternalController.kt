@@ -52,7 +52,6 @@ class ExternalController(
         form.vid?.let { vid -> villageIdList = villageIdList.filter { vid.contains(it) } }
         if (villageIdList.isEmpty()) return VillageRecordsView(listOf())
         val villageList = villageService.findVillagesAsDetail(villageIdList).list.sortedBy { it.id }
-        val charas = charachipService.findCharas(villageList.flatMap { it.setting.charachip.charachipIds }.distinct())
         val players = playerService.findPlayers(
             playerIdList = villageList.flatMap {
                 (it.participant.memberList + it.spectator.memberList).map { member -> member.playerId!! }
@@ -60,7 +59,6 @@ class ExternalController(
         )
         return VillageRecordsView(
             villages = Villages(villageList),
-            charas = charas,
             players = players
         )
     }
@@ -72,7 +70,7 @@ class ExternalController(
                 VillageStatus(CDef.VillageStatus.エピローグ),
                 VillageStatus(CDef.VillageStatus.終了)
             )
-        ).list.map { it.id }.max() ?: 0
+        ).list.maxOfOrNull { it.id } ?: 0
         return LatestVillageRecordView(
             vid = maxVillageId
         )
