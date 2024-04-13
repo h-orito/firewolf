@@ -1,5 +1,6 @@
 package com.ort.firewolf.api.view.charachip
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.ort.firewolf.domain.model.charachip.Chara
 import com.ort.firewolf.domain.model.charachip.Charachip
 import com.ort.firewolf.domain.model.charachip.Charas
@@ -10,7 +11,8 @@ data class CharachipView(
     val name: String,
     val designer: Designer,
     val descriptionUrl: String,
-    val charaList: List<Chara> // domainとの違い
+    val charaList: List<Chara>, // domainとの違い
+    @JsonProperty("is_available_change_name") val isAvailableChangeName: Boolean
 ) {
 
     constructor(
@@ -21,6 +23,7 @@ data class CharachipView(
         name = charachip.name,
         designer = charachip.designer,
         descriptionUrl = charachip.descriptionUrl,
-        charaList = charas.list.filter { it.charachipId == charachip.id }
+        charaList = charas.list.filter { it.charachipId == charachip.id },
+        isAvailableChangeName = charachip.isAvailableChangeName
     )
 }
