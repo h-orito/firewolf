@@ -404,7 +404,7 @@ class VillageController(
         val participant = villageCoordinator.findParticipant(village, user)
         val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipIds)
         val players: Players = playerService.findPlayers(villageId)
-        val target = body.targetId?.let { village.participant.member(it) }
+        val target = body.targetId?.let { village.allParticipants().member(it) }
         return MessageView(
             message = Message(
                 fromVillageParticipantId = participant!!.id,

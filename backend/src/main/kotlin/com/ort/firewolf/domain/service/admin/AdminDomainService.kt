@@ -14,7 +14,7 @@ class AdminDomainService {
         if (myself?.playerId != 1) return VillageAdminSituation(false, listOf())
         return VillageAdminSituation(
             admin = true,
-            participantList = village.participant.memberList.map { participant ->
+            participantList = village.allParticipants().memberList.map { participant ->
                 VillageParticipantSituation(
                     name = participant.name(),
                     nickname = players.list.find { it.id == participant.playerId }!!.nickname,

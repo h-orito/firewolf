@@ -200,12 +200,12 @@ class MessageDataSource(
         mes.messageDatetime = now
         mes.messageUnixtimestampMilli = now.toInstant(ZoneOffset.ofHours(+9)).toEpochMilli()
         message.fromVillageParticipantId?.let { participantId ->
-            val participant = village.participant.member(participantId)
+            val participant = village.allParticipants().member(participantId)
             mes.charaName = participant.charaName.name
             mes.charaShortName = participant.charaName.shortName
         }
         message.toVillageParticipantId?.let { participantId ->
-            val participant = village.participant.member(participantId)
+            val participant = village.allParticipants().member(participantId)
             mes.toCharaName = participant.charaName.name
             mes.toCharaShortName = participant.charaName.shortName
         }
