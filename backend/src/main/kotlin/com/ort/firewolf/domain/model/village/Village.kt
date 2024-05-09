@@ -393,7 +393,7 @@ data class Village(
 
     // 名前変更
     fun changeName(participantId: Int, name: String, shortName: String): Village =
-        this.copy(participant = participant.changeName(participantId, name, shortName))
+        this.copy(participant = allParticipants().changeName(participantId, name, shortName))
 
     // 全員おまかせに変更
     fun changeAllSkillRequestLeftover(): Village =
