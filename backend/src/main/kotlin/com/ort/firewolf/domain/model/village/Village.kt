@@ -392,8 +392,14 @@ data class Village(
         this.copy(participant = participant.changeSkillRequest(participantId, first, second))
 
     // 名前変更
-    fun changeName(participantId: Int, name: String, shortName: String): Village =
-        this.copy(participant = allParticipants().changeName(participantId, name, shortName))
+    fun changeName(participantId: Int, name: String, shortName: String): Village {
+        val member = findMemberById(participantId) ?: return this
+        return if (member.isSpectator) {
+            this.copy(spectator = spectator.changeName(participantId, name, shortName))
+        } else {
+            this.copy(participant = participant.changeName(participantId, name, shortName))
+        }
+    }
 
     // 全員おまかせに変更
     fun changeAllSkillRequestLeftover(): Village =
