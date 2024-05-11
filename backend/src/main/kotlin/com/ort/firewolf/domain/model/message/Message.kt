@@ -2,13 +2,14 @@ package com.ort.firewolf.domain.model.message
 
 import com.ort.dbflute.allcommon.CDef
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
+import com.ort.firewolf.domain.model.village.participant.VillageParticipantName
 import com.ort.firewolf.fw.FirewolfDateUtil
 
 data class Message(
     val fromVillageParticipantId: Int?,
-    val fromCharacterName: String?,
+    val fromCharacterName: VillageParticipantName?,
     val toVillageParticipantId: Int?,
-    val toCharacterName: String?,
+    val toCharacterName: VillageParticipantName?,
     val time: MessageTime,
     val content: MessageContent,
     val sendToParticipantIds: List<Int> = emptyList()
@@ -24,9 +25,9 @@ data class Message(
             to: VillageParticipant? = null
         ): Message = Message(
             fromVillageParticipantId = from.id,
-            fromCharacterName = from.name(),
+            fromCharacterName = from.charaName,
             toVillageParticipantId = to?.id,
-            toCharacterName = to?.name(),
+            toCharacterName = to?.charaName,
             time = MessageTime(
                 villageDayId = villageDayId,
                 datetime = FirewolfDateUtil.currentLocalDateTime(), // dummy

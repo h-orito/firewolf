@@ -14,6 +14,7 @@ import com.ort.firewolf.domain.model.message.MessageType
 import com.ort.firewolf.domain.model.message.Messages
 import com.ort.firewolf.domain.model.village.Village
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
+import com.ort.firewolf.domain.model.village.participant.VillageParticipantName
 import com.ort.firewolf.fw.FirewolfDateUtil
 import com.ort.firewolf.fw.exception.FirewolfBusinessException
 import org.dbflute.cbean.result.PagingResultBean
@@ -318,11 +319,17 @@ class MessageDataSource(
         return com.ort.firewolf.domain.model.message.Message(
             fromVillageParticipantId = message.villagePlayerId,
             fromCharacterName = message.charaName?.let {
-                "[${message.charaShortName}] $it"
+                VillageParticipantName(
+                    name = it,
+                    shortName = message.charaShortName
+                )
             },
             toVillageParticipantId = message.toVillagePlayerId,
             toCharacterName = message.toCharaName?.let {
-                "[${message.toCharaShortName}] $it"
+                VillageParticipantName(
+                    name = it,
+                    shortName = message.toCharaShortName
+                )
             },
             time = MessageTime(
                 villageDayId = message.villageDayId,

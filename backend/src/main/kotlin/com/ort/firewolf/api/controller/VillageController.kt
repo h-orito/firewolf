@@ -290,7 +290,12 @@ class VillageController(
                 commingOuts = ComingOuts(),
                 notification = null
             ),
+            fromCharacterName = VillageParticipantName(
+                name = chara.charaName.name,
+                shortName = chara.charaName.shortName
+            ),
             to = null,
+            toCharacterName = null,
             time = MessageTimeView(
                 villageDayId = 1, // dummy
                 day = 0,
@@ -408,9 +413,9 @@ class VillageController(
         return MessageView(
             message = Message(
                 fromVillageParticipantId = participant!!.id,
-                fromCharacterName = participant.name(),
+                fromCharacterName = participant.charaName,
                 toVillageParticipantId = body.targetId,
-                toCharacterName = target?.name(),
+                toCharacterName = target?.charaName,
                 time = MessageTime(
                     villageDayId = village.day.latestDay().id,
                     datetime = LocalDateTime.now(),
@@ -465,7 +470,7 @@ class VillageController(
         return MessageView(
             message = Message(
                 fromVillageParticipantId = participant!!.id,
-                fromCharacterName = participant.name(),
+                fromCharacterName = participant.charaName,
                 toVillageParticipantId = null,
                 toCharacterName = null,
                 time = MessageTime(
