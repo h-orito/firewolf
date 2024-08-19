@@ -45,6 +45,7 @@ data class Skill(
     fun isAvailableWerewolfSay(): Boolean = toCdef().isAvailableWerewolfSay
     fun isViewableSympathizeSay(): Boolean = toCdef().isViewableSympathizeSay
     fun isAvailableSympathizeSay(): Boolean = toCdef().isAvailableSympathizeSay
+    fun isViewableLoversMessage(): Boolean = camp().code == CDef.Camp.恋人陣営.code()
 
     fun canRecognizeWolf(): Boolean = toCdef().isRecognizableWolf
     fun canRecognizeEachMason(): Boolean = toCdef().isRecognizableEachMason
@@ -66,7 +67,8 @@ data class Skill(
             CDef.Skill.占い師 to listOf(CDef.AbilityType.占い),
             CDef.Skill.賢者 to listOf(CDef.AbilityType.占い),
             CDef.Skill.狩人 to listOf(CDef.AbilityType.護衛),
-            CDef.Skill.風来狩人 to listOf(CDef.AbilityType.風来護衛)
+            CDef.Skill.風来狩人 to listOf(CDef.AbilityType.風来護衛),
+            CDef.Skill.求愛者 to listOf(CDef.AbilityType.求愛),
         )
 
         // 説明書専用
@@ -82,7 +84,8 @@ data class Skill(
             CDef.Skill.パン屋 to listOf(AbilityType("BAKE", "パン焼き")),
             CDef.Skill.人狼 to listOf(AbilityType(CDef.AbilityType.襲撃)),
             CDef.Skill.呪狼 to listOf(AbilityType(CDef.AbilityType.襲撃)),
-            CDef.Skill.智狼 to listOf(AbilityType("WISEATTACK", "襲撃占い"))
+            CDef.Skill.智狼 to listOf(AbilityType("WISEATTACK", "襲撃占い")),
+            CDef.Skill.求愛者 to listOf(AbilityType(CDef.AbilityType.求愛)),
         )
 
         fun skillByShortName(shortName: String): Skill? {

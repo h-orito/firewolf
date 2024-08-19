@@ -17,11 +17,9 @@ class WandererGuardDomainService : GuardDomainService() {
 
     override fun getSelectableTargetList(
         village: Village,
-        participant: VillageParticipant?,
+        participant: VillageParticipant,
         villageAbilities: VillageAbilities
     ): List<VillageParticipant> {
-        participant ?: return listOf()
-
         // 1日目は護衛できない
         if (village.day.latestDay().day <= 1) return listOf()
 

@@ -71,7 +71,7 @@ public abstract class BsTwitterUser extends AbstractEntity implements DomainEnti
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
-    /** player_id: {PK, NotNull, INT UNSIGNED(10), FK to PLAYER} */
+    /** player_id: {PK, NotNull, INT UNSIGNED(10), FK to player} */
     protected Integer _playerId;
 
     /** TWITTER_USER_NAME: {NotNull, VARCHAR(15)} */
@@ -211,7 +211,7 @@ public abstract class BsTwitterUser extends AbstractEntity implements DomainEnti
     //                                                                            Accessor
     //                                                                            ========
     /**
-     * [get] player_id: {PK, NotNull, INT UNSIGNED(10), FK to PLAYER} <br>
+     * [get] player_id: {PK, NotNull, INT UNSIGNED(10), FK to player} <br>
      * @return The value of the column 'player_id'. (basically NotNull if selected: for the constraint)
      */
     public Integer getPlayerId() {
@@ -220,7 +220,7 @@ public abstract class BsTwitterUser extends AbstractEntity implements DomainEnti
     }
 
     /**
-     * [set] player_id: {PK, NotNull, INT UNSIGNED(10), FK to PLAYER} <br>
+     * [set] player_id: {PK, NotNull, INT UNSIGNED(10), FK to player} <br>
      * @param playerId The value of the column 'player_id'. (basically NotNull if update: for the constraint)
      */
     public void setPlayerId(Integer playerId) {

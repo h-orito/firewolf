@@ -39,7 +39,7 @@ class DayChangeDomainService(
             // プロローグ
             status.isPrologue() -> prologueDomainService.dayChange(dayChange, charas)
             // 進行中
-            status.isProgress() -> progressDomainService.dayChange(dayChange, todayMessages, charas, commits)
+            status.isProgress() -> progressDomainService.dayChange(dayChange, todayMessages, commits)
             // エピローグ
             status.isEpilogue() -> epilogueDomainService.dayChange(dayChange)
             // 終了後

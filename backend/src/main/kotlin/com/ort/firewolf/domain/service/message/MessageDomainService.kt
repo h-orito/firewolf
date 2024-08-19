@@ -7,7 +7,15 @@ import com.ort.firewolf.domain.model.player.Player
 import com.ort.firewolf.domain.model.village.Village
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 import com.ort.firewolf.domain.service.message.say.SayDomainService
-import com.ort.firewolf.domain.service.message.system.*
+import com.ort.firewolf.domain.service.message.system.AttackMessageDomainService
+import com.ort.firewolf.domain.service.message.system.AutopsyMessageDomainService
+import com.ort.firewolf.domain.service.message.system.FanaticMessageDomainService
+import com.ort.firewolf.domain.service.message.system.FoxMessageDomainService
+import com.ort.firewolf.domain.service.message.system.GuruPsychicMessageDomainService
+import com.ort.firewolf.domain.service.message.system.MasonMessageDomainService
+import com.ort.firewolf.domain.service.message.system.PrivateSystemMessageDomainService
+import com.ort.firewolf.domain.service.message.system.PsychicMessageDomainService
+import com.ort.firewolf.domain.service.message.system.SympathizerMessageDomainService
 import org.springframework.stereotype.Service
 
 @Service

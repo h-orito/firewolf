@@ -19,11 +19,9 @@ class AttackDomainService : IAbilityDomainService {
 
     override fun getSelectableTargetList(
         village: Village,
-        participant: VillageParticipant?,
+        participant: VillageParticipant,
         villageAbilities: VillageAbilities
     ): List<VillageParticipant> {
-        participant ?: return listOf()
-
         return if (village.day.latestDay().day == 1) {
             // ダミーキャラ固定
             listOf(village.dummyChara())

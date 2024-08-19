@@ -27,6 +27,7 @@ import com.ort.firewolf.domain.model.skill.Skills
 import com.ort.firewolf.domain.model.village.*
 import com.ort.firewolf.domain.model.village.participant.VillageParticipantName
 import com.ort.firewolf.domain.model.village.participant.VillageParticipantNotificationCondition
+import com.ort.firewolf.domain.model.village.participant.VillageParticipantStatus
 import com.ort.firewolf.domain.model.village.participant.coming_out.ComingOuts
 import com.ort.firewolf.fw.exception.FirewolfBusinessException
 import com.ort.firewolf.fw.security.FirewolfUser
@@ -282,11 +283,13 @@ class VillageController(
                 ),
                 chara = CharaView(chara),
                 player = null,
+                status = VillageParticipantStatus(),
                 dead = null,
                 spectator = body.spectator ?: false,
                 skill = null,
                 skillRequest = null,
                 win = null,
+                camp = null,
                 commingOuts = ComingOuts(),
                 notification = null
             ),

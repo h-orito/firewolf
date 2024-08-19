@@ -1,6 +1,5 @@
 package com.ort.firewolf.domain.service.daychange
 
-import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.commit.Commits
 import com.ort.firewolf.domain.model.daychange.DayChange
 import com.ort.firewolf.domain.model.message.Message
@@ -10,6 +9,7 @@ import com.ort.firewolf.domain.service.ability.AbilityDomainService
 import com.ort.firewolf.domain.service.ability.AttackDomainService
 import com.ort.firewolf.domain.service.ability.AutopsyDomainService
 import com.ort.firewolf.domain.service.ability.BakeryDomainService
+import com.ort.firewolf.domain.service.ability.CourtDomainService
 import com.ort.firewolf.domain.service.ability.DivineDomainService
 import com.ort.firewolf.domain.service.ability.GuardDomainService
 import com.ort.firewolf.domain.service.ability.GuruDomainService
@@ -32,6 +32,7 @@ class ProgressDomainService(
     private val attackDomainService: AttackDomainService,
     private val autopsyDomainService: AutopsyDomainService,
     private val bakeryDomainService: BakeryDomainService,
+    private val courtDomainService: CourtDomainService,
     private val miserableDeathDomainService: MiserableDeathDomainService,
     private val suddenlyDeathDomainService: SuddenlyDeathDomainService,
     private val suicideDomainService: SuicideDomainService,
@@ -50,11 +51,14 @@ class ProgressDomainService(
     fun dayChange(
         beforeDayChange: DayChange,
         todayMessages: Messages,
-        charas: Charas,
         commits: Commits
     ): DayChange {
         // 突然死
-        var dayChange = suddenlyDeathDomainService.processDayChangeAction(beforeDayChange, todayMessages, charas, commits)
+        var dayChange =
+            suddenlyDeathDomainService.processDayChangeAction(beforeDayChange, todayMessages, commits)
+
+        // 求愛
+        dayChange = courtDomainService.processDayChangeAction(dayChange)
 
         // 処刑
         dayChange = executeDomainService.processDayChangeAction(dayChange)
@@ -106,7 +110,7 @@ class ProgressDomainService(
         dayChange = voteDomainService.addDefaultVote(dayChange)
 
         // 生存者メッセージ登録
-        dayChange = addAliveMemberMessage(dayChange, charas)
+        dayChange = addAliveMemberMessage(dayChange)
 
         return dayChange.setIsChange(beforeDayChange)
     }
@@ -148,19 +152,17 @@ class ProgressDomainService(
     }
 
     // 生存者メッセージ
-    private fun addAliveMemberMessage(dayChange: DayChange, charas: Charas): DayChange {
+    private fun addAliveMemberMessage(dayChange: DayChange): DayChange {
         return dayChange.copy(
-            messages = dayChange.messages.add(createAliveMemberMessage(dayChange.village, charas))
+            messages = dayChange.messages.add(createAliveMemberMessage(dayChange.village))
         )
     }
 
-    private fun createAliveMemberMessage(village: Village, charas: Charas): Message {
+    private fun createAliveMemberMessage(village: Village): Message {
         val text = village.participant.filterAlive().memberList.joinToString(
             separator = "\n",
             prefix = "現在の生存者は以下の${village.participant.filterAlive().count}名。\n"
-        ) { member ->
-            charas.chara(member.charaId).charaName.fullName()
-        }
+        ) { member -> member.name() }
         return Message.createPublicSystemMessage(text, village.day.latestDay().id)
     }
 }

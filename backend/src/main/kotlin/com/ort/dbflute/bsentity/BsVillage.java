@@ -87,16 +87,16 @@ public abstract class BsVillage extends AbstractEntity implements DomainEntity, 
     /** VILLAGE_DISPLAY_NAME: {NotNull, VARCHAR(40)} */
     protected String _villageDisplayName;
 
-    /** CREATE_PLAYER_ID: {IX, NotNull, INT UNSIGNED(10), FK to PLAYER} */
+    /** CREATE_PLAYER_ID: {IX, NotNull, INT UNSIGNED(10), FK to player} */
     protected Integer _createPlayerId;
 
-    /** VILLAGE_STATUS_CODE: {IX, NotNull, VARCHAR(20), FK to VILLAGE_STATUS, classification=VillageStatus} */
+    /** VILLAGE_STATUS_CODE: {IX, NotNull, VARCHAR(20), FK to village_status, classification=VillageStatus} */
     protected String _villageStatusCode;
 
     /** EPILOGUE_DAY: {INT UNSIGNED(10)} */
     protected Integer _epilogueDay;
 
-    /** WIN_CAMP_CODE: {IX, VARCHAR(20), FK to CAMP, classification=Camp} */
+    /** WIN_CAMP_CODE: {IX, VARCHAR(20), FK to camp, classification=Camp} */
     protected String _winCampCode;
 
     /** REGISTER_DATETIME: {NotNull, DATETIME(19)} */
@@ -121,7 +121,7 @@ public abstract class BsVillage extends AbstractEntity implements DomainEntity, 
 
     /** {@inheritDoc} */
     public String asTableDbName() {
-        return "VILLAGE";
+        return "village";
     }
 
     // ===================================================================================
@@ -138,7 +138,7 @@ public abstract class BsVillage extends AbstractEntity implements DomainEntity, 
     //                                                             =======================
     /**
      * Get the value of villageStatusCode as the classification of VillageStatus. <br>
-     * VILLAGE_STATUS_CODE: {IX, NotNull, VARCHAR(20), FK to VILLAGE_STATUS, classification=VillageStatus} <br>
+     * VILLAGE_STATUS_CODE: {IX, NotNull, VARCHAR(20), FK to village_status, classification=VillageStatus} <br>
      * 村ステータス
      * <p>It's treated as case insensitive and if the code value is null, it returns null.</p>
      * @return The instance of classification definition (as ENUM type). (NullAllowed: when the column value is null)
@@ -149,7 +149,7 @@ public abstract class BsVillage extends AbstractEntity implements DomainEntity, 
 
     /**
      * Set the value of villageStatusCode as the classification of VillageStatus. <br>
-     * VILLAGE_STATUS_CODE: {IX, NotNull, VARCHAR(20), FK to VILLAGE_STATUS, classification=VillageStatus} <br>
+     * VILLAGE_STATUS_CODE: {IX, NotNull, VARCHAR(20), FK to village_status, classification=VillageStatus} <br>
      * 村ステータス
      * @param cdef The instance of classification definition (as ENUM type). (NullAllowed: if null, null value is set to the column)
      */
@@ -159,7 +159,7 @@ public abstract class BsVillage extends AbstractEntity implements DomainEntity, 
 
     /**
      * Get the value of winCampCode as the classification of Camp. <br>
-     * WIN_CAMP_CODE: {IX, VARCHAR(20), FK to CAMP, classification=Camp} <br>
+     * WIN_CAMP_CODE: {IX, VARCHAR(20), FK to camp, classification=Camp} <br>
      * 陣営
      * <p>It's treated as case insensitive and if the code value is null, it returns null.</p>
      * @return The instance of classification definition (as ENUM type). (NullAllowed: when the column value is null)
@@ -170,7 +170,7 @@ public abstract class BsVillage extends AbstractEntity implements DomainEntity, 
 
     /**
      * Set the value of winCampCode as the classification of Camp. <br>
-     * WIN_CAMP_CODE: {IX, VARCHAR(20), FK to CAMP, classification=Camp} <br>
+     * WIN_CAMP_CODE: {IX, VARCHAR(20), FK to camp, classification=Camp} <br>
      * 陣営
      * @param cdef The instance of classification definition (as ENUM type). (NullAllowed: if null, null value is set to the column)
      */
@@ -227,6 +227,14 @@ public abstract class BsVillage extends AbstractEntity implements DomainEntity, 
      */
     public void setWinCampCode_狐陣営() {
         setWinCampCodeAsCamp(CDef.Camp.狐陣営);
+    }
+
+    /**
+     * Set the value of winCampCode as 恋人陣営 (LOVERS). <br>
+     * 恋人陣営
+     */
+    public void setWinCampCode_恋人陣営() {
+        setWinCampCodeAsCamp(CDef.Camp.恋人陣営);
     }
 
     /**
@@ -332,6 +340,17 @@ public abstract class BsVillage extends AbstractEntity implements DomainEntity, 
     public boolean isWinCampCode狐陣営() {
         CDef.Camp cdef = getWinCampCodeAsCamp();
         return cdef != null ? cdef.equals(CDef.Camp.狐陣営) : false;
+    }
+
+    /**
+     * Is the value of winCampCode 恋人陣営? <br>
+     * 恋人陣営
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isWinCampCode恋人陣営() {
+        CDef.Camp cdef = getWinCampCodeAsCamp();
+        return cdef != null ? cdef.equals(CDef.Camp.恋人陣営) : false;
     }
 
     /**
@@ -670,7 +689,7 @@ public abstract class BsVillage extends AbstractEntity implements DomainEntity, 
     }
 
     /**
-     * [get] CREATE_PLAYER_ID: {IX, NotNull, INT UNSIGNED(10), FK to PLAYER} <br>
+     * [get] CREATE_PLAYER_ID: {IX, NotNull, INT UNSIGNED(10), FK to player} <br>
      * 村作成プレイヤーID
      * @return The value of the column 'CREATE_PLAYER_ID'. (basically NotNull if selected: for the constraint)
      */
@@ -680,7 +699,7 @@ public abstract class BsVillage extends AbstractEntity implements DomainEntity, 
     }
 
     /**
-     * [set] CREATE_PLAYER_ID: {IX, NotNull, INT UNSIGNED(10), FK to PLAYER} <br>
+     * [set] CREATE_PLAYER_ID: {IX, NotNull, INT UNSIGNED(10), FK to player} <br>
      * 村作成プレイヤーID
      * @param createPlayerId The value of the column 'CREATE_PLAYER_ID'. (basically NotNull if update: for the constraint)
      */
@@ -690,7 +709,7 @@ public abstract class BsVillage extends AbstractEntity implements DomainEntity, 
     }
 
     /**
-     * [get] VILLAGE_STATUS_CODE: {IX, NotNull, VARCHAR(20), FK to VILLAGE_STATUS, classification=VillageStatus} <br>
+     * [get] VILLAGE_STATUS_CODE: {IX, NotNull, VARCHAR(20), FK to village_status, classification=VillageStatus} <br>
      * 村ステータスコード
      * @return The value of the column 'VILLAGE_STATUS_CODE'. (basically NotNull if selected: for the constraint)
      */
@@ -700,7 +719,7 @@ public abstract class BsVillage extends AbstractEntity implements DomainEntity, 
     }
 
     /**
-     * [set] VILLAGE_STATUS_CODE: {IX, NotNull, VARCHAR(20), FK to VILLAGE_STATUS, classification=VillageStatus} <br>
+     * [set] VILLAGE_STATUS_CODE: {IX, NotNull, VARCHAR(20), FK to village_status, classification=VillageStatus} <br>
      * 村ステータスコード
      * @param villageStatusCode The value of the column 'VILLAGE_STATUS_CODE'. (basically NotNull if update: for the constraint)
      */
@@ -731,7 +750,7 @@ public abstract class BsVillage extends AbstractEntity implements DomainEntity, 
     }
 
     /**
-     * [get] WIN_CAMP_CODE: {IX, VARCHAR(20), FK to CAMP, classification=Camp} <br>
+     * [get] WIN_CAMP_CODE: {IX, VARCHAR(20), FK to camp, classification=Camp} <br>
      * 勝利陣営コード
      * @return The value of the column 'WIN_CAMP_CODE'. (NullAllowed even if selected: for no constraint)
      */
@@ -741,7 +760,7 @@ public abstract class BsVillage extends AbstractEntity implements DomainEntity, 
     }
 
     /**
-     * [set] WIN_CAMP_CODE: {IX, VARCHAR(20), FK to CAMP, classification=Camp} <br>
+     * [set] WIN_CAMP_CODE: {IX, VARCHAR(20), FK to camp, classification=Camp} <br>
      * 勝利陣営コード
      * @param winCampCode The value of the column 'WIN_CAMP_CODE'. (NullAllowed: null update allowed for no constraint)
      */

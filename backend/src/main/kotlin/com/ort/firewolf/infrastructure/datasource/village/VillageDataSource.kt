@@ -8,6 +8,7 @@ import com.ort.dbflute.exbhv.VillageDayBhv
 import com.ort.dbflute.exbhv.VillagePlayerAccessInfoBhv
 import com.ort.dbflute.exbhv.VillagePlayerBhv
 import com.ort.dbflute.exbhv.VillagePlayerNotificationBhv
+import com.ort.dbflute.exbhv.VillagePlayerStatusBhv
 import com.ort.dbflute.exbhv.VillageSettingBhv
 import com.ort.dbflute.exentity.MessageRestriction
 import com.ort.dbflute.exentity.Village
@@ -16,10 +17,12 @@ import com.ort.dbflute.exentity.VillageDay
 import com.ort.dbflute.exentity.VillagePlayer
 import com.ort.dbflute.exentity.VillagePlayerAccessInfo
 import com.ort.dbflute.exentity.VillagePlayerNotification
+import com.ort.dbflute.exentity.VillagePlayerStatus
 import com.ort.dbflute.exentity.VillageSetting
 import com.ort.firewolf.domain.model.village.Villages
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 import com.ort.firewolf.domain.model.village.participant.VillageParticipantNotificationCondition
+import com.ort.firewolf.domain.model.village.participant.VillageParticipantStatus
 import com.ort.firewolf.domain.model.village.setting.VillageCharachip
 import com.ort.firewolf.domain.model.village.setting.VillageMessageRestrict
 import com.ort.firewolf.domain.model.village.setting.VillageSettings
@@ -35,6 +38,7 @@ class VillageDataSource(
     private val villageCharaGroupBhv: VillageCharaGroupBhv,
     private val villageDayBhv: VillageDayBhv,
     private val villagePlayerBhv: VillagePlayerBhv,
+    private val villagePlayerStatusBhv: VillagePlayerStatusBhv,
     private val villagePlayerAccessInfoBhv: VillagePlayerAccessInfoBhv,
     private val messageRestrictionBhv: MessageRestrictionBhv,
     private val villagePlayerNotificationBhv: VillagePlayerNotificationBhv
@@ -188,6 +192,8 @@ class VillageDataSource(
             }.withNestedReferrer {
                 it.pulloutChara().loadCharaImage { }
                 it.loadVillagePlayerAccessInfo { }
+                it.loadVillagePlayerStatusByVillagePlayerId { }
+                it.loadVillagePlayerStatusByToVillagePlayerId { }
             }
             loader.loadVillageSetting { }
             loader.loadVillageDay {
@@ -221,6 +227,8 @@ class VillageDataSource(
                 it.pulloutChara().loadCharaImage { }
                 it.loadComingOut { }
                 it.loadVillagePlayerAccessInfo { }
+                it.loadVillagePlayerStatusByVillagePlayerId { }
+                it.loadVillagePlayerStatusByToVillagePlayerId { }
             }
             loader.loadVillageSetting { }
             loader.loadVillageDay {
@@ -323,7 +331,10 @@ class VillageDataSource(
             before.participant.memberList.any { it.id == member.id }
         }.forEach {
             val beforeMember = before.participant.member(it.id)
-            if (it.existsDifference(beforeMember)) updateVillagePlayer(villageId, it)
+            if (it.existsDifference(beforeMember)) {
+                updateVillagePlayer(villageId, it)
+                updateVillagePlayerStatusDaychangeDifference(it.id, beforeMember.status, it.status)
+            }
             insertVillagePlayerAccessInfos(it.id, it.ipAddresses)
         }
         after.spectator.memberList.filter { member ->
@@ -333,6 +344,20 @@ class VillageDataSource(
             if (it.existsDifference(beforeMember)) updateVillagePlayer(villageId, it)
             insertVillagePlayerAccessInfos(it.id, it.ipAddresses)
         }
+    }
+
+    private fun updateVillagePlayerStatusDaychangeDifference(
+        participantId: Int,
+        current: VillageParticipantStatus,
+        changed: VillageParticipantStatus
+    ) {
+        // 削除
+        current.loverIdList.filterNot { changed.loverIdList.contains(it) }
+            .forEach { deleteVillagePlayerStatus(participantId, it, CDef.VillagePlayerStatusType.恋絆) }
+
+        // 追加
+        changed.loverIdList.filterNot { current.loverIdList.contains(it) }
+            .forEach { insertVillagePlayerStatus(participantId, it, CDef.VillagePlayerStatusType.恋絆) }
     }
 
     private fun updateVillageSettingDifference(
@@ -489,6 +514,8 @@ class VillageDataSource(
         villagePlayer.skillCodeAsSkill = villagePlayerModel.skill?.toCdef()
         villagePlayer.requestSkillCodeAsSkill = villagePlayerModel.skillRequest.first.toCdef()
         villagePlayer.secondRequestSkillCodeAsSkill = villagePlayerModel.skillRequest.second.toCdef()
+        villagePlayer.isWin = villagePlayerModel.isWin
+        villagePlayer.campCode = villagePlayerModel.camp?.code
         villagePlayer.charaName = villagePlayerModel.charaName.name
         villagePlayer.charaShortName = villagePlayerModel.charaName.shortName
         villagePlayerBhv.update(villagePlayer)
@@ -531,6 +558,24 @@ class VillageDataSource(
         info.villagePlayerId = participantId
         info.ipAddress = ipAddress
         villagePlayerAccessInfoBhv.insert(info)
+    }
+
+    private fun insertVillagePlayerStatus(from: Int, to: Int?, type: CDef.VillagePlayerStatusType) {
+        val status = VillagePlayerStatus()
+        status.villagePlayerId = from
+        status.toVillagePlayerId = to
+        status.villagePlayerStatusCodeAsVillagePlayerStatusType = type
+        villagePlayerStatusBhv.insert(status)
+    }
+
+    private fun deleteVillagePlayerStatus(from: Int, to: Int?, type: CDef.VillagePlayerStatusType) {
+        villagePlayerStatusBhv.queryDelete {
+            it.query().setVillagePlayerId_Equal(from)
+            to?.let { to ->
+                it.query().setToVillagePlayerId_Equal(to)
+            }
+            it.query().setVillagePlayerStatusCode_Equal_AsVillagePlayerStatusType(type)
+        }
     }
 
     // ===================================================================================

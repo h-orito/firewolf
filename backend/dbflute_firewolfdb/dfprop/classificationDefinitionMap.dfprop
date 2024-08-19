@@ -260,6 +260,13 @@ map:{
             ; code=NOONNIGHT_CODE; name=NOONNIGHT_NAME
         }
     }
+    ; VillagePlayerStatusType = list:{
+        ; map:{topComment=村参加者ステータス種別; codeType=String}
+        ; map:{
+            ; table=VILLAGE_PLAYER_STATUS_TYPE
+            ; code=VILLAGE_PLAYER_STATUS_TYPE_CODE; name=VILLAGE_PLAYER_STATUS_TYPE_NAME
+        }
+    }
 
 	# アプリ定義
     ; Term = list:{

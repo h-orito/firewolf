@@ -16,7 +16,7 @@ import com.ort.dbflute.cbean.*;
 import com.ort.dbflute.cbean.cq.*;
 
 /**
- * The abstract condition-query of VILLAGE.
+ * The abstract condition-query of village.
  * @author DBFlute(AutoGenerator)
  */
 public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
@@ -37,7 +37,7 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
     }
 
     public String asTableDbName() {
-        return "VILLAGE";
+        return "village";
     }
 
     // ===================================================================================
@@ -159,8 +159,8 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * Set up ExistsReferrer (correlated sub-query). <br>
-     * {exists (select VILLAGE_ID from MESSAGE_RESTRICTION where ...)} <br>
-     * MESSAGE_RESTRICTION by VILLAGE_ID, named 'messageRestrictionAsOne'.
+     * {exists (select VILLAGE_ID from message_restriction where ...)} <br>
+     * message_restriction by VILLAGE_ID, named 'messageRestrictionAsOne'.
      * <pre>
      * cb.query().<span style="color: #CC4747">existsMessageRestriction</span>(restrictionCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
      *     restrictionCB.query().set...
@@ -178,8 +178,8 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * Set up ExistsReferrer (correlated sub-query). <br>
-     * {exists (select VILLAGE_ID from VILLAGE_CHARA_GROUP where ...)} <br>
-     * VILLAGE_CHARA_GROUP by VILLAGE_ID, named 'villageCharaGroupAsOne'.
+     * {exists (select VILLAGE_ID from village_chara_group where ...)} <br>
+     * village_chara_group by VILLAGE_ID, named 'villageCharaGroupAsOne'.
      * <pre>
      * cb.query().<span style="color: #CC4747">existsVillageCharaGroup</span>(groupCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
      *     groupCB.query().set...
@@ -197,8 +197,8 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * Set up ExistsReferrer (correlated sub-query). <br>
-     * {exists (select VILLAGE_ID from VILLAGE_DAY where ...)} <br>
-     * VILLAGE_DAY by VILLAGE_ID, named 'villageDayAsOne'.
+     * {exists (select VILLAGE_ID from village_day where ...)} <br>
+     * village_day by VILLAGE_ID, named 'villageDayAsOne'.
      * <pre>
      * cb.query().<span style="color: #CC4747">existsVillageDay</span>(dayCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
      *     dayCB.query().set...
@@ -216,8 +216,8 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * Set up ExistsReferrer (correlated sub-query). <br>
-     * {exists (select VILLAGE_ID from VILLAGE_PLAYER where ...)} <br>
-     * VILLAGE_PLAYER by VILLAGE_ID, named 'villagePlayerAsOne'.
+     * {exists (select VILLAGE_ID from village_player where ...)} <br>
+     * village_player by VILLAGE_ID, named 'villagePlayerAsOne'.
      * <pre>
      * cb.query().<span style="color: #CC4747">existsVillagePlayer</span>(playerCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
      *     playerCB.query().set...
@@ -235,8 +235,8 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * Set up ExistsReferrer (correlated sub-query). <br>
-     * {exists (select VILLAGE_ID from VILLAGE_SETTING where ...)} <br>
-     * VILLAGE_SETTING by VILLAGE_ID, named 'villageSettingAsOne'.
+     * {exists (select VILLAGE_ID from village_setting where ...)} <br>
+     * village_setting by VILLAGE_ID, named 'villageSettingAsOne'.
      * <pre>
      * cb.query().<span style="color: #CC4747">existsVillageSetting</span>(settingCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
      *     settingCB.query().set...
@@ -254,8 +254,8 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * Set up NotExistsReferrer (correlated sub-query). <br>
-     * {not exists (select VILLAGE_ID from MESSAGE_RESTRICTION where ...)} <br>
-     * MESSAGE_RESTRICTION by VILLAGE_ID, named 'messageRestrictionAsOne'.
+     * {not exists (select VILLAGE_ID from message_restriction where ...)} <br>
+     * message_restriction by VILLAGE_ID, named 'messageRestrictionAsOne'.
      * <pre>
      * cb.query().<span style="color: #CC4747">notExistsMessageRestriction</span>(restrictionCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
      *     restrictionCB.query().set...
@@ -273,8 +273,8 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * Set up NotExistsReferrer (correlated sub-query). <br>
-     * {not exists (select VILLAGE_ID from VILLAGE_CHARA_GROUP where ...)} <br>
-     * VILLAGE_CHARA_GROUP by VILLAGE_ID, named 'villageCharaGroupAsOne'.
+     * {not exists (select VILLAGE_ID from village_chara_group where ...)} <br>
+     * village_chara_group by VILLAGE_ID, named 'villageCharaGroupAsOne'.
      * <pre>
      * cb.query().<span style="color: #CC4747">notExistsVillageCharaGroup</span>(groupCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
      *     groupCB.query().set...
@@ -292,8 +292,8 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * Set up NotExistsReferrer (correlated sub-query). <br>
-     * {not exists (select VILLAGE_ID from VILLAGE_DAY where ...)} <br>
-     * VILLAGE_DAY by VILLAGE_ID, named 'villageDayAsOne'.
+     * {not exists (select VILLAGE_ID from village_day where ...)} <br>
+     * village_day by VILLAGE_ID, named 'villageDayAsOne'.
      * <pre>
      * cb.query().<span style="color: #CC4747">notExistsVillageDay</span>(dayCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
      *     dayCB.query().set...
@@ -311,8 +311,8 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * Set up NotExistsReferrer (correlated sub-query). <br>
-     * {not exists (select VILLAGE_ID from VILLAGE_PLAYER where ...)} <br>
-     * VILLAGE_PLAYER by VILLAGE_ID, named 'villagePlayerAsOne'.
+     * {not exists (select VILLAGE_ID from village_player where ...)} <br>
+     * village_player by VILLAGE_ID, named 'villagePlayerAsOne'.
      * <pre>
      * cb.query().<span style="color: #CC4747">notExistsVillagePlayer</span>(playerCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
      *     playerCB.query().set...
@@ -330,8 +330,8 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * Set up NotExistsReferrer (correlated sub-query). <br>
-     * {not exists (select VILLAGE_ID from VILLAGE_SETTING where ...)} <br>
-     * VILLAGE_SETTING by VILLAGE_ID, named 'villageSettingAsOne'.
+     * {not exists (select VILLAGE_ID from village_setting where ...)} <br>
+     * village_setting by VILLAGE_ID, named 'villageSettingAsOne'.
      * <pre>
      * cb.query().<span style="color: #CC4747">notExistsVillageSetting</span>(settingCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
      *     settingCB.query().set...
@@ -389,8 +389,8 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * Prepare for (Query)DerivedReferrer (correlated sub-query). <br>
-     * {FOO &lt;= (select max(BAR) from MESSAGE_RESTRICTION where ...)} <br>
-     * MESSAGE_RESTRICTION by VILLAGE_ID, named 'messageRestrictionAsOne'.
+     * {FOO &lt;= (select max(BAR) from message_restriction where ...)} <br>
+     * message_restriction by VILLAGE_ID, named 'messageRestrictionAsOne'.
      * <pre>
      * cb.query().<span style="color: #CC4747">derivedMessageRestriction()</span>.<span style="color: #CC4747">max</span>(restrictionCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
      *     restrictionCB.specify().<span style="color: #CC4747">columnFoo...</span> <span style="color: #3F7E5E">// derived column by function</span>
@@ -416,8 +416,8 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * Prepare for (Query)DerivedReferrer (correlated sub-query). <br>
-     * {FOO &lt;= (select max(BAR) from VILLAGE_CHARA_GROUP where ...)} <br>
-     * VILLAGE_CHARA_GROUP by VILLAGE_ID, named 'villageCharaGroupAsOne'.
+     * {FOO &lt;= (select max(BAR) from village_chara_group where ...)} <br>
+     * village_chara_group by VILLAGE_ID, named 'villageCharaGroupAsOne'.
      * <pre>
      * cb.query().<span style="color: #CC4747">derivedVillageCharaGroup()</span>.<span style="color: #CC4747">max</span>(groupCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
      *     groupCB.specify().<span style="color: #CC4747">columnFoo...</span> <span style="color: #3F7E5E">// derived column by function</span>
@@ -443,8 +443,8 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * Prepare for (Query)DerivedReferrer (correlated sub-query). <br>
-     * {FOO &lt;= (select max(BAR) from VILLAGE_DAY where ...)} <br>
-     * VILLAGE_DAY by VILLAGE_ID, named 'villageDayAsOne'.
+     * {FOO &lt;= (select max(BAR) from village_day where ...)} <br>
+     * village_day by VILLAGE_ID, named 'villageDayAsOne'.
      * <pre>
      * cb.query().<span style="color: #CC4747">derivedVillageDay()</span>.<span style="color: #CC4747">max</span>(dayCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
      *     dayCB.specify().<span style="color: #CC4747">columnFoo...</span> <span style="color: #3F7E5E">// derived column by function</span>
@@ -470,8 +470,8 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * Prepare for (Query)DerivedReferrer (correlated sub-query). <br>
-     * {FOO &lt;= (select max(BAR) from VILLAGE_PLAYER where ...)} <br>
-     * VILLAGE_PLAYER by VILLAGE_ID, named 'villagePlayerAsOne'.
+     * {FOO &lt;= (select max(BAR) from village_player where ...)} <br>
+     * village_player by VILLAGE_ID, named 'villagePlayerAsOne'.
      * <pre>
      * cb.query().<span style="color: #CC4747">derivedVillagePlayer()</span>.<span style="color: #CC4747">max</span>(playerCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
      *     playerCB.specify().<span style="color: #CC4747">columnFoo...</span> <span style="color: #3F7E5E">// derived column by function</span>
@@ -497,8 +497,8 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * Prepare for (Query)DerivedReferrer (correlated sub-query). <br>
-     * {FOO &lt;= (select max(BAR) from VILLAGE_SETTING where ...)} <br>
-     * VILLAGE_SETTING by VILLAGE_ID, named 'villageSettingAsOne'.
+     * {FOO &lt;= (select max(BAR) from village_setting where ...)} <br>
+     * village_setting by VILLAGE_ID, named 'villageSettingAsOne'.
      * <pre>
      * cb.query().<span style="color: #CC4747">derivedVillageSetting()</span>.<span style="color: #CC4747">max</span>(settingCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
      *     settingCB.specify().<span style="color: #CC4747">columnFoo...</span> <span style="color: #3F7E5E">// derived column by function</span>
@@ -674,7 +674,7 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * Equal(=). And NullIgnored, OnlyOnceRegistered. <br>
-     * CREATE_PLAYER_ID: {IX, NotNull, INT UNSIGNED(10), FK to PLAYER}
+     * CREATE_PLAYER_ID: {IX, NotNull, INT UNSIGNED(10), FK to player}
      * @param createPlayerId The value of createPlayerId as equal. (basically NotNull: error as default, or no condition as option)
      */
     public void setCreatePlayerId_Equal(Integer createPlayerId) {
@@ -687,7 +687,7 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * NotEqual(&lt;&gt;). And NullIgnored, OnlyOnceRegistered. <br>
-     * CREATE_PLAYER_ID: {IX, NotNull, INT UNSIGNED(10), FK to PLAYER}
+     * CREATE_PLAYER_ID: {IX, NotNull, INT UNSIGNED(10), FK to player}
      * @param createPlayerId The value of createPlayerId as notEqual. (basically NotNull: error as default, or no condition as option)
      */
     public void setCreatePlayerId_NotEqual(Integer createPlayerId) {
@@ -700,7 +700,7 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * GreaterThan(&gt;). And NullIgnored, OnlyOnceRegistered. <br>
-     * CREATE_PLAYER_ID: {IX, NotNull, INT UNSIGNED(10), FK to PLAYER}
+     * CREATE_PLAYER_ID: {IX, NotNull, INT UNSIGNED(10), FK to player}
      * @param createPlayerId The value of createPlayerId as greaterThan. (basically NotNull: error as default, or no condition as option)
      */
     public void setCreatePlayerId_GreaterThan(Integer createPlayerId) {
@@ -709,7 +709,7 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * LessThan(&lt;). And NullIgnored, OnlyOnceRegistered. <br>
-     * CREATE_PLAYER_ID: {IX, NotNull, INT UNSIGNED(10), FK to PLAYER}
+     * CREATE_PLAYER_ID: {IX, NotNull, INT UNSIGNED(10), FK to player}
      * @param createPlayerId The value of createPlayerId as lessThan. (basically NotNull: error as default, or no condition as option)
      */
     public void setCreatePlayerId_LessThan(Integer createPlayerId) {
@@ -718,7 +718,7 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * GreaterEqual(&gt;=). And NullIgnored, OnlyOnceRegistered. <br>
-     * CREATE_PLAYER_ID: {IX, NotNull, INT UNSIGNED(10), FK to PLAYER}
+     * CREATE_PLAYER_ID: {IX, NotNull, INT UNSIGNED(10), FK to player}
      * @param createPlayerId The value of createPlayerId as greaterEqual. (basically NotNull: error as default, or no condition as option)
      */
     public void setCreatePlayerId_GreaterEqual(Integer createPlayerId) {
@@ -727,7 +727,7 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * LessEqual(&lt;=). And NullIgnored, OnlyOnceRegistered. <br>
-     * CREATE_PLAYER_ID: {IX, NotNull, INT UNSIGNED(10), FK to PLAYER}
+     * CREATE_PLAYER_ID: {IX, NotNull, INT UNSIGNED(10), FK to player}
      * @param createPlayerId The value of createPlayerId as lessEqual. (basically NotNull: error as default, or no condition as option)
      */
     public void setCreatePlayerId_LessEqual(Integer createPlayerId) {
@@ -738,7 +738,7 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
      * RangeOf with various options. (versatile) <br>
      * {(default) minNumber &lt;= column &lt;= maxNumber} <br>
      * And NullIgnored, OnlyOnceRegistered. <br>
-     * CREATE_PLAYER_ID: {IX, NotNull, INT UNSIGNED(10), FK to PLAYER}
+     * CREATE_PLAYER_ID: {IX, NotNull, INT UNSIGNED(10), FK to player}
      * @param minNumber The min number of createPlayerId. (basically NotNull: if op.allowOneSide(), null allowed)
      * @param maxNumber The max number of createPlayerId. (basically NotNull: if op.allowOneSide(), null allowed)
      * @param opLambda The callback for option of range-of. (NotNull)
@@ -751,7 +751,7 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
      * RangeOf with various options. (versatile) <br>
      * {(default) minNumber &lt;= column &lt;= maxNumber} <br>
      * And NullIgnored, OnlyOnceRegistered. <br>
-     * CREATE_PLAYER_ID: {IX, NotNull, INT UNSIGNED(10), FK to PLAYER}
+     * CREATE_PLAYER_ID: {IX, NotNull, INT UNSIGNED(10), FK to player}
      * @param minNumber The min number of createPlayerId. (basically NotNull: if op.allowOneSide(), null allowed)
      * @param maxNumber The max number of createPlayerId. (basically NotNull: if op.allowOneSide(), null allowed)
      * @param rangeOfOption The option of range-of. (NotNull)
@@ -762,7 +762,7 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * InScope {in (1, 2)}. And NullIgnored, NullElementIgnored, SeveralRegistered. <br>
-     * CREATE_PLAYER_ID: {IX, NotNull, INT UNSIGNED(10), FK to PLAYER}
+     * CREATE_PLAYER_ID: {IX, NotNull, INT UNSIGNED(10), FK to player}
      * @param createPlayerIdList The collection of createPlayerId as inScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     public void setCreatePlayerId_InScope(Collection<Integer> createPlayerIdList) {
@@ -775,7 +775,7 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * NotInScope {not in (1, 2)}. And NullIgnored, NullElementIgnored, SeveralRegistered. <br>
-     * CREATE_PLAYER_ID: {IX, NotNull, INT UNSIGNED(10), FK to PLAYER}
+     * CREATE_PLAYER_ID: {IX, NotNull, INT UNSIGNED(10), FK to player}
      * @param createPlayerIdList The collection of createPlayerId as notInScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     public void setCreatePlayerId_NotInScope(Collection<Integer> createPlayerIdList) {
@@ -791,7 +791,7 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * Equal(=). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * VILLAGE_STATUS_CODE: {IX, NotNull, VARCHAR(20), FK to VILLAGE_STATUS, classification=VillageStatus}
+     * VILLAGE_STATUS_CODE: {IX, NotNull, VARCHAR(20), FK to village_status, classification=VillageStatus}
      * @param villageStatusCode The value of villageStatusCode as equal. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     protected void setVillageStatusCode_Equal(String villageStatusCode) {
@@ -800,7 +800,7 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * Equal(=). As VillageStatus. And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * VILLAGE_STATUS_CODE: {IX, NotNull, VARCHAR(20), FK to VILLAGE_STATUS, classification=VillageStatus} <br>
+     * VILLAGE_STATUS_CODE: {IX, NotNull, VARCHAR(20), FK to village_status, classification=VillageStatus} <br>
      * 村ステータス
      * @param cdef The instance of classification definition (as ENUM type). (basically NotNull: error as default, or no condition as option)
      */
@@ -854,7 +854,7 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * NotEqual(&lt;&gt;). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * VILLAGE_STATUS_CODE: {IX, NotNull, VARCHAR(20), FK to VILLAGE_STATUS, classification=VillageStatus}
+     * VILLAGE_STATUS_CODE: {IX, NotNull, VARCHAR(20), FK to village_status, classification=VillageStatus}
      * @param villageStatusCode The value of villageStatusCode as notEqual. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     protected void setVillageStatusCode_NotEqual(String villageStatusCode) {
@@ -863,7 +863,7 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * NotEqual(&lt;&gt;). As VillageStatus. And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * VILLAGE_STATUS_CODE: {IX, NotNull, VARCHAR(20), FK to VILLAGE_STATUS, classification=VillageStatus} <br>
+     * VILLAGE_STATUS_CODE: {IX, NotNull, VARCHAR(20), FK to village_status, classification=VillageStatus} <br>
      * 村ステータス
      * @param cdef The instance of classification definition (as ENUM type). (basically NotNull: error as default, or no condition as option)
      */
@@ -917,7 +917,7 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * InScope {in ('a', 'b')}. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * VILLAGE_STATUS_CODE: {IX, NotNull, VARCHAR(20), FK to VILLAGE_STATUS, classification=VillageStatus}
+     * VILLAGE_STATUS_CODE: {IX, NotNull, VARCHAR(20), FK to village_status, classification=VillageStatus}
      * @param villageStatusCodeList The collection of villageStatusCode as inScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     protected void setVillageStatusCode_InScope(Collection<String> villageStatusCodeList) {
@@ -926,7 +926,7 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * InScope {in ('a', 'b')}. As VillageStatus. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * VILLAGE_STATUS_CODE: {IX, NotNull, VARCHAR(20), FK to VILLAGE_STATUS, classification=VillageStatus} <br>
+     * VILLAGE_STATUS_CODE: {IX, NotNull, VARCHAR(20), FK to village_status, classification=VillageStatus} <br>
      * 村ステータス
      * @param cdefList The list of classification definition (as ENUM type). (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
@@ -960,7 +960,7 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * NotInScope {not in ('a', 'b')}. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * VILLAGE_STATUS_CODE: {IX, NotNull, VARCHAR(20), FK to VILLAGE_STATUS, classification=VillageStatus}
+     * VILLAGE_STATUS_CODE: {IX, NotNull, VARCHAR(20), FK to village_status, classification=VillageStatus}
      * @param villageStatusCodeList The collection of villageStatusCode as notInScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     protected void setVillageStatusCode_NotInScope(Collection<String> villageStatusCodeList) {
@@ -969,7 +969,7 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * NotInScope {not in ('a', 'b')}. As VillageStatus. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * VILLAGE_STATUS_CODE: {IX, NotNull, VARCHAR(20), FK to VILLAGE_STATUS, classification=VillageStatus} <br>
+     * VILLAGE_STATUS_CODE: {IX, NotNull, VARCHAR(20), FK to village_status, classification=VillageStatus} <br>
      * 村ステータス
      * @param cdefList The list of classification definition (as ENUM type). (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
@@ -1115,7 +1115,7 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * Equal(=). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * WIN_CAMP_CODE: {IX, VARCHAR(20), FK to CAMP, classification=Camp}
+     * WIN_CAMP_CODE: {IX, VARCHAR(20), FK to camp, classification=Camp}
      * @param winCampCode The value of winCampCode as equal. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     protected void setWinCampCode_Equal(String winCampCode) {
@@ -1124,7 +1124,7 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * Equal(=). As Camp. And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * WIN_CAMP_CODE: {IX, VARCHAR(20), FK to CAMP, classification=Camp} <br>
+     * WIN_CAMP_CODE: {IX, VARCHAR(20), FK to camp, classification=Camp} <br>
      * 陣営
      * @param cdef The instance of classification definition (as ENUM type). (basically NotNull: error as default, or no condition as option)
      */
@@ -1138,6 +1138,14 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
      */
     public void setWinCampCode_Equal_狐陣営() {
         setWinCampCode_Equal_AsCamp(CDef.Camp.狐陣営);
+    }
+
+    /**
+     * Equal(=). As 恋人陣営 (LOVERS). And OnlyOnceRegistered. <br>
+     * 恋人陣営
+     */
+    public void setWinCampCode_Equal_恋人陣営() {
+        setWinCampCode_Equal_AsCamp(CDef.Camp.恋人陣営);
     }
 
     /**
@@ -1162,7 +1170,7 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * NotEqual(&lt;&gt;). And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * WIN_CAMP_CODE: {IX, VARCHAR(20), FK to CAMP, classification=Camp}
+     * WIN_CAMP_CODE: {IX, VARCHAR(20), FK to camp, classification=Camp}
      * @param winCampCode The value of winCampCode as notEqual. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     protected void setWinCampCode_NotEqual(String winCampCode) {
@@ -1171,7 +1179,7 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * NotEqual(&lt;&gt;). As Camp. And NullOrEmptyIgnored, OnlyOnceRegistered. <br>
-     * WIN_CAMP_CODE: {IX, VARCHAR(20), FK to CAMP, classification=Camp} <br>
+     * WIN_CAMP_CODE: {IX, VARCHAR(20), FK to camp, classification=Camp} <br>
      * 陣営
      * @param cdef The instance of classification definition (as ENUM type). (basically NotNull: error as default, or no condition as option)
      */
@@ -1185,6 +1193,14 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
      */
     public void setWinCampCode_NotEqual_狐陣営() {
         setWinCampCode_NotEqual_AsCamp(CDef.Camp.狐陣営);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 恋人陣営 (LOVERS). And OnlyOnceRegistered. <br>
+     * 恋人陣営
+     */
+    public void setWinCampCode_NotEqual_恋人陣営() {
+        setWinCampCode_NotEqual_AsCamp(CDef.Camp.恋人陣営);
     }
 
     /**
@@ -1209,7 +1225,7 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * InScope {in ('a', 'b')}. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * WIN_CAMP_CODE: {IX, VARCHAR(20), FK to CAMP, classification=Camp}
+     * WIN_CAMP_CODE: {IX, VARCHAR(20), FK to camp, classification=Camp}
      * @param winCampCodeList The collection of winCampCode as inScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     protected void setWinCampCode_InScope(Collection<String> winCampCodeList) {
@@ -1218,7 +1234,7 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * InScope {in ('a', 'b')}. As Camp. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * WIN_CAMP_CODE: {IX, VARCHAR(20), FK to CAMP, classification=Camp} <br>
+     * WIN_CAMP_CODE: {IX, VARCHAR(20), FK to camp, classification=Camp} <br>
      * 陣営
      * @param cdefList The list of classification definition (as ENUM type). (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
@@ -1232,7 +1248,7 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * NotInScope {not in ('a', 'b')}. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * WIN_CAMP_CODE: {IX, VARCHAR(20), FK to CAMP, classification=Camp}
+     * WIN_CAMP_CODE: {IX, VARCHAR(20), FK to camp, classification=Camp}
      * @param winCampCodeList The collection of winCampCode as notInScope. (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
     protected void setWinCampCode_NotInScope(Collection<String> winCampCodeList) {
@@ -1241,7 +1257,7 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * NotInScope {not in ('a', 'b')}. As Camp. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
-     * WIN_CAMP_CODE: {IX, VARCHAR(20), FK to CAMP, classification=Camp} <br>
+     * WIN_CAMP_CODE: {IX, VARCHAR(20), FK to camp, classification=Camp} <br>
      * 陣営
      * @param cdefList The list of classification definition (as ENUM type). (basically NotNull, NotEmpty: error as default, or no condition as option)
      */
@@ -1255,19 +1271,19 @@ public abstract class AbstractBsVillageCQ extends AbstractConditionQuery {
 
     /**
      * IsNull {is null}. And OnlyOnceRegistered. <br>
-     * WIN_CAMP_CODE: {IX, VARCHAR(20), FK to CAMP, classification=Camp}
+     * WIN_CAMP_CODE: {IX, VARCHAR(20), FK to camp, classification=Camp}
      */
     public void setWinCampCode_IsNull() { regWinCampCode(CK_ISN, DOBJ); }
 
     /**
      * IsNullOrEmpty {is null or empty}. And OnlyOnceRegistered. <br>
-     * WIN_CAMP_CODE: {IX, VARCHAR(20), FK to CAMP, classification=Camp}
+     * WIN_CAMP_CODE: {IX, VARCHAR(20), FK to camp, classification=Camp}
      */
     public void setWinCampCode_IsNullOrEmpty() { regWinCampCode(CK_ISNOE, DOBJ); }
 
     /**
      * IsNotNull {is not null}. And OnlyOnceRegistered. <br>
-     * WIN_CAMP_CODE: {IX, VARCHAR(20), FK to CAMP, classification=Camp}
+     * WIN_CAMP_CODE: {IX, VARCHAR(20), FK to camp, classification=Camp}
      */
     public void setWinCampCode_IsNotNull() { regWinCampCode(CK_ISNN, DOBJ); }
 

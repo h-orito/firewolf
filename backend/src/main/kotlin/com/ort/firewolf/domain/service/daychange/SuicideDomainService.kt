@@ -15,7 +15,14 @@ class SuicideDomainService {
 
         while (existsSuicideTarget(village)) {
             val target = findSuicideTarget(village)!!
-            messages = messages.add(createImmoralSuicideMessage(village, target))
+
+            val loverSuicideTarget = findLoverSuicideTarget(village)
+            messages = if (loverSuicideTarget != null) {
+                val lover = target.getTargetLovers(village).filterDead().memberList.shuffled().first()
+                messages.add(createLoverSuicideMessage(village, target, lover))
+            } else {
+                messages.add(createImmoralSuicideMessage(village, target))
+            }
             village = village.suicideParticipant(target.id)
         }
 
@@ -23,11 +30,22 @@ class SuicideDomainService {
     }
 
     private fun findSuicideTarget(village: Village): VillageParticipant? {
+        // 恋絆
+        findLoverSuicideTarget(village)?.let { return it }
         // 背徳者
         return findImmoralSuicideTarget(village)
     }
 
     private fun existsSuicideTarget(village: Village): Boolean = findSuicideTarget(village) != null
+
+    private fun findLoverSuicideTarget(village: Village): VillageParticipant? {
+        return village.participant.filterAlive().memberList // 自分は生きていて
+            .filter { it.status.hasLover() } // 恋人がいて
+            .firstOrNull { participant ->
+                // 恋人のいずれかが死亡している
+                participant.getTargetLovers(village).memberList.any { it.isDead() }
+            }
+    }
 
     private fun findImmoralSuicideTarget(village: Village): VillageParticipant? {
         // 妖狐系が生存していたら後追いしない
@@ -38,6 +56,17 @@ class SuicideDomainService {
         return village.participant
             .filterAlive().memberList
             .firstOrNull { it.skill!!.camp().isFoxs() }
+    }
+
+    private fun createLoverSuicideMessage(
+        village: Village,
+        target: VillageParticipant,
+        lover: VillageParticipant
+    ): Message {
+        return Message.createPublicSystemMessage(
+            text = "${target.name()}は、絆に引きずられるように${lover.name()}の後を追った。",
+            villageDayId = village.day.latestDay().id,
+        )
     }
 
     private fun createImmoralSuicideMessage(village: Village, target: VillageParticipant): Message {

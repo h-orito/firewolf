@@ -17,11 +17,9 @@ open class DivineDomainService : IAbilityDomainService {
 
     override fun getSelectableTargetList(
         village: Village,
-        participant: VillageParticipant?,
+        participant: VillageParticipant,
         villageAbilities: VillageAbilities
     ): List<VillageParticipant> {
-        participant ?: return listOf()
-
         // 自分以外の生存者全員
         return village.participant.memberList.filter {
             it.id != participant.id && it.isAlive()

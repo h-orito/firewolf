@@ -77,10 +77,10 @@ public abstract class BsMessageRestriction extends AbstractEntity implements Dom
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
-    /** VILLAGE_ID: {PK, NotNull, INT UNSIGNED(10), FK to VILLAGE} */
+    /** VILLAGE_ID: {PK, NotNull, INT UNSIGNED(10), FK to village} */
     protected Integer _villageId;
 
-    /** MESSAGE_TYPE_CODE: {PK, IX, NotNull, VARCHAR(20), FK to MESSAGE_TYPE, classification=MessageType} */
+    /** MESSAGE_TYPE_CODE: {PK, IX, NotNull, VARCHAR(20), FK to message_type, classification=MessageType} */
     protected String _messageTypeCode;
 
     /** MESSAGE_MAX_NUM: {NotNull, INT UNSIGNED(10)} */
@@ -111,7 +111,7 @@ public abstract class BsMessageRestriction extends AbstractEntity implements Dom
 
     /** {@inheritDoc} */
     public String asTableDbName() {
-        return "MESSAGE_RESTRICTION";
+        return "message_restriction";
     }
 
     // ===================================================================================
@@ -129,7 +129,7 @@ public abstract class BsMessageRestriction extends AbstractEntity implements Dom
     //                                                             =======================
     /**
      * Get the value of messageTypeCode as the classification of MessageType. <br>
-     * MESSAGE_TYPE_CODE: {PK, IX, NotNull, VARCHAR(20), FK to MESSAGE_TYPE, classification=MessageType} <br>
+     * MESSAGE_TYPE_CODE: {PK, IX, NotNull, VARCHAR(20), FK to message_type, classification=MessageType} <br>
      * メッセージ種別
      * <p>It's treated as case insensitive and if the code value is null, it returns null.</p>
      * @return The instance of classification definition (as ENUM type). (NullAllowed: when the column value is null)
@@ -140,7 +140,7 @@ public abstract class BsMessageRestriction extends AbstractEntity implements Dom
 
     /**
      * Set the value of messageTypeCode as the classification of MessageType. <br>
-     * MESSAGE_TYPE_CODE: {PK, IX, NotNull, VARCHAR(20), FK to MESSAGE_TYPE, classification=MessageType} <br>
+     * MESSAGE_TYPE_CODE: {PK, IX, NotNull, VARCHAR(20), FK to message_type, classification=MessageType} <br>
      * メッセージ種別
      * @param cdef The instance of classification definition (as ENUM type). (NullAllowed: if null, null value is set to the column)
      */
@@ -176,6 +176,14 @@ public abstract class BsMessageRestriction extends AbstractEntity implements Dom
     }
 
     /**
+     * Set the value of messageTypeCode as 恋人発言 (LOVERS_SAY). <br>
+     * 恋人発言
+     */
+    public void setMessageTypeCode_恋人発言() {
+        setMessageTypeCodeAsMessageType(CDef.MessageType.恋人発言);
+    }
+
+    /**
      * Set the value of messageTypeCode as 独り言 (MONOLOGUE_SAY). <br>
      * 独り言
      */
@@ -197,6 +205,14 @@ public abstract class BsMessageRestriction extends AbstractEntity implements Dom
      */
     public void setMessageTypeCode_参加者一覧() {
         setMessageTypeCodeAsMessageType(CDef.MessageType.参加者一覧);
+    }
+
+    /**
+     * Set the value of messageTypeCode as 能力行使メッセージ (PRIVATE_ABILITY). <br>
+     * 能力行使メッセージ
+     */
+    public void setMessageTypeCode_能力行使メッセージ() {
+        setMessageTypeCodeAsMessageType(CDef.MessageType.能力行使メッセージ);
     }
 
     /**
@@ -229,6 +245,14 @@ public abstract class BsMessageRestriction extends AbstractEntity implements Dom
      */
     public void setMessageTypeCode_役職霊視結果() {
         setMessageTypeCodeAsMessageType(CDef.MessageType.役職霊視結果);
+    }
+
+    /**
+     * Set the value of messageTypeCode as 恋人メッセージ (PRIVATE_LOVERS). <br>
+     * 恋人メッセージ
+     */
+    public void setMessageTypeCode_恋人メッセージ() {
+        setMessageTypeCodeAsMessageType(CDef.MessageType.恋人メッセージ);
     }
 
     /**
@@ -364,6 +388,17 @@ public abstract class BsMessageRestriction extends AbstractEntity implements Dom
     }
 
     /**
+     * Is the value of messageTypeCode 恋人発言? <br>
+     * 恋人発言
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isMessageTypeCode恋人発言() {
+        CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
+        return cdef != null ? cdef.equals(CDef.MessageType.恋人発言) : false;
+    }
+
+    /**
      * Is the value of messageTypeCode 独り言? <br>
      * 独り言
      * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
@@ -394,6 +429,17 @@ public abstract class BsMessageRestriction extends AbstractEntity implements Dom
     public boolean isMessageTypeCode参加者一覧() {
         CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
         return cdef != null ? cdef.equals(CDef.MessageType.参加者一覧) : false;
+    }
+
+    /**
+     * Is the value of messageTypeCode 能力行使メッセージ? <br>
+     * 能力行使メッセージ
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isMessageTypeCode能力行使メッセージ() {
+        CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
+        return cdef != null ? cdef.equals(CDef.MessageType.能力行使メッセージ) : false;
     }
 
     /**
@@ -438,6 +484,17 @@ public abstract class BsMessageRestriction extends AbstractEntity implements Dom
     public boolean isMessageTypeCode役職霊視結果() {
         CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
         return cdef != null ? cdef.equals(CDef.MessageType.役職霊視結果) : false;
+    }
+
+    /**
+     * Is the value of messageTypeCode 恋人メッセージ? <br>
+     * 恋人メッセージ
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isMessageTypeCode恋人メッセージ() {
+        CDef.MessageType cdef = getMessageTypeCodeAsMessageType();
+        return cdef != null ? cdef.equals(CDef.MessageType.恋人メッセージ) : false;
     }
 
     /**
@@ -701,7 +758,7 @@ public abstract class BsMessageRestriction extends AbstractEntity implements Dom
     //                                                                            Accessor
     //                                                                            ========
     /**
-     * [get] VILLAGE_ID: {PK, NotNull, INT UNSIGNED(10), FK to VILLAGE} <br>
+     * [get] VILLAGE_ID: {PK, NotNull, INT UNSIGNED(10), FK to village} <br>
      * 村ID
      * @return The value of the column 'VILLAGE_ID'. (basically NotNull if selected: for the constraint)
      */
@@ -711,7 +768,7 @@ public abstract class BsMessageRestriction extends AbstractEntity implements Dom
     }
 
     /**
-     * [set] VILLAGE_ID: {PK, NotNull, INT UNSIGNED(10), FK to VILLAGE} <br>
+     * [set] VILLAGE_ID: {PK, NotNull, INT UNSIGNED(10), FK to village} <br>
      * 村ID
      * @param villageId The value of the column 'VILLAGE_ID'. (basically NotNull if update: for the constraint)
      */
@@ -721,7 +778,7 @@ public abstract class BsMessageRestriction extends AbstractEntity implements Dom
     }
 
     /**
-     * [get] MESSAGE_TYPE_CODE: {PK, IX, NotNull, VARCHAR(20), FK to MESSAGE_TYPE, classification=MessageType} <br>
+     * [get] MESSAGE_TYPE_CODE: {PK, IX, NotNull, VARCHAR(20), FK to message_type, classification=MessageType} <br>
      * メッセージ種別コード
      * @return The value of the column 'MESSAGE_TYPE_CODE'. (basically NotNull if selected: for the constraint)
      */
@@ -731,7 +788,7 @@ public abstract class BsMessageRestriction extends AbstractEntity implements Dom
     }
 
     /**
-     * [set] MESSAGE_TYPE_CODE: {PK, IX, NotNull, VARCHAR(20), FK to MESSAGE_TYPE, classification=MessageType} <br>
+     * [set] MESSAGE_TYPE_CODE: {PK, IX, NotNull, VARCHAR(20), FK to message_type, classification=MessageType} <br>
      * メッセージ種別コード
      * @param messageTypeCode The value of the column 'MESSAGE_TYPE_CODE'. (basically NotNull if update: for the constraint)
      */

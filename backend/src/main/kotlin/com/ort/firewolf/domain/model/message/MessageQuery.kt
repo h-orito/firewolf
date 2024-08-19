@@ -35,7 +35,12 @@ data class MessageQuery(
     )
 
     companion object {
-        val personalPrivateAbilityList = listOf(CDef.MessageType.白黒占い結果, CDef.MessageType.役職占い結果)
+        val personalPrivateAbilityList = listOf(
+            CDef.MessageType.白黒占い結果,
+            CDef.MessageType.役職占い結果,
+            CDef.MessageType.能力行使メッセージ,
+            CDef.MessageType.恋人メッセージ
+        )
     }
 
     fun isPaging(): Boolean = pageSize != null || pageNum != null

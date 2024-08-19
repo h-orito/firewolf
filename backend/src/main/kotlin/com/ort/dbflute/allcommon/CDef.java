@@ -145,6 +145,9 @@ public interface CDef extends Classification {
         /** 狐陣営 */
         狐陣営("FOX", "狐陣営", emptyStrings())
         ,
+        /** 恋人陣営 */
+        恋人陣営("LOVERS", "恋人陣営", emptyStrings())
+        ,
         /** 村人陣営 */
         村人陣営("VILLAGER", "村人陣営", emptyStrings())
         ,
@@ -166,6 +169,11 @@ public interface CDef extends Classification {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
                 subItemMap.put("order", "3");
                 _subItemMapMap.put(狐陣営.code(), Collections.unmodifiableMap(subItemMap));
+            }
+            {
+                Map<String, Object> subItemMap = new HashMap<String, Object>();
+                subItemMap.put("order", "4");
+                _subItemMapMap.put(恋人陣営.code(), Collections.unmodifiableMap(subItemMap));
             }
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
@@ -475,6 +483,9 @@ public interface CDef extends Classification {
         /** 検死官 */
         検死官("CORONER", "検死官", emptyStrings())
         ,
+        /** 求愛者 */
+        求愛者("COURTSHIP", "求愛者", emptyStrings())
+        ,
         /** 呪狼 */
         呪狼("CURSEWOLF", "呪狼", emptyStrings())
         ,
@@ -575,6 +586,14 @@ public interface CDef extends Classification {
                 subItemMap.put("campCode", "VILLAGER");
                 subItemMap.put("description", "あなたは検死官です。無惨な死体となった人物の役職を知ることができます。");
                 _subItemMapMap.put(検死官.code(), Collections.unmodifiableMap(subItemMap));
+            }
+            {
+                Map<String, Object> subItemMap = new HashMap<String, Object>();
+                subItemMap.put("shortName", "求");
+                subItemMap.put("order", "301");
+                subItemMap.put("campCode", "LOVERS");
+                subItemMap.put("description", "あなたは求愛者です。1回だけ、指定した人とお互いに恋絆を結ぶことができます。");
+                _subItemMapMap.put(求愛者.code(), Collections.unmodifiableMap(subItemMap));
             }
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
@@ -1552,6 +1571,9 @@ public interface CDef extends Classification {
         /** 死者の呻き */
         死者の呻き("GRAVE_SAY", "死者の呻き", emptyStrings())
         ,
+        /** 恋人発言 */
+        恋人発言("LOVERS_SAY", "恋人発言", emptyStrings())
+        ,
         /** 独り言 */
         独り言("MONOLOGUE_SAY", "独り言", emptyStrings())
         ,
@@ -1560,6 +1582,9 @@ public interface CDef extends Classification {
         ,
         /** 参加者一覧 */
         参加者一覧("PARTICIPANTS", "参加者一覧", emptyStrings())
+        ,
+        /** 能力行使メッセージ */
+        能力行使メッセージ("PRIVATE_ABILITY", "能力行使メッセージ", emptyStrings())
         ,
         /** 検死結果 */
         検死結果("PRIVATE_CORONER", "検死結果", emptyStrings())
@@ -1572,6 +1597,9 @@ public interface CDef extends Classification {
         ,
         /** 役職霊視結果 */
         役職霊視結果("PRIVATE_GURU", "役職霊視結果", emptyStrings())
+        ,
+        /** 恋人メッセージ */
+        恋人メッセージ("PRIVATE_LOVERS", "恋人メッセージ", emptyStrings())
         ,
         /** 共有相互確認メッセージ */
         共有相互確認メッセージ("PRIVATE_MASON", "共有相互確認メッセージ", emptyStrings())
@@ -1904,6 +1932,9 @@ public interface CDef extends Classification {
     public enum AbilityType implements CDef {
         /** 襲撃 */
         襲撃("ATTACK", "襲撃", emptyStrings())
+        ,
+        /** 求愛 */
+        求愛("COURT", "求愛", emptyStrings())
         ,
         /** 占い */
         占い("DIVINE", "占い", emptyStrings())
@@ -2465,6 +2496,125 @@ public interface CDef extends Classification {
     }
 
     /**
+     * 村参加者ステータス種別
+     */
+    public enum VillagePlayerStatusType implements CDef {
+        /** 恋絆 */
+        恋絆("LOVE", "恋絆", emptyStrings())
+        ;
+        private static final Map<String, VillagePlayerStatusType> _codeClsMap = new HashMap<String, VillagePlayerStatusType>();
+        private static final Map<String, VillagePlayerStatusType> _nameClsMap = new HashMap<String, VillagePlayerStatusType>();
+        static {
+            for (VillagePlayerStatusType value : values()) {
+                _codeClsMap.put(value.code().toLowerCase(), value);
+                for (String sister : value.sisterSet()) { _codeClsMap.put(sister.toLowerCase(), value); }
+                _nameClsMap.put(value.name().toLowerCase(), value);
+            }
+        }
+        private String _code; private String _alias; private Set<String> _sisterSet;
+        private VillagePlayerStatusType(String code, String alias, String[] sisters)
+        { _code = code; _alias = alias; _sisterSet = Collections.unmodifiableSet(new LinkedHashSet<String>(Arrays.asList(sisters))); }
+        public String code() { return _code; } public String alias() { return _alias; }
+        public Set<String> sisterSet() { return _sisterSet; }
+        public Map<String, Object> subItemMap() { return Collections.emptyMap(); }
+        public ClassificationMeta meta() { return CDef.DefMeta.VillagePlayerStatusType; }
+
+        public boolean inGroup(String groupName) {
+            return false;
+        }
+
+        /**
+         * Get the classification of the code. (CaseInsensitive)
+         * @param code The value of code, which is case-insensitive. (NullAllowed: if null, returns empty)
+         * @return The optional classification corresponding to the code. (NotNull, EmptyAllowed: if not found, returns empty)
+         */
+        public static OptionalThing<VillagePlayerStatusType> of(Object code) {
+            if (code == null) { return OptionalThing.ofNullable(null, () -> { throw new ClassificationNotFoundException("null code specified"); }); }
+            if (code instanceof VillagePlayerStatusType) { return OptionalThing.of((VillagePlayerStatusType)code); }
+            if (code instanceof OptionalThing<?>) { return of(((OptionalThing<?>)code).orElse(null)); }
+            return OptionalThing.ofNullable(_codeClsMap.get(code.toString().toLowerCase()), () ->{
+                throw new ClassificationNotFoundException("Unknown classification code: " + code);
+            });
+        }
+
+        /**
+         * Find the classification by the name. (CaseInsensitive)
+         * @param name The string of name, which is case-insensitive. (NotNull)
+         * @return The optional classification corresponding to the name. (NotNull, EmptyAllowed: if not found, returns empty)
+         */
+        public static OptionalThing<VillagePlayerStatusType> byName(String name) {
+            if (name == null) { throw new IllegalArgumentException("The argument 'name' should not be null."); }
+            return OptionalThing.ofNullable(_nameClsMap.get(name.toLowerCase()), () ->{
+                throw new ClassificationNotFoundException("Unknown classification name: " + name);
+            });
+        }
+
+        /**
+         * <span style="color: #AD4747; font-size: 120%">Old style so use of(code).</span> <br>
+         * Get the classification by the code. (CaseInsensitive)
+         * @param code The value of code, which is case-insensitive. (NullAllowed: if null, returns null)
+         * @return The instance of the corresponding classification to the code. (NullAllowed: if not found, returns null)
+         */
+        public static VillagePlayerStatusType codeOf(Object code) {
+            if (code == null) { return null; }
+            if (code instanceof VillagePlayerStatusType) { return (VillagePlayerStatusType)code; }
+            return _codeClsMap.get(code.toString().toLowerCase());
+        }
+
+        /**
+         * <span style="color: #AD4747; font-size: 120%">Old style so use byName(name).</span> <br>
+         * Get the classification by the name (also called 'value' in ENUM world).
+         * @param name The string of name, which is case-sensitive. (NullAllowed: if null, returns null)
+         * @return The instance of the corresponding classification to the name. (NullAllowed: if not found, returns null)
+         */
+        public static VillagePlayerStatusType nameOf(String name) {
+            if (name == null) { return null; }
+            try { return valueOf(name); } catch (RuntimeException ignored) { return null; }
+        }
+
+        /**
+         * Get the list of all classification elements. (returns new copied list)
+         * @return The snapshot list of all classification elements. (NotNull)
+         */
+        public static List<VillagePlayerStatusType> listAll() {
+            return new ArrayList<VillagePlayerStatusType>(Arrays.asList(values()));
+        }
+
+        /**
+         * Get the list of classification elements in the specified group. (returns new copied list) <br>
+         * @param groupName The string of group name, which is case-insensitive. (NotNull)
+         * @return The snapshot list of classification elements in the group. (NotNull, EmptyAllowed: if not found, throws exception)
+         */
+        public static List<VillagePlayerStatusType> listByGroup(String groupName) {
+            if (groupName == null) { throw new IllegalArgumentException("The argument 'groupName' should not be null."); }
+            throw new ClassificationNotFoundException("Unknown classification group: VillagePlayerStatusType." + groupName);
+        }
+
+        /**
+         * Get the list of classification elements corresponding to the specified codes. (returns new copied list) <br>
+         * @param codeList The list of plain code, which is case-insensitive. (NotNull)
+         * @return The snapshot list of classification elements in the code list. (NotNull, EmptyAllowed: when empty specified)
+         */
+        public static List<VillagePlayerStatusType> listOf(Collection<String> codeList) {
+            if (codeList == null) { throw new IllegalArgumentException("The argument 'codeList' should not be null."); }
+            List<VillagePlayerStatusType> clsList = new ArrayList<VillagePlayerStatusType>(codeList.size());
+            for (String code : codeList) { clsList.add(of(code).get()); }
+            return clsList;
+        }
+
+        /**
+         * Get the list of classification elements in the specified group. (returns new copied list) <br>
+         * @param groupName The string of group name, which is case-sensitive. (NullAllowed: if null, returns empty list)
+         * @return The snapshot list of classification elements in the group. (NotNull, EmptyAllowed: if the group is not found)
+         */
+        public static List<VillagePlayerStatusType> groupOf(String groupName) {
+            return new ArrayList<VillagePlayerStatusType>(4);
+        }
+
+        @Override public String toString() { return code(); }
+    }
+
+    /**
      * 期間
      */
     public enum Term implements CDef {
@@ -2617,6 +2767,9 @@ public interface CDef extends Classification {
         /** 昼夜 */
         Noonnight
         ,
+        /** 村参加者ステータス種別 */
+        VillagePlayerStatusType
+        ,
         /** 期間 */
         Term
         ;
@@ -2635,6 +2788,7 @@ public interface CDef extends Classification {
             if (FaceType.name().equals(name())) { return CDef.FaceType.of(code); }
             if (VillageSettingItem.name().equals(name())) { return CDef.VillageSettingItem.of(code); }
             if (Noonnight.name().equals(name())) { return CDef.Noonnight.of(code); }
+            if (VillagePlayerStatusType.name().equals(name())) { return CDef.VillagePlayerStatusType.of(code); }
             if (Term.name().equals(name())) { return CDef.Term.of(code); }
             throw new IllegalStateException("Unknown definition: " + this); // basically unreachable
         }
@@ -2650,6 +2804,7 @@ public interface CDef extends Classification {
             if (FaceType.name().equals(name())) { return CDef.FaceType.byName(name); }
             if (VillageSettingItem.name().equals(name())) { return CDef.VillageSettingItem.byName(name); }
             if (Noonnight.name().equals(name())) { return CDef.Noonnight.byName(name); }
+            if (VillagePlayerStatusType.name().equals(name())) { return CDef.VillagePlayerStatusType.byName(name); }
             if (Term.name().equals(name())) { return CDef.Term.byName(name); }
             throw new IllegalStateException("Unknown definition: " + this); // basically unreachable
         }
@@ -2665,6 +2820,7 @@ public interface CDef extends Classification {
             if (FaceType.name().equals(name())) { return CDef.FaceType.codeOf(code); }
             if (VillageSettingItem.name().equals(name())) { return CDef.VillageSettingItem.codeOf(code); }
             if (Noonnight.name().equals(name())) { return CDef.Noonnight.codeOf(code); }
+            if (VillagePlayerStatusType.name().equals(name())) { return CDef.VillagePlayerStatusType.codeOf(code); }
             if (Term.name().equals(name())) { return CDef.Term.codeOf(code); }
             throw new IllegalStateException("Unknown definition: " + this); // basically unreachable
         }
@@ -2680,6 +2836,7 @@ public interface CDef extends Classification {
             if (FaceType.name().equals(name())) { return CDef.FaceType.valueOf(name); }
             if (VillageSettingItem.name().equals(name())) { return CDef.VillageSettingItem.valueOf(name); }
             if (Noonnight.name().equals(name())) { return CDef.Noonnight.valueOf(name); }
+            if (VillagePlayerStatusType.name().equals(name())) { return CDef.VillagePlayerStatusType.valueOf(name); }
             if (Term.name().equals(name())) { return CDef.Term.valueOf(name); }
             throw new IllegalStateException("Unknown definition: " + this); // basically unreachable
         }
@@ -2695,6 +2852,7 @@ public interface CDef extends Classification {
             if (FaceType.name().equals(name())) { return toClsList(CDef.FaceType.listAll()); }
             if (VillageSettingItem.name().equals(name())) { return toClsList(CDef.VillageSettingItem.listAll()); }
             if (Noonnight.name().equals(name())) { return toClsList(CDef.Noonnight.listAll()); }
+            if (VillagePlayerStatusType.name().equals(name())) { return toClsList(CDef.VillagePlayerStatusType.listAll()); }
             if (Term.name().equals(name())) { return toClsList(CDef.Term.listAll()); }
             throw new IllegalStateException("Unknown definition: " + this); // basically unreachable
         }
@@ -2710,6 +2868,7 @@ public interface CDef extends Classification {
             if (FaceType.name().equals(name())) { return toClsList(CDef.FaceType.listByGroup(groupName)); }
             if (VillageSettingItem.name().equals(name())) { return toClsList(CDef.VillageSettingItem.listByGroup(groupName)); }
             if (Noonnight.name().equals(name())) { return toClsList(CDef.Noonnight.listByGroup(groupName)); }
+            if (VillagePlayerStatusType.name().equals(name())) { return toClsList(CDef.VillagePlayerStatusType.listByGroup(groupName)); }
             if (Term.name().equals(name())) { return toClsList(CDef.Term.listByGroup(groupName)); }
             throw new IllegalStateException("Unknown definition: " + this); // basically unreachable
         }
@@ -2725,6 +2884,7 @@ public interface CDef extends Classification {
             if (FaceType.name().equals(name())) { return toClsList(CDef.FaceType.listOf(codeList)); }
             if (VillageSettingItem.name().equals(name())) { return toClsList(CDef.VillageSettingItem.listOf(codeList)); }
             if (Noonnight.name().equals(name())) { return toClsList(CDef.Noonnight.listOf(codeList)); }
+            if (VillagePlayerStatusType.name().equals(name())) { return toClsList(CDef.VillagePlayerStatusType.listOf(codeList)); }
             if (Term.name().equals(name())) { return toClsList(CDef.Term.listOf(codeList)); }
             throw new IllegalStateException("Unknown definition: " + this); // basically unreachable
         }
@@ -2740,6 +2900,7 @@ public interface CDef extends Classification {
             if (FaceType.name().equals(name())) { return toClsList(CDef.FaceType.groupOf(groupName)); }
             if (VillageSettingItem.name().equals(name())) { return toClsList(CDef.VillageSettingItem.groupOf(groupName)); }
             if (Noonnight.name().equals(name())) { return toClsList(CDef.Noonnight.groupOf(groupName)); }
+            if (VillagePlayerStatusType.name().equals(name())) { return toClsList(CDef.VillagePlayerStatusType.groupOf(groupName)); }
             if (Term.name().equals(name())) { return toClsList(CDef.Term.groupOf(groupName)); }
             throw new IllegalStateException("Unknown definition: " + this); // basically unreachable
         }
@@ -2760,6 +2921,7 @@ public interface CDef extends Classification {
             if (FaceType.name().equals(name())) { return ClassificationCodeType.String; }
             if (VillageSettingItem.name().equals(name())) { return ClassificationCodeType.String; }
             if (Noonnight.name().equals(name())) { return ClassificationCodeType.String; }
+            if (VillagePlayerStatusType.name().equals(name())) { return ClassificationCodeType.String; }
             if (Term.name().equals(name())) { return ClassificationCodeType.String; }
             return ClassificationCodeType.String; // as default
         }
@@ -2775,6 +2937,7 @@ public interface CDef extends Classification {
             if (FaceType.name().equals(name())) { return ClassificationUndefinedHandlingType.LOGGING; }
             if (VillageSettingItem.name().equals(name())) { return ClassificationUndefinedHandlingType.LOGGING; }
             if (Noonnight.name().equals(name())) { return ClassificationUndefinedHandlingType.LOGGING; }
+            if (VillagePlayerStatusType.name().equals(name())) { return ClassificationUndefinedHandlingType.LOGGING; }
             if (Term.name().equals(name())) { return ClassificationUndefinedHandlingType.LOGGING; }
             return ClassificationUndefinedHandlingType.LOGGING; // as default
         }
@@ -2791,6 +2954,7 @@ public interface CDef extends Classification {
             if (FaceType.name().equalsIgnoreCase(classificationName)) { return OptionalThing.of(CDef.DefMeta.FaceType); }
             if (VillageSettingItem.name().equalsIgnoreCase(classificationName)) { return OptionalThing.of(CDef.DefMeta.VillageSettingItem); }
             if (Noonnight.name().equalsIgnoreCase(classificationName)) { return OptionalThing.of(CDef.DefMeta.Noonnight); }
+            if (VillagePlayerStatusType.name().equalsIgnoreCase(classificationName)) { return OptionalThing.of(CDef.DefMeta.VillagePlayerStatusType); }
             if (Term.name().equalsIgnoreCase(classificationName)) { return OptionalThing.of(CDef.DefMeta.Term); }
             return OptionalThing.ofNullable(null, () -> {
                 throw new ClassificationNotFoundException("Unknown classification: " + classificationName);
@@ -2809,6 +2973,7 @@ public interface CDef extends Classification {
             if (FaceType.name().equalsIgnoreCase(classificationName)) { return CDef.DefMeta.FaceType; }
             if (VillageSettingItem.name().equalsIgnoreCase(classificationName)) { return CDef.DefMeta.VillageSettingItem; }
             if (Noonnight.name().equalsIgnoreCase(classificationName)) { return CDef.DefMeta.Noonnight; }
+            if (VillagePlayerStatusType.name().equalsIgnoreCase(classificationName)) { return CDef.DefMeta.VillagePlayerStatusType; }
             if (Term.name().equalsIgnoreCase(classificationName)) { return CDef.DefMeta.Term; }
             throw new IllegalStateException("Unknown classification: " + classificationName);
         }

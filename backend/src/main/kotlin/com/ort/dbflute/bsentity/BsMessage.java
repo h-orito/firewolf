@@ -173,7 +173,7 @@ public abstract class BsMessage extends AbstractEntity implements DomainEntity, 
 
     /** {@inheritDoc} */
     public String asTableDbName() {
-        return "MESSAGE";
+        return "message";
     }
 
     // ===================================================================================

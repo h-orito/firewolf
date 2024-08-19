@@ -16,7 +16,7 @@ import com.ort.dbflute.cbean.*;
 import com.ort.dbflute.cbean.cq.*;
 
 /**
- * The abstract condition-query of RESERVED_VILLAGE.
+ * The abstract condition-query of reserved_village.
  * @author DBFlute(AutoGenerator)
  */
 public abstract class AbstractBsReservedVillageCQ extends AbstractConditionQuery {
@@ -37,7 +37,7 @@ public abstract class AbstractBsReservedVillageCQ extends AbstractConditionQuery
     }
 
     public String asTableDbName() {
-        return "RESERVED_VILLAGE";
+        return "reserved_village";
     }
 
     // ===================================================================================

@@ -1,12 +1,11 @@
 package com.ort.firewolf.domain.service.daychange
 
-import com.ort.firewolf.domain.model.charachip.Chara
-import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.commit.Commits
 import com.ort.firewolf.domain.model.daychange.DayChange
 import com.ort.firewolf.domain.model.message.Message
 import com.ort.firewolf.domain.model.message.Messages
 import com.ort.firewolf.domain.model.village.Village
+import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 import org.springframework.stereotype.Service
 
 @Service
@@ -15,7 +14,6 @@ class SuddenlyDeathDomainService {
     fun processDayChangeAction(
         dayChange: DayChange,
         todayMessages: Messages,
-        charas: Charas,
         commits: Commits
     ): DayChange {
         var village = dayChange.village.copy()
@@ -39,7 +37,7 @@ class SuddenlyDeathDomainService {
             // 入村制限
             players = players.restrictParticipation(member.playerId)
             // 突然死メッセージ
-            messages = messages.add(createSuddenlyDeathMessage(charas.chara(member.charaId), village.day.latestDay().id))
+            messages = messages.add(createSuddenlyDeathMessage(member, village.day.latestDay().id))
         }
 
         return dayChange.copy(
@@ -54,20 +52,18 @@ class SuddenlyDeathDomainService {
     //                                                                        ============
     /**
      * 突然死メッセージ
-     * @param chara chara
-     * @param villageDayId 村日付ID
      */
     private fun createSuddenlyDeathMessage(
-        chara: Chara,
+        villageParticipant: VillageParticipant,
         villageDayId: Int
     ): Message {
         return Message.createPublicSystemMessage(
-            createSuddenlyDeathMessageString(chara), villageDayId
+            createSuddenlyDeathMessageString(villageParticipant), villageDayId
         )
     }
 
-    private fun createSuddenlyDeathMessageString(chara: Chara): String =
-        "${chara.charaName.fullName()}は突然死した。"
+    private fun createSuddenlyDeathMessageString(villageParticipant: VillageParticipant): String =
+        "${villageParticipant.name()}は突然死した。"
 
     // 前日がコミットで終了したか
     private fun isAllCommitted(village: Village, commits: Commits): Boolean {

@@ -3,7 +3,6 @@ package com.ort.firewolf.domain.service.ability
 import com.ort.dbflute.allcommon.CDef
 import com.ort.firewolf.domain.model.ability.AbilityType
 import com.ort.firewolf.domain.model.ability.AbilityTypes
-import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.daychange.DayChange
 import com.ort.firewolf.domain.model.message.Message
 import com.ort.firewolf.domain.model.myself.participant.VillageAbilitySituation
@@ -21,7 +20,8 @@ class AbilityDomainService(
     private val divineDomainService: DivineDomainService,
     private val wiseDivineDomainService: WiseDivineDomainService,
     private val guardDomainService: GuardDomainService,
-    private val wandererGuardDomainService: WandererGuardDomainService
+    private val wandererGuardDomainService: WandererGuardDomainService,
+    private val courtDomainService: CourtDomainService
 ) {
 
     // 選択可能な対象
@@ -32,7 +32,7 @@ class AbilityDomainService(
         abilityType: AbilityType
     ): List<VillageParticipant> {
         if (!canUseAbility(village, participant)) return listOf()
-        return detectDomainService(abilityType)?.getSelectableTargetList(village, participant, villageAbilities)
+        return detectDomainService(abilityType)?.getSelectableTargetList(village, participant!!, villageAbilities)
             ?: listOf()
     }
 
@@ -156,6 +156,7 @@ class AbilityDomainService(
             CDef.AbilityType.占い.code() -> divineDomainService
             CDef.AbilityType.護衛.code() -> guardDomainService
             CDef.AbilityType.風来護衛.code() -> wandererGuardDomainService
+            CDef.AbilityType.求愛.code() -> courtDomainService
             else -> null
         }
     }

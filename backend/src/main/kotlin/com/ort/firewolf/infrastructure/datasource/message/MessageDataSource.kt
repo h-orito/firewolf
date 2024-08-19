@@ -36,7 +36,7 @@ class MessageDataSource(
             Pattern.compile("^(?![\\+=\\?@\\-\\*a_])(\\d{1,5})") to CDef.MessageType.通常発言,
             Pattern.compile("^\\+(\\d{1,5})") to CDef.MessageType.死者の呻き,
             Pattern.compile("^=(\\d{1,5})") to CDef.MessageType.共鳴発言,
-//            Pattern.compile("^\\?(\\d{1,5})") to CDef.MessageType.恋人発言,
+            Pattern.compile("^\\?(\\d{1,5})") to CDef.MessageType.恋人発言,
             Pattern.compile("^@(\\d{1,5})") to CDef.MessageType.見学発言,
             Pattern.compile("^-(\\d{1,5})") to CDef.MessageType.独り言,
             Pattern.compile("^\\*(\\d{1,5})") to CDef.MessageType.人狼の囁き,

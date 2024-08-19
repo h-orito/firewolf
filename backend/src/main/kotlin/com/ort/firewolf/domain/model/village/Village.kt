@@ -308,6 +308,8 @@ data class Village(
     fun isViewableSpectateSay(player: Player?): Boolean = !status.isProgress() || setting.rules.visibleGraveMessage
     fun isSayableActionSay(): Boolean = !status.isFinished() && setting.rules.availableAction
     fun isSayableSpectateSay(): Boolean = true
+    fun isViewableLoversSay(player: Player?): Boolean = status.isSolved()
+    fun isSayableLoversSay(): Boolean = status.isProgress()
     fun isViewableAttackMessage(): Boolean = status.isSolved()
     fun isViewableAutopsyMessage(): Boolean = status.isSolved()
     fun isViewableMasonMessage(): Boolean = status.isSolved()
@@ -439,6 +441,11 @@ data class Village(
     fun suicideParticipant(participantId: Int): Village =
         this.copy(participant = this.participant.suicide(participantId, day.latestDay()))
 
+    // 求愛
+    fun courtParticipant(fromParticipantId: Int, toParticipantId: Int): Village {
+        return copy(participant = participant.court(fromParticipantId, toParticipantId))
+    }
+
     // IPアドレス追加
     fun addParticipantIpAddress(id: Int, ipAddress: String): Village =
         this.copy(participant = this.participant.addIpAddress(id, ipAddress))
@@ -491,6 +498,7 @@ data class Village(
 
     private fun wolfCount(): Int = participant.filterAlive().memberList.count { it.skill!!.toCdef().isCountWolf }
 
+    private fun isLoversAlive(): Boolean = participant.filterAlive().memberList.any { it.status.hasLover() }
     private fun isFoxAlive(): Boolean = participant.filterAlive().memberList.any { it.skill!!.toCdef().isNoCount }
 
     // 勝利陣営設定
@@ -510,6 +518,7 @@ data class Village(
 
     private fun judgeWinCamp(): Camp? {
         if (!this.isSettled()) return null
+        if (isLoversAlive()) return Camp(CDef.Camp.恋人陣営)
         if (isFoxAlive()) return Camp(CDef.Camp.狐陣営)
         if (villagerCount() <= wolfCount()) return Camp(CDef.Camp.人狼陣営)
         return Camp(CDef.Camp.村人陣営)

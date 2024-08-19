@@ -5,6 +5,7 @@ import com.ort.dbflute.exentity.Village
 import com.ort.dbflute.exentity.VillageDay
 import com.ort.dbflute.exentity.VillagePlayer
 import com.ort.dbflute.exentity.VillageSetting
+import com.ort.firewolf.domain.model.camp.toModel
 import com.ort.firewolf.domain.model.dead.Dead
 import com.ort.firewolf.domain.model.skill.Skill
 import com.ort.firewolf.domain.model.skill.SkillRequest
@@ -14,6 +15,7 @@ import com.ort.firewolf.domain.model.village.Villages
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 import com.ort.firewolf.domain.model.village.participant.VillageParticipantName
 import com.ort.firewolf.domain.model.village.participant.VillageParticipantNotificationCondition
+import com.ort.firewolf.domain.model.village.participant.VillageParticipantStatus
 import com.ort.firewolf.domain.model.village.participant.VillageParticipants
 import com.ort.firewolf.domain.model.village.participant.coming_out.ComingOut
 import com.ort.firewolf.domain.model.village.participant.coming_out.ComingOuts
@@ -54,7 +56,7 @@ object VillageDataConverter {
             setting = convertVillageSettingListToVillageSetting(village),
             participant = VillageParticipants(
                 count = participantList.size,
-                memberList = participantList.map { convertVillagePlayerToParticipant(it, village) }
+                memberList = participantList.map { convertVillagePlayerToParticipant(it) }
             ),
             spectator = VillageParticipants(
                 count = visitorList.size,
@@ -189,7 +191,7 @@ object VillageDataConverter {
         )
     }
 
-    private fun convertVillagePlayerToParticipant(vp: VillagePlayer, village: Village? = null): VillageParticipant {
+    private fun convertVillagePlayerToParticipant(vp: VillagePlayer): VillageParticipant {
         return VillageParticipant(
             id = vp.villagePlayerId,
             charaName = VillageParticipantName(
@@ -201,13 +203,14 @@ object VillageDataConverter {
             dead = if (vp.isDead) convertToDeadReasonToDead(vp) else null,
             isSpectator = vp.isSpectator,
             isGone = vp.isGone,
+            status = mapVillageParticipantStatus(vp),
             skill = if (vp.skillCodeAsSkill == null) null else Skill(vp.skillCodeAsSkill),
             skillRequest = SkillRequest(
                 first = Skill(vp.requestSkillCodeAsSkill),
                 second = Skill(vp.secondRequestSkillCodeAsSkill)
             ),
-            isWin = if (village?.winCampCode == null || vp.skillCodeAsSkill == null) null
-            else village.winCampCode == vp.skillCodeAsSkill.campCode() && (vp.deadReason == null || !vp.isDeadReasonCode突然),
+            isWin = vp.isWin,
+            camp = vp.campCode?.let { CDef.Camp.codeOf(it).toModel() },
             commigOuts = ComingOuts(
                 list = vp.comingOutList.map {
                     ComingOut(Skill(it.skillCodeAsSkill))
@@ -224,6 +227,17 @@ object VillageDataConverter {
 
     private fun detectItemText(settingList: List<VillageSetting>, item: CDef.VillageSettingItem): String? {
         return settingList.find { setting -> setting.villageSettingItemCodeAsVillageSettingItem == item }?.villageSettingText
+    }
+
+    private fun mapVillageParticipantStatus(villagePlayer: VillagePlayer): VillageParticipantStatus {
+        // 自分からのステータス
+        val statusList = villagePlayer.villagePlayerStatusByVillagePlayerIdList
+        // 自分へのステータス
+//        val toStatusList = villagePlayer.villagePlayerStatusByToVillagePlayerIdList
+
+        return VillageParticipantStatus(
+            loverIdList = statusList.filter { it.isVillagePlayerStatusCode恋絆 }.map { it.toVillagePlayerId },
+        )
     }
 
     private fun mapNotification(villagePlayer: VillagePlayer): VillageParticipantNotificationCondition? {

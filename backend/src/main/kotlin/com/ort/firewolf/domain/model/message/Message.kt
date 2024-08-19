@@ -79,6 +79,20 @@ data class Message(
         fun createAutopsyPrivateMessage(text: String, villageDayId: Int): Message =
             createSystemMessage(MessageType(CDef.MessageType.検死結果), text, villageDayId)
 
+        fun createPrivateLoversMessage(
+            text: String,
+            villageDayId: Int,
+            villageParticipant: VillageParticipant
+        ): Message =
+            createSystemMessage(MessageType(CDef.MessageType.恋人メッセージ), text, villageDayId, villageParticipant)
+
+        fun createPrivateAbilityMessage(
+            text: String,
+            villageDayId: Int,
+            villageParticipant: VillageParticipant,
+        ): Message =
+            createSystemMessage(MessageType(CDef.MessageType.能力行使メッセージ), text, villageDayId, villageParticipant)
+
         // ===================================================================================
         //                                                                        Assist Logic
         //                                                                        ============

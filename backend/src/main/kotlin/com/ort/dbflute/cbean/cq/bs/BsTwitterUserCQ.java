@@ -81,14 +81,14 @@ public class BsTwitterUserCQ extends AbstractBsTwitterUserCQ {
 
     /**
      * Add order-by as ascend. <br>
-     * player_id: {PK, NotNull, INT UNSIGNED(10), FK to PLAYER}
+     * player_id: {PK, NotNull, INT UNSIGNED(10), FK to player}
      * @return this. (NotNull)
      */
     public BsTwitterUserCQ addOrderBy_PlayerId_Asc() { regOBA("player_id"); return this; }
 
     /**
      * Add order-by as descend. <br>
-     * player_id: {PK, NotNull, INT UNSIGNED(10), FK to PLAYER}
+     * player_id: {PK, NotNull, INT UNSIGNED(10), FK to player}
      * @return this. (NotNull)
      */
     public BsTwitterUserCQ addOrderBy_PlayerId_Desc() { regOBD("player_id"); return this; }

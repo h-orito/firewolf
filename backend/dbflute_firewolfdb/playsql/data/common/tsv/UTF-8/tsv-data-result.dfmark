@@ -7,12 +7,12 @@
 data-directory: playsql/data/common/tsv/UTF-8
 
 01-AUTHORITY.tsv (2)
-02-CAMP.tsv (3)
+02-CAMP.tsv (4)
 03-VILLAGE_STATUS.tsv (5)
-04-SKILL.tsv (25)
-05-MESSAGE_TYPE.tsv (22)
+04-SKILL.tsv (26)
+05-MESSAGE_TYPE.tsv (25)
 06-DEAD_REASON.tsv (5)
-07-ABILITY_TYPE.tsv (4)
+07-ABILITY_TYPE.tsv (5)
 08-DESIGNER.tsv (2)
 09-CHARA_GROUP.tsv (2)
 10-FACE_TYPE.tsv (7)
@@ -21,3 +21,4 @@ data-directory: playsql/data/common/tsv/UTF-8
 13-CHARA_IMAGE.tsv (194)
 14-NOONNIGHT.tsv (2)
 15-APP_VERSION.tsv (1)
+16-VILLAGE_PLAYER_STATUS_TYPE.tsv (1)

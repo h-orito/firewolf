@@ -21,8 +21,11 @@ data class DeadView(
 
     companion object {
         private fun convertToHideCode(dead: Dead): String {
-            // 処刑、突然はそのまま出してok
-            if (dead.code == CDef.DeadReason.処刑.code() || dead.code == CDef.DeadReason.突然.code()) {
+            // 処刑、突然、後追いはそのまま出してok
+            if (dead.code == CDef.DeadReason.処刑.code() ||
+                dead.code == CDef.DeadReason.突然.code() ||
+                dead.code == CDef.DeadReason.後追.code()
+            ) {
                 return dead.code
             }
             // それ以外は無惨
@@ -30,8 +33,11 @@ data class DeadView(
         }
 
         private fun convertToHideReason(dead: Dead): String {
-            // 処刑、突然はそのまま出してok
-            if (dead.code == CDef.DeadReason.処刑.code() || dead.code == CDef.DeadReason.突然.code()) {
+            // 処刑、突然、後追はそのまま出してok
+            if (dead.code == CDef.DeadReason.処刑.code() ||
+                dead.code == CDef.DeadReason.突然.code() ||
+                dead.code == CDef.DeadReason.後追.code()
+            ) {
                 return dead.reason
             }
             // それ以外は無惨

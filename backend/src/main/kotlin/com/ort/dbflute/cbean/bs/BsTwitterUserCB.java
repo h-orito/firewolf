@@ -85,7 +85,7 @@ public class BsTwitterUserCB extends AbstractConditionBean {
     //                                                                 ===================
     /**
      * Accept the query condition of primary key as equal.
-     * @param playerId : PK, NotNull, INT UNSIGNED(10), FK to PLAYER. (NotNull)
+     * @param playerId : PK, NotNull, INT UNSIGNED(10), FK to player. (NotNull)
      * @return this. (NotNull)
      */
     public TwitterUserCB acceptPK(Integer playerId) {
@@ -315,7 +315,7 @@ public class BsTwitterUserCB extends AbstractConditionBean {
                              , HpSDRFunctionFactory sdrFuncFactory)
         { super(baseCB, qyCall, purpose, dbmetaProvider, sdrFuncFactory); }
         /**
-         * player_id: {PK, NotNull, INT UNSIGNED(10), FK to PLAYER}
+         * player_id: {PK, NotNull, INT UNSIGNED(10), FK to player}
          * @return The information object of specified column. (NotNull)
          */
         public SpecifiedColumn columnPlayerId() { return doColumn("player_id"); }

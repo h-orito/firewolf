@@ -20,7 +20,7 @@ import com.ort.dbflute.cbean.*;
 import com.ort.dbflute.cbean.cq.*;
 
 /**
- * The base condition-bean of MESSAGE.
+ * The base condition-bean of message.
  * @author DBFlute(AutoGenerator)
  */
 public class BsMessageCB extends AbstractConditionBean {
@@ -76,7 +76,7 @@ public class BsMessageCB extends AbstractConditionBean {
     }
 
     public String asTableDbName() {
-        return "MESSAGE";
+        return "message";
     }
 
     // ===================================================================================
@@ -406,10 +406,10 @@ public class BsMessageCB extends AbstractConditionBean {
             columnMessageTypeCode(); // PK
         }
         @Override
-        protected String getTableDbName() { return "MESSAGE"; }
+        protected String getTableDbName() { return "message"; }
         /**
          * Prepare for (Specify)DerivedReferrer (correlated sub-query). <br>
-         * {select max(FOO) from MESSAGE_SENDTO where ...) as FOO_MAX} <br>
+         * {select max(FOO) from message_sendto where ...) as FOO_MAX} <br>
          * MESSAGE_SENDTO by VILLAGE_ID, MESSAGE_TYPE_CODE, MESSAGE_NUMBER, named 'messageSendtoList'.
          * <pre>
          * cb.specify().<span style="color: #CC4747">derived${relationMethodIdentityName}()</span>.<span style="color: #CC4747">max</span>(sendtoCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {

@@ -38,12 +38,14 @@ data class VillageParticipants(
                     shortName = chara.charaName.shortName
                 ),
                 playerId = playerId,
+                status = VillageParticipantStatus(),
                 dead = null,
                 isSpectator = isSpectator,
                 isGone = false,
                 skill = null,
                 skillRequest = skillRequest,
                 isWin = null,
+                camp = null,
                 commigOuts = ComingOuts(),
                 ipAddresses = listOf(ipAddress),
                 notification = null
@@ -125,6 +127,19 @@ data class VillageParticipants(
         )
     }
 
+    // 求愛
+    fun court(fromParticipantId: Int, toParticipantId: Int): VillageParticipants {
+        return copy(
+            memberList = memberList.map {
+                when (it.id) {
+                    fromParticipantId -> it.court(toParticipantId)
+                    toParticipantId -> it.courted(fromParticipantId)
+                    else -> it.copy()
+                }
+            }
+        )
+    }
+
     // IPアドレス追加
     fun addIpAddress(id: Int, ipAddress: String): VillageParticipants {
         return this.copy(
@@ -136,7 +151,7 @@ data class VillageParticipants(
 
     // 勝敗設定
     fun winLose(winCamp: Camp): VillageParticipants =
-        this.copy(memberList = this.memberList.map { it.winLose(winCamp) })
+        this.copy(memberList = this.memberList.map { it.judgeWin(winCamp) })
 
     fun find(id: Int): VillageParticipant? = memberList.firstOrNull { it.id == id }
 
@@ -154,6 +169,14 @@ data class VillageParticipants(
         )
     }
 
+    fun filterDead(): VillageParticipants {
+        val deadMembers = memberList.filter { it.isDead() }
+        return VillageParticipants(
+            count = deadMembers.size,
+            memberList = deadMembers
+        )
+    }
+
     fun filterBySkill(skill: Skill): VillageParticipants {
         val list = memberList.filter { it.skill?.toCdef() == skill.toCdef() }
         return copy(
@@ -165,6 +188,9 @@ data class VillageParticipants(
     fun findRandom(predicate: (VillageParticipant) -> Boolean): VillageParticipant? {
         return memberList.filter { predicate(it) }.shuffled().firstOrNull()
     }
+
+    fun filterNotParticipant(participant: VillageParticipant) =
+        copy(memberList = memberList.filterNot { it.id == participant.id })
 
     fun existsDifference(participant: VillageParticipants): Boolean {
         if (count != participant.count) return true
