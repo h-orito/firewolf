@@ -13,6 +13,7 @@ import com.ort.firewolf.domain.service.ability.CourtDomainService
 import com.ort.firewolf.domain.service.ability.DivineDomainService
 import com.ort.firewolf.domain.service.ability.GuardDomainService
 import com.ort.firewolf.domain.service.ability.GuruDomainService
+import com.ort.firewolf.domain.service.ability.HiyashichukaDomainService
 import com.ort.firewolf.domain.service.ability.PsychicDomainService
 import com.ort.firewolf.domain.service.ability.WandererGuardDomainService
 import com.ort.firewolf.domain.service.ability.WiseDivineDomainService
@@ -33,6 +34,7 @@ class ProgressDomainService(
     private val autopsyDomainService: AutopsyDomainService,
     private val bakeryDomainService: BakeryDomainService,
     private val courtDomainService: CourtDomainService,
+    private val hiyashichukaDomainService: HiyashichukaDomainService,
     private val miserableDeathDomainService: MiserableDeathDomainService,
     private val suddenlyDeathDomainService: SuddenlyDeathDomainService,
     private val suicideDomainService: SuicideDomainService,
@@ -56,6 +58,9 @@ class ProgressDomainService(
         // 突然死
         var dayChange =
             suddenlyDeathDomainService.processDayChangeAction(beforeDayChange, todayMessages, commits)
+
+        // 冷やし中華
+        dayChange = hiyashichukaDomainService.processDayChangeAction(dayChange)
 
         // 求愛
         dayChange = courtDomainService.processDayChangeAction(dayChange)

@@ -498,6 +498,9 @@ public interface CDef extends Classification {
         /** 導師 */
         導師("GURU", "導師", emptyStrings())
         ,
+        /** 冷やし中華 */
+        冷やし中華("HIYASICHUKA", "冷やし中華", emptyStrings())
+        ,
         /** 狩人 */
         狩人("HUNTER", "狩人", emptyStrings())
         ,
@@ -592,7 +595,7 @@ public interface CDef extends Classification {
                 subItemMap.put("shortName", "求");
                 subItemMap.put("order", "301");
                 subItemMap.put("campCode", "LOVERS");
-                subItemMap.put("description", "あなたは求愛者です。1回だけ、指定した人とお互いに恋絆を結ぶことができます。");
+                subItemMap.put("description", "あなたは求愛者です。初日に指定した人とお互いに恋絆を結ぶことができます。");
                 _subItemMapMap.put(求愛者.code(), Collections.unmodifiableMap(subItemMap));
             }
             {
@@ -626,6 +629,14 @@ public interface CDef extends Classification {
                 subItemMap.put("campCode", "VILLAGER");
                 subItemMap.put("description", "あなたは導師です。処刑された・突然死した人物の役職を知ることができます。");
                 _subItemMapMap.put(導師.code(), Collections.unmodifiableMap(subItemMap));
+            }
+            {
+                Map<String, Object> subItemMap = new HashMap<String, Object>();
+                subItemMap.put("shortName", "冷");
+                subItemMap.put("order", "15");
+                subItemMap.put("campCode", "VILLAGER");
+                subItemMap.put("description", "あなたは冷やし中華です。1回だけ、始まることができます。");
+                _subItemMapMap.put(冷やし中華.code(), Collections.unmodifiableMap(subItemMap));
             }
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
@@ -1941,6 +1952,9 @@ public interface CDef extends Classification {
         ,
         /** 護衛 */
         護衛("GUARD", "護衛", emptyStrings())
+        ,
+        /** 冷やし中華 */
+        冷やし中華("HIYASICHUKA", "冷やし中華", emptyStrings())
         ,
         /** 風来護衛 */
         風来護衛("WANDERER_GUARD", "風来護衛", emptyStrings())

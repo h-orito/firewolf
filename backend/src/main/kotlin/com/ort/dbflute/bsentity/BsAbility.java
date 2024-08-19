@@ -185,6 +185,14 @@ public abstract class BsAbility extends AbstractEntity implements DomainEntity, 
     }
 
     /**
+     * Set the value of abilityTypeCode as 冷やし中華 (HIYASICHUKA). <br>
+     * 冷やし中華
+     */
+    public void setAbilityTypeCode_冷やし中華() {
+        setAbilityTypeCodeAsAbilityType(CDef.AbilityType.冷やし中華);
+    }
+
+    /**
      * Set the value of abilityTypeCode as 風来護衛 (WANDERER_GUARD). <br>
      * 風来護衛
      */
@@ -237,6 +245,17 @@ public abstract class BsAbility extends AbstractEntity implements DomainEntity, 
     public boolean isAbilityTypeCode護衛() {
         CDef.AbilityType cdef = getAbilityTypeCodeAsAbilityType();
         return cdef != null ? cdef.equals(CDef.AbilityType.護衛) : false;
+    }
+
+    /**
+     * Is the value of abilityTypeCode 冷やし中華? <br>
+     * 冷やし中華
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isAbilityTypeCode冷やし中華() {
+        CDef.AbilityType cdef = getAbilityTypeCodeAsAbilityType();
+        return cdef != null ? cdef.equals(CDef.AbilityType.冷やし中華) : false;
     }
 
     /**

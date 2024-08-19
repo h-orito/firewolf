@@ -256,6 +256,14 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
     }
 
     /**
+     * Equal(=). As 冷やし中華 (HIYASICHUKA). And OnlyOnceRegistered. <br>
+     * 冷やし中華
+     */
+    public void setSkillCode_Equal_冷やし中華() {
+        setSkillCode_Equal_AsSkill(CDef.Skill.冷やし中華);
+    }
+
+    /**
      * Equal(=). As 狩人 (HUNTER). And OnlyOnceRegistered. <br>
      * 狩人
      */
@@ -484,6 +492,14 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
      */
     public void setSkillCode_NotEqual_導師() {
         setSkillCode_NotEqual_AsSkill(CDef.Skill.導師);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 冷やし中華 (HIYASICHUKA). And OnlyOnceRegistered. <br>
+     * 冷やし中華
+     */
+    public void setSkillCode_NotEqual_冷やし中華() {
+        setSkillCode_NotEqual_AsSkill(CDef.Skill.冷やし中華);
     }
 
     /**

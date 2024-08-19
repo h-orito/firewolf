@@ -95,6 +95,14 @@ public abstract class AbstractBsAbilityCQ extends AbstractConditionQuery {
     }
 
     /**
+     * Equal(=). As 冷やし中華 (HIYASICHUKA). And OnlyOnceRegistered. <br>
+     * 冷やし中華
+     */
+    public void setAbilityTypeCode_Equal_冷やし中華() {
+        setAbilityTypeCode_Equal_AsAbilityType(CDef.AbilityType.冷やし中華);
+    }
+
+    /**
      * Equal(=). As 風来護衛 (WANDERER_GUARD). And OnlyOnceRegistered. <br>
      * 風来護衛
      */
@@ -155,6 +163,14 @@ public abstract class AbstractBsAbilityCQ extends AbstractConditionQuery {
      */
     public void setAbilityTypeCode_NotEqual_護衛() {
         setAbilityTypeCode_NotEqual_AsAbilityType(CDef.AbilityType.護衛);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 冷やし中華 (HIYASICHUKA). And OnlyOnceRegistered. <br>
+     * 冷やし中華
+     */
+    public void setAbilityTypeCode_NotEqual_冷やし中華() {
+        setAbilityTypeCode_NotEqual_AsAbilityType(CDef.AbilityType.冷やし中華);
     }
 
     /**

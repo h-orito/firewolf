@@ -338,6 +338,14 @@ public abstract class BsVillagePlayer extends AbstractEntity implements DomainEn
     }
 
     /**
+     * Set the value of skillCode as 冷やし中華 (HIYASICHUKA). <br>
+     * 冷やし中華
+     */
+    public void setSkillCode_冷やし中華() {
+        setSkillCodeAsSkill(CDef.Skill.冷やし中華);
+    }
+
+    /**
      * Set the value of skillCode as 狩人 (HUNTER). <br>
      * 狩人
      */
@@ -546,6 +554,14 @@ public abstract class BsVillagePlayer extends AbstractEntity implements DomainEn
     }
 
     /**
+     * Set the value of requestSkillCode as 冷やし中華 (HIYASICHUKA). <br>
+     * 冷やし中華
+     */
+    public void setRequestSkillCode_冷やし中華() {
+        setRequestSkillCodeAsSkill(CDef.Skill.冷やし中華);
+    }
+
+    /**
      * Set the value of requestSkillCode as 狩人 (HUNTER). <br>
      * 狩人
      */
@@ -751,6 +767,14 @@ public abstract class BsVillagePlayer extends AbstractEntity implements DomainEn
      */
     public void setSecondRequestSkillCode_導師() {
         setSecondRequestSkillCodeAsSkill(CDef.Skill.導師);
+    }
+
+    /**
+     * Set the value of secondRequestSkillCode as 冷やし中華 (HIYASICHUKA). <br>
+     * 冷やし中華
+     */
+    public void setSecondRequestSkillCode_冷やし中華() {
+        setSecondRequestSkillCodeAsSkill(CDef.Skill.冷やし中華);
     }
 
     /**
@@ -1026,6 +1050,17 @@ public abstract class BsVillagePlayer extends AbstractEntity implements DomainEn
     public boolean isSkillCode導師() {
         CDef.Skill cdef = getSkillCodeAsSkill();
         return cdef != null ? cdef.equals(CDef.Skill.導師) : false;
+    }
+
+    /**
+     * Is the value of skillCode 冷やし中華? <br>
+     * 冷やし中華
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isSkillCode冷やし中華() {
+        CDef.Skill cdef = getSkillCodeAsSkill();
+        return cdef != null ? cdef.equals(CDef.Skill.冷やし中華) : false;
     }
 
     /**
@@ -1605,6 +1640,17 @@ public abstract class BsVillagePlayer extends AbstractEntity implements DomainEn
     }
 
     /**
+     * Is the value of requestSkillCode 冷やし中華? <br>
+     * 冷やし中華
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isRequestSkillCode冷やし中華() {
+        CDef.Skill cdef = getRequestSkillCodeAsSkill();
+        return cdef != null ? cdef.equals(CDef.Skill.冷やし中華) : false;
+    }
+
+    /**
      * Is the value of requestSkillCode 狩人? <br>
      * 狩人
      * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
@@ -2178,6 +2224,17 @@ public abstract class BsVillagePlayer extends AbstractEntity implements DomainEn
     public boolean isSecondRequestSkillCode導師() {
         CDef.Skill cdef = getSecondRequestSkillCodeAsSkill();
         return cdef != null ? cdef.equals(CDef.Skill.導師) : false;
+    }
+
+    /**
+     * Is the value of secondRequestSkillCode 冷やし中華? <br>
+     * 冷やし中華
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isSecondRequestSkillCode冷やし中華() {
+        CDef.Skill cdef = getSecondRequestSkillCodeAsSkill();
+        return cdef != null ? cdef.equals(CDef.Skill.冷やし中華) : false;
     }
 
     /**
