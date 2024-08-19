@@ -45,7 +45,31 @@ class CourtDomainService : IAbilityDomainService {
         village: Village,
         villageAbilities: VillageAbilities
     ): List<VillageAbility> {
-        return emptyList()
+        // 進行中のみ
+        if (!village.status.isProgress()) return listOf()
+        // 最新日id
+        val latestVillageDay = village.day.latestDay()
+        // 1日目のみ
+        if (latestVillageDay.day != 1) {
+            return listOf()
+        }
+
+        // 生存している求愛能力持ちごとに
+        return village
+            .notDummyParticipant() // ダミーは求愛しない
+            .filterAlive()
+            .filterBySkill(CDef.Skill.求愛者.toModel()).memberList
+            .mapNotNull { court ->
+                // 対象はランダム
+                getSelectableTargetList(village, court, villageAbilities).shuffled().firstOrNull()?.let {
+                    VillageAbility(
+                        villageDayId = latestVillageDay.id,
+                        myselfId = court.id,
+                        targetId = it.id,
+                        abilityType = getAbilityType()
+                    )
+                }
+            }
     }
 
     override fun processDayChangeAction(dayChange: DayChange): DayChange {
@@ -71,11 +95,11 @@ class CourtDomainService : IAbilityDomainService {
         ).setIsChange(dayChange)
     }
 
-    override fun isAvailableNoTarget(village: Village): Boolean = true
+    override fun isAvailableNoTarget(village: Village): Boolean = false
 
     override fun isUsable(village: Village, participant: VillageParticipant): Boolean {
-        // 生存していたら行使できる
-        return participant.isAlive()
+        // 1日目のみ使用可能
+        return participant.isAlive() && village.day.latestDay().day == 1
     }
 
     // ===================================================================================

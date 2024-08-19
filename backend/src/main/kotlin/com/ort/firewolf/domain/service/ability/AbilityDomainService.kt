@@ -128,6 +128,8 @@ class AbilityDomainService(
         abilities = abilities.addAll(wiseDivineDomainService.getDefaultAbilityList(village, abilities))
         // 護衛
         abilities = abilities.addAll(guardDomainService.getDefaultAbilityList(village, abilities))
+        // 求愛
+        abilities = abilities.addAll(courtDomainService.getDefaultAbilityList(village, abilities))
 
         return dayChange.copy(abilities = abilities).setIsChange(dayChange)
     }
