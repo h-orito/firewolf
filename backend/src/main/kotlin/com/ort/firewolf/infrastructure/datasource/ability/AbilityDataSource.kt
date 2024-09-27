@@ -50,6 +50,7 @@ class AbilityDataSource(
     }
 
     private fun insertAbility(villageAbility: VillageAbility) {
+        if (villageAbility.targetId == null) return
         val ability = Ability()
         ability.villageDayId = villageAbility.villageDayId
         ability.villagePlayerId = villageAbility.myselfId
