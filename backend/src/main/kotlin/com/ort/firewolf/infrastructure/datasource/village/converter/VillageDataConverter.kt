@@ -27,6 +27,7 @@ import com.ort.firewolf.domain.model.village.setting.VillageOrganizations
 import com.ort.firewolf.domain.model.village.setting.VillagePassword
 import com.ort.firewolf.domain.model.village.setting.VillageRules
 import com.ort.firewolf.domain.model.village.setting.VillageSettings
+import com.ort.firewolf.domain.model.village.setting.VillageTags
 import com.ort.firewolf.domain.model.village.setting.VillageTime
 import org.dbflute.cbean.result.ListResultBean
 import java.time.LocalDateTime
@@ -184,6 +185,9 @@ object VillageDataConverter {
                         )
                     }
                 )
+            ),
+            tags = VillageTags(
+                list = village.villageTagList.map { it.villageTagItemCode }
             ),
             password = VillagePassword(
                 joinPassword = detectItemText(settingList, CDef.VillageSettingItem.入村パスワード)

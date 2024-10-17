@@ -21,20 +21,20 @@ import com.ort.dbflute.cbean.cq.*;
 import com.ort.dbflute.cbean.nss.*;
 
 /**
- * The base condition-bean of village.
+ * The base condition-bean of village_tag.
  * @author DBFlute(AutoGenerator)
  */
-public class BsVillageCB extends AbstractConditionBean {
+public class BsVillageTagCB extends AbstractConditionBean {
 
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
-    protected VillageCQ _conditionQuery;
+    protected VillageTagCQ _conditionQuery;
 
     // ===================================================================================
     //                                                                         Constructor
     //                                                                         ===========
-    public BsVillageCB() {
+    public BsVillageTagCB() {
         if (DBFluteConfig.getInstance().isPagingCountLater()) {
             enablePagingCountLater();
         }
@@ -77,7 +77,7 @@ public class BsVillageCB extends AbstractConditionBean {
     }
 
     public String asTableDbName() {
-        return "village";
+        return "village_tag";
     }
 
     // ===================================================================================
@@ -85,23 +85,23 @@ public class BsVillageCB extends AbstractConditionBean {
     //                                                                 ===================
     /**
      * Accept the query condition of primary key as equal.
-     * @param villageId : PK, ID, NotNull, INT UNSIGNED(10). (NotNull)
+     * @param villageTagId : PK, ID, NotNull, INT UNSIGNED(10). (NotNull)
      * @return this. (NotNull)
      */
-    public VillageCB acceptPK(Integer villageId) {
-        assertObjectNotNull("villageId", villageId);
-        BsVillageCB cb = this;
-        cb.query().setVillageId_Equal(villageId);
-        return (VillageCB)this;
+    public VillageTagCB acceptPK(Integer villageTagId) {
+        assertObjectNotNull("villageTagId", villageTagId);
+        BsVillageTagCB cb = this;
+        cb.query().setVillageTagId_Equal(villageTagId);
+        return (VillageTagCB)this;
     }
 
     public ConditionBean addOrderBy_PK_Asc() {
-        query().addOrderBy_VillageId_Asc();
+        query().addOrderBy_VillageTagId_Asc();
         return this;
     }
 
     public ConditionBean addOrderBy_PK_Desc() {
-        query().addOrderBy_VillageId_Desc();
+        query().addOrderBy_VillageTagId_Desc();
         return this;
     }
 
@@ -165,34 +165,34 @@ public class BsVillageCB extends AbstractConditionBean {
      * </pre>
      * @return The instance of condition-query for base-point table to set up query. (NotNull)
      */
-    public VillageCQ query() {
+    public VillageTagCQ query() {
         assertQueryPurpose(); // assert only when user-public query
         return doGetConditionQuery();
     }
 
-    public VillageCQ xdfgetConditionQuery() { // public for parameter comment and internal
+    public VillageTagCQ xdfgetConditionQuery() { // public for parameter comment and internal
         return doGetConditionQuery();
     }
 
-    protected VillageCQ doGetConditionQuery() {
+    protected VillageTagCQ doGetConditionQuery() {
         if (_conditionQuery == null) {
             _conditionQuery = createLocalCQ();
         }
         return _conditionQuery;
     }
 
-    protected VillageCQ createLocalCQ() {
+    protected VillageTagCQ createLocalCQ() {
         return xcreateCQ(null, getSqlClause(), getSqlClause().getBasePointAliasName(), 0);
     }
 
-    protected VillageCQ xcreateCQ(ConditionQuery childQuery, SqlClause sqlClause, String aliasName, int nestLevel) {
-        VillageCQ cq = xnewCQ(childQuery, sqlClause, aliasName, nestLevel);
+    protected VillageTagCQ xcreateCQ(ConditionQuery childQuery, SqlClause sqlClause, String aliasName, int nestLevel) {
+        VillageTagCQ cq = xnewCQ(childQuery, sqlClause, aliasName, nestLevel);
         cq.xsetBaseCB(this);
         return cq;
     }
 
-    protected VillageCQ xnewCQ(ConditionQuery childQuery, SqlClause sqlClause, String aliasName, int nestLevel) {
-        return new VillageCQ(childQuery, sqlClause, aliasName, nestLevel);
+    protected VillageTagCQ xnewCQ(ConditionQuery childQuery, SqlClause sqlClause, String aliasName, int nestLevel) {
+        return new VillageTagCQ(childQuery, sqlClause, aliasName, nestLevel);
     }
 
     /**
@@ -216,10 +216,10 @@ public class BsVillageCB extends AbstractConditionBean {
      * </pre>
      * @param unionCBLambda The callback for query of 'union'. (NotNull)
      */
-    public void union(UnionQuery<VillageCB> unionCBLambda) {
-        final VillageCB cb = new VillageCB(); cb.xsetupForUnion(this); xsyncUQ(cb);
+    public void union(UnionQuery<VillageTagCB> unionCBLambda) {
+        final VillageTagCB cb = new VillageTagCB(); cb.xsetupForUnion(this); xsyncUQ(cb);
         try { lock(); unionCBLambda.query(cb); } finally { unlock(); } xsaveUCB(cb);
-        final VillageCQ cq = cb.query(); query().xsetUnionQuery(cq);
+        final VillageTagCQ cq = cb.query(); query().xsetUnionQuery(cq);
     }
 
     /**
@@ -233,82 +233,62 @@ public class BsVillageCB extends AbstractConditionBean {
      * </pre>
      * @param unionCBLambda The callback for query of 'union all'. (NotNull)
      */
-    public void unionAll(UnionQuery<VillageCB> unionCBLambda) {
-        final VillageCB cb = new VillageCB(); cb.xsetupForUnion(this); xsyncUQ(cb);
+    public void unionAll(UnionQuery<VillageTagCB> unionCBLambda) {
+        final VillageTagCB cb = new VillageTagCB(); cb.xsetupForUnion(this); xsyncUQ(cb);
         try { lock(); unionCBLambda.query(cb); } finally { unlock(); } xsaveUCB(cb);
-        final VillageCQ cq = cb.query(); query().xsetUnionAllQuery(cq);
+        final VillageTagCQ cq = cb.query(); query().xsetUnionAllQuery(cq);
     }
 
     // ===================================================================================
     //                                                                         SetupSelect
     //                                                                         ===========
-    protected PlayerNss _nssPlayer;
-    public PlayerNss xdfgetNssPlayer() {
-        if (_nssPlayer == null) { _nssPlayer = new PlayerNss(null); }
-        return _nssPlayer;
+    protected VillageNss _nssVillage;
+    public VillageNss xdfgetNssVillage() {
+        if (_nssVillage == null) { _nssVillage = new VillageNss(null); }
+        return _nssVillage;
     }
     /**
      * Set up relation columns to select clause. <br>
-     * PLAYER by my CREATE_PLAYER_ID, named 'player'.
+     * VILLAGE by my VILLAGE_ID, named 'village'.
      * <pre>
-     * <span style="color: #0000C0">villageBhv</span>.selectEntity(<span style="color: #553000">cb</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-     *     <span style="color: #553000">cb</span>.<span style="color: #CC4747">setupSelect_Player()</span>; <span style="color: #3F7E5E">// ...().with[nested-relation]()</span>
+     * <span style="color: #0000C0">villageTagBhv</span>.selectEntity(<span style="color: #553000">cb</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+     *     <span style="color: #553000">cb</span>.<span style="color: #CC4747">setupSelect_Village()</span>; <span style="color: #3F7E5E">// ...().with[nested-relation]()</span>
      *     <span style="color: #553000">cb</span>.query().set...
-     * }).alwaysPresent(<span style="color: #553000">village</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-     *     ... = <span style="color: #553000">village</span>.<span style="color: #CC4747">getPlayer()</span>; <span style="color: #3F7E5E">// you can get by using SetupSelect</span>
+     * }).alwaysPresent(<span style="color: #553000">villageTag</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+     *     ... = <span style="color: #553000">villageTag</span>.<span style="color: #CC4747">getVillage()</span>; <span style="color: #3F7E5E">// you can get by using SetupSelect</span>
      * });
      * </pre>
      * @return The set-upper of nested relation. {setupSelect...().with[nested-relation]} (NotNull)
      */
-    public PlayerNss setupSelect_Player() {
-        assertSetupSelectPurpose("player");
+    public VillageNss setupSelect_Village() {
+        assertSetupSelectPurpose("village");
         if (hasSpecifiedLocalColumn()) {
-            specify().columnCreatePlayerId();
+            specify().columnVillageId();
         }
-        doSetupSelect(() -> query().queryPlayer());
-        if (_nssPlayer == null || !_nssPlayer.hasConditionQuery())
-        { _nssPlayer = new PlayerNss(query().queryPlayer()); }
-        return _nssPlayer;
+        doSetupSelect(() -> query().queryVillage());
+        if (_nssVillage == null || !_nssVillage.hasConditionQuery())
+        { _nssVillage = new VillageNss(query().queryVillage()); }
+        return _nssVillage;
     }
 
     /**
      * Set up relation columns to select clause. <br>
-     * VILLAGE_STATUS by my VILLAGE_STATUS_CODE, named 'villageStatus'.
+     * VILLAGE_TAG_ITEM by my VILLAGE_TAG_ITEM_CODE, named 'villageTagItem'.
      * <pre>
-     * <span style="color: #0000C0">villageBhv</span>.selectEntity(<span style="color: #553000">cb</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-     *     <span style="color: #553000">cb</span>.<span style="color: #CC4747">setupSelect_VillageStatus()</span>; <span style="color: #3F7E5E">// ...().with[nested-relation]()</span>
+     * <span style="color: #0000C0">villageTagBhv</span>.selectEntity(<span style="color: #553000">cb</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+     *     <span style="color: #553000">cb</span>.<span style="color: #CC4747">setupSelect_VillageTagItem()</span>; <span style="color: #3F7E5E">// ...().with[nested-relation]()</span>
      *     <span style="color: #553000">cb</span>.query().set...
-     * }).alwaysPresent(<span style="color: #553000">village</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-     *     ... = <span style="color: #553000">village</span>.<span style="color: #CC4747">getVillageStatus()</span>; <span style="color: #3F7E5E">// you can get by using SetupSelect</span>
+     * }).alwaysPresent(<span style="color: #553000">villageTag</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+     *     ... = <span style="color: #553000">villageTag</span>.<span style="color: #CC4747">getVillageTagItem()</span>; <span style="color: #3F7E5E">// you can get by using SetupSelect</span>
      * });
      * </pre>
      */
-    public void setupSelect_VillageStatus() {
-        assertSetupSelectPurpose("villageStatus");
+    public void setupSelect_VillageTagItem() {
+        assertSetupSelectPurpose("villageTagItem");
         if (hasSpecifiedLocalColumn()) {
-            specify().columnVillageStatusCode();
+            specify().columnVillageTagItemCode();
         }
-        doSetupSelect(() -> query().queryVillageStatus());
-    }
-
-    /**
-     * Set up relation columns to select clause. <br>
-     * CAMP by my WIN_CAMP_CODE, named 'camp'.
-     * <pre>
-     * <span style="color: #0000C0">villageBhv</span>.selectEntity(<span style="color: #553000">cb</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-     *     <span style="color: #553000">cb</span>.<span style="color: #CC4747">setupSelect_Camp()</span>; <span style="color: #3F7E5E">// ...().with[nested-relation]()</span>
-     *     <span style="color: #553000">cb</span>.query().set...
-     * }).alwaysPresent(<span style="color: #553000">village</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-     *     ... = <span style="color: #553000">village</span>.<span style="color: #CC4747">getCamp()</span>; <span style="color: #3F7E5E">// you can get by using SetupSelect</span>
-     * });
-     * </pre>
-     */
-    public void setupSelect_Camp() {
-        assertSetupSelectPurpose("camp");
-        if (hasSpecifiedLocalColumn()) {
-            specify().columnWinCampCode();
-        }
-        doSetupSelect(() -> query().queryCamp());
+        doSetupSelect(() -> query().queryVillageTagItem());
     }
 
     // [DBFlute-0.7.4]
@@ -351,44 +331,28 @@ public class BsVillageCB extends AbstractConditionBean {
         return _specification != null && _specification.hasSpecifiedColumn();
     }
 
-    public static class HpSpecification extends HpAbstractSpecification<VillageCQ> {
-        protected PlayerCB.HpSpecification _player;
-        protected VillageStatusCB.HpSpecification _villageStatus;
-        protected CampCB.HpSpecification _camp;
-        public HpSpecification(ConditionBean baseCB, HpSpQyCall<VillageCQ> qyCall
+    public static class HpSpecification extends HpAbstractSpecification<VillageTagCQ> {
+        protected VillageCB.HpSpecification _village;
+        protected VillageTagItemCB.HpSpecification _villageTagItem;
+        public HpSpecification(ConditionBean baseCB, HpSpQyCall<VillageTagCQ> qyCall
                              , HpCBPurpose purpose, DBMetaProvider dbmetaProvider
                              , HpSDRFunctionFactory sdrFuncFactory)
         { super(baseCB, qyCall, purpose, dbmetaProvider, sdrFuncFactory); }
         /**
-         * VILLAGE_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
+         * VILLAGE_TAG_ID: {PK, ID, NotNull, INT UNSIGNED(10)}
+         * @return The information object of specified column. (NotNull)
+         */
+        public SpecifiedColumn columnVillageTagId() { return doColumn("VILLAGE_TAG_ID"); }
+        /**
+         * VILLAGE_ID: {IX, NotNull, INT UNSIGNED(10), FK to village}
          * @return The information object of specified column. (NotNull)
          */
         public SpecifiedColumn columnVillageId() { return doColumn("VILLAGE_ID"); }
         /**
-         * VILLAGE_DISPLAY_NAME: {NotNull, VARCHAR(40)}
+         * VILLAGE_TAG_ITEM_CODE: {IX, NotNull, VARCHAR(50), FK to village_tag_item}
          * @return The information object of specified column. (NotNull)
          */
-        public SpecifiedColumn columnVillageDisplayName() { return doColumn("VILLAGE_DISPLAY_NAME"); }
-        /**
-         * CREATE_PLAYER_ID: {IX, NotNull, INT UNSIGNED(10), FK to player}
-         * @return The information object of specified column. (NotNull)
-         */
-        public SpecifiedColumn columnCreatePlayerId() { return doColumn("CREATE_PLAYER_ID"); }
-        /**
-         * VILLAGE_STATUS_CODE: {IX, NotNull, VARCHAR(20), FK to village_status, classification=VillageStatus}
-         * @return The information object of specified column. (NotNull)
-         */
-        public SpecifiedColumn columnVillageStatusCode() { return doColumn("VILLAGE_STATUS_CODE"); }
-        /**
-         * EPILOGUE_DAY: {INT UNSIGNED(10)}
-         * @return The information object of specified column. (NotNull)
-         */
-        public SpecifiedColumn columnEpilogueDay() { return doColumn("EPILOGUE_DAY"); }
-        /**
-         * WIN_CAMP_CODE: {IX, VARCHAR(20), FK to camp, classification=Camp}
-         * @return The information object of specified column. (NotNull)
-         */
-        public SpecifiedColumn columnWinCampCode() { return doColumn("WIN_CAMP_CODE"); }
+        public SpecifiedColumn columnVillageTagItemCode() { return doColumn("VILLAGE_TAG_ITEM_CODE"); }
         /**
          * REGISTER_DATETIME: {NotNull, DATETIME(19)}
          * @return The information object of specified column. (NotNull)
@@ -413,191 +377,65 @@ public class BsVillageCB extends AbstractConditionBean {
         public void exceptRecordMetaColumn() { doExceptRecordMetaColumn(); }
         @Override
         protected void doSpecifyRequiredColumn() {
-            columnVillageId(); // PK
-            if (qyCall().qy().hasConditionQueryPlayer()
-                    || qyCall().qy().xgetReferrerQuery() instanceof PlayerCQ) {
-                columnCreatePlayerId(); // FK or one-to-one referrer
+            columnVillageTagId(); // PK
+            if (qyCall().qy().hasConditionQueryVillage()
+                    || qyCall().qy().xgetReferrerQuery() instanceof VillageCQ) {
+                columnVillageId(); // FK or one-to-one referrer
             }
-            if (qyCall().qy().hasConditionQueryVillageStatus()
-                    || qyCall().qy().xgetReferrerQuery() instanceof VillageStatusCQ) {
-                columnVillageStatusCode(); // FK or one-to-one referrer
-            }
-            if (qyCall().qy().hasConditionQueryCamp()
-                    || qyCall().qy().xgetReferrerQuery() instanceof CampCQ) {
-                columnWinCampCode(); // FK or one-to-one referrer
+            if (qyCall().qy().hasConditionQueryVillageTagItem()
+                    || qyCall().qy().xgetReferrerQuery() instanceof VillageTagItemCQ) {
+                columnVillageTagItemCode(); // FK or one-to-one referrer
             }
         }
         @Override
-        protected String getTableDbName() { return "village"; }
+        protected String getTableDbName() { return "village_tag"; }
         /**
          * Prepare to specify functions about relation table. <br>
-         * PLAYER by my CREATE_PLAYER_ID, named 'player'.
+         * VILLAGE by my VILLAGE_ID, named 'village'.
          * @return The instance for specification for relation table to specify. (NotNull)
          */
-        public PlayerCB.HpSpecification specifyPlayer() {
-            assertRelation("player");
-            if (_player == null) {
-                _player = new PlayerCB.HpSpecification(_baseCB
-                    , xcreateSpQyCall(() -> _qyCall.has() && _qyCall.qy().hasConditionQueryPlayer()
-                                    , () -> _qyCall.qy().queryPlayer())
+        public VillageCB.HpSpecification specifyVillage() {
+            assertRelation("village");
+            if (_village == null) {
+                _village = new VillageCB.HpSpecification(_baseCB
+                    , xcreateSpQyCall(() -> _qyCall.has() && _qyCall.qy().hasConditionQueryVillage()
+                                    , () -> _qyCall.qy().queryVillage())
                     , _purpose, _dbmetaProvider, xgetSDRFnFc());
                 if (xhasSyncQyCall()) { // inherits it
-                    _player.xsetSyncQyCall(xcreateSpQyCall(
-                        () -> xsyncQyCall().has() && xsyncQyCall().qy().hasConditionQueryPlayer()
-                      , () -> xsyncQyCall().qy().queryPlayer()));
+                    _village.xsetSyncQyCall(xcreateSpQyCall(
+                        () -> xsyncQyCall().has() && xsyncQyCall().qy().hasConditionQueryVillage()
+                      , () -> xsyncQyCall().qy().queryVillage()));
                 }
             }
-            return _player;
-        }
-        /**
-         * Prepare to specify functions about relation table. <br>
-         * VILLAGE_STATUS by my VILLAGE_STATUS_CODE, named 'villageStatus'.
-         * @return The instance for specification for relation table to specify. (NotNull)
-         */
-        public VillageStatusCB.HpSpecification specifyVillageStatus() {
-            assertRelation("villageStatus");
-            if (_villageStatus == null) {
-                _villageStatus = new VillageStatusCB.HpSpecification(_baseCB
-                    , xcreateSpQyCall(() -> _qyCall.has() && _qyCall.qy().hasConditionQueryVillageStatus()
-                                    , () -> _qyCall.qy().queryVillageStatus())
-                    , _purpose, _dbmetaProvider, xgetSDRFnFc());
-                if (xhasSyncQyCall()) { // inherits it
-                    _villageStatus.xsetSyncQyCall(xcreateSpQyCall(
-                        () -> xsyncQyCall().has() && xsyncQyCall().qy().hasConditionQueryVillageStatus()
-                      , () -> xsyncQyCall().qy().queryVillageStatus()));
-                }
-            }
-            return _villageStatus;
+            return _village;
         }
         /**
          * Prepare to specify functions about relation table. <br>
-         * CAMP by my WIN_CAMP_CODE, named 'camp'.
+         * VILLAGE_TAG_ITEM by my VILLAGE_TAG_ITEM_CODE, named 'villageTagItem'.
          * @return The instance for specification for relation table to specify. (NotNull)
          */
-        public CampCB.HpSpecification specifyCamp() {
-            assertRelation("camp");
-            if (_camp == null) {
-                _camp = new CampCB.HpSpecification(_baseCB
-                    , xcreateSpQyCall(() -> _qyCall.has() && _qyCall.qy().hasConditionQueryCamp()
-                                    , () -> _qyCall.qy().queryCamp())
+        public VillageTagItemCB.HpSpecification specifyVillageTagItem() {
+            assertRelation("villageTagItem");
+            if (_villageTagItem == null) {
+                _villageTagItem = new VillageTagItemCB.HpSpecification(_baseCB
+                    , xcreateSpQyCall(() -> _qyCall.has() && _qyCall.qy().hasConditionQueryVillageTagItem()
+                                    , () -> _qyCall.qy().queryVillageTagItem())
                     , _purpose, _dbmetaProvider, xgetSDRFnFc());
                 if (xhasSyncQyCall()) { // inherits it
-                    _camp.xsetSyncQyCall(xcreateSpQyCall(
-                        () -> xsyncQyCall().has() && xsyncQyCall().qy().hasConditionQueryCamp()
-                      , () -> xsyncQyCall().qy().queryCamp()));
+                    _villageTagItem.xsetSyncQyCall(xcreateSpQyCall(
+                        () -> xsyncQyCall().has() && xsyncQyCall().qy().hasConditionQueryVillageTagItem()
+                      , () -> xsyncQyCall().qy().queryVillageTagItem()));
                 }
             }
-            return _camp;
-        }
-        /**
-         * Prepare for (Specify)DerivedReferrer (correlated sub-query). <br>
-         * {select max(FOO) from message_restriction where ...) as FOO_MAX} <br>
-         * MESSAGE_RESTRICTION by VILLAGE_ID, named 'messageRestrictionList'.
-         * <pre>
-         * cb.specify().<span style="color: #CC4747">derived${relationMethodIdentityName}()</span>.<span style="color: #CC4747">max</span>(restrictionCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-         *     restrictionCB.specify().<span style="color: #CC4747">column...</span> <span style="color: #3F7E5E">// derived column by function</span>
-         *     restrictionCB.query().set... <span style="color: #3F7E5E">// referrer condition</span>
-         * }, MessageRestriction.<span style="color: #CC4747">ALIAS_foo...</span>);
-         * </pre>
-         * @return The object to set up a function for referrer table. (NotNull)
-         */
-        public HpSDRFunction<MessageRestrictionCB, VillageCQ> derivedMessageRestriction() {
-            assertDerived("messageRestrictionList"); if (xhasSyncQyCall()) { xsyncQyCall().qy(); } // for sync (for example, this in ColumnQuery)
-            return cHSDRF(_baseCB, _qyCall.qy(), (String fn, SubQuery<MessageRestrictionCB> sq, VillageCQ cq, String al, DerivedReferrerOption op)
-                    -> cq.xsderiveMessageRestrictionList(fn, sq, al, op), _dbmetaProvider);
-        }
-        /**
-         * Prepare for (Specify)DerivedReferrer (correlated sub-query). <br>
-         * {select max(FOO) from village_chara_group where ...) as FOO_MAX} <br>
-         * VILLAGE_CHARA_GROUP by VILLAGE_ID, named 'villageCharaGroupList'.
-         * <pre>
-         * cb.specify().<span style="color: #CC4747">derived${relationMethodIdentityName}()</span>.<span style="color: #CC4747">max</span>(groupCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-         *     groupCB.specify().<span style="color: #CC4747">column...</span> <span style="color: #3F7E5E">// derived column by function</span>
-         *     groupCB.query().set... <span style="color: #3F7E5E">// referrer condition</span>
-         * }, VillageCharaGroup.<span style="color: #CC4747">ALIAS_foo...</span>);
-         * </pre>
-         * @return The object to set up a function for referrer table. (NotNull)
-         */
-        public HpSDRFunction<VillageCharaGroupCB, VillageCQ> derivedVillageCharaGroup() {
-            assertDerived("villageCharaGroupList"); if (xhasSyncQyCall()) { xsyncQyCall().qy(); } // for sync (for example, this in ColumnQuery)
-            return cHSDRF(_baseCB, _qyCall.qy(), (String fn, SubQuery<VillageCharaGroupCB> sq, VillageCQ cq, String al, DerivedReferrerOption op)
-                    -> cq.xsderiveVillageCharaGroupList(fn, sq, al, op), _dbmetaProvider);
-        }
-        /**
-         * Prepare for (Specify)DerivedReferrer (correlated sub-query). <br>
-         * {select max(FOO) from village_day where ...) as FOO_MAX} <br>
-         * VILLAGE_DAY by VILLAGE_ID, named 'villageDayList'.
-         * <pre>
-         * cb.specify().<span style="color: #CC4747">derived${relationMethodIdentityName}()</span>.<span style="color: #CC4747">max</span>(dayCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-         *     dayCB.specify().<span style="color: #CC4747">column...</span> <span style="color: #3F7E5E">// derived column by function</span>
-         *     dayCB.query().set... <span style="color: #3F7E5E">// referrer condition</span>
-         * }, VillageDay.<span style="color: #CC4747">ALIAS_foo...</span>);
-         * </pre>
-         * @return The object to set up a function for referrer table. (NotNull)
-         */
-        public HpSDRFunction<VillageDayCB, VillageCQ> derivedVillageDay() {
-            assertDerived("villageDayList"); if (xhasSyncQyCall()) { xsyncQyCall().qy(); } // for sync (for example, this in ColumnQuery)
-            return cHSDRF(_baseCB, _qyCall.qy(), (String fn, SubQuery<VillageDayCB> sq, VillageCQ cq, String al, DerivedReferrerOption op)
-                    -> cq.xsderiveVillageDayList(fn, sq, al, op), _dbmetaProvider);
-        }
-        /**
-         * Prepare for (Specify)DerivedReferrer (correlated sub-query). <br>
-         * {select max(FOO) from village_player where ...) as FOO_MAX} <br>
-         * VILLAGE_PLAYER by VILLAGE_ID, named 'villagePlayerList'.
-         * <pre>
-         * cb.specify().<span style="color: #CC4747">derived${relationMethodIdentityName}()</span>.<span style="color: #CC4747">max</span>(playerCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-         *     playerCB.specify().<span style="color: #CC4747">column...</span> <span style="color: #3F7E5E">// derived column by function</span>
-         *     playerCB.query().set... <span style="color: #3F7E5E">// referrer condition</span>
-         * }, VillagePlayer.<span style="color: #CC4747">ALIAS_foo...</span>);
-         * </pre>
-         * @return The object to set up a function for referrer table. (NotNull)
-         */
-        public HpSDRFunction<VillagePlayerCB, VillageCQ> derivedVillagePlayer() {
-            assertDerived("villagePlayerList"); if (xhasSyncQyCall()) { xsyncQyCall().qy(); } // for sync (for example, this in ColumnQuery)
-            return cHSDRF(_baseCB, _qyCall.qy(), (String fn, SubQuery<VillagePlayerCB> sq, VillageCQ cq, String al, DerivedReferrerOption op)
-                    -> cq.xsderiveVillagePlayerList(fn, sq, al, op), _dbmetaProvider);
-        }
-        /**
-         * Prepare for (Specify)DerivedReferrer (correlated sub-query). <br>
-         * {select max(FOO) from village_setting where ...) as FOO_MAX} <br>
-         * VILLAGE_SETTING by VILLAGE_ID, named 'villageSettingList'.
-         * <pre>
-         * cb.specify().<span style="color: #CC4747">derived${relationMethodIdentityName}()</span>.<span style="color: #CC4747">max</span>(settingCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-         *     settingCB.specify().<span style="color: #CC4747">column...</span> <span style="color: #3F7E5E">// derived column by function</span>
-         *     settingCB.query().set... <span style="color: #3F7E5E">// referrer condition</span>
-         * }, VillageSetting.<span style="color: #CC4747">ALIAS_foo...</span>);
-         * </pre>
-         * @return The object to set up a function for referrer table. (NotNull)
-         */
-        public HpSDRFunction<VillageSettingCB, VillageCQ> derivedVillageSetting() {
-            assertDerived("villageSettingList"); if (xhasSyncQyCall()) { xsyncQyCall().qy(); } // for sync (for example, this in ColumnQuery)
-            return cHSDRF(_baseCB, _qyCall.qy(), (String fn, SubQuery<VillageSettingCB> sq, VillageCQ cq, String al, DerivedReferrerOption op)
-                    -> cq.xsderiveVillageSettingList(fn, sq, al, op), _dbmetaProvider);
-        }
-        /**
-         * Prepare for (Specify)DerivedReferrer (correlated sub-query). <br>
-         * {select max(FOO) from village_tag where ...) as FOO_MAX} <br>
-         * VILLAGE_TAG by VILLAGE_ID, named 'villageTagList'.
-         * <pre>
-         * cb.specify().<span style="color: #CC4747">derived${relationMethodIdentityName}()</span>.<span style="color: #CC4747">max</span>(tagCB <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
-         *     tagCB.specify().<span style="color: #CC4747">column...</span> <span style="color: #3F7E5E">// derived column by function</span>
-         *     tagCB.query().set... <span style="color: #3F7E5E">// referrer condition</span>
-         * }, VillageTag.<span style="color: #CC4747">ALIAS_foo...</span>);
-         * </pre>
-         * @return The object to set up a function for referrer table. (NotNull)
-         */
-        public HpSDRFunction<VillageTagCB, VillageCQ> derivedVillageTag() {
-            assertDerived("villageTagList"); if (xhasSyncQyCall()) { xsyncQyCall().qy(); } // for sync (for example, this in ColumnQuery)
-            return cHSDRF(_baseCB, _qyCall.qy(), (String fn, SubQuery<VillageTagCB> sq, VillageCQ cq, String al, DerivedReferrerOption op)
-                    -> cq.xsderiveVillageTagList(fn, sq, al, op), _dbmetaProvider);
+            return _villageTagItem;
         }
         /**
          * Prepare for (Specify)MyselfDerived (SubQuery).
          * @return The object to set up a function for myself table. (NotNull)
          */
-        public HpSDRFunction<VillageCB, VillageCQ> myselfDerived() {
+        public HpSDRFunction<VillageTagCB, VillageTagCQ> myselfDerived() {
             assertDerived("myselfDerived"); if (xhasSyncQyCall()) { xsyncQyCall().qy(); } // for sync (for example, this in ColumnQuery)
-            return cHSDRF(_baseCB, _qyCall.qy(), (String fn, SubQuery<VillageCB> sq, VillageCQ cq, String al, DerivedReferrerOption op)
+            return cHSDRF(_baseCB, _qyCall.qy(), (String fn, SubQuery<VillageTagCB> sq, VillageTagCQ cq, String al, DerivedReferrerOption op)
                     -> cq.xsmyselfDerive(fn, sq, al, op), _dbmetaProvider);
         }
     }
@@ -610,9 +448,9 @@ public class BsVillageCB extends AbstractConditionBean {
      * This is very specialty so you can get the frontier spirit. Bon voyage!
      * @return The condition-bean for dream cruise, which is linked to main condition-bean.
      */
-    public VillageCB dreamCruiseCB() {
-        VillageCB cb = new VillageCB();
-        cb.xsetupForDreamCruise((VillageCB) this);
+    public VillageTagCB dreamCruiseCB() {
+        VillageTagCB cb = new VillageTagCB();
+        cb.xsetupForDreamCruise((VillageTagCB) this);
         return cb;
     }
 
@@ -637,15 +475,15 @@ public class BsVillageCB extends AbstractConditionBean {
      * @param colCBLambda The callback for specify-query of left column. (NotNull)
      * @return The object for setting up operand and right column. (NotNull)
      */
-    public HpColQyOperand<VillageCB> columnQuery(final SpecifyQuery<VillageCB> colCBLambda) {
+    public HpColQyOperand<VillageTagCB> columnQuery(final SpecifyQuery<VillageTagCB> colCBLambda) {
         return xcreateColQyOperand((rightSp, operand) -> {
             return xcolqy(xcreateColumnQueryCB(), xcreateColumnQueryCB(), colCBLambda, rightSp, operand);
         });
     }
 
-    protected VillageCB xcreateColumnQueryCB() {
-        VillageCB cb = new VillageCB();
-        cb.xsetupForColumnQuery((VillageCB)this);
+    protected VillageTagCB xcreateColumnQueryCB() {
+        VillageTagCB cb = new VillageTagCB();
+        cb.xsetupForColumnQuery((VillageTagCB)this);
         return cb;
     }
 
@@ -665,8 +503,8 @@ public class BsVillageCB extends AbstractConditionBean {
      * </pre>
      * @param orCBLambda The callback for query of or-condition. (NotNull)
      */
-    public void orScopeQuery(OrQuery<VillageCB> orCBLambda) {
-        xorSQ((VillageCB)this, orCBLambda);
+    public void orScopeQuery(OrQuery<VillageTagCB> orCBLambda) {
+        xorSQ((VillageTagCB)this, orCBLambda);
     }
 
     /**
@@ -684,8 +522,8 @@ public class BsVillageCB extends AbstractConditionBean {
      * </pre>
      * @param andCBLambda The callback for query of and-condition. (NotNull)
      */
-    public void orScopeQueryAndPart(AndQuery<VillageCB> andCBLambda) {
-        xorSQAP((VillageCB)this, andCBLambda);
+    public void orScopeQueryAndPart(AndQuery<VillageTagCB> andCBLambda) {
+        xorSQAP((VillageTagCB)this, andCBLambda);
     }
 
     // ===================================================================================
@@ -715,11 +553,11 @@ public class BsVillageCB extends AbstractConditionBean {
     //                                                                        ============
     @Override
     protected void xprepareSyncQyCall(ConditionBean mainCB) {
-        final VillageCB cb;
+        final VillageTagCB cb;
         if (mainCB != null) {
-            cb = (VillageCB)mainCB;
+            cb = (VillageTagCB)mainCB;
         } else {
-            cb = new VillageCB();
+            cb = new VillageTagCB();
         }
         specify().xsetSyncQyCall(xcreateSpQyCall(() -> true, () -> cb.query()));
     }
@@ -728,8 +566,8 @@ public class BsVillageCB extends AbstractConditionBean {
     //                                                                            Internal
     //                                                                            ========
     // very internal (for suppressing warn about 'Not Use Import')
-    protected String xgetConditionBeanClassNameInternally() { return VillageCB.class.getName(); }
-    protected String xgetConditionQueryClassNameInternally() { return VillageCQ.class.getName(); }
+    protected String xgetConditionBeanClassNameInternally() { return VillageTagCB.class.getName(); }
+    protected String xgetConditionQueryClassNameInternally() { return VillageTagCQ.class.getName(); }
     protected String xgetSubQueryClassNameInternally() { return SubQuery.class.getName(); }
     protected String xgetConditionOptionClassNameInternally() { return ConditionOption.class.getName(); }
 }

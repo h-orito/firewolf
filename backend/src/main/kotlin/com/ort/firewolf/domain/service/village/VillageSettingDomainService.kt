@@ -7,11 +7,13 @@ import com.ort.firewolf.domain.model.village.VillageCreateResource
 import com.ort.firewolf.domain.model.village.VillageMessageRestrictCreateResource
 import com.ort.firewolf.domain.model.village.VillageOrganizationCreateResource
 import com.ort.firewolf.domain.model.village.VillageRuleCreateResource
+import com.ort.firewolf.domain.model.village.VillageTagCreateResource
 import com.ort.firewolf.domain.model.village.VillageTimeCreateResource
 import com.ort.firewolf.domain.model.village.setting.VillageCharachip
 import com.ort.firewolf.domain.model.village.setting.VillageMessageRestricts
 import com.ort.firewolf.domain.model.village.setting.VillageOrganizations
 import com.ort.firewolf.domain.model.village.setting.VillageRules
+import com.ort.firewolf.domain.model.village.setting.VillageTags
 import com.ort.firewolf.domain.model.village.setting.VillageTime
 import com.ort.firewolf.fw.exception.FirewolfBusinessException
 import org.springframework.stereotype.Service
@@ -37,6 +39,7 @@ class VillageSettingDomainService {
             addOrganizationModifyMessage(list, setting.organizations, resource.setting.organization)
             addRuleModifyMessage(list, setting.rules, resource.setting.rule)
             addRestrictModifyMessage(list, setting.rules.messageRestrict, resource.setting.rule.restrictList)
+            addTagModifyMessage(list, setting.tags, resource.setting.tags)
             addPasswordModifyMessage(list, setting.password.joinPassword, resource.setting.rule.joinPassword)
         }
         val message = list.map { "・${it}" }.joinToString(
@@ -97,6 +100,16 @@ class VillageSettingDomainService {
             resourceRestrict == null || restrict.count != resourceRestrict.count || restrict.length != resourceRestrict.length
         }
         if (existsDiff) list.add("発言制限")
+    }
+
+    private fun addTagModifyMessage(
+        list: MutableList<String>,
+        tags: VillageTags,
+        resourceTags: VillageTagCreateResource
+    ) {
+        val existsDiff = tags.list.size != resourceTags.tagCodes.size
+                || !tags.list.containsAll(resourceTags.tagCodes)
+        if (existsDiff) list.add("年齢制限")
     }
 
     private fun addPasswordModifyMessage(

@@ -33,9 +33,13 @@ data class VillageSettingRegisterBody(
 
     @field:NotNull
     @Valid
-    val rule: VillageRuleCreateBody?
+    val rule: VillageRuleCreateBody?,
+
+    @field:NotNull
+    @Valid
+    val tags: VillageTagCreateBody?
 ) {
-    constructor() : this(null, null, null, null)
+    constructor() : this(null, null, null, null, null)
 }
 
 data class VillageTimeCreateBody(
@@ -116,6 +120,13 @@ data class VillageRuleCreateBody(
         null,
         null
     )
+}
+
+data class VillageTagCreateBody(
+    @field:NotNull
+    val list: List<String>?
+) {
+    constructor() : this(null)
 }
 
 data class VillageMessageRestrictCreateBody(

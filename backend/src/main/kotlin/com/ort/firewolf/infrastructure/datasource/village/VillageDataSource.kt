@@ -10,6 +10,7 @@ import com.ort.dbflute.exbhv.VillagePlayerBhv
 import com.ort.dbflute.exbhv.VillagePlayerNotificationBhv
 import com.ort.dbflute.exbhv.VillagePlayerStatusBhv
 import com.ort.dbflute.exbhv.VillageSettingBhv
+import com.ort.dbflute.exbhv.VillageTagBhv
 import com.ort.dbflute.exentity.MessageRestriction
 import com.ort.dbflute.exentity.Village
 import com.ort.dbflute.exentity.VillageCharaGroup
@@ -19,6 +20,7 @@ import com.ort.dbflute.exentity.VillagePlayerAccessInfo
 import com.ort.dbflute.exentity.VillagePlayerNotification
 import com.ort.dbflute.exentity.VillagePlayerStatus
 import com.ort.dbflute.exentity.VillageSetting
+import com.ort.dbflute.exentity.VillageTag
 import com.ort.firewolf.domain.model.village.Villages
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 import com.ort.firewolf.domain.model.village.participant.VillageParticipantNotificationCondition
@@ -41,6 +43,7 @@ class VillageDataSource(
     private val villagePlayerStatusBhv: VillagePlayerStatusBhv,
     private val villagePlayerAccessInfoBhv: VillagePlayerAccessInfoBhv,
     private val messageRestrictionBhv: MessageRestrictionBhv,
+    private val villageTagBhv: VillageTagBhv,
     private val villagePlayerNotificationBhv: VillagePlayerNotificationBhv
 ) {
 
@@ -124,6 +127,7 @@ class VillageDataSource(
             }
             loader.loadMessageRestriction { }
             loader.loadVillageCharaGroup { }
+            loader.loadVillageTag {}
         }
         return VillageDataConverter.convertVillageListToVillages(villageList)
     }
@@ -158,6 +162,7 @@ class VillageDataSource(
             }
             loader.loadMessageRestriction { }
             loader.loadVillageCharaGroup { }
+            loader.loadVillageTag {}
         }
 
         return VillageDataConverter.convertVillageListToVillages(villageList)
@@ -202,6 +207,7 @@ class VillageDataSource(
             }
             loader.loadMessageRestriction { }
             loader.loadVillageCharaGroup { }
+            loader.loadVillageTag {}
         }
 
         return Villages(villageList.map { VillageDataConverter.convertVillageToVillage(it) })
@@ -237,6 +243,7 @@ class VillageDataSource(
             }
             loader.loadMessageRestriction { }
             loader.loadVillageCharaGroup { }
+            loader.loadVillageTag {}
         }
 
         return VillageDataConverter.convertVillageToVillage(village)
@@ -367,12 +374,12 @@ class VillageDataSource(
         val villageId = after.id
         if (!before.setting.existsDifference(after.setting)) return
 
-        after.setting.capacity.let(fun(afterCapacity) {
+        after.setting.capacity.let { afterCapacity ->
             if (!before.setting.capacity.existsDifference(afterCapacity)) return
             updateVillageSetting(villageId, CDef.VillageSettingItem.最低人数, afterCapacity.min.toString())
             updateVillageSetting(villageId, CDef.VillageSettingItem.最大人数, afterCapacity.max.toString())
-        })
-        after.setting.time.let(fun(afterTime) {
+        }
+        after.setting.time.let { afterTime ->
             if (!before.setting.time.existsDifference(afterTime)) return
             updateVillageSetting(villageId, CDef.VillageSettingItem.期間形式, afterTime.termType)
             updateVillageSetting(
@@ -386,13 +393,12 @@ class VillageDataSource(
                 afterTime.dayChangeIntervalSeconds.toString()
             )
             updateVillageSetting(villageId, CDef.VillageSettingItem.沈黙時間, afterTime.silentHours?.toString() ?: "")
-
-        })
-        after.setting.organizations.let(fun(afterOrg) {
+        }
+        after.setting.organizations.let { afterOrg ->
             if (!before.setting.organizations.existsDifference(afterOrg)) return
             updateVillageSetting(villageId, CDef.VillageSettingItem.構成, afterOrg.toString())
-        })
-        after.setting.rules.let(fun(afterRules) {
+        }
+        after.setting.rules.let { afterRules ->
             if (!before.setting.rules.existsDifference(afterRules)) return
             updateVillageSetting(villageId, CDef.VillageSettingItem.記名投票か, toFlg(afterRules.openVote))
             updateVillageSetting(
@@ -412,11 +418,16 @@ class VillageDataSource(
             updateVillageSetting(villageId, CDef.VillageSettingItem.役欠けありか, toFlg(afterRules.availableDummySkill))
             updateVillageSetting(villageId, CDef.VillageSettingItem.アクション可能か, toFlg(afterRules.availableAction))
             updateVillageSetting(villageId, CDef.VillageSettingItem.秘話可能か, toFlg(afterRules.availableSecretSay))
-        })
-        after.setting.password.let(fun(afterPassword) {
+        }
+        after.setting.password.let { afterPassword ->
             if (!before.setting.password.existsDifference(afterPassword)) return
             updateVillageSetting(villageId, CDef.VillageSettingItem.入村パスワード, afterPassword.joinPassword ?: "")
-        })
+        }
+
+        villageTagBhv.queryDelete {
+            it.query().setVillageId_Equal(villageId)
+        }
+        after.setting.tags.list.forEach { insertVillageTag(villageId, it) }
     }
 
     private fun updateMessageRestrictionDifference(
@@ -653,6 +664,8 @@ class VillageDataSource(
         insertVillageSetting(villageId, CDef.VillageSettingItem.役欠けありか, toFlg(settings.rules.availableDummySkill))
         insertVillageSetting(villageId, CDef.VillageSettingItem.アクション可能か, toFlg(settings.rules.availableAction))
         insertVillageSetting(villageId, CDef.VillageSettingItem.秘話可能か, toFlg(settings.rules.availableSecretSay))
+        // タグ
+        settings.tags.list.forEach { insertVillageTag(villageId, it) }
     }
 
     private fun insertVillageSetting(villageId: Int, item: CDef.VillageSettingItem, value: String) {
@@ -670,6 +683,13 @@ class VillageDataSource(
             it.query().setVillageId_Equal(villageId)
             it.query().setVillageSettingItemCode_Equal_AsVillageSettingItem(item)
         }
+    }
+
+    private fun insertVillageTag(villageId: Int, tag: String) {
+        val entity = VillageTag()
+        entity.villageId = villageId
+        entity.villageTagItemCode = tag
+        villageTagBhv.insert(entity)
     }
 
     private fun insertVillageCharaGroups(villageId: Int, charachip: VillageCharachip) {

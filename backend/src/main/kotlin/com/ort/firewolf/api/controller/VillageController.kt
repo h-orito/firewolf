@@ -670,8 +670,8 @@ class VillageController(
             time = convertToVillageTimeCreateResource(body.time!!),
             organization = convertToVillageOrganizationCreateResource(body.organization!!),
             charachip = convertToVillageCharachipCreateResource(body.charachip!!),
+            tags = convertToVillageTagsCreateResource(body.tags!!),
             rule = convertToVillageRuleCreateResource(body.rule!!)
-
         )
     }
 
@@ -693,6 +693,12 @@ class VillageController(
     ): VillageCharachipCreateResource = VillageCharachipCreateResource(
         charachipIds = body.charachipIds!!,
         dummyCharaId = body.dummyCharaId!!
+    )
+
+    private fun convertToVillageTagsCreateResource(
+        body: VillageTagCreateBody
+    ): VillageTagCreateResource = VillageTagCreateResource(
+        tagCodes = body.list!!
     )
 
     private fun convertToVillageRuleCreateResource(

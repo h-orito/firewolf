@@ -101,7 +101,7 @@ public class VillageDbm extends AbstractDBMeta {
     // ===================================================================================
     //                                                                         Column Info
     //                                                                         ===========
-    protected final ColumnInfo _columnVillageId = cci("VILLAGE_ID", "VILLAGE_ID", null, null, Integer.class, "villageId", null, true, true, true, "INT UNSIGNED", 10, 0, null, null, false, null, null, null, "messageRestrictionList,villageCharaGroupList,villageDayList,villagePlayerList,villageSettingList", null, false);
+    protected final ColumnInfo _columnVillageId = cci("VILLAGE_ID", "VILLAGE_ID", null, null, Integer.class, "villageId", null, true, true, true, "INT UNSIGNED", 10, 0, null, null, false, null, null, null, "messageRestrictionList,villageCharaGroupList,villageDayList,villagePlayerList,villageSettingList,villageTagList", null, false);
     protected final ColumnInfo _columnVillageDisplayName = cci("VILLAGE_DISPLAY_NAME", "VILLAGE_DISPLAY_NAME", null, null, String.class, "villageDisplayName", null, false, false, true, "VARCHAR", 40, 0, null, null, false, null, null, null, null, null, false);
     protected final ColumnInfo _columnCreatePlayerId = cci("CREATE_PLAYER_ID", "CREATE_PLAYER_ID", null, null, Integer.class, "createPlayerId", null, false, false, true, "INT UNSIGNED", 10, 0, null, null, false, null, null, "player", null, null, false);
     protected final ColumnInfo _columnVillageStatusCode = cci("VILLAGE_STATUS_CODE", "VILLAGE_STATUS_CODE", null, null, String.class, "villageStatusCode", null, false, false, true, "VARCHAR", 20, 0, null, null, false, null, null, "villageStatus", null, CDef.DefMeta.VillageStatus, false);
@@ -265,6 +265,14 @@ public class VillageDbm extends AbstractDBMeta {
     public ReferrerInfo referrerVillageSettingList() {
         Map<ColumnInfo, ColumnInfo> mp = newLinkedHashMap(columnVillageId(), VillageSettingDbm.getInstance().columnVillageId());
         return cri("FK_VILLAGE_SETTINGS_VILLAGE", "villageSettingList", this, VillageSettingDbm.getInstance(), mp, false, "village");
+    }
+    /**
+     * VILLAGE_TAG by VILLAGE_ID, named 'villageTagList'.
+     * @return The information object of referrer property. (NotNull)
+     */
+    public ReferrerInfo referrerVillageTagList() {
+        Map<ColumnInfo, ColumnInfo> mp = newLinkedHashMap(columnVillageId(), VillageTagDbm.getInstance().columnVillageId());
+        return cri("FK_VILLAGE_TAG_VILLAGE", "villageTagList", this, VillageTagDbm.getInstance(), mp, false, "village");
     }
 
     // ===================================================================================

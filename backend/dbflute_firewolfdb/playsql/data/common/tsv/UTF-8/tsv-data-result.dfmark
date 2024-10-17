@@ -22,3 +22,4 @@ data-directory: playsql/data/common/tsv/UTF-8
 14-NOONNIGHT.tsv (2)
 15-APP_VERSION.tsv (1)
 16-VILLAGE_PLAYER_STATUS_TYPE.tsv (1)
+17-VILLAGE_TAG_ITEM.tsv (2)

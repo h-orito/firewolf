@@ -11,6 +11,7 @@ data class VillageSettings(
     val charachip: VillageCharachip,
     val organizations: VillageOrganizations,
     val rules: VillageRules,
+    val tags: VillageTags,
     val password: VillagePassword
 ) {
 
@@ -61,6 +62,7 @@ data class VillageSettings(
                         }
                     )
                 ),
+                tags = VillageTags(list = resource.tags.tagCodes),
                 password = VillagePassword(
                     joinPasswordRequired = !resource.rule.joinPassword.isNullOrEmpty(),
                     joinPassword = resource.rule.joinPassword
@@ -74,6 +76,7 @@ data class VillageSettings(
                 || time.existsDifference(setting.time)
                 || organizations.existsDifference(setting.organizations)
                 || rules.existsDifference(setting.rules)
+                || tags.existsDifference(setting.tags)
                 || password.existsDifference(setting.password)
     }
 

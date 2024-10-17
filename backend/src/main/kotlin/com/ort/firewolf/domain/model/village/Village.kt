@@ -26,7 +26,7 @@ data class Village(
     val setting: VillageSettings,
     val participant: VillageParticipants,
     val spectator: VillageParticipants,
-    val day: VillageDays
+    val day: VillageDays,
 ) {
 
     // ===================================================================================
@@ -551,7 +551,7 @@ data class Village(
                 day = VillageDays(
                     dayList = listOf()
                 ),
-                winCamp = null
+                winCamp = null,
             )
         }
 
@@ -575,7 +575,7 @@ data class Village(
                         else it
                     }
                 ),
-                winCamp = null
+                winCamp = null,
             )
         }
     }

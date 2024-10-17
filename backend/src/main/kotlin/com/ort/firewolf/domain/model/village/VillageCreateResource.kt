@@ -13,7 +13,8 @@ data class VillageSettingCreateResource(
     val time: VillageTimeCreateResource,
     val organization: VillageOrganizationCreateResource,
     val charachip: VillageCharachipCreateResource,
-    val rule: VillageRuleCreateResource
+    val rule: VillageRuleCreateResource,
+    val tags: VillageTagCreateResource,
 )
 
 data class VillageTimeCreateResource(
@@ -43,6 +44,10 @@ data class VillageRuleCreateResource(
     val isAvailableSecretSay: Boolean,
     val restrictList: List<VillageMessageRestrictCreateResource>,
     val joinPassword: String?
+)
+
+data class VillageTagCreateResource(
+    val tagCodes: List<String>
 )
 
 data class VillageMessageRestrictCreateResource(

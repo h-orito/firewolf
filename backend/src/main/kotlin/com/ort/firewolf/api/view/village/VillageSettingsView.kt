@@ -5,6 +5,7 @@ import com.ort.firewolf.domain.model.village.setting.VillageCharachip
 import com.ort.firewolf.domain.model.village.setting.VillageOrganizations
 import com.ort.firewolf.domain.model.village.setting.VillageRules
 import com.ort.firewolf.domain.model.village.setting.VillageSettings
+import com.ort.firewolf.domain.model.village.setting.VillageTags
 
 data class VillageSettingsView(
     val capacity: PersonCapacity,
@@ -12,6 +13,7 @@ data class VillageSettingsView(
     val charachip: VillageCharachip,
     val organizations: VillageOrganizations,
     val rules: VillageRules,
+    val tags: VillageTags,
     val password: VillagePasswordView
 ) {
     constructor(
@@ -22,6 +24,7 @@ data class VillageSettingsView(
         charachip = villageSettings.charachip,
         organizations = villageSettings.organizations,
         rules = villageSettings.rules,
+        tags = villageSettings.tags,
         password = VillagePasswordView(villageSettings.password)
     )
 }

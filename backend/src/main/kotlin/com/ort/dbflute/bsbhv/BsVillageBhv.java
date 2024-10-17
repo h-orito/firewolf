@@ -43,13 +43,13 @@ import com.ort.dbflute.cbean.*;
  *     PLAYER, VILLAGE_STATUS, CAMP
  *
  * [referrer table]
- *     MESSAGE_RESTRICTION, VILLAGE_CHARA_GROUP, VILLAGE_DAY, VILLAGE_PLAYER, VILLAGE_SETTING
+ *     MESSAGE_RESTRICTION, VILLAGE_CHARA_GROUP, VILLAGE_DAY, VILLAGE_PLAYER, VILLAGE_SETTING, VILLAGE_TAG
  *
  * [foreign property]
  *     player, villageStatus, camp
  *
  * [referrer property]
- *     messageRestrictionList, villageCharaGroupList, villageDayList, villagePlayerList, villageSettingList
+ *     messageRestrictionList, villageCharaGroupList, villageDayList, villagePlayerList, villageSettingList, villageTagList
  * </pre>
  * @author DBFlute(AutoGenerator)
  */
@@ -679,6 +679,70 @@ public abstract class BsVillageBhv extends AbstractBehaviorWritable<Village, Vil
 
     protected NestedReferrerListGateway<VillageSetting> doLoadVillageSetting(List<Village> villageList, LoadReferrerOption<VillageSettingCB, VillageSetting> option) {
         return helpLoadReferrerInternally(villageList, option, "villageSettingList");
+    }
+
+    /**
+     * Load referrer of villageTagList by the set-upper of referrer. <br>
+     * VILLAGE_TAG by VILLAGE_ID, named 'villageTagList'.
+     * <pre>
+     * <span style="color: #0000C0">villageBhv</span>.<span style="color: #CC4747">loadVillageTag</span>(<span style="color: #553000">villageList</span>, <span style="color: #553000">tagCB</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+     *     <span style="color: #553000">tagCB</span>.setupSelect...
+     *     <span style="color: #553000">tagCB</span>.query().set...
+     *     <span style="color: #553000">tagCB</span>.query().addOrderBy...
+     * }); <span style="color: #3F7E5E">// you can load nested referrer from here</span>
+     * <span style="color: #3F7E5E">//}).withNestedReferrer(referrerList -&gt; {</span>
+     * <span style="color: #3F7E5E">//    ...</span>
+     * <span style="color: #3F7E5E">//});</span>
+     * <span style="color: #70226C">for</span> (Village village : <span style="color: #553000">villageList</span>) {
+     *     ... = village.<span style="color: #CC4747">getVillageTagList()</span>;
+     * }
+     * </pre>
+     * About internal policy, the value of primary key (and others too) is treated as case-insensitive. <br>
+     * The condition-bean, which the set-upper provides, has settings before callback as follows:
+     * <pre>
+     * cb.query().setVillageId_InScope(pkList);
+     * cb.query().addOrderBy_VillageId_Asc();
+     * </pre>
+     * @param villageList The entity list of village. (NotNull)
+     * @param refCBLambda The callback to set up referrer condition-bean for loading referrer. (NotNull)
+     * @return The callback interface which you can load nested referrer by calling withNestedReferrer(). (NotNull)
+     */
+    public NestedReferrerListGateway<VillageTag> loadVillageTag(List<Village> villageList, ReferrerConditionSetupper<VillageTagCB> refCBLambda) {
+        xassLRArg(villageList, refCBLambda);
+        return doLoadVillageTag(villageList, new LoadReferrerOption<VillageTagCB, VillageTag>().xinit(refCBLambda));
+    }
+
+    /**
+     * Load referrer of villageTagList by the set-upper of referrer. <br>
+     * VILLAGE_TAG by VILLAGE_ID, named 'villageTagList'.
+     * <pre>
+     * <span style="color: #0000C0">villageBhv</span>.<span style="color: #CC4747">loadVillageTag</span>(<span style="color: #553000">village</span>, <span style="color: #553000">tagCB</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+     *     <span style="color: #553000">tagCB</span>.setupSelect...
+     *     <span style="color: #553000">tagCB</span>.query().set...
+     *     <span style="color: #553000">tagCB</span>.query().addOrderBy...
+     * }); <span style="color: #3F7E5E">// you can load nested referrer from here</span>
+     * <span style="color: #3F7E5E">//}).withNestedReferrer(referrerList -&gt; {</span>
+     * <span style="color: #3F7E5E">//    ...</span>
+     * <span style="color: #3F7E5E">//});</span>
+     * ... = <span style="color: #553000">village</span>.<span style="color: #CC4747">getVillageTagList()</span>;
+     * </pre>
+     * About internal policy, the value of primary key (and others too) is treated as case-insensitive. <br>
+     * The condition-bean, which the set-upper provides, has settings before callback as follows:
+     * <pre>
+     * cb.query().setVillageId_InScope(pkList);
+     * cb.query().addOrderBy_VillageId_Asc();
+     * </pre>
+     * @param village The entity of village. (NotNull)
+     * @param refCBLambda The callback to set up referrer condition-bean for loading referrer. (NotNull)
+     * @return The callback interface which you can load nested referrer by calling withNestedReferrer(). (NotNull)
+     */
+    public NestedReferrerListGateway<VillageTag> loadVillageTag(Village village, ReferrerConditionSetupper<VillageTagCB> refCBLambda) {
+        xassLRArg(village, refCBLambda);
+        return doLoadVillageTag(xnewLRLs(village), new LoadReferrerOption<VillageTagCB, VillageTag>().xinit(refCBLambda));
+    }
+
+    protected NestedReferrerListGateway<VillageTag> doLoadVillageTag(List<Village> villageList, LoadReferrerOption<VillageTagCB, VillageTag> option) {
+        return helpLoadReferrerInternally(villageList, option, "villageTagList");
     }
 
     // ===================================================================================
