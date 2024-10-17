@@ -375,12 +375,12 @@ class VillageDataSource(
         if (!before.setting.existsDifference(after.setting)) return
 
         after.setting.capacity.let { afterCapacity ->
-            if (!before.setting.capacity.existsDifference(afterCapacity)) return
+            if (!before.setting.capacity.existsDifference(afterCapacity)) return@let
             updateVillageSetting(villageId, CDef.VillageSettingItem.最低人数, afterCapacity.min.toString())
             updateVillageSetting(villageId, CDef.VillageSettingItem.最大人数, afterCapacity.max.toString())
         }
         after.setting.time.let { afterTime ->
-            if (!before.setting.time.existsDifference(afterTime)) return
+            if (!before.setting.time.existsDifference(afterTime)) return@let
             updateVillageSetting(villageId, CDef.VillageSettingItem.期間形式, afterTime.termType)
             updateVillageSetting(
                 villageId,
@@ -395,11 +395,11 @@ class VillageDataSource(
             updateVillageSetting(villageId, CDef.VillageSettingItem.沈黙時間, afterTime.silentHours?.toString() ?: "")
         }
         after.setting.organizations.let { afterOrg ->
-            if (!before.setting.organizations.existsDifference(afterOrg)) return
+            if (!before.setting.organizations.existsDifference(afterOrg)) return@let
             updateVillageSetting(villageId, CDef.VillageSettingItem.構成, afterOrg.toString())
         }
         after.setting.rules.let { afterRules ->
-            if (!before.setting.rules.existsDifference(afterRules)) return
+            if (!before.setting.rules.existsDifference(afterRules)) return@let
             updateVillageSetting(villageId, CDef.VillageSettingItem.記名投票か, toFlg(afterRules.openVote))
             updateVillageSetting(
                 villageId,
@@ -420,14 +420,16 @@ class VillageDataSource(
             updateVillageSetting(villageId, CDef.VillageSettingItem.秘話可能か, toFlg(afterRules.availableSecretSay))
         }
         after.setting.password.let { afterPassword ->
-            if (!before.setting.password.existsDifference(afterPassword)) return
+            if (!before.setting.password.existsDifference(afterPassword)) return@let
             updateVillageSetting(villageId, CDef.VillageSettingItem.入村パスワード, afterPassword.joinPassword ?: "")
         }
 
-        villageTagBhv.queryDelete {
-            it.query().setVillageId_Equal(villageId)
+        if (before.setting.tags.existsDifference(after.setting.tags)) {
+            villageTagBhv.queryDelete {
+                it.query().setVillageId_Equal(villageId)
+            }
+            after.setting.tags.list.forEach { insertVillageTag(villageId, it) }
         }
-        after.setting.tags.list.forEach { insertVillageTag(villageId, it) }
     }
 
     private fun updateMessageRestrictionDifference(
