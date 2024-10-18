@@ -35,6 +35,7 @@ class VillageSettingDomainService {
         val list = mutableListOf<String>()
         if (village.name != resource.villageName) list.add("村の名前")
         village.setting.let { setting ->
+            addCharachipModifyMessage(list, setting.charachip, resource.setting.charachip)
             addTimeModifyMessage(list, setting.time, resource.setting.time)
             addOrganizationModifyMessage(list, setting.organizations, resource.setting.organization)
             addRuleModifyMessage(list, setting.rules, resource.setting.rule)
@@ -51,6 +52,14 @@ class VillageSettingDomainService {
             text = message,
             villageDayId = village.day.latestDay().id
         )
+    }
+
+    private fun addCharachipModifyMessage(
+        list: MutableList<String>,
+        charachip: VillageCharachip,
+        charachip1: VillageCharachipCreateResource
+    ) {
+        if (charachip.dummyCharaDay1Message != charachip1.dummyCharaDay1Message) list.add("ダミーキャラ1日目発言")
     }
 
     private fun addTimeModifyMessage(

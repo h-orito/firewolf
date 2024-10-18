@@ -23,6 +23,8 @@ data class VillageParticipants(
 
     fun addParticipant(
         chara: Chara,
+        charaShortName: String,
+        charaName: String,
         playerId: Int,
         skillRequest: SkillRequest,
         isSpectator: Boolean,
@@ -34,8 +36,8 @@ data class VillageParticipants(
                 id = -1, // dummy
                 charaId = chara.id,
                 charaName = VillageParticipantName(
-                    name = chara.charaName.name,
-                    shortName = chara.charaName.shortName
+                    name = charaName,
+                    shortName = charaShortName
                 ),
                 playerId = playerId,
                 status = VillageParticipantStatus(),

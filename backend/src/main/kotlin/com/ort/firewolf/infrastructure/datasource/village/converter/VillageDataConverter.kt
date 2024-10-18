@@ -130,6 +130,10 @@ object VillageDataConverter {
             ),
             charachip = VillageCharachip.invoke(
                 dummyCharaId = detectItemText(settingList, CDef.VillageSettingItem.ダミーキャラid)?.toInt(),
+                dummyCharaShortName = detectItemText(settingList, CDef.VillageSettingItem.ダミーキャラ略称).orEmpty(),
+                dummyCharaName = detectItemText(settingList, CDef.VillageSettingItem.ダミーキャラ名).orEmpty(),
+                dummyCharaDay0Message = detectItemText(settingList, CDef.VillageSettingItem.プロローグダミー発言).orEmpty(),
+                dummyCharaDay1Message = detectItemText(settingList, CDef.VillageSettingItem.N1日目ダミー発言).orEmpty(),
                 charachipIds = village.villageCharaGroupList.map { it.charaGroupId }
             ),
             organizations = VillageOrganizations.invoke(detectItemText(settingList, CDef.VillageSettingItem.構成)),

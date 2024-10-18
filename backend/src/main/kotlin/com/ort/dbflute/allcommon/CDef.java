@@ -2218,8 +2218,20 @@ public interface CDef extends Classification {
         /** 更新間隔秒 */
         更新間隔秒("day_change_interval_seconds", "更新間隔秒", emptyStrings())
         ,
+        /** プロローグダミー発言 */
+        プロローグダミー発言("day0_dummy_message", "プロローグダミー発言", emptyStrings())
+        ,
+        /** 1日目ダミー発言 */
+        N1日目ダミー発言("day1_dummy_message", "1日目ダミー発言", emptyStrings())
+        ,
         /** ダミーキャラID */
         ダミーキャラid("dummy_chara_id", "ダミーキャラID", emptyStrings())
+        ,
+        /** ダミーキャラ名 */
+        ダミーキャラ名("dummy_chara_name", "ダミーキャラ名", emptyStrings())
+        ,
+        /** ダミーキャラ略称 */
+        ダミーキャラ略称("dummy_chara_short_name", "ダミーキャラ略称", emptyStrings())
         ,
         /** 自動生成村か */
         自動生成村か("is_auto_generated", "自動生成村か", emptyStrings())

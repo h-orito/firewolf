@@ -86,6 +86,8 @@ class DebugController(
                 villageId = villageId,
                 playerId = playerId,
                 charaId = chara.charaId,
+                charaShortName = chara.charaShortName,
+                charaName = chara.charaName,
                 message = "テストアカウント入村 playerId: ${playerId}",
                 isSpectate = false,
                 firstRequestSkill = randomSkill.toCdef(),

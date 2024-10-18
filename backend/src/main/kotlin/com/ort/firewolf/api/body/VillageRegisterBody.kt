@@ -1,5 +1,6 @@
 package com.ort.firewolf.api.body
 
+import org.hibernate.validator.constraints.Length
 import java.time.LocalDateTime
 import javax.validation.Valid
 import javax.validation.constraints.Max
@@ -63,9 +64,22 @@ data class VillageCharachipCreateBody(
     val dummyCharaId: Int?,
 
     @field:NotNull
+    val dummyCharaShortName: String?,
+
+    @field:NotNull
+    val dummyCharaName: String?,
+
+    @field:NotNull
+    @field:Length(min = 1, max = 1000)
+    val dummyCharaDay0Message: String?,
+
+    @field:Length(min = 1, max = 1000)
+    val dummyCharaDay1Message: String?,
+
+    @field:NotNull
     val charachipIds: List<Int>?
 ) {
-    constructor() : this(null, null)
+    constructor() : this(null, null, null, null, null, null)
 }
 
 data class VillageRuleCreateBody(

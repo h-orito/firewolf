@@ -1,6 +1,5 @@
 package com.ort.firewolf.domain.service.daychange
 
-import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.commit.Commits
 import com.ort.firewolf.domain.model.daychange.DayChange
 import com.ort.firewolf.domain.model.message.Messages
@@ -33,11 +32,11 @@ class DayChangeDomainService(
     }
 
     // 日付変更処理
-    fun process(dayChange: DayChange, todayMessages: Messages, charas: Charas, commits: Commits): DayChange {
+    fun process(dayChange: DayChange, todayMessages: Messages, commits: Commits): DayChange {
         val status = dayChange.village.status
         return when {
             // プロローグ
-            status.isPrologue() -> prologueDomainService.dayChange(dayChange, charas)
+            status.isPrologue() -> prologueDomainService.dayChange(dayChange)
             // 進行中
             status.isProgress() -> progressDomainService.dayChange(dayChange, todayMessages, commits)
             // エピローグ

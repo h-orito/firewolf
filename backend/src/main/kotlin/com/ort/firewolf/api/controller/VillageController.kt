@@ -336,6 +336,8 @@ class VillageController(
             villageId = villageId,
             playerId = player.id,
             charaId = body.charaId,
+            charaShortName = body.charaShortName!!,
+            charaName = body.charaName!!,
             message = body.joinMessage,
             isSpectate = body.spectator ?: false,
             firstRequestSkill = CDef.Skill.codeOf(body.firstRequestSkill),
@@ -692,7 +694,11 @@ class VillageController(
         body: VillageCharachipCreateBody
     ): VillageCharachipCreateResource = VillageCharachipCreateResource(
         charachipIds = body.charachipIds!!,
-        dummyCharaId = body.dummyCharaId!!
+        dummyCharaId = body.dummyCharaId!!,
+        dummyCharaShortName = body.dummyCharaShortName!!,
+        dummyCharaName = body.dummyCharaName!!,
+        dummyCharaDay0Message = body.dummyCharaDay0Message!!,
+        dummyCharaDay1Message = body.dummyCharaDay1Message
     )
 
     private fun convertToVillageTagsCreateResource(

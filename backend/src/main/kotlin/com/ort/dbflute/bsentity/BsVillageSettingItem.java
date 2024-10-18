@@ -139,11 +139,43 @@ public abstract class BsVillageSettingItem extends AbstractEntity implements Dom
     }
 
     /**
+     * Set the value of villageSettingItemCode as プロローグダミー発言 (day0_dummy_message). <br>
+     * プロローグダミー発言
+     */
+    public void setVillageSettingItemCode_プロローグダミー発言() {
+        setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.プロローグダミー発言);
+    }
+
+    /**
+     * Set the value of villageSettingItemCode as N1日目ダミー発言 (day1_dummy_message). <br>
+     * 1日目ダミー発言
+     */
+    public void setVillageSettingItemCode_N1日目ダミー発言() {
+        setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.N1日目ダミー発言);
+    }
+
+    /**
      * Set the value of villageSettingItemCode as ダミーキャラid (dummy_chara_id). <br>
      * ダミーキャラID
      */
     public void setVillageSettingItemCode_ダミーキャラid() {
         setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.ダミーキャラid);
+    }
+
+    /**
+     * Set the value of villageSettingItemCode as ダミーキャラ名 (dummy_chara_name). <br>
+     * ダミーキャラ名
+     */
+    public void setVillageSettingItemCode_ダミーキャラ名() {
+        setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.ダミーキャラ名);
+    }
+
+    /**
+     * Set the value of villageSettingItemCode as ダミーキャラ略称 (dummy_chara_short_name). <br>
+     * ダミーキャラ略称
+     */
+    public void setVillageSettingItemCode_ダミーキャラ略称() {
+        setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.ダミーキャラ略称);
     }
 
     /**
@@ -316,6 +348,28 @@ public abstract class BsVillageSettingItem extends AbstractEntity implements Dom
     }
 
     /**
+     * Is the value of villageSettingItemCode プロローグダミー発言? <br>
+     * プロローグダミー発言
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isVillageSettingItemCodeプロローグダミー発言() {
+        CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
+        return cdef != null ? cdef.equals(CDef.VillageSettingItem.プロローグダミー発言) : false;
+    }
+
+    /**
+     * Is the value of villageSettingItemCode N1日目ダミー発言? <br>
+     * 1日目ダミー発言
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isVillageSettingItemCodeN1日目ダミー発言() {
+        CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
+        return cdef != null ? cdef.equals(CDef.VillageSettingItem.N1日目ダミー発言) : false;
+    }
+
+    /**
      * Is the value of villageSettingItemCode ダミーキャラid? <br>
      * ダミーキャラID
      * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
@@ -324,6 +378,28 @@ public abstract class BsVillageSettingItem extends AbstractEntity implements Dom
     public boolean isVillageSettingItemCodeダミーキャラid() {
         CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
         return cdef != null ? cdef.equals(CDef.VillageSettingItem.ダミーキャラid) : false;
+    }
+
+    /**
+     * Is the value of villageSettingItemCode ダミーキャラ名? <br>
+     * ダミーキャラ名
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isVillageSettingItemCodeダミーキャラ名() {
+        CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
+        return cdef != null ? cdef.equals(CDef.VillageSettingItem.ダミーキャラ名) : false;
+    }
+
+    /**
+     * Is the value of villageSettingItemCode ダミーキャラ略称? <br>
+     * ダミーキャラ略称
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isVillageSettingItemCodeダミーキャラ略称() {
+        CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
+        return cdef != null ? cdef.equals(CDef.VillageSettingItem.ダミーキャラ略称) : false;
     }
 
     /**

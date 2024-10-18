@@ -1,10 +1,18 @@
 package com.ort.firewolf.api.body
 
+import org.hibernate.validator.constraints.Length
 import javax.validation.constraints.NotNull
 
 data class VillageParticipateBody(
     @field:NotNull(message = "charaIdは必須")
     val charaId: Int?,
+
+    @field:NotNull(message = "charaShortNameは必須")
+    @field:Length(min = 1, max = 1)
+    val charaShortName: String?,
+
+    @field:NotNull(message = "charaNameは必須")
+    val charaName: String?,
 
     @field:NotNull(message = "firstRequestSkillは必須")
     val firstRequestSkill: String?,
@@ -19,5 +27,5 @@ data class VillageParticipateBody(
 
     val spectator: Boolean?
 ) {
-    constructor() : this(null, null, null, null, null, null) {}
+    constructor() : this(null, null, null, null, null, null, null, null) {}
 }

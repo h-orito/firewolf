@@ -20,3 +20,7 @@ silent_hours	沈黙時間	18
 is_available_dummy_skill	役欠けありか	19
 is_available_action	アクション可能か	20
 is_available_secret_say	秘話可能か	21
+dummy_chara_short_name	ダミーキャラ略称	22
+dummy_chara_name	ダミーキャラ名	23
+day0_dummy_message	プロローグダミー発言	24
+day1_dummy_message	1日目ダミー発言	25

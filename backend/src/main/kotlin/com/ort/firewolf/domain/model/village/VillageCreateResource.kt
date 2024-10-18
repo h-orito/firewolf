@@ -28,6 +28,10 @@ data class VillageOrganizationCreateResource(
 
 data class VillageCharachipCreateResource(
     val dummyCharaId: Int,
+    val dummyCharaShortName: String,
+    val dummyCharaName: String,
+    val dummyCharaDay0Message: String,
+    val dummyCharaDay1Message: String?,
     val charachipIds: List<Int>
 )
 

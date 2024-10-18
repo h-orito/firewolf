@@ -79,11 +79,43 @@ public abstract class AbstractBsVillageSettingItemCQ extends AbstractConditionQu
     }
 
     /**
+     * Equal(=). As プロローグダミー発言 (day0_dummy_message). And OnlyOnceRegistered. <br>
+     * プロローグダミー発言
+     */
+    public void setVillageSettingItemCode_Equal_プロローグダミー発言() {
+        setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.プロローグダミー発言);
+    }
+
+    /**
+     * Equal(=). As N1日目ダミー発言 (day1_dummy_message). And OnlyOnceRegistered. <br>
+     * 1日目ダミー発言
+     */
+    public void setVillageSettingItemCode_Equal_N1日目ダミー発言() {
+        setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.N1日目ダミー発言);
+    }
+
+    /**
      * Equal(=). As ダミーキャラid (dummy_chara_id). And OnlyOnceRegistered. <br>
      * ダミーキャラID
      */
     public void setVillageSettingItemCode_Equal_ダミーキャラid() {
         setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.ダミーキャラid);
+    }
+
+    /**
+     * Equal(=). As ダミーキャラ名 (dummy_chara_name). And OnlyOnceRegistered. <br>
+     * ダミーキャラ名
+     */
+    public void setVillageSettingItemCode_Equal_ダミーキャラ名() {
+        setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.ダミーキャラ名);
+    }
+
+    /**
+     * Equal(=). As ダミーキャラ略称 (dummy_chara_short_name). And OnlyOnceRegistered. <br>
+     * ダミーキャラ略称
+     */
+    public void setVillageSettingItemCode_Equal_ダミーキャラ略称() {
+        setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.ダミーキャラ略称);
     }
 
     /**
@@ -270,11 +302,43 @@ public abstract class AbstractBsVillageSettingItemCQ extends AbstractConditionQu
     }
 
     /**
+     * NotEqual(&lt;&gt;). As プロローグダミー発言 (day0_dummy_message). And OnlyOnceRegistered. <br>
+     * プロローグダミー発言
+     */
+    public void setVillageSettingItemCode_NotEqual_プロローグダミー発言() {
+        setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.プロローグダミー発言);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As N1日目ダミー発言 (day1_dummy_message). And OnlyOnceRegistered. <br>
+     * 1日目ダミー発言
+     */
+    public void setVillageSettingItemCode_NotEqual_N1日目ダミー発言() {
+        setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.N1日目ダミー発言);
+    }
+
+    /**
      * NotEqual(&lt;&gt;). As ダミーキャラid (dummy_chara_id). And OnlyOnceRegistered. <br>
      * ダミーキャラID
      */
     public void setVillageSettingItemCode_NotEqual_ダミーキャラid() {
         setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.ダミーキャラid);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As ダミーキャラ名 (dummy_chara_name). And OnlyOnceRegistered. <br>
+     * ダミーキャラ名
+     */
+    public void setVillageSettingItemCode_NotEqual_ダミーキャラ名() {
+        setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.ダミーキャラ名);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As ダミーキャラ略称 (dummy_chara_short_name). And OnlyOnceRegistered. <br>
+     * ダミーキャラ略称
+     */
+    public void setVillageSettingItemCode_NotEqual_ダミーキャラ略称() {
+        setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.ダミーキャラ略称);
     }
 
     /**

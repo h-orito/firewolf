@@ -423,6 +423,15 @@ class VillageDataSource(
             if (!before.setting.password.existsDifference(afterPassword)) return@let
             updateVillageSetting(villageId, CDef.VillageSettingItem.入村パスワード, afterPassword.joinPassword ?: "")
         }
+        after.setting.charachip.let { charachip ->
+            if (before.setting.charachip.dummyCharaDay1Message != charachip.dummyCharaDay1Message) {
+                updateVillageSetting(
+                    villageId,
+                    CDef.VillageSettingItem.N1日目ダミー発言,
+                    charachip.dummyCharaDay1Message ?: ""
+                )
+            }
+        }
 
         if (before.setting.tags.existsDifference(after.setting.tags)) {
             villageTagBhv.queryDelete {
@@ -668,6 +677,19 @@ class VillageDataSource(
         insertVillageSetting(villageId, CDef.VillageSettingItem.秘話可能か, toFlg(settings.rules.availableSecretSay))
         // タグ
         settings.tags.list.forEach { insertVillageTag(villageId, it) }
+        // ダミーキャラ設定
+        insertVillageSetting(villageId, CDef.VillageSettingItem.ダミーキャラ略称, settings.charachip.dummyCharaShortName)
+        insertVillageSetting(villageId, CDef.VillageSettingItem.ダミーキャラ名, settings.charachip.dummyCharaName)
+        insertVillageSetting(
+            villageId,
+            CDef.VillageSettingItem.プロローグダミー発言,
+            settings.charachip.dummyCharaDay0Message
+        )
+        insertVillageSetting(
+            villageId,
+            CDef.VillageSettingItem.N1日目ダミー発言,
+            settings.charachip.dummyCharaDay1Message ?: ""
+        )
     }
 
     private fun insertVillageSetting(villageId: Int, item: CDef.VillageSettingItem, value: String) {

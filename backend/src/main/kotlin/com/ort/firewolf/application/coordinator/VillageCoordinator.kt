@@ -219,6 +219,8 @@ class VillageCoordinator(
         villageId: Int,
         playerId: Int,
         charaId: Int,
+        charaShortName: String,
+        charaName: String,
         message: String,
         isSpectate: Boolean,
         firstRequestSkill: CDef.Skill = CDef.Skill.おまかせ,
@@ -231,6 +233,8 @@ class VillageCoordinator(
         val changedVillage: Village = village.participate(
             playerId = playerId,
             chara = chara,
+            charaShortName = charaShortName,
+            charaName = charaName,
             firstRequestSkill = firstRequestSkill,
             secondRequestSkill = secondRequestSkill,
             isSpectate = isSpectate,
@@ -577,19 +581,26 @@ class VillageCoordinator(
         // 村作成時のシステムメッセージを登録
         messageService.registerInitialMessage(village)
         // ダミーキャラを参加させる
-        val chara: Chara = charachipService.findChara(village.setting.charachip.dummyCharaId)
-        participateDummyChara(village.id, village, chara)
-
+        participateDummyChara(
+            villageId = village.id,
+            village = village,
+            message = paramVillage.setting.charachip.dummyCharaDay0Message
+        )
         return village
     }
 
-    private fun participateDummyChara(villageId: Int, village: Village, dummyChara: Chara) {
+    private fun participateDummyChara(
+        villageId: Int,
+        village: Village,
+        message: String
+    ) {
         val dummyPlayerId = 1 // 固定
-        val message: String = dummyChara.defaultMessage.joinMessage ?: "人狼なんているわけないじゃん。みんな大げさだなあ"
         this.participate(
             villageId = villageId,
             playerId = dummyPlayerId,
             charaId = village.setting.charachip.dummyCharaId,
+            charaShortName = village.setting.charachip.dummyCharaShortName,
+            charaName = village.setting.charachip.dummyCharaName,
             message = message,
             isSpectate = false,
             ipAddress = "dummy"

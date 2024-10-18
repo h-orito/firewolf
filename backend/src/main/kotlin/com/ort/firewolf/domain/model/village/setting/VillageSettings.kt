@@ -37,6 +37,10 @@ data class VillageSettings(
                 ),
                 charachip = VillageCharachip(
                     dummyCharaId = resource.charachip.dummyCharaId,
+                    dummyCharaShortName = resource.charachip.dummyCharaShortName,
+                    dummyCharaName = resource.charachip.dummyCharaName,
+                    dummyCharaDay0Message = resource.charachip.dummyCharaDay0Message,
+                    dummyCharaDay1Message = resource.charachip.dummyCharaDay1Message,
                     charachipIds = resource.charachip.charachipIds
                 ),
                 organizations = org,
@@ -73,6 +77,7 @@ data class VillageSettings(
 
     fun existsDifference(setting: VillageSettings): Boolean {
         return capacity.existsDifference(setting.capacity)
+                || charachip.existsDifference(setting.charachip)
                 || time.existsDifference(setting.time)
                 || organizations.existsDifference(setting.organizations)
                 || rules.existsDifference(setting.rules)

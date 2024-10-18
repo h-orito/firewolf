@@ -9,7 +9,6 @@ import com.ort.firewolf.application.service.NotificationService
 import com.ort.firewolf.application.service.PlayerService
 import com.ort.firewolf.application.service.VillageService
 import com.ort.firewolf.application.service.VoteService
-import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.commit.Commits
 import com.ort.firewolf.domain.model.daychange.DayChange
 import com.ort.firewolf.domain.model.message.MessageQuery
@@ -52,7 +51,6 @@ class DayChangeCoordinator(
             village.day.latestDay().id,
             MessageQuery(listOf(CDef.MessageType.通常発言))
         )
-        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipIds)
         val players: Players = playerService.findPlayers(village.id)
 
         val beforeDayChange = DayChange(village.copy(
@@ -78,7 +76,7 @@ class DayChangeCoordinator(
         dayChange = dayChange.copy(village = villageService.findVillage(village.id))
 
         // 日付更新
-        dayChangeDomainService.process(dayChange, todayMessages, charas, commits).also {
+        dayChangeDomainService.process(dayChange, todayMessages, commits).also {
             updateIfNeeded(dayChange, it)
             notifyIfNeeded(beforeDayChange, it)
         }

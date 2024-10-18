@@ -1,7 +1,6 @@
 package com.ort.firewolf.domain.service.daychange
 
 import com.ort.dbflute.allcommon.CDef
-import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.daychange.DayChange
 import com.ort.firewolf.domain.model.village.Village
 import com.ort.firewolf.domain.service.ability.AbilityDomainService
@@ -32,10 +31,7 @@ class PrologueDomainService(
         return dayChange.copy(village = dayChange.village.addNewDay()).setIsChange(dayChange)
     }
 
-    fun dayChange(
-        beforeDayChange: DayChange,
-        charas: Charas
-    ): DayChange {
+    fun dayChange(beforeDayChange: DayChange): DayChange {
         // 開始メッセージ追加
         var dayChange = addStartMessage(beforeDayChange)
         // 役職割り当て
@@ -49,7 +45,7 @@ class PrologueDomainService(
         // デフォルト能力行使指定
         dayChange = abilityDomainService.addDefaultAbilities(dayChange)
         // ダミーキャラ発言
-        dayChange = addDummyCharaFirstDayMessageIfNeeded(dayChange, charas)
+        dayChange = addDummyCharaFirstDayMessageIfNeeded(dayChange)
 
         return dayChange.setIsChange(beforeDayChange)
     }
@@ -83,8 +79,8 @@ class PrologueDomainService(
         )
     }
 
-    private fun addDummyCharaFirstDayMessageIfNeeded(dayChange: DayChange, charas: Charas): DayChange {
-        return dayChange.village.createDummyCharaFirstDayMessage(charas)?.let {
+    private fun addDummyCharaFirstDayMessageIfNeeded(dayChange: DayChange): DayChange {
+        return dayChange.village.createDummyCharaFirstDayMessage()?.let {
             dayChange.copy(
                 messages = dayChange.messages.add(it)
             )

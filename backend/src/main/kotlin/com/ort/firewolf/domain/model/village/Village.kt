@@ -3,7 +3,6 @@ package com.ort.firewolf.domain.model.village
 import com.ort.dbflute.allcommon.CDef
 import com.ort.firewolf.domain.model.camp.Camp
 import com.ort.firewolf.domain.model.charachip.Chara
-import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.message.Message
 import com.ort.firewolf.domain.model.message.MessageContent
 import com.ort.firewolf.domain.model.player.Player
@@ -142,10 +141,9 @@ data class Village(
 
     /**
      * ダミーキャラの1日目発言
-     * @param charas charas
      */
-    fun createDummyCharaFirstDayMessage(charas: Charas): Message? {
-        val firstDayMessage = charas.chara(dummyChara().charaId).defaultMessage.firstDayMessage ?: return null
+    fun createDummyCharaFirstDayMessage(): Message? {
+        val firstDayMessage = setting.charachip.dummyCharaDay1Message ?: return null
         val messageContent = MessageContent.invoke(
             messageType = CDef.MessageType.通常発言.code(),
             text = firstDayMessage,
@@ -361,6 +359,8 @@ data class Village(
     fun participate(
         playerId: Int,
         chara: Chara,
+        charaShortName: String,
+        charaName: String,
         firstRequestSkill: CDef.Skill = CDef.Skill.おまかせ,
         secondRequestSkill: CDef.Skill = CDef.Skill.おまかせ,
         isSpectate: Boolean,
@@ -370,6 +370,8 @@ data class Village(
             this.copy(
                 spectator = spectator.addParticipant(
                     chara = chara,
+                    charaShortName = charaShortName,
+                    charaName = charaName,
                     playerId = playerId,
                     skillRequest = SkillRequest(Skill(firstRequestSkill), Skill(secondRequestSkill)),
                     isSpectator = true,
@@ -380,6 +382,8 @@ data class Village(
             this.copy(
                 participant = participant.addParticipant(
                     chara = chara,
+                    charaShortName = charaShortName,
+                    charaName = charaName,
                     playerId = playerId,
                     skillRequest = SkillRequest(Skill(firstRequestSkill), Skill(secondRequestSkill)),
                     isSpectator = false,
