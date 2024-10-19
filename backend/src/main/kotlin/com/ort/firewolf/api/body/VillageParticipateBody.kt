@@ -12,6 +12,7 @@ data class VillageParticipateBody(
     val charaShortName: String?,
 
     @field:NotNull(message = "charaNameは必須")
+    @field:Length(min = 1, max = 40)
     val charaName: String?,
 
     @field:NotNull(message = "firstRequestSkillは必須")

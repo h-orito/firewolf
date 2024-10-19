@@ -274,12 +274,12 @@ class VillageController(
             from = VillageParticipantView(
                 id = 1, // dummy
                 name = VillageParticipantName(
-                    name = chara.charaName.name,
-                    shortName = chara.charaName.shortName
+                    name = body.charaName!!,
+                    shortName = body.charaShortName!!
                 ).fullName(),
                 charaName = VillageParticipantName(
-                    name = chara.charaName.name,
-                    shortName = chara.charaName.shortName
+                    name = body.charaName,
+                    shortName = body.charaShortName
                 ),
                 chara = CharaView(chara),
                 player = null,
@@ -294,8 +294,8 @@ class VillageController(
                 notification = null
             ),
             fromCharacterName = VillageParticipantName(
-                name = chara.charaName.name,
-                shortName = chara.charaName.shortName
+                name = body.charaName,
+                shortName = body.charaShortName
             ),
             to = null,
             toCharacterName = null,

@@ -79,12 +79,14 @@ class ParticipateDomainService {
 
     /**
      * 参加メッセージ
-     * @param village village
-     * @param chara chara
-     * @param isSpectate 見学か
-     * @return 参加時のメッセージ e.g. {N}人目、{キャラ名}。
      */
-    fun createParticipateMessage(village: Village, chara: Chara, isSpectate: Boolean): Message {
+    fun createParticipateMessage(
+        village: Village,
+        chara: Chara,
+        charaName: String,
+        charaShortName: String,
+        isSpectate: Boolean
+    ): Message {
         // 何人目か
         val number = if (isSpectate) {
             village.spectator.count
@@ -92,9 +94,9 @@ class ParticipateDomainService {
             village.participant.count
         }
         val text = if (isSpectate) {
-            "（見学）${number}人目、${chara.charaName.fullName()}。"
+            "（見学）${number}人目、[${charaShortName}] ${charaName}。"
         } else {
-            "${number}人目、${chara.charaName.fullName()}。"
+            "${number}人目、[${charaShortName}] ${charaName}。"
         }
         return Message.createPublicSystemMessage(text, village.day.prologueDay().id)
     }

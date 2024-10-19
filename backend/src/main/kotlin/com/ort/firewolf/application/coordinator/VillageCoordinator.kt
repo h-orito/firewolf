@@ -248,6 +248,8 @@ class VillageCoordinator(
             village = village,
             participant = village.findMemberById(myself.id)!!,
             chara = chara,
+            charaName = charaName,
+            charaShortName = charaShortName,
             message = message,
             isSpectate = isSpectate
         )

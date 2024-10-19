@@ -100,23 +100,20 @@ class MessageService(
 
     /**
      * 村に参加する際の発言を登録
-     * @param village village
-     * @param participant 参加者
-     * @param chara chara
-     * @param message message text
-     * @param isSpectate 見学か
      */
     fun registerParticipateMessage(
         village: Village,
         participant: VillageParticipant,
         chara: Chara,
+        charaName: String,
+        charaShortName: String,
         message: String,
         isSpectate: Boolean
     ) {
         // {N}人目、{キャラ名}。
         messageDataSource.registerMessage(
             village,
-            participateDomainService.createParticipateMessage(village, chara, isSpectate)
+            participateDomainService.createParticipateMessage(village, chara, charaName, charaShortName, isSpectate)
         )
         // 参加発言
         val messageContent = MessageContent.invoke(
