@@ -61,11 +61,11 @@ class ProgressDomainService(
         var dayChange =
             suddenlyDeathDomainService.processDayChangeAction(beforeDayChange, todayMessages, commits)
 
-        // 冷やし中華
-        dayChange = hiyashichukaDomainService.processDayChangeAction(dayChange)
-
         // 情緒
         dayChange = emotionDomainService.processDayChangeAction(dayChange)
+
+        // 冷やし中華
+        dayChange = hiyashichukaDomainService.processDayChangeAction(dayChange)
 
         // 求愛
         dayChange = courtDomainService.processDayChangeAction(dayChange)
