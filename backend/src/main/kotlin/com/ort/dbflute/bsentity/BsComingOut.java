@@ -161,6 +161,14 @@ public abstract class BsComingOut extends AbstractEntity implements DomainEntity
     }
 
     /**
+     * Set the value of skillCode as 情緒 (EMOTION). <br>
+     * 情緒
+     */
+    public void setSkillCode_情緒() {
+        setSkillCodeAsSkill(CDef.Skill.情緒);
+    }
+
+    /**
      * Set the value of skillCode as 狂信者 (FANATIC). <br>
      * 狂信者
      */
@@ -392,6 +400,17 @@ public abstract class BsComingOut extends AbstractEntity implements DomainEntity
     public boolean isSkillCode呪狼() {
         CDef.Skill cdef = getSkillCodeAsSkill();
         return cdef != null ? cdef.equals(CDef.Skill.呪狼) : false;
+    }
+
+    /**
+     * Is the value of skillCode 情緒? <br>
+     * 情緒
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isSkillCode情緒() {
+        CDef.Skill cdef = getSkillCodeAsSkill();
+        return cdef != null ? cdef.equals(CDef.Skill.情緒) : false;
     }
 
     /**

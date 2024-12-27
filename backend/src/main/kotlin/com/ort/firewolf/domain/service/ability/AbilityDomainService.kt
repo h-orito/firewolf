@@ -22,7 +22,8 @@ class AbilityDomainService(
     private val guardDomainService: GuardDomainService,
     private val wandererGuardDomainService: WandererGuardDomainService,
     private val courtDomainService: CourtDomainService,
-    private val hiyashichukaDomainService: HiyashichukaDomainService
+    private val hiyashichukaDomainService: HiyashichukaDomainService,
+    private val emotionDomainService: EmotionDomainService
 ) {
 
     // 選択可能な対象
@@ -161,6 +162,7 @@ class AbilityDomainService(
             CDef.AbilityType.風来護衛.code() -> wandererGuardDomainService
             CDef.AbilityType.求愛.code() -> courtDomainService
             CDef.AbilityType.冷やし中華.code() -> hiyashichukaDomainService
+            CDef.AbilityType.情緒.code() -> emotionDomainService
             else -> null
         }
     }

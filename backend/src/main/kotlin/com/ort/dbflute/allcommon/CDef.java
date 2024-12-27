@@ -489,6 +489,9 @@ public interface CDef extends Classification {
         /** 呪狼 */
         呪狼("CURSEWOLF", "呪狼", emptyStrings())
         ,
+        /** 情緒 */
+        情緒("EMOTION", "情緒", emptyStrings())
+        ,
         /** 狂信者 */
         狂信者("FANATIC", "狂信者", emptyStrings())
         ,
@@ -605,6 +608,14 @@ public interface CDef extends Classification {
                 subItemMap.put("campCode", "WEREWOLF");
                 subItemMap.put("description", "あなたは呪狼です。人狼系役職とC国狂人同士にしか聞こえない会話が可能です。また、毎晩一人を襲撃することができます。また、あなたを占った人を死亡させることができます。");
                 _subItemMapMap.put(呪狼.code(), Collections.unmodifiableMap(subItemMap));
+            }
+            {
+                Map<String, Object> subItemMap = new HashMap<String, Object>();
+                subItemMap.put("shortName", "情");
+                subItemMap.put("order", "16");
+                subItemMap.put("campCode", "VILLAGER");
+                subItemMap.put("description", "あなたは情緒です。何回でも、終わることができます。");
+                _subItemMapMap.put(情緒.code(), Collections.unmodifiableMap(subItemMap));
             }
             {
                 Map<String, Object> subItemMap = new HashMap<String, Object>();
@@ -1950,6 +1961,9 @@ public interface CDef extends Classification {
         /** 占い */
         占い("DIVINE", "占い", emptyStrings())
         ,
+        /** 情緒 */
+        情緒("EMOTION", "情緒", emptyStrings())
+        ,
         /** 護衛 */
         護衛("GUARD", "護衛", emptyStrings())
         ,
@@ -2215,14 +2229,14 @@ public interface CDef extends Classification {
         /** キャラクターグループID */
         キャラクターグループid("character_group_id", "キャラクターグループID", emptyStrings())
         ,
-        /** 更新間隔秒 */
-        更新間隔秒("day_change_interval_seconds", "更新間隔秒", emptyStrings())
-        ,
         /** プロローグダミー発言 */
         プロローグダミー発言("day0_dummy_message", "プロローグダミー発言", emptyStrings())
         ,
         /** 1日目ダミー発言 */
         N1日目ダミー発言("day1_dummy_message", "1日目ダミー発言", emptyStrings())
+        ,
+        /** 更新間隔秒 */
+        更新間隔秒("day_change_interval_seconds", "更新間隔秒", emptyStrings())
         ,
         /** ダミーキャラID */
         ダミーキャラid("dummy_chara_id", "ダミーキャラID", emptyStrings())
