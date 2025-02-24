@@ -39,6 +39,8 @@ dependencies {
     implementation("org.dbflute:dbflute-runtime:1.2.1")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-aop")
+    implementation("org.springframework.boot:spring-boot-starter-cache")
+    implementation("com.github.ben-manes.caffeine:caffeine:2.8.8")
     // mysql
     val mysqlConnectorVersion = if (System.getenv("MYSQL_CONNECTOR_VERSION") != null) {
         System.getenv("MYSQL_CONNECTOR_VERSION")

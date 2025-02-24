@@ -6,6 +6,7 @@ import com.ort.firewolf.fw.config.FirewolfAppConfig
 import com.ort.firewolf.fw.config.FirewolfWebMvcConfigurer
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.cache.annotation.EnableCaching
 import org.springframework.context.annotation.Import
 
 @SpringBootApplication
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.Import
     FirewolfWebMvcConfigurer::class,
     FirebaseConfig::class
 )
+@EnableCaching
 class FirewolfApplication
 
 fun main(args: Array<String>) {

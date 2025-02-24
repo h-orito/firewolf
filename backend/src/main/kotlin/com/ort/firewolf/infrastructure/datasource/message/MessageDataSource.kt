@@ -19,6 +19,8 @@ import com.ort.firewolf.fw.FirewolfDateUtil
 import com.ort.firewolf.fw.exception.FirewolfBusinessException
 import org.dbflute.cbean.result.PagingResultBean
 import org.slf4j.LoggerFactory
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
 import java.time.ZoneOffset
 import java.util.regex.Pattern
@@ -53,6 +55,7 @@ class MessageDataSource(
      * @param query query
      * @return 発言
      */
+    @Cacheable("messages")
     fun findMessages(
         villageId: Int,
         villageDayId: Int,
@@ -111,6 +114,7 @@ class MessageDataSource(
      * @param participant 参加情報
      * @return 最新発言日時(unix_datetime_milli)
      */
+    @Cacheable("latest-messages")
     fun findLatestMessagesUnixTimeMilli(
         villageId: Int,
         messageTypeList: List<CDef.MessageType>,
@@ -182,6 +186,7 @@ class MessageDataSource(
         return messageList.groupBy { CDef.MessageType.codeOf(it.messageTypeCode) }.mapValues { it.value.size }
     }
 
+    @CacheEvict(cacheNames = ["message", "latest-messages"], allEntries = true)
     fun registerMessage(
         village: Village,
         message: com.ort.firewolf.domain.model.message.Message
@@ -222,8 +227,8 @@ class MessageDataSource(
             mes.messageCount = count + 1
         }
 
-        // 発言番号の採番 & insert (3回チャレンジする)
-        for (i in 1..3) {
+        // 発言番号の採番 & insert (10回チャレンジする)
+        for (i in 1..10) {
             try {
                 mes.messageNumber = selectNextMessageNumber(village.id, message.content.type.code)
                 messageBhv.insert(mes)
@@ -282,6 +287,7 @@ class MessageDataSource(
     /**
      * 差分更新
      */
+    @CacheEvict(cacheNames = ["message", "latest-message"], allEntries = true)
     fun updateDifference(village: Village, before: Messages, after: Messages) {
         // 追加しかないのでbeforeにないindexから追加していく
         after.list.drop(before.list.size).forEach {

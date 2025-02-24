@@ -11,6 +11,9 @@ spring:
     encoding: UTF-8
   jackson:
     property-naming-strategy: SNAKE_CASE
+  cache:
+    caffeine:
+      spec: "expireAfterAccess=600s"
 security:
   corsClientUrls:
     - https://firewolf.netlify.app

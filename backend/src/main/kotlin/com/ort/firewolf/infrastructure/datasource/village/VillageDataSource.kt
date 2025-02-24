@@ -30,6 +30,8 @@ import com.ort.firewolf.domain.model.village.setting.VillageMessageRestrict
 import com.ort.firewolf.domain.model.village.setting.VillageSettings
 import com.ort.firewolf.fw.security.FirewolfUser
 import com.ort.firewolf.infrastructure.datasource.village.converter.VillageDataConverter
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
 import java.time.LocalDateTime
 
@@ -111,7 +113,7 @@ class VillageDataSource(
                     vpCB.query().queryPlayer().setUid_Equal(user.uid)
                 }
             }
-            if (villageStatusList != null && villageStatusList.isNotEmpty()) {
+            if (!villageStatusList.isNullOrEmpty()) {
                 it.query().setVillageStatusCode_InScope_AsVillageStatus(
                     villageStatusList.map { status -> status.toCdef() }
                 )
@@ -218,6 +220,7 @@ class VillageDataSource(
      * @param villageId villageId
      * @return 村情報
      */
+    @Cacheable("village")
     fun findVillage(villageId: Int, excludeGonePlayer: Boolean = true): com.ort.firewolf.domain.model.village.Village {
         val village = villageBhv.selectEntityWithDeletedCheck {
             it.query().setVillageId_Equal(villageId)
@@ -255,6 +258,7 @@ class VillageDataSource(
      * @param before village
      * @param after village
      */
+    @CacheEvict(cacheNames = ["village"], allEntries = true)
     fun updateDifference(
         before: com.ort.firewolf.domain.model.village.Village,
         after: com.ort.firewolf.domain.model.village.Village
