@@ -87,6 +87,14 @@ public abstract class AbstractBsAbilityTypeCQ extends AbstractConditionQuery {
     }
 
     /**
+     * Equal(=). As 情緒 (EMOTION). And OnlyOnceRegistered. <br>
+     * 情緒
+     */
+    public void setAbilityTypeCode_Equal_情緒() {
+        setAbilityTypeCode_Equal_AsAbilityType(CDef.AbilityType.情緒);
+    }
+
+    /**
      * Equal(=). As 護衛 (GUARD). And OnlyOnceRegistered. <br>
      * 護衛
      */
@@ -155,6 +163,14 @@ public abstract class AbstractBsAbilityTypeCQ extends AbstractConditionQuery {
      */
     public void setAbilityTypeCode_NotEqual_占い() {
         setAbilityTypeCode_NotEqual_AsAbilityType(CDef.AbilityType.占い);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 情緒 (EMOTION). And OnlyOnceRegistered. <br>
+     * 情緒
+     */
+    public void setAbilityTypeCode_NotEqual_情緒() {
+        setAbilityTypeCode_NotEqual_AsAbilityType(CDef.AbilityType.情緒);
     }
 
     /**

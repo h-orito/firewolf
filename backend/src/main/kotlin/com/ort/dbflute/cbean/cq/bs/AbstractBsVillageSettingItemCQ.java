@@ -71,14 +71,6 @@ public abstract class AbstractBsVillageSettingItemCQ extends AbstractConditionQu
     }
 
     /**
-     * Equal(=). As 更新間隔秒 (day_change_interval_seconds). And OnlyOnceRegistered. <br>
-     * 更新間隔秒
-     */
-    public void setVillageSettingItemCode_Equal_更新間隔秒() {
-        setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.更新間隔秒);
-    }
-
-    /**
      * Equal(=). As プロローグダミー発言 (day0_dummy_message). And OnlyOnceRegistered. <br>
      * プロローグダミー発言
      */
@@ -92,6 +84,14 @@ public abstract class AbstractBsVillageSettingItemCQ extends AbstractConditionQu
      */
     public void setVillageSettingItemCode_Equal_N1日目ダミー発言() {
         setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.N1日目ダミー発言);
+    }
+
+    /**
+     * Equal(=). As 更新間隔秒 (day_change_interval_seconds). And OnlyOnceRegistered. <br>
+     * 更新間隔秒
+     */
+    public void setVillageSettingItemCode_Equal_更新間隔秒() {
+        setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.更新間隔秒);
     }
 
     /**
@@ -294,14 +294,6 @@ public abstract class AbstractBsVillageSettingItemCQ extends AbstractConditionQu
     }
 
     /**
-     * NotEqual(&lt;&gt;). As 更新間隔秒 (day_change_interval_seconds). And OnlyOnceRegistered. <br>
-     * 更新間隔秒
-     */
-    public void setVillageSettingItemCode_NotEqual_更新間隔秒() {
-        setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.更新間隔秒);
-    }
-
-    /**
      * NotEqual(&lt;&gt;). As プロローグダミー発言 (day0_dummy_message). And OnlyOnceRegistered. <br>
      * プロローグダミー発言
      */
@@ -315,6 +307,14 @@ public abstract class AbstractBsVillageSettingItemCQ extends AbstractConditionQu
      */
     public void setVillageSettingItemCode_NotEqual_N1日目ダミー発言() {
         setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.N1日目ダミー発言);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 更新間隔秒 (day_change_interval_seconds). And OnlyOnceRegistered. <br>
+     * 更新間隔秒
+     */
+    public void setVillageSettingItemCode_NotEqual_更新間隔秒() {
+        setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.更新間隔秒);
     }
 
     /**

@@ -131,14 +131,6 @@ public abstract class BsVillageSettingItem extends AbstractEntity implements Dom
     }
 
     /**
-     * Set the value of villageSettingItemCode as 更新間隔秒 (day_change_interval_seconds). <br>
-     * 更新間隔秒
-     */
-    public void setVillageSettingItemCode_更新間隔秒() {
-        setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.更新間隔秒);
-    }
-
-    /**
      * Set the value of villageSettingItemCode as プロローグダミー発言 (day0_dummy_message). <br>
      * プロローグダミー発言
      */
@@ -152,6 +144,14 @@ public abstract class BsVillageSettingItem extends AbstractEntity implements Dom
      */
     public void setVillageSettingItemCode_N1日目ダミー発言() {
         setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.N1日目ダミー発言);
+    }
+
+    /**
+     * Set the value of villageSettingItemCode as 更新間隔秒 (day_change_interval_seconds). <br>
+     * 更新間隔秒
+     */
+    public void setVillageSettingItemCode_更新間隔秒() {
+        setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.更新間隔秒);
     }
 
     /**
@@ -337,17 +337,6 @@ public abstract class BsVillageSettingItem extends AbstractEntity implements Dom
     }
 
     /**
-     * Is the value of villageSettingItemCode 更新間隔秒? <br>
-     * 更新間隔秒
-     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
-     * @return The determination, true or false.
-     */
-    public boolean isVillageSettingItemCode更新間隔秒() {
-        CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
-        return cdef != null ? cdef.equals(CDef.VillageSettingItem.更新間隔秒) : false;
-    }
-
-    /**
      * Is the value of villageSettingItemCode プロローグダミー発言? <br>
      * プロローグダミー発言
      * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
@@ -367,6 +356,17 @@ public abstract class BsVillageSettingItem extends AbstractEntity implements Dom
     public boolean isVillageSettingItemCodeN1日目ダミー発言() {
         CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
         return cdef != null ? cdef.equals(CDef.VillageSettingItem.N1日目ダミー発言) : false;
+    }
+
+    /**
+     * Is the value of villageSettingItemCode 更新間隔秒? <br>
+     * 更新間隔秒
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isVillageSettingItemCode更新間隔秒() {
+        CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
+        return cdef != null ? cdef.equals(CDef.VillageSettingItem.更新間隔秒) : false;
     }
 
     /**

@@ -70,6 +70,7 @@ data class Skill(
             CDef.Skill.風来狩人 to listOf(CDef.AbilityType.風来護衛),
             CDef.Skill.求愛者 to listOf(CDef.AbilityType.求愛),
             CDef.Skill.冷やし中華 to listOf(CDef.AbilityType.冷やし中華),
+            CDef.Skill.情緒 to listOf(CDef.AbilityType.情緒),
         )
 
         // 説明書専用
@@ -88,6 +89,7 @@ data class Skill(
             CDef.Skill.智狼 to listOf(AbilityType("WISEATTACK", "襲撃占い")),
             CDef.Skill.求愛者 to listOf(AbilityType(CDef.AbilityType.求愛)),
             CDef.Skill.冷やし中華 to listOf(AbilityType(CDef.AbilityType.冷やし中華)),
+            CDef.Skill.情緒 to listOf(AbilityType(CDef.AbilityType.情緒)),
         )
 
         fun skillByShortName(shortName: String): Skill? {

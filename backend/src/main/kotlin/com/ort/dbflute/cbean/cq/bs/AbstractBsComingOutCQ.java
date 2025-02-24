@@ -232,6 +232,14 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
     }
 
     /**
+     * Equal(=). As 情緒 (EMOTION). And OnlyOnceRegistered. <br>
+     * 情緒
+     */
+    public void setSkillCode_Equal_情緒() {
+        setSkillCode_Equal_AsSkill(CDef.Skill.情緒);
+    }
+
+    /**
      * Equal(=). As 狂信者 (FANATIC). And OnlyOnceRegistered. <br>
      * 狂信者
      */
@@ -468,6 +476,14 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
      */
     public void setSkillCode_NotEqual_呪狼() {
         setSkillCode_NotEqual_AsSkill(CDef.Skill.呪狼);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 情緒 (EMOTION). And OnlyOnceRegistered. <br>
+     * 情緒
+     */
+    public void setSkillCode_NotEqual_情緒() {
+        setSkillCode_NotEqual_AsSkill(CDef.Skill.情緒);
     }
 
     /**

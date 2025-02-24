@@ -1313,6 +1313,14 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     }
 
     /**
+     * Equal(=). As 情緒 (EMOTION). And OnlyOnceRegistered. <br>
+     * 情緒
+     */
+    public void setSkillCode_Equal_情緒() {
+        setSkillCode_Equal_AsSkill(CDef.Skill.情緒);
+    }
+
+    /**
      * Equal(=). As 狂信者 (FANATIC). And OnlyOnceRegistered. <br>
      * 狂信者
      */
@@ -1549,6 +1557,14 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      */
     public void setSkillCode_NotEqual_呪狼() {
         setSkillCode_NotEqual_AsSkill(CDef.Skill.呪狼);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 情緒 (EMOTION). And OnlyOnceRegistered. <br>
+     * 情緒
+     */
+    public void setSkillCode_NotEqual_情緒() {
+        setSkillCode_NotEqual_AsSkill(CDef.Skill.情緒);
     }
 
     /**
@@ -2148,6 +2164,14 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     }
 
     /**
+     * Equal(=). As 情緒 (EMOTION). And OnlyOnceRegistered. <br>
+     * 情緒
+     */
+    public void setRequestSkillCode_Equal_情緒() {
+        setRequestSkillCode_Equal_AsSkill(CDef.Skill.情緒);
+    }
+
+    /**
      * Equal(=). As 狂信者 (FANATIC). And OnlyOnceRegistered. <br>
      * 狂信者
      */
@@ -2384,6 +2408,14 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      */
     public void setRequestSkillCode_NotEqual_呪狼() {
         setRequestSkillCode_NotEqual_AsSkill(CDef.Skill.呪狼);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 情緒 (EMOTION). And OnlyOnceRegistered. <br>
+     * 情緒
+     */
+    public void setRequestSkillCode_NotEqual_情緒() {
+        setRequestSkillCode_NotEqual_AsSkill(CDef.Skill.情緒);
     }
 
     /**
@@ -2983,6 +3015,14 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
     }
 
     /**
+     * Equal(=). As 情緒 (EMOTION). And OnlyOnceRegistered. <br>
+     * 情緒
+     */
+    public void setSecondRequestSkillCode_Equal_情緒() {
+        setSecondRequestSkillCode_Equal_AsSkill(CDef.Skill.情緒);
+    }
+
+    /**
      * Equal(=). As 狂信者 (FANATIC). And OnlyOnceRegistered. <br>
      * 狂信者
      */
@@ -3219,6 +3259,14 @@ public abstract class AbstractBsVillagePlayerCQ extends AbstractConditionQuery {
      */
     public void setSecondRequestSkillCode_NotEqual_呪狼() {
         setSecondRequestSkillCode_NotEqual_AsSkill(CDef.Skill.呪狼);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 情緒 (EMOTION). And OnlyOnceRegistered. <br>
+     * 情緒
+     */
+    public void setSecondRequestSkillCode_NotEqual_情緒() {
+        setSecondRequestSkillCode_NotEqual_AsSkill(CDef.Skill.情緒);
     }
 
     /**
