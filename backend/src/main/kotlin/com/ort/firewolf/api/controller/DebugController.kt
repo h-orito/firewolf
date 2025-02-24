@@ -20,6 +20,7 @@ import com.ort.firewolf.fw.FirewolfDateUtil
 import com.ort.firewolf.fw.exception.FirewolfBusinessException
 import com.ort.firewolf.fw.security.FirewolfUser
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.cache.annotation.CacheEvict
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
@@ -132,6 +133,7 @@ class DebugController(
      * @param user user
      */
     @PostMapping("/admin/village/{villageId}/change-day")
+    @CacheEvict("village", allEntries = true)
     fun changeDay(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: FirewolfUser
@@ -175,6 +177,7 @@ class DebugController(
      * @param user user
      */
     @PostMapping("/admin/village/{villageId}/no-suddenly-death")
+    @CacheEvict("village", allEntries = true)
     fun setNoSuddenlyDeath(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: FirewolfUser

@@ -186,7 +186,7 @@ class MessageDataSource(
         return messageList.groupBy { CDef.MessageType.codeOf(it.messageTypeCode) }.mapValues { it.value.size }
     }
 
-    @CacheEvict(cacheNames = ["message", "latest-messages"], allEntries = true)
+    @CacheEvict(cacheNames = ["messages", "latest-messages"], allEntries = true)
     fun registerMessage(
         village: Village,
         message: com.ort.firewolf.domain.model.message.Message
