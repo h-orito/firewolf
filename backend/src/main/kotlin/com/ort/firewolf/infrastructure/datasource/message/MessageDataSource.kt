@@ -112,16 +112,18 @@ class MessageDataSource(
      * @param villageId villageId
      * @param messageTypeList 発言種別
      * @param participant 参加情報
+     * @param from この時間以降を取得
      * @return 最新発言日時(unix_datetime_milli)
      */
     @Cacheable("latest-messages")
     fun findLatestMessagesUnixTimeMilli(
         villageId: Int,
         messageTypeList: List<CDef.MessageType>,
-        participant: VillageParticipant?
+        participant: VillageParticipant?,
+        from: Long?
     ): Long {
         val query = MessageQuery(
-            from = null,
+            from = from,
             pageSize = null,
             pageNum = null,
             keyword = null,
@@ -134,7 +136,7 @@ class MessageDataSource(
             includePrivateAbility = false,
             isLatest = false
         )
-        return messageBhv.selectEntityWithDeletedCheck() {
+        return messageBhv.selectEntityWithDeletedCheck {
             queryMessage(it, villageId, null, query)
             it.query().addOrderBy_MessageUnixtimestampMilli_Desc()
             it.fetchFirst(1)
@@ -367,7 +369,7 @@ class MessageDataSource(
         // 発言種別
         queryMessageType(cb, query)
 
-        query.from?.let { cb.query().setMessageUnixtimestampMilli_GreaterThan(it) }
+        query.from?.let { cb.query().setMessageUnixtimestampMilli_GreaterEqual(it) }
         query.keyword?.let {
             cb.query().setMessageContent_LikeSearch(it) { op -> op.splitByBlank().likeContain().asOrSplit() }
         }

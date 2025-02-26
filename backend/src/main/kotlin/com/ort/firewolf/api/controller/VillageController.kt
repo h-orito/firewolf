@@ -174,15 +174,21 @@ class VillageController(
     @GetMapping("/village/{villageId}/latest")
     fun findLatest(
         @PathVariable("villageId") villageId: Int,
-        @AuthenticationPrincipal user: FirewolfUser?
+        @AuthenticationPrincipal user: FirewolfUser?,
+        @Validated form: VillageLatestForm,
     ): VillageLatestView {
         val village: Village = villageService.findVillage(villageId, false)
-        val unixTimeMilli = messageCoordinator.findLatestMessagesUnixTimeMilli(village, user)
+        val unixTimeMilli = messageCoordinator.findLatestMessagesUnixTimeMilli(village, user, form.from)
         return VillageLatestView(
             unixTimeMilli = unixTimeMilli,
             villageDayId = village.day.latestDay().id
         )
     }
+
+    data class VillageLatestForm(
+        val from: Long? = null
+    )
+
 
     /**
      * 村作成

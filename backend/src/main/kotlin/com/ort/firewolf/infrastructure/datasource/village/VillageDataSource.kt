@@ -252,7 +252,6 @@ class VillageDataSource(
         return VillageDataConverter.convertVillageToVillage(village)
     }
 
-
     /**
      * 差分更新
      * @param before village
