@@ -108,38 +108,21 @@ class MessageDataSource(
      * 最新発言日時取得
      *
      * @param villageId villageId
-     * @param messageTypeList 発言種別
-     * @param participant 参加情報
-     * @param from この時間以降を取得
+     * @param villageDayId 村日付ID
+     * @param query query
      * @return 最新発言日時(unix_datetime_milli)
      */
 //    @Cacheable("latest-messages")
     fun findLatestMessagesUnixTimeMilli(
         villageId: Int,
-        messageTypeList: List<CDef.MessageType>,
-        participant: VillageParticipant?,
-        from: Long?
+        villageDayId: Int,
+        query: MessageQuery
     ): Long {
-        val query = MessageQuery(
-//            from = from,
-            from = null, // いったん戻す
-            pageSize = null,
-            pageNum = null,
-            keyword = null,
-            participant = participant,
-            messageTypeList = messageTypeList,
-            fromParticipantIdList = null,
-            toParticipantIdList = null,
-            includeMonologue = false,
-            includeSecret = false,
-            includePrivateAbility = false,
-            isLatest = false
-        )
-        return messageBhv.selectEntityWithDeletedCheck {
-            queryMessage(it, villageId, null, query)
+        return messageBhv.selectEntity {
+            queryMessage(it, villageId, villageDayId, query)
             it.query().addOrderBy_MessageUnixtimestampMilli_Desc()
             it.fetchFirst(1)
-        }.messageUnixtimestampMilli
+        }.map { it.messageUnixtimestampMilli }.orElse(query.from ?: 0L)
     }
 
     /**

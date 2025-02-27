@@ -87,14 +87,22 @@ class MessageCoordinator(
     ): Long {
         val player = user?.let { playerService.findPlayer(it) }
         val participant: VillageParticipant? = villageCoordinator.findParticipant(village, user)
-        val messageTypeList: List<CDef.MessageType> =
-            messageDomainService.viewableMessageTypeList(
-                village,
-                participant,
-                player,
-                village.day.latestDay().day,
-                user?.authority
-            )
-        return messageService.findLatestMessagesUnixTimeMilli(village.id, messageTypeList, participant, from)
+        val query = messageDomainService.createQuery(
+            village = village,
+            participant = participant,
+            player = player,
+            day = village.day.latestDay().day,
+            authority = user?.authority,
+            messageTypeList = null,
+            from = from,
+            pageSize = null,
+            pageNum = null,
+            keyword = null,
+            isLatest = false,
+            fromParticipantIdList = null,
+            toParticipantIdList = null,
+        )
+
+        return messageService.findLatestMessagesUnixTimeMilli(village.id, village.day.latestDay().id, query)
     }
 }

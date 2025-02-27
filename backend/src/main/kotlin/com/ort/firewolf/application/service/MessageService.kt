@@ -47,18 +47,16 @@ class MessageService(
      * 最新発言日時取得
      *
      * @param villageId villageId
-     * @param messageTypeList 発言種別
-     * @param participant 参加情報
-     * @param from この時間以降を取得
+     * @param villageDayId villageDayId
+     * @param query query
      * @return 発言
      */
     fun findLatestMessagesUnixTimeMilli(
         villageId: Int,
-        messageTypeList: List<CDef.MessageType>,
-        participant: VillageParticipant? = null,
-        from: Long?
+        villageDayId: Int,
+        query: MessageQuery,
     ): Long {
-        return messageDataSource.findLatestMessagesUnixTimeMilli(villageId, messageTypeList, participant, from)
+        return messageDataSource.findLatestMessagesUnixTimeMilli(villageId, villageDayId, query)
     }
 
     /**
