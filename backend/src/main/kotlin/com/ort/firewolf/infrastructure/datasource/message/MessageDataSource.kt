@@ -6,7 +6,6 @@ import com.ort.dbflute.exbhv.MessageBhv
 import com.ort.dbflute.exbhv.MessageSendtoBhv
 import com.ort.dbflute.exentity.Message
 import com.ort.dbflute.exentity.MessageSendto
-import com.ort.firewolf.api.controller.VillageController
 import com.ort.firewolf.domain.model.message.MessageContent
 import com.ort.firewolf.domain.model.message.MessageQuery
 import com.ort.firewolf.domain.model.message.MessageTime
@@ -19,6 +18,7 @@ import com.ort.firewolf.fw.FirewolfDateUtil
 import com.ort.firewolf.fw.exception.FirewolfBusinessException
 import org.dbflute.cbean.result.PagingResultBean
 import org.slf4j.LoggerFactory
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
 import java.time.ZoneOffset
 import java.util.regex.Pattern
@@ -26,10 +26,10 @@ import java.util.regex.Pattern
 @Repository
 class MessageDataSource(
     private val messageBhv: MessageBhv,
-    private val messageSendtoBhv: MessageSendtoBhv
+    private val messageSendtoBhv: MessageSendtoBhv,
 ) {
 
-    private val logger = LoggerFactory.getLogger(VillageController::class.java)
+    private val logger = LoggerFactory.getLogger(MessageDataSource::class.java)
 
     companion object {
         val patternMessageTypeMap = mapOf(
@@ -53,7 +53,7 @@ class MessageDataSource(
      * @param query query
      * @return 発言
      */
-//    @Cacheable("messages")
+    @Cacheable("messages")
     fun findMessages(
         villageId: Int,
         villageDayId: Int,
@@ -112,7 +112,7 @@ class MessageDataSource(
      * @param query query
      * @return 最新発言日時(unix_datetime_milli)
      */
-//    @Cacheable("latest-messages")
+    @Cacheable("latest-messages")
     fun findLatestMessagesUnixTimeMilli(
         villageId: Int,
         villageDayId: Int,
@@ -170,7 +170,6 @@ class MessageDataSource(
         return messageList.groupBy { CDef.MessageType.codeOf(it.messageTypeCode) }.mapValues { it.value.size }
     }
 
-    //    @CacheEvict(cacheNames = ["messages", "latest-messages"], allEntries = true)
     fun registerMessage(
         village: Village,
         message: com.ort.firewolf.domain.model.message.Message
@@ -271,7 +270,6 @@ class MessageDataSource(
     /**
      * 差分更新
      */
-//    @CacheEvict(cacheNames = ["message", "latest-message"], allEntries = true)
     fun updateDifference(village: Village, before: Messages, after: Messages) {
         // 追加しかないのでbeforeにないindexから追加していく
         after.list.drop(before.list.size).forEach {

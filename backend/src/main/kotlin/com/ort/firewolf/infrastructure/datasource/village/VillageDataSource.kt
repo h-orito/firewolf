@@ -30,6 +30,8 @@ import com.ort.firewolf.domain.model.village.setting.VillageMessageRestrict
 import com.ort.firewolf.domain.model.village.setting.VillageSettings
 import com.ort.firewolf.fw.security.FirewolfUser
 import com.ort.firewolf.infrastructure.datasource.village.converter.VillageDataConverter
+import org.slf4j.LoggerFactory
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Repository
 import java.time.LocalDateTime
 
@@ -44,8 +46,10 @@ class VillageDataSource(
     private val villagePlayerAccessInfoBhv: VillagePlayerAccessInfoBhv,
     private val messageRestrictionBhv: MessageRestrictionBhv,
     private val villageTagBhv: VillageTagBhv,
-    private val villagePlayerNotificationBhv: VillagePlayerNotificationBhv
+    private val villagePlayerNotificationBhv: VillagePlayerNotificationBhv,
 ) {
+
+    private val logger = LoggerFactory.getLogger(VillageDataSource::class.java)
 
     /**
      * 村登録
@@ -214,11 +218,21 @@ class VillageDataSource(
     }
 
     /**
+     * キャッシュを使わず村情報を取得
+     */
+    fun findVillageWithoutCache(
+        villageId: Int,
+        excludeGonePlayer: Boolean = true
+    ): com.ort.firewolf.domain.model.village.Village {
+        return findVillage(villageId, excludeGonePlayer)
+    }
+
+    /**
      * 村情報取得
      * @param villageId villageId
      * @return 村情報
      */
-//    @Cacheable("village")
+    @Cacheable("village")
     fun findVillage(villageId: Int, excludeGonePlayer: Boolean = true): com.ort.firewolf.domain.model.village.Village {
         val village = villageBhv.selectEntityWithDeletedCheck {
             it.query().setVillageId_Equal(villageId)
@@ -255,7 +269,6 @@ class VillageDataSource(
      * @param before village
      * @param after village
      */
-//    @CacheEvict(cacheNames = ["village"], allEntries = true)
     fun updateDifference(
         before: com.ort.firewolf.domain.model.village.Village,
         after: com.ort.firewolf.domain.model.village.Village
@@ -408,13 +421,21 @@ class VillageDataSource(
                 toFlg(afterRules.availableSkillRequest)
             )
             updateVillageSetting(villageId, CDef.VillageSettingItem.見学可能か, toFlg(afterRules.availableSpectate))
-            updateVillageSetting(villageId, CDef.VillageSettingItem.墓下役職公開ありか, toFlg(afterRules.openSkillInGrave))
+            updateVillageSetting(
+                villageId,
+                CDef.VillageSettingItem.墓下役職公開ありか,
+                toFlg(afterRules.openSkillInGrave)
+            )
             updateVillageSetting(
                 villageId,
                 CDef.VillageSettingItem.墓下見学発言を生存者が見られるか,
                 toFlg(afterRules.visibleGraveMessage)
             )
-            updateVillageSetting(villageId, CDef.VillageSettingItem.突然死ありか, toFlg(afterRules.availableSuddenlyDeath))
+            updateVillageSetting(
+                villageId,
+                CDef.VillageSettingItem.突然死ありか,
+                toFlg(afterRules.availableSuddenlyDeath)
+            )
             updateVillageSetting(villageId, CDef.VillageSettingItem.コミット可能か, toFlg(afterRules.availableCommit))
             updateVillageSetting(villageId, CDef.VillageSettingItem.役欠けありか, toFlg(afterRules.availableDummySkill))
             updateVillageSetting(villageId, CDef.VillageSettingItem.アクション可能か, toFlg(afterRules.availableAction))
@@ -654,7 +675,11 @@ class VillageDataSource(
             CDef.VillageSettingItem.更新間隔秒,
             settings.time.dayChangeIntervalSeconds.toString()
         )
-        insertVillageSetting(villageId, CDef.VillageSettingItem.ダミーキャラid, settings.charachip.dummyCharaId.toString())
+        insertVillageSetting(
+            villageId,
+            CDef.VillageSettingItem.ダミーキャラid,
+            settings.charachip.dummyCharaId.toString()
+        )
         insertVillageSetting(villageId, CDef.VillageSettingItem.構成, settings.organizations.toString())
         insertVillageSetting(villageId, CDef.VillageSettingItem.記名投票か, toFlg(settings.rules.openVote))
         insertVillageSetting(
@@ -663,13 +688,21 @@ class VillageDataSource(
             toFlg(settings.rules.availableSkillRequest)
         )
         insertVillageSetting(villageId, CDef.VillageSettingItem.見学可能か, toFlg(settings.rules.availableSpectate))
-        insertVillageSetting(villageId, CDef.VillageSettingItem.墓下役職公開ありか, toFlg(settings.rules.openSkillInGrave))
+        insertVillageSetting(
+            villageId,
+            CDef.VillageSettingItem.墓下役職公開ありか,
+            toFlg(settings.rules.openSkillInGrave)
+        )
         insertVillageSetting(
             villageId,
             CDef.VillageSettingItem.墓下見学発言を生存者が見られるか,
             toFlg(settings.rules.visibleGraveMessage)
         )
-        insertVillageSetting(villageId, CDef.VillageSettingItem.突然死ありか, toFlg(settings.rules.availableSuddenlyDeath))
+        insertVillageSetting(
+            villageId,
+            CDef.VillageSettingItem.突然死ありか,
+            toFlg(settings.rules.availableSuddenlyDeath)
+        )
         insertVillageSetting(villageId, CDef.VillageSettingItem.コミット可能か, toFlg(settings.rules.availableCommit))
         insertVillageSetting(villageId, CDef.VillageSettingItem.入村パスワード, settings.password.joinPassword ?: "")
         insertVillageSetting(villageId, CDef.VillageSettingItem.沈黙時間, settings.time.silentHours?.toString() ?: "")
@@ -679,7 +712,11 @@ class VillageDataSource(
         // タグ
         settings.tags.list.forEach { insertVillageTag(villageId, it) }
         // ダミーキャラ設定
-        insertVillageSetting(villageId, CDef.VillageSettingItem.ダミーキャラ略称, settings.charachip.dummyCharaShortName)
+        insertVillageSetting(
+            villageId,
+            CDef.VillageSettingItem.ダミーキャラ略称,
+            settings.charachip.dummyCharaShortName
+        )
         insertVillageSetting(villageId, CDef.VillageSettingItem.ダミーキャラ名, settings.charachip.dummyCharaName)
         insertVillageSetting(
             villageId,

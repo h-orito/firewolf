@@ -42,6 +42,7 @@ import com.ort.firewolf.domain.service.village.VillageSettingDomainService
 import com.ort.firewolf.domain.service.vote.VoteDomainService
 import com.ort.firewolf.fw.exception.FirewolfBusinessException
 import com.ort.firewolf.fw.security.FirewolfUser
+import org.springframework.cache.annotation.CacheEvict
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -104,6 +105,7 @@ class VillageCoordinator(
      * @return 村ID
      */
     @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
+    @CacheEvict(cacheNames = ["village"], allEntries = true)
     fun registerVillage(paramVillage: Village, user: FirewolfUser): Int {
         // 作成できない状況ならエラー
         val player: Player = playerService.findPlayer(user)
@@ -136,6 +138,7 @@ class VillageCoordinator(
      * @param resource resource
      */
     @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
+    @CacheEvict(cacheNames = ["village", "messages", "latest-messages"], allEntries = true)
     fun modifySetting(village: Village, player: Player, resource: VillageCreateResource) {
         assertModifySetting(village, player, resource)
         // 変更なしの場合もある
@@ -215,6 +218,7 @@ class VillageCoordinator(
      * @param ipAddress ipAddress
      */
     @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
+    @CacheEvict(cacheNames = ["village", "messages", "latest-messages"], allEntries = true)
     fun participate(
         villageId: Int,
         playerId: Int,
@@ -264,6 +268,8 @@ class VillageCoordinator(
      * @param firstRequestSkill 第1希望
      * @param secondRequestSkill 第2希望
      */
+    @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
+    @CacheEvict(cacheNames = ["village", "messages", "latest-messages"], allEntries = true)
     fun changeSkillRequest(villageId: Int, user: FirewolfUser, firstRequestSkill: String, secondRequestSkill: String) {
         // 役職希望変更できない状況ならエラー
         val village: Village = villageService.findVillage(villageId)
@@ -281,6 +287,8 @@ class VillageCoordinator(
     /**
      * 名前変更
      */
+    @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
+    @CacheEvict(cacheNames = ["village", "messages", "latest-messages"], allEntries = true)
     fun changeName(villageId: Int, user: FirewolfUser, name: String, shortName: String) {
         val village: Village = villageService.findVillage(villageId)
         val participant: VillageParticipant? = findParticipant(village, user)
@@ -305,6 +313,7 @@ class VillageCoordinator(
      * @param user user
      */
     @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
+    @CacheEvict(cacheNames = ["village", "messages", "latest-messages"], allEntries = true)
     fun leave(villageId: Int, user: FirewolfUser) {
         // 退村できない状況ならエラー
         val village: Village = villageService.findVillage(villageId)
@@ -343,7 +352,8 @@ class VillageCoordinator(
     }
 
     fun confirmToCreatorSay(village: Village, messageText: String) {
-        val messageContent: MessageContent = MessageContent.invoke(CDef.MessageType.村建て発言.code(), messageText, null)
+        val messageContent: MessageContent =
+            MessageContent.invoke(CDef.MessageType.村建て発言.code(), messageText, null)
         // 発言できない状況ならエラー
         sayDomainService.assertCreatorSay(village, messageContent)
     }
@@ -358,6 +368,7 @@ class VillageCoordinator(
      * @param faceType 表情種別
      */
     @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
+    @CacheEvict(cacheNames = ["messages", "latest-messages"], allEntries = true)
     fun say(
         villageId: Int,
         user: FirewolfUser,
@@ -378,7 +389,6 @@ class VillageCoordinator(
         val registered = messageService.registerMessage(village, message)
         // 通知
         val players = playerService.findPlayers(village.id)
-        val charas = charachipService.findCharas(village.setting.charachip.charachipIds)
         notificationService.notifyReceiveMessageToCustomerIfNeeded(village, players, registered)
         // IPアドレス更新
         accessInfoCoordinator.registerAccessInfo(village, myself, user.ipAddress!!)
@@ -388,6 +398,7 @@ class VillageCoordinator(
      * アクション
      */
     @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
+    @CacheEvict(cacheNames = ["messages", "latest-messages"], allEntries = true)
     fun action(
         villageId: Int,
         user: FirewolfUser,
@@ -409,15 +420,16 @@ class VillageCoordinator(
         val registered = messageService.registerMessage(village, message)
         // 通知
         val players = playerService.findPlayers(village.id)
-        val charas = charachipService.findCharas(village.setting.charachip.charachipIds)
         notificationService.notifyReceiveMessageToCustomerIfNeeded(village, players, registered)
         // IPアドレス更新
         accessInfoCoordinator.registerAccessInfo(village, myself, user.ipAddress!!)
     }
 
     @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
+    @CacheEvict(cacheNames = ["messages", "latest-messages"], allEntries = true)
     fun creatorSay(village: Village, messageText: String) {
-        val messageContent: MessageContent = MessageContent.invoke(CDef.MessageType.村建て発言.code(), messageText, null)
+        val messageContent: MessageContent =
+            MessageContent.invoke(CDef.MessageType.村建て発言.code(), messageText, null)
         // 発言できない状況ならエラー
         sayDomainService.assertCreatorSay(village, messageContent)
         // 発言
@@ -425,7 +437,6 @@ class VillageCoordinator(
         val registered = messageService.registerMessage(village, message)
         // 通知
         val players = playerService.findPlayers(village.id)
-        val charas = charachipService.findCharas(village.setting.charachip.charachipIds)
         notificationService.notifyReceiveMessageToCustomerIfNeeded(village, players, registered)
     }
 
@@ -439,6 +450,7 @@ class VillageCoordinator(
      * @param abilityTypeCode 能力種別
      */
     @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
+    @CacheEvict(cacheNames = ["messages", "latest-messages"], allEntries = true)
     fun setAbility(villageId: Int, user: FirewolfUser, myselfId: Int?, targetId: Int?, abilityTypeCode: String) {
         // 能力セットできない状況ならエラー
         val village: Village = villageService.findVillage(villageId)
@@ -484,6 +496,7 @@ class VillageCoordinator(
      * @param doCommit コミットするか
      */
     @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
+    @CacheEvict(cacheNames = ["messages", "latest-messages"], allEntries = true)
     fun setCommit(villageId: Int, user: FirewolfUser, doCommit: Boolean) {
         // コミットできない状況ならエラー
         val village: Village = villageService.findVillage(villageId)
@@ -505,6 +518,7 @@ class VillageCoordinator(
      * @param skills
      */
     @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
+    @CacheEvict(cacheNames = ["village", "messages", "latest-messages"], allEntries = true)
     fun setComingOut(villageId: Int, user: FirewolfUser, skills: Skills) {
         // カミングアウトできない状況ならエラー
         val village: Village = villageService.findVillage(villageId)
@@ -520,18 +534,21 @@ class VillageCoordinator(
         messageService.registerComingOutMessage(village, participant, skills)
     }
 
-    /**
-     * 通知設定保存
-     */
     @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
-    fun registerNotification(
+    @CacheEvict(cacheNames = ["village"], allEntries = true)
+    fun saveNotification(
         villageId: Int,
         user: FirewolfUser,
         notificationCondition: VillageParticipantNotificationCondition
     ) {
         val village = villageService.findVillage(villageId)
-        val participant = findParticipant(village, user) ?: return
-        villageService.registerParticipantNotificationSetting(participant.id, notificationCondition)
+        val myself = findParticipant(village, user) ?: throw FirewolfBusinessException("保存できません")
+        villageService.registerParticipantNotificationSetting(myself.id, notificationCondition)
+        if (notificationCondition.discordWebhookUrl.isNotEmpty() &&
+            myself.notification?.discordWebhookUrl != notificationCondition.discordWebhookUrl
+        ) {
+            notificationService.notifyTest(notificationCondition.discordWebhookUrl, village.id)
+        }
     }
 
     /**
@@ -622,20 +639,5 @@ class VillageCoordinator(
         val latestDayMessageCountMap =
             messageService.findParticipateDayMessageList(villageId, village.day.latestDay(), participant)
         sayDomainService.assertSay(village, participant, player, chara, latestDayMessageCountMap, messageContent)
-    }
-
-    fun saveNotification(
-        villageId: Int,
-        user: FirewolfUser,
-        notificationCondition: VillageParticipantNotificationCondition
-    ) {
-        val village = villageService.findVillage(villageId)
-        val myself = findParticipant(village, user) ?: throw FirewolfBusinessException("保存できません")
-        villageService.registerParticipantNotificationSetting(myself.id, notificationCondition)
-        if (notificationCondition.discordWebhookUrl.isNotEmpty() &&
-            myself.notification?.discordWebhookUrl != notificationCondition.discordWebhookUrl
-        ) {
-            notificationService.notifyTest(notificationCondition.discordWebhookUrl, village.id)
-        }
     }
 }

@@ -5,7 +5,6 @@ import com.ort.firewolf.api.body.CreatorKickBody
 import com.ort.firewolf.api.body.CreatorSayBody
 import com.ort.firewolf.api.view.message.MessageView
 import com.ort.firewolf.application.coordinator.VillageCoordinator
-import com.ort.firewolf.application.service.CharachipService
 import com.ort.firewolf.application.service.MessageService
 import com.ort.firewolf.application.service.PlayerService
 import com.ort.firewolf.application.service.VillageService
@@ -16,7 +15,9 @@ import com.ort.firewolf.domain.model.message.MessageTime
 import com.ort.firewolf.domain.model.player.Players
 import com.ort.firewolf.fw.exception.FirewolfBusinessException
 import com.ort.firewolf.fw.security.FirewolfUser
+import org.springframework.cache.annotation.CacheEvict
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -30,11 +31,12 @@ class CreatorController(
     private val villageService: VillageService,
     private val playerService: PlayerService,
     private val messageService: MessageService,
-    private val charachipService: CharachipService,
-    private val villageCoordinator: VillageCoordinator
+    private val villageCoordinator: VillageCoordinator,
 ) {
 
     @PostMapping("/creator/village/{villageId}/kick")
+    @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
+    @CacheEvict(cacheNames = ["village", "messages", "latest-messages"], allEntries = true)
     fun kick(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: FirewolfUser,
@@ -56,6 +58,8 @@ class CreatorController(
     }
 
     @PostMapping("/creator/village/{villageId}/cancel")
+    @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
+    @CacheEvict(cacheNames = ["village", "messages", "latest-messages"], allEntries = true)
     fun cancel(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: FirewolfUser
@@ -110,6 +114,8 @@ class CreatorController(
     }
 
     @PostMapping("/creator/village/{villageId}/say")
+    @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
+    @CacheEvict(cacheNames = ["messages", "latest-messages"], allEntries = true)
     fun say(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: FirewolfUser,
@@ -126,6 +132,8 @@ class CreatorController(
     }
 
     @PostMapping("/creator/village/{villageId}/extend-epilogue")
+    @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
+    @CacheEvict(cacheNames = ["village", "messages", "latest-messages"], allEntries = true)
     fun extendEpilogue(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: FirewolfUser

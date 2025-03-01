@@ -18,6 +18,7 @@ import com.ort.firewolf.domain.model.village.ability.VillageAbilities
 import com.ort.firewolf.domain.model.village.vote.VillageVotes
 import com.ort.firewolf.domain.service.daychange.DayChangeDomainService
 import com.ort.firewolf.fw.exception.FirewolfBusinessException
+import org.springframework.cache.CacheManager
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -32,7 +33,9 @@ class DayChangeCoordinator(
     val playerService: PlayerService,
     val notificationService: NotificationService,
     // domain service
-    val dayChangeDomainService: DayChangeDomainService
+    val dayChangeDomainService: DayChangeDomainService,
+    // other
+    val cacheManager: CacheManager
 ) {
 
     /**
@@ -53,33 +56,41 @@ class DayChangeCoordinator(
         )
         val players: Players = playerService.findPlayers(village.id)
 
-        val beforeDayChange = DayChange(village.copy(
-            participant = village.participant.copy(
-                count = village.participant.memberList.count { !it.isGone },
-                memberList = village.participant.memberList.filter { !it.isGone }
-            )
-        ), votes, abilities, players)
+        val beforeDayChange = DayChange(
+            village.copy(
+                participant = village.participant.copy(
+                    count = village.participant.memberList.count { !it.isGone },
+                    memberList = village.participant.memberList.filter { !it.isGone }
+                )
+            ), votes, abilities, players)
 
         // プロローグ延長処理
         var dayChange = updateIfNeeded(
             beforeDayChange,
             dayChangeDomainService.extendVillageIfNeeded(beforeDayChange)
         )
+        val shouldClearCache: Boolean = dayChange.isChange
 
         // 必要あれば日付追加
         dayChange = dayChangeDomainService.addDayIfNeeded(dayChange, commits).let {
-            if (!it.isChange) return
+            if (!it.isChange) {
+                if (shouldClearCache) clearCache()
+                return
+            }
             updateIfNeeded(dayChange, it)
         }
 
         // 登録後の村日付idが必要になるので取得し直す
-        dayChange = dayChange.copy(village = villageService.findVillage(village.id))
+        dayChange = dayChange.copy(village = villageService.findVillageWithoutCache(village.id))
 
         // 日付更新
         dayChangeDomainService.process(dayChange, todayMessages, commits).also {
             updateIfNeeded(dayChange, it)
             notifyIfNeeded(beforeDayChange, it)
         }
+
+        // キャッシュクリア
+        clearCache()
     }
 
     // ===================================================================================
@@ -125,5 +136,11 @@ class DayChangeCoordinator(
         ) {
             notificationService.notifyVillageDaychangeToCustomerIfNeeded(changed.village)
         }
+    }
+
+    private fun clearCache() {
+        cacheManager.getCache("village")?.clear()
+        cacheManager.getCache("messages")?.clear()
+        cacheManager.getCache("latest-messages")?.clear()
     }
 }

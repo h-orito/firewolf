@@ -19,8 +19,6 @@ class AccessInfoCoordinator(
         myself: VillageParticipant,
         ipAddress: String
     ) {
-        val changedVillage: Village = village.addParticipantIpAddress(myself.id, ipAddress)
-        val savedVillage = villageService.updateVillageDifference(village, changedVillage)
         // IPアドレスが重複している人がいたら通知
         if (!playerService.findPlayer(myself.playerId!!).shouldCheckAccessInfo) return
 

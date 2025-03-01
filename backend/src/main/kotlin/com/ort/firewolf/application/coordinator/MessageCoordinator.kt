@@ -8,10 +8,8 @@ import com.ort.firewolf.domain.model.message.Messages
 import com.ort.firewolf.domain.model.village.Village
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 import com.ort.firewolf.domain.service.message.MessageDomainService
-import com.ort.firewolf.fw.exception.FirewolfBusinessException
 import com.ort.firewolf.fw.security.FirewolfUser
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
 class MessageCoordinator(
@@ -25,7 +23,6 @@ class MessageCoordinator(
     // ===================================================================================
     //                                                                             Execute
     //                                                                           =========
-    @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
     fun findMessageList(
         village: Village,
         day: Int,

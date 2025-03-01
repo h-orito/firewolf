@@ -189,7 +189,6 @@ class VillageController(
         val from: Long? = null
     )
 
-
     /**
      * 村作成
      * @param user user

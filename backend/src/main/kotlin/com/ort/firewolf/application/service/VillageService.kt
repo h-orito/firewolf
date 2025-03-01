@@ -39,6 +39,12 @@ class VillageService(
     fun findVillagesAsDetail(villageIdList: List<Int>): Villages = villageDataSource.findVillagesAsDetail(villageIdList)
 
     /**
+     * キャッシュを使わずに村取得
+     */
+    fun findVillageWithoutCache(villageId: Int, excludeGonePlayer: Boolean = true): Village =
+        villageDataSource.findVillageWithoutCache(villageId, excludeGonePlayer)
+
+    /**
      * 村取得
      * @param villageId villageId
      * @return Village

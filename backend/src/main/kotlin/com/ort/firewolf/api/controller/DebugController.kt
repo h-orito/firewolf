@@ -20,9 +20,15 @@ import com.ort.firewolf.fw.FirewolfDateUtil
 import com.ort.firewolf.fw.exception.FirewolfBusinessException
 import com.ort.firewolf.fw.security.FirewolfUser
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.cache.annotation.CacheEvict
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RestController
 
 
 /**
@@ -58,6 +64,8 @@ class DebugController(
      * @param body body
      */
     @PostMapping("/admin/village/{villageId}/participate")
+    @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
+    @CacheEvict(cacheNames = ["village", "messages", "latest-messages"], allEntries = true)
     fun participateVillage(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: FirewolfUser,
@@ -132,7 +140,8 @@ class DebugController(
      * @param user user
      */
     @PostMapping("/admin/village/{villageId}/change-day")
-//    @CacheEvict("village", allEntries = true)
+    @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
+    @CacheEvict(cacheNames = ["village"], allEntries = true)
     fun changeDay(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: FirewolfUser
@@ -176,7 +185,7 @@ class DebugController(
      * @param user user
      */
     @PostMapping("/admin/village/{villageId}/no-suddenly-death")
-//    @CacheEvict("village", allEntries = true)
+    @CacheEvict("village", allEntries = true)
     fun setNoSuddenlyDeath(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: FirewolfUser
