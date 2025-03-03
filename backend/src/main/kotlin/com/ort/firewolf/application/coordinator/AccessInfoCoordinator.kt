@@ -2,14 +2,12 @@ package com.ort.firewolf.application.coordinator
 
 import com.ort.firewolf.application.service.NotificationService
 import com.ort.firewolf.application.service.PlayerService
-import com.ort.firewolf.application.service.VillageService
 import com.ort.firewolf.domain.model.village.Village
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 import org.springframework.stereotype.Service
 
 @Service
 class AccessInfoCoordinator(
-    private val villageService: VillageService,
     private val playerService: PlayerService,
     private val notificationService: NotificationService,
 ) {

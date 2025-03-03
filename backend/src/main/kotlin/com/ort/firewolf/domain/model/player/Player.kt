@@ -33,7 +33,8 @@ data class Player(
      * @return 村に参戦可能か
      */
     fun isAvailableParticipate(): Boolean {
-        if (isParticipatingProgressVillage()) return false
+        // 他の村に入村中でも入れるようにしてみる
+        // if (isParticipatingProgressVillage()) return false
         if (isRestrictedParticipation) return false
         return true
     }
@@ -45,7 +46,8 @@ data class Player(
     fun isAvailableCreateVillage(user: FirewolfUser?): Boolean {
         user ?: return false
         if (user.authority == CDef.Authority.管理者) return true
-        if (isParticipatingProgressVillage()) return false
+        // 参加中でも村を建てられるようにしてみる
+        // if (isParticipatingProgressVillage()) return false
         if (isRestrictedParticipation) return false
         if (isProgressCreateVillage()) return false
         return true
