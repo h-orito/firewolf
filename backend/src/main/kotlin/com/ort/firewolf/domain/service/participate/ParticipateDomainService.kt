@@ -175,7 +175,7 @@ class ParticipateDomainService {
     ): Boolean {
         // プレイヤーとして参加可能か
         player ?: return false
-        if (!player.isAvailableParticipate()) return false
+        if (!player.isAvailableParticipate(village.id)) return false
         // 村として参加可能か
         return village.isAvailableParticipate()
     }
@@ -192,7 +192,7 @@ class ParticipateDomainService {
     ): Boolean {
         // プレイヤーとして参加可能か
         player ?: return false
-        if (!player.isAvailableParticipate()) return false
+        if (!player.isAvailableParticipate(village.id)) return false
         // 村として見学可能か
         return village.isAvailableSpectate(charachipCharaNum)
     }

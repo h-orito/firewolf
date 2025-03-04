@@ -32,8 +32,9 @@ data class Player(
     /**
      * @return 村に参戦可能か
      */
-    fun isAvailableParticipate(): Boolean {
+    fun isAvailableParticipate(villageId: Int): Boolean {
         // 他の村に入村中でも入れるようにしてみる
+        if (participateProgressVillageIdList.contains(villageId)) return false
         // if (isParticipatingProgressVillage()) return false
         if (isRestrictedParticipation) return false
         return true
