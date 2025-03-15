@@ -11,7 +11,7 @@ import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 import org.springframework.stereotype.Service
 
 @Service
-open class GuardDomainService : IAbilityDomainService {
+class GuardDomainService : IAbilityDomainService {
 
     override fun getAbilityType(): AbilityType = AbilityType(CDef.AbilityType.護衛)
 
@@ -21,12 +21,23 @@ open class GuardDomainService : IAbilityDomainService {
         villageAbilities: VillageAbilities
     ): List<VillageParticipant> {
         // 1日目は護衛できない
-        if (village.day.latestDay().day <= 1) return listOf()
+        if (village.day.latestDay().day <= 1) return emptyList()
 
         // 連続護衛可能なら自分以外の生存者全員
-        return village.participant.memberList.filter {
-            it.id != participant.id && it.isAlive()
-        }
+        val base = village.participant
+            .filterAlive()
+            .filterNotParticipant(participant)
+            .memberList
+        if (village.setting.rules.availableGuardSameTarget) return base
+
+        // 昨日の護衛先
+        val yesterdayGuardTarget = villageAbilities.findYesterday(
+            village = village,
+            participant = participant,
+            type = getAbilityType()
+        ) ?: return base
+        // 昨日の護衛先は護衛できない
+        return base.filterNot { it.id == yesterdayGuardTarget.targetId }
     }
 
     override fun getSelectingTarget(
@@ -55,42 +66,32 @@ open class GuardDomainService : IAbilityDomainService {
     ): List<VillageAbility> {
         // 進行中のみ
         if (!village.status.isProgress()) return listOf()
-        // 最新日id
-        val latestVillageDay = village.day.latestDay()
-        // 1日目は護衛できない
-        if (latestVillageDay.day == 1) {
-            return listOf()
-        }
 
         // 生存している護衛能力持ちごとに
         return village.participant.filterAlive().memberList.filter {
             it.skill!!.toCdef().isHasGuardAbility
-        }.mapNotNull { seer ->
-            // 対象は自分以外の生存者からランダム
-            village.participant.filterAlive()
-                .findRandom { it.id != seer.id }?.let {
-                    VillageAbility(
-                        villageDayId = latestVillageDay.id,
-                        myselfId = seer.id,
-                        targetId = it.id,
-                        abilityType = getAbilityType()
-                    )
-                } // 自分しかいない場合
+        }.mapNotNull { hunter ->
+            getSelectableTargetList(village, hunter, villageAbilities).randomOrNull()?.let {
+                VillageAbility(
+                    villageDayId = village.day.latestDay().id,
+                    myselfId = hunter.id,
+                    targetId = it.id,
+                    abilityType = getAbilityType()
+                )
+            }
         }
     }
 
     override fun processDayChangeAction(dayChange: DayChange): DayChange {
         var messages = dayChange.messages.copy()
 
-        dayChange.village.participant.memberList.filter {
-            it.isAlive() && it.skill!!.toCdef().isHasGuardAbility
-        }.forEach { hunter ->
-            dayChange.abilities.list.find {
-                it.myselfId == hunter.id && it.villageDayId == dayChange.village.day.yesterday().id
-            }?.let { ability ->
-                messages = messages.add(createGuardMessage(dayChange.village, ability))
+        dayChange.village.participant.filterAlive().memberList
+            .filter { it.skill!!.toCdef().isHasGuardAbility }
+            .forEach { hunter ->
+                dayChange.abilities.findYesterday(dayChange.village, hunter, getAbilityType())?.let { ability ->
+                    messages = messages.add(createGuardMessage(dayChange.village, ability))
+                }
             }
-        }
 
         return dayChange.copy(
             messages = messages
@@ -111,7 +112,11 @@ open class GuardDomainService : IAbilityDomainService {
         val hunter = village.participant.member(ability.myselfId)
         val target = village.participant.member(ability.targetId!!)
         val text = createGuardMessageString(hunter, target)
-        return Message.createPrivateSystemMessage(text, village.day.latestDay().id)
+        return Message.createPrivateAbilityMessage(
+            text = text,
+            villageDayId = village.day.latestDay().id,
+            villageParticipant = hunter
+        )
     }
 
     private fun createGuardMessageString(hunter: VillageParticipant, target: VillageParticipant): String =

@@ -14,6 +14,7 @@ data class VillageRules(
     val availableDummySkill: Boolean = false,
     val availableAction: Boolean = false,
     val availableSecretSay: Boolean = false,
+    val availableGuardSameTarget: Boolean = true,
     val messageRestrict: VillageMessageRestricts = VillageMessageRestricts()
 ) {
     companion object {
@@ -29,6 +30,7 @@ data class VillageRules(
             availableDummySkill: Boolean?,
             availableAction: Boolean?,
             availableSecretSay: Boolean?,
+            availableGuardSameTarget: Boolean?,
             messageRestrict: VillageMessageRestricts?
         ): VillageRules {
             val defaultRules = VillageRules()
@@ -44,6 +46,7 @@ data class VillageRules(
                 availableDummySkill = availableDummySkill ?: defaultRules.availableDummySkill,
                 availableAction = availableAction ?: defaultRules.availableAction,
                 availableSecretSay = availableSecretSay ?: defaultRules.availableSecretSay,
+                availableGuardSameTarget = availableGuardSameTarget ?: defaultRules.availableGuardSameTarget,
                 messageRestrict = messageRestrict ?: defaultRules.messageRestrict
             )
         }
@@ -65,6 +68,7 @@ data class VillageRules(
                 || availableDummySkill != rules.availableDummySkill
                 || availableAction != rules.availableAction
                 || availableSecretSay != rules.availableSecretSay
+                || availableGuardSameTarget != rules.availableGuardSameTarget
                 || messageRestrict.existsDifference(rules.messageRestrict)
     }
 }

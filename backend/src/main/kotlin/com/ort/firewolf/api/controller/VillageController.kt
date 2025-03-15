@@ -725,6 +725,8 @@ class VillageController(
         isAvailableDummySkill = body.availableDummySkill!!,
         isAvailableAction = body.availableAction!!,
         isAvailableSecretSay = body.availableSecretSay!!,
+        isAvailableGuardSameTarget = body.availableGuardSameTarget!!,
+
         restrictList = body.restrictList!!.map {
             VillageMessageRestrictCreateResource(
                 type = MessageType(CDef.MessageType.codeOf(it.type!!)),

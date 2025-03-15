@@ -132,7 +132,10 @@ object VillageDataConverter {
                 dummyCharaId = detectItemText(settingList, CDef.VillageSettingItem.ダミーキャラid)?.toInt(),
                 dummyCharaShortName = detectItemText(settingList, CDef.VillageSettingItem.ダミーキャラ略称).orEmpty(),
                 dummyCharaName = detectItemText(settingList, CDef.VillageSettingItem.ダミーキャラ名).orEmpty(),
-                dummyCharaDay0Message = detectItemText(settingList, CDef.VillageSettingItem.プロローグダミー発言).orEmpty(),
+                dummyCharaDay0Message = detectItemText(
+                    settingList,
+                    CDef.VillageSettingItem.プロローグダミー発言
+                ).orEmpty(),
                 dummyCharaDay1Message = detectItemText(settingList, CDef.VillageSettingItem.N1日目ダミー発言).orEmpty(),
                 charachipIds = village.villageCharaGroupList.map { it.charaGroupId }
             ),
@@ -178,6 +181,10 @@ object VillageDataConverter {
                 availableSecretSay = detectItemText(
                     settingList,
                     CDef.VillageSettingItem.秘話可能か
+                )?.let { it == FLG_TRUE },
+                availableGuardSameTarget = detectItemText(
+                    settingList,
+                    CDef.VillageSettingItem.連続護衛可能か
                 )?.let { it == FLG_TRUE },
                 messageRestrict = VillageMessageRestricts(
                     existRestricts = restrictList.isNotEmpty(),

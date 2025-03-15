@@ -24,3 +24,4 @@ dummy_chara_short_name	ダミーキャラ略称	22
 dummy_chara_name	ダミーキャラ名	23
 day0_dummy_message	プロローグダミー発言	24
 day1_dummy_message	1日目ダミー発言	25
+is_available_guard_same_target	連続護衛可能か	26

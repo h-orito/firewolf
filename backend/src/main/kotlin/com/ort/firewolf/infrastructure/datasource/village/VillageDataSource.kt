@@ -440,6 +440,11 @@ class VillageDataSource(
             updateVillageSetting(villageId, CDef.VillageSettingItem.役欠けありか, toFlg(afterRules.availableDummySkill))
             updateVillageSetting(villageId, CDef.VillageSettingItem.アクション可能か, toFlg(afterRules.availableAction))
             updateVillageSetting(villageId, CDef.VillageSettingItem.秘話可能か, toFlg(afterRules.availableSecretSay))
+            updateVillageSetting(
+                villageId,
+                CDef.VillageSettingItem.連続護衛可能か,
+                toFlg(afterRules.availableGuardSameTarget)
+            )
         }
         after.setting.password.let { afterPassword ->
             if (!before.setting.password.existsDifference(afterPassword)) return@let
@@ -709,6 +714,11 @@ class VillageDataSource(
         insertVillageSetting(villageId, CDef.VillageSettingItem.役欠けありか, toFlg(settings.rules.availableDummySkill))
         insertVillageSetting(villageId, CDef.VillageSettingItem.アクション可能か, toFlg(settings.rules.availableAction))
         insertVillageSetting(villageId, CDef.VillageSettingItem.秘話可能か, toFlg(settings.rules.availableSecretSay))
+        insertVillageSetting(
+            villageId,
+            CDef.VillageSettingItem.連続護衛可能か,
+            toFlg(settings.rules.availableGuardSameTarget)
+        )
         // タグ
         settings.tags.list.forEach { insertVillageTag(villageId, it) }
         // ダミーキャラ設定

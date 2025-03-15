@@ -14,7 +14,7 @@ interface IAbilityDomainService {
     fun getSelectableTargetList(
         village: Village,
         participant: VillageParticipant,
-        villageAbilities: VillageAbilities
+        villageAbilities: VillageAbilities,
     ): List<VillageParticipant>
 
     fun getSelectingTarget(

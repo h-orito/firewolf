@@ -55,6 +55,7 @@ data class VillageSettings(
                     availableDummySkill = resource.rule.isAvailableDummySkill,
                     availableAction = resource.rule.isAvailableAction,
                     availableSecretSay = resource.rule.isAvailableSecretSay,
+                    availableGuardSameTarget = resource.rule.isAvailableGuardSameTarget,
                     messageRestrict = VillageMessageRestricts(
                         existRestricts = true,
                         restrictList = resource.rule.restrictList.map {

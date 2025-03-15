@@ -2229,14 +2229,14 @@ public interface CDef extends Classification {
         /** キャラクターグループID */
         キャラクターグループid("character_group_id", "キャラクターグループID", emptyStrings())
         ,
+        /** 更新間隔秒 */
+        更新間隔秒("day_change_interval_seconds", "更新間隔秒", emptyStrings())
+        ,
         /** プロローグダミー発言 */
         プロローグダミー発言("day0_dummy_message", "プロローグダミー発言", emptyStrings())
         ,
         /** 1日目ダミー発言 */
         N1日目ダミー発言("day1_dummy_message", "1日目ダミー発言", emptyStrings())
-        ,
-        /** 更新間隔秒 */
-        更新間隔秒("day_change_interval_seconds", "更新間隔秒", emptyStrings())
         ,
         /** ダミーキャラID */
         ダミーキャラid("dummy_chara_id", "ダミーキャラID", emptyStrings())
@@ -2258,6 +2258,9 @@ public interface CDef extends Classification {
         ,
         /** 役欠けありか */
         役欠けありか("is_available_dummy_skill", "役欠けありか", emptyStrings())
+        ,
+        /** 連続護衛可能か */
+        連続護衛可能か("is_available_guard_same_target", "連続護衛可能か", emptyStrings())
         ,
         /** 秘話可能か */
         秘話可能か("is_available_secret_say", "秘話可能か", emptyStrings())
