@@ -200,6 +200,14 @@ public abstract class AbstractBsVillageSettingCQ extends AbstractConditionQuery 
     }
 
     /**
+     * Equal(=). As 更新間隔秒 (day_change_interval_seconds). And OnlyOnceRegistered. <br>
+     * 更新間隔秒
+     */
+    public void setVillageSettingItemCode_Equal_更新間隔秒() {
+        setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.更新間隔秒);
+    }
+
+    /**
      * Equal(=). As プロローグダミー発言 (day0_dummy_message). And OnlyOnceRegistered. <br>
      * プロローグダミー発言
      */
@@ -213,14 +221,6 @@ public abstract class AbstractBsVillageSettingCQ extends AbstractConditionQuery 
      */
     public void setVillageSettingItemCode_Equal_N1日目ダミー発言() {
         setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.N1日目ダミー発言);
-    }
-
-    /**
-     * Equal(=). As 更新間隔秒 (day_change_interval_seconds). And OnlyOnceRegistered. <br>
-     * 更新間隔秒
-     */
-    public void setVillageSettingItemCode_Equal_更新間隔秒() {
-        setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.更新間隔秒);
     }
 
     /**
@@ -277,6 +277,14 @@ public abstract class AbstractBsVillageSettingCQ extends AbstractConditionQuery 
      */
     public void setVillageSettingItemCode_Equal_役欠けありか() {
         setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.役欠けありか);
+    }
+
+    /**
+     * Equal(=). As 連続護衛可能か (is_available_guard_same_target). And OnlyOnceRegistered. <br>
+     * 連続護衛可能か
+     */
+    public void setVillageSettingItemCode_Equal_連続護衛可能か() {
+        setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.連続護衛可能か);
     }
 
     /**
@@ -423,6 +431,14 @@ public abstract class AbstractBsVillageSettingCQ extends AbstractConditionQuery 
     }
 
     /**
+     * NotEqual(&lt;&gt;). As 更新間隔秒 (day_change_interval_seconds). And OnlyOnceRegistered. <br>
+     * 更新間隔秒
+     */
+    public void setVillageSettingItemCode_NotEqual_更新間隔秒() {
+        setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.更新間隔秒);
+    }
+
+    /**
      * NotEqual(&lt;&gt;). As プロローグダミー発言 (day0_dummy_message). And OnlyOnceRegistered. <br>
      * プロローグダミー発言
      */
@@ -436,14 +452,6 @@ public abstract class AbstractBsVillageSettingCQ extends AbstractConditionQuery 
      */
     public void setVillageSettingItemCode_NotEqual_N1日目ダミー発言() {
         setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.N1日目ダミー発言);
-    }
-
-    /**
-     * NotEqual(&lt;&gt;). As 更新間隔秒 (day_change_interval_seconds). And OnlyOnceRegistered. <br>
-     * 更新間隔秒
-     */
-    public void setVillageSettingItemCode_NotEqual_更新間隔秒() {
-        setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.更新間隔秒);
     }
 
     /**
@@ -500,6 +508,14 @@ public abstract class AbstractBsVillageSettingCQ extends AbstractConditionQuery 
      */
     public void setVillageSettingItemCode_NotEqual_役欠けありか() {
         setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.役欠けありか);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As 連続護衛可能か (is_available_guard_same_target). And OnlyOnceRegistered. <br>
+     * 連続護衛可能か
+     */
+    public void setVillageSettingItemCode_NotEqual_連続護衛可能か() {
+        setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.連続護衛可能か);
     }
 
     /**
