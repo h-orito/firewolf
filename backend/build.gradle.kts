@@ -11,7 +11,7 @@ plugins {
 
 group = "com.ort"
 version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_1_8
+java.sourceCompatibility = JavaVersion.VERSION_21
 
 repositories {
     mavenCentral()
@@ -68,13 +68,13 @@ tasks.withType<Test> {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "1.8"
+        jvmTarget = "21"
     }
 }
 
 jib {
     from {
-        image = "arm64v8/openjdk:8"
+        image = "eclipse-temurin:21"
         platforms {
             platform {
                 architecture = "arm64"
