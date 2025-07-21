@@ -91,6 +91,7 @@ GitHub Actionsで自動デプロイ（`.github/workflows/deploy.yml`）
 - ✅ **第2段階 スキップ**: Spring Boot 2.7.x（直接3.4.0へ移行）
 - ✅ **第3段階 完了**: Spring Boot 3.4.0 + Jakarta EE + DBFlute対応
 - ✅ **第4段階 完了**: Spring Boot 3.4最終移行
+- 🔄 **第5段階 進行中**: 仕上げ作業（ドキュメント更新、CI/CD設定）
 - 🎉 **移行完了**: Spring Boot 3.4.0、Java 21、Kotlin 1.9.25への移行完了
 - ✅ **動作確認**: bootRunでJava 21環境での正常起動を確認済み
 
