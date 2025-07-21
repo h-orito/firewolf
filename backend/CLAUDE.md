@@ -82,8 +82,20 @@ GitHub Actionsで自動デプロイ（`.github/workflows/deploy.yml`）
 - ✅ 良い例: "Spring Boot 2.3.0から2.7.18へ移行"
 - ❌ 悪い例: "いろいろ更新"
 
-### 現在進行中のタスク
-- **Spring Boot 3.4への移行**（`.claude/designs.md`参照）
-  - 段階的移行アプローチを採用
-  - Java 8 → Java 21（最新LTS）への移行が必要
-  - Jakarta EEへの移行とSpring Security設定の更新が必要
+### タスク管理
+`.claude/tasks.md`に記載されたタスクを順番に実行してください。
+
+**Spring Boot 3.4への移行** - 現在のステータス：
+- ✅ **第3段階 完了**: Spring Boot 3.0.x + Kotlin 1.9 + Java 17移行
+- 📋 **次のタスク**: `.claude/tasks.md`の第4段階（Spring Boot 3.4移行）から継続
+
+**タスク実行時の注意点**：
+1. `.claude/tasks.md`の各段階を順番に実行する
+2. 各段階完了後に必ずコミットを作成する  
+3. 問題が発生した場合は前の段階にロールバック可能
+4. テストは外部依存をモック化して実行する
+5. DBFluteの自動生成ファイル（`com.ort.dbflute`）は直接編集しない
+
+**タスク進捗の更新方法**：
+各タスク完了時に`.claude/tasks.md`の該当項目を`- [ ]`から`- [x]`に変更してください。
+段階完了時にCLAUDE.mdの現在のステータスも更新してください。

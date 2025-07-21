@@ -3,7 +3,7 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/firewolfdb?characterEncoding=UTF-8
     username: firewolfuser # 本番は起動引数で与える
     password: firewolfpass # 本番は起動引数で与える
-    driverClassName: com.mysql.jdbc.Driver
+    driverClassName: com.mysql.cj.jdbc.Driver
     type: org.apache.tomcat.jdbc.pool.DataSource
   messages:
     basename: messages
