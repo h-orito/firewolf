@@ -86,8 +86,13 @@ GitHub Actionsで自動デプロイ（`.github/workflows/deploy.yml`）
 `.claude/tasks.md`に記載されたタスクを順番に実行してください。
 
 **Spring Boot 3.4への移行** - 現在のステータス：
-- ✅ **第3段階 完了**: Spring Boot 3.0.x + Kotlin 1.9 + Java 17移行
-- 📋 **次のタスク**: `.claude/tasks.md`の第4段階（Spring Boot 3.4移行）から継続
+- ✅ **第0段階 完了**: Java 21環境準備、Gradle 8.14.3アップグレード  
+- ✅ **第1段階 完了**: Java 21 + Kotlin 1.9.25移行
+- ✅ **第2段階 スキップ**: Spring Boot 2.7.x（直接3.4.0へ移行）
+- ✅ **第3段階 完了**: Spring Boot 3.4.0 + Jakarta EE + DBFlute対応
+- ✅ **第4段階 完了**: Spring Boot 3.4最終移行
+- 🎉 **移行完了**: Spring Boot 3.4.0、Java 21、Kotlin 1.9.25への移行完了
+- ✅ **動作確認**: bootRunでJava 21環境での正常起動を確認済み
 
 **タスク実行時の注意点**：
 1. `.claude/tasks.md`の各段階を順番に実行する
