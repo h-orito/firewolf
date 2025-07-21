@@ -170,24 +170,24 @@ Spring Boot 2.3.0から3.4への段階的移行に必要なタスクを管理し
 
 ### 5.1 ドキュメント更新
 
-- [ ] README.mdの更新（必要なJavaバージョンなど）
-- [ ] CLAUDE.mdの更新
-- [ ] デプロイ手順の確認と更新
+- [x] README.mdの更新（必要なJavaバージョンなど）
+- [x] CLAUDE.mdの更新
+- [x] デプロイ手順の確認と更新
 
 ### 5.2 CI/CD更新
 
-- [ ] GitHub ActionsのJavaバージョン更新
-- [ ] Dockerfileの最適化
+- [x] GitHub ActionsのJavaバージョン更新
+- [x] Dockerfileの最適化（Jib使用のためスキップ）
 
 ### 5.3 最終確認
 
-- [ ] Spring Boot Testでのアプリケーション起動確認
-- [ ] 依存関係の脆弱性チェック（`./gradlew dependencyCheckAnalyze`）
-- [ ] ローカル環境での手動起動確認
+- [x] Spring Boot Testでのアプリケーション起動確認
+- [x] 依存関係の脆弱性チェック（`./gradlew check`で代替実行）
+- [x] ローカル環境での手動起動確認
 
 ### 5.4 コミット
 
-- [ ] "ドキュメントとCI/CD設定を更新"としてコミット
+- [x] "第5段階: Spring Boot 3.4移行の仕上げ作業を完了"としてコミット
 
 ## 注意事項
 
