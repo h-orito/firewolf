@@ -21,9 +21,9 @@ import java.io.ByteArrayInputStream
 import java.security.Key
 import java.security.cert.CertificateFactory
 import java.util.*
-import javax.servlet.FilterChain
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
+import jakarta.servlet.FilterChain
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 
 /**
  * see https://qiita.com/mr-hisa-child/items/5ed2ae2fe4c86d4bb5c7

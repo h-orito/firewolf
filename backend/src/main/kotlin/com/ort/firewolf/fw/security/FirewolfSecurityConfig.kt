@@ -1,11 +1,13 @@
 package com.ort.firewolf.fw.security
 
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
+import org.springframework.context.annotation.Bean
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.ProviderManager
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.web.AuthenticationEntryPoint
+import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.access.AccessDeniedHandler
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
@@ -19,7 +21,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 @ConfigurationProperties(prefix = "security")
 class FirewolfSecurityConfig(
     private val authenticationProvider: FireWolfAuthenticationProvider
-) : WebSecurityConfigurerAdapter() {
+) {
 
     // ===================================================================================
     //                                                                           Attribute
@@ -30,48 +32,52 @@ class FirewolfSecurityConfig(
     // ===================================================================================
     //                                                                             Execute
     //                                                                           =========
+    @Bean
     @Throws(Exception::class)
-    override fun configure(http: HttpSecurity) {
-        http
+    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
+        return http
             // AUTHORIZE
-            .authorizeRequests()
-            // TODO うまく動作させられていないので調査
-            // LoginFilterあたり？
-//            .antMatchers("/admin/**")
-//            .hasRole("ADMIN")
-            .anyRequest()
-            .permitAll()
-            .and()
+            .authorizeHttpRequests { authz ->
+                authz
+                    // TODO うまく動作させられていないので調査
+                    // LoginFilterあたり？
+                    // .requestMatchers("/admin/**").hasRole("ADMIN")
+                    .anyRequest().permitAll()
+            }
             // EXCEPTION
-            .exceptionHandling()
-            .authenticationEntryPoint(authenticationEntryPoint())
-            .accessDeniedHandler(accessDeniedHandler())
-            .and()
+            .exceptionHandling { exceptions ->
+                exceptions
+                    .authenticationEntryPoint(authenticationEntryPoint())
+                    .accessDeniedHandler(accessDeniedHandler())
+            }
             // CSRF
-            .csrf()
-            .disable()
+            .csrf { csrf -> csrf.disable() }
             // CORS
-            .cors()
-            .configurationSource(getCorsConfigurationSource())
+            .cors { cors -> cors.configurationSource(getCorsConfigurationSource()) }
+            .build()
     }
 
+    @Bean
     internal fun authenticationEntryPoint(): AuthenticationEntryPoint {
         return FirewolfAuthenticationEntryPoint()
     }
 
+    @Bean
     internal fun accessDeniedHandler(): AccessDeniedHandler {
         return FirewolfAccessDeniedHandler()
     }
 
+    @Bean
     @Throws(Exception::class)
-    override fun configure(auth: AuthenticationManagerBuilder) {
-        auth.authenticationProvider(authenticationProvider)
+    fun authenticationManager(): AuthenticationManager {
+        return ProviderManager(authenticationProvider)
     }
 
     /**
      * see https://rennnosukesann.hatenablog.com/entry/2019/09/18/235731
      */
-    private fun getCorsConfigurationSource(): CorsConfigurationSource {
+    @Bean
+    fun getCorsConfigurationSource(): CorsConfigurationSource {
         val corsConfiguration = CorsConfiguration()
 
         // CORSを許可するURLの登録(Access-Control-Allow-Origin)

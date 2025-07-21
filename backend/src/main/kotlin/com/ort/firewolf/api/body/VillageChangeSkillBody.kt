@@ -1,6 +1,6 @@
 package com.ort.firewolf.api.body
 
-import javax.validation.constraints.NotNull
+import jakarta.validation.constraints.NotNull
 
 data class VillageChangeSkillBody(
     @field:NotNull(message = "firstRequestSkillは必須")
