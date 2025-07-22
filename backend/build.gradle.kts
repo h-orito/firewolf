@@ -41,6 +41,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("com.github.ben-manes.caffeine:caffeine:2.8.8")
+    // swagger
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0")
     // mysql
     val mysqlConnectorVersion = if (System.getenv("MYSQL_CONNECTOR_VERSION") != null) {
         System.getenv("MYSQL_CONNECTOR_VERSION")
