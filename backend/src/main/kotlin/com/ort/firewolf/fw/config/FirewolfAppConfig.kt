@@ -1,7 +1,7 @@
 package com.ort.firewolf.fw.config
 
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer
 import org.springframework.context.annotation.Bean
@@ -23,7 +23,7 @@ class FirewolfAppConfig {
         builder.simpleDateFormat(dateTimeFormat)
         builder.serializers(LocalDateSerializer(DateTimeFormatter.ofPattern(dateFormat)))
         builder.serializers(LocalDateTimeSerializer(DateTimeFormatter.ofPattern(dateTimeFormat)))
-        builder.propertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
+        builder.propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
         return builder
     }
 
