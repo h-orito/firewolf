@@ -4,7 +4,7 @@ import com.ort.dbflute.allcommon.CDef
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
-import javax.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletRequest
 
 data class FirewolfUser(
         val uid: String,

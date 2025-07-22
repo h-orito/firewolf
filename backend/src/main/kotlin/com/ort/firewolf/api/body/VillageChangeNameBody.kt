@@ -1,7 +1,7 @@
 package com.ort.firewolf.api.body
 
 import org.hibernate.validator.constraints.Length
-import javax.validation.constraints.NotNull
+import jakarta.validation.constraints.NotNull
 
 data class VillageChangeNameBody(
     @field:NotNull

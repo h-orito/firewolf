@@ -22,35 +22,7 @@ import com.ort.dbflute.bsentity.dbmeta.*;
 import com.ort.dbflute.cbean.*;
 
 /**
- * The behavior of MESSAGE_SENDTO as TABLE. <br>
- * <pre>
- * [primary key]
- *     MESSAGE_SENDTO_ID
- *
- * [column]
- *     MESSAGE_SENDTO_ID, VILLAGE_ID, MESSAGE_NUMBER, MESSAGE_TYPE_CODE, VILLAGE_PLAYER_ID, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
- *
- * [sequence]
- *     
- *
- * [identity]
- *     MESSAGE_SENDTO_ID
- *
- * [version-no]
- *     
- *
- * [foreign table]
- *     VILLAGE_PLAYER, MESSAGE
- *
- * [referrer table]
- *     
- *
- * [foreign property]
- *     villagePlayer, message
- *
- * [referrer property]
- *     
- * </pre>
+ * The behavior of MESSAGE_SENDTO as TABLE.
  * @author DBFlute(AutoGenerator)
  */
 public abstract class BsMessageSendtoBhv extends AbstractBehaviorWritable<MessageSendto, MessageSendtoCB> {
@@ -605,7 +577,7 @@ public abstract class BsMessageSendtoBhv extends AbstractBehaviorWritable<Messag
     /**
      * Delete the several entities by query. (NonExclusiveControl)
      * <pre>
-     * <span style="color: #0000C0">messageSendtoBhv</span>.<span style="color: #CC4747">queryDelete</span>(messageSendto, <span style="color: #553000">cb</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+     * <span style="color: #0000C0">messageSendtoBhv</span>.<span style="color: #CC4747">queryDelete</span>(<span style="color: #553000">cb</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
      *     <span style="color: #553000">cb</span>.query().setFoo...
      * });
      * </pre>
@@ -854,19 +826,22 @@ public abstract class BsMessageSendtoBhv extends AbstractBehaviorWritable<Messag
     //                                                                            Accessor
     //                                                                            ========
     @Override
-    @javax.annotation.Resource(name="behaviorCommandInvoker")
+    @org.springframework.beans.factory.annotation.Autowired
+    @org.springframework.beans.factory.annotation.Qualifier("behaviorCommandInvoker")
     public void setBehaviorCommandInvoker(BehaviorCommandInvoker behaviorCommandInvoker) {
         super.setBehaviorCommandInvoker(behaviorCommandInvoker);
     }
 
     @Override
-    @javax.annotation.Resource(name="behaviorSelector")
+    @org.springframework.beans.factory.annotation.Autowired
+    @org.springframework.beans.factory.annotation.Qualifier("behaviorSelector")
     public void setBehaviorSelector(BehaviorSelector behaviorSelector) {
         super.setBehaviorSelector(behaviorSelector);
     }
 
     @Override
-    @javax.annotation.Resource(name="commonColumnAutoSetupper")
+    @org.springframework.beans.factory.annotation.Autowired
+    @org.springframework.beans.factory.annotation.Qualifier("commonColumnAutoSetupper")
     public void setCommonColumnAutoSetupper(CommonColumnAutoSetupper commonColumnAutoSetupper) {
         super.setCommonColumnAutoSetupper(commonColumnAutoSetupper);
     }

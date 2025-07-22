@@ -22,35 +22,7 @@ import com.ort.dbflute.bsentity.dbmeta.*;
 import com.ort.dbflute.cbean.*;
 
 /**
- * The behavior of VILLAGE_PLAYER as TABLE. <br>
- * <pre>
- * [primary key]
- *     VILLAGE_PLAYER_ID
- *
- * [column]
- *     VILLAGE_PLAYER_ID, VILLAGE_ID, PLAYER_ID, CHARA_ID, SKILL_CODE, REQUEST_SKILL_CODE, SECOND_REQUEST_SKILL_CODE, IS_DEAD, IS_SPECTATOR, DEAD_REASON_CODE, DEAD_VILLAGE_DAY_ID, IS_GONE, CAMP_CODE, IS_WIN, CHARA_NAME, CHARA_SHORT_NAME, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
- *
- * [sequence]
- *     
- *
- * [identity]
- *     VILLAGE_PLAYER_ID
- *
- * [version-no]
- *     
- *
- * [foreign table]
- *     CHARA, DEAD_REASON, VILLAGE_DAY, PLAYER, SKILL, VILLAGE, VILLAGE_PLAYER_NOTIFICATION(AsOne)
- *
- * [referrer table]
- *     ABILITY, COMING_OUT, COMMIT, MESSAGE_SENDTO, VILLAGE_PLAYER_ACCESS_INFO, VILLAGE_PLAYER_STATUS, VOTE, VILLAGE_PLAYER_NOTIFICATION
- *
- * [foreign property]
- *     chara, deadReason, villageDay, player, skillByRequestSkillCode, skillBySecondRequestSkillCode, skillBySkillCode, village, villagePlayerNotificationAsOne
- *
- * [referrer property]
- *     abilityByTargetVillagePlayerIdList, abilityByVillagePlayerIdList, comingOutList, commitList, messageSendtoList, villagePlayerAccessInfoList, villagePlayerStatusByToVillagePlayerIdList, villagePlayerStatusByVillagePlayerIdList, voteByTargetVillagePlayerIdList, voteByVillagePlayerIdList
- * </pre>
+ * The behavior of VILLAGE_PLAYER as TABLE.
  * @author DBFlute(AutoGenerator)
  */
 public abstract class BsVillagePlayerBhv extends AbstractBehaviorWritable<VillagePlayer, VillagePlayerCB> {
@@ -1301,7 +1273,7 @@ public abstract class BsVillagePlayerBhv extends AbstractBehaviorWritable<Villag
     /**
      * Delete the several entities by query. (NonExclusiveControl)
      * <pre>
-     * <span style="color: #0000C0">villagePlayerBhv</span>.<span style="color: #CC4747">queryDelete</span>(villagePlayer, <span style="color: #553000">cb</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
+     * <span style="color: #0000C0">villagePlayerBhv</span>.<span style="color: #CC4747">queryDelete</span>(<span style="color: #553000">cb</span> <span style="color: #90226C; font-weight: bold"><span style="font-size: 120%">-</span>&gt;</span> {
      *     <span style="color: #553000">cb</span>.query().setFoo...
      * });
      * </pre>
@@ -1550,19 +1522,22 @@ public abstract class BsVillagePlayerBhv extends AbstractBehaviorWritable<Villag
     //                                                                            Accessor
     //                                                                            ========
     @Override
-    @javax.annotation.Resource(name="behaviorCommandInvoker")
+    @org.springframework.beans.factory.annotation.Autowired
+    @org.springframework.beans.factory.annotation.Qualifier("behaviorCommandInvoker")
     public void setBehaviorCommandInvoker(BehaviorCommandInvoker behaviorCommandInvoker) {
         super.setBehaviorCommandInvoker(behaviorCommandInvoker);
     }
 
     @Override
-    @javax.annotation.Resource(name="behaviorSelector")
+    @org.springframework.beans.factory.annotation.Autowired
+    @org.springframework.beans.factory.annotation.Qualifier("behaviorSelector")
     public void setBehaviorSelector(BehaviorSelector behaviorSelector) {
         super.setBehaviorSelector(behaviorSelector);
     }
 
     @Override
-    @javax.annotation.Resource(name="commonColumnAutoSetupper")
+    @org.springframework.beans.factory.annotation.Autowired
+    @org.springframework.beans.factory.annotation.Qualifier("commonColumnAutoSetupper")
     public void setCommonColumnAutoSetupper(CommonColumnAutoSetupper commonColumnAutoSetupper) {
         super.setCommonColumnAutoSetupper(commonColumnAutoSetupper);
     }

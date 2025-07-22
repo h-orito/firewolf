@@ -9,35 +9,7 @@ import com.ort.dbflute.exentity.*;
 import com.ort.dbflute.cbean.*;
 
 /**
- * The referrer loader of MESSAGE as TABLE. <br>
- * <pre>
- * [primary key]
- *     VILLAGE_ID, MESSAGE_NUMBER, MESSAGE_TYPE_CODE
- *
- * [column]
- *     VILLAGE_ID, MESSAGE_NUMBER, MESSAGE_TYPE_CODE, MESSAGE_UNIXTIMESTAMP_MILLI, VILLAGE_DAY_ID, VILLAGE_PLAYER_ID, TO_VILLAGE_PLAYER_ID, PLAYER_ID, MESSAGE_CONTENT, MESSAGE_DATETIME, MESSAGE_COUNT, IS_CONVERT_DISABLE, FACE_TYPE_CODE, CHARA_NAME, CHARA_SHORT_NAME, TO_CHARA_NAME, TO_CHARA_SHORT_NAME, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
- *
- * [sequence]
- *     
- *
- * [identity]
- *     
- *
- * [version-no]
- *     
- *
- * [foreign table]
- *     
- *
- * [referrer table]
- *     MESSAGE_SENDTO
- *
- * [foreign property]
- *     
- *
- * [referrer property]
- *     messageSendtoList
- * </pre>
+ * The referrer loader of MESSAGE as TABLE.
  * @author DBFlute(AutoGenerator)
  */
 public class LoaderOfMessage {

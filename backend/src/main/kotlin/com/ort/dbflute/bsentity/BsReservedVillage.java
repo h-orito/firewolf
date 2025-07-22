@@ -13,58 +13,6 @@ import com.ort.dbflute.exentity.*;
 /**
  * The entity of RESERVED_VILLAGE as TABLE. <br>
  * 予約村
- * <pre>
- * [primary-key]
- *     RESERVED_VILLAGE_ID
- *
- * [column]
- *     RESERVED_VILLAGE_ID, CREATE_DATETIME, START_DATETIME, ORGANIZATION, SILENT_HOURS, IS_AVAILABLE_DUMMY_SKILL, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
- *
- * [sequence]
- *     
- *
- * [identity]
- *     RESERVED_VILLAGE_ID
- *
- * [version-no]
- *     
- *
- * [foreign table]
- *     
- *
- * [referrer table]
- *     
- *
- * [foreign property]
- *     
- *
- * [referrer property]
- *     
- *
- * [get/set template]
- * /= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
- * Integer reservedVillageId = entity.getReservedVillageId();
- * java.time.LocalDateTime createDatetime = entity.getCreateDatetime();
- * java.time.LocalDateTime startDatetime = entity.getStartDatetime();
- * String organization = entity.getOrganization();
- * Integer silentHours = entity.getSilentHours();
- * Boolean isAvailableDummySkill = entity.getIsAvailableDummySkill();
- * java.time.LocalDateTime registerDatetime = entity.getRegisterDatetime();
- * String registerTrace = entity.getRegisterTrace();
- * java.time.LocalDateTime updateDatetime = entity.getUpdateDatetime();
- * String updateTrace = entity.getUpdateTrace();
- * entity.setReservedVillageId(reservedVillageId);
- * entity.setCreateDatetime(createDatetime);
- * entity.setStartDatetime(startDatetime);
- * entity.setOrganization(organization);
- * entity.setSilentHours(silentHours);
- * entity.setIsAvailableDummySkill(isAvailableDummySkill);
- * entity.setRegisterDatetime(registerDatetime);
- * entity.setRegisterTrace(registerTrace);
- * entity.setUpdateDatetime(updateDatetime);
- * entity.setUpdateTrace(updateTrace);
- * = = = = = = = = = =/
- * </pre>
  * @author DBFlute(AutoGenerator)
  */
 public abstract class BsReservedVillage extends AbstractEntity implements DomainEntity, EntityDefinedCommonColumn {

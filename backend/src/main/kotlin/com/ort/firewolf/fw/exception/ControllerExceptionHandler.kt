@@ -2,6 +2,7 @@ package com.ort.firewolf.fw.exception
 
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -17,50 +18,50 @@ class ControllerExceptionHandler : ResponseEntityExceptionHandler() {
         ex: Exception,
         body: Any?,
         headers: HttpHeaders,
-        status: HttpStatus,
+        statusCode: HttpStatusCode,
         request: WebRequest
-    ): ResponseEntity<Any> {
+    ): ResponseEntity<Any>? {
         var body = body
         if (body !is FirewolfErrorResponse) {
-            body = FirewolfErrorResponse(status.value(), status.reasonPhrase)
+            body = FirewolfErrorResponse(statusCode.value(), "Error occurred")
         }
-        return ResponseEntity(body, headers, status)
+        return ResponseEntity(body, headers, statusCode)
     }
 
     override fun handleMethodArgumentNotValid(
         ex: MethodArgumentNotValidException,
         headers: HttpHeaders,
-        status: HttpStatus,
+        status: HttpStatusCode,
         request: WebRequest
-    ): ResponseEntity<Any> {
+    ): ResponseEntity<Any>? {
         val message = ex.bindingResult.allErrors.mapNotNull { it.defaultMessage }.joinToString("\n")
-        val headers = HttpHeaders()
+        val newHeaders = HttpHeaders()
         val body = FirewolfErrorResponse(499, message)
-        val status = HttpStatus.NOT_FOUND
-        return handleExceptionInternal(ex, body, headers, status, request)
+        val statusCode = HttpStatusCode.valueOf(404)
+        return handleExceptionInternal(ex, body, newHeaders, statusCode, request)
     }
 
     @ExceptionHandler(FirewolfBusinessException::class)
-    fun handleBusinessException(ex: FirewolfBusinessException, request: WebRequest?): ResponseEntity<Any> {
+    fun handleBusinessException(ex: FirewolfBusinessException, request: WebRequest?): ResponseEntity<Any>? {
         val headers = HttpHeaders()
         val body = FirewolfErrorResponse(499, ex.message)
-        val status = HttpStatus.NOT_FOUND // dummy
-        return handleExceptionInternal(ex, body, headers, status, request!!)
+        val statusCode = HttpStatus.NOT_FOUND // dummy
+        return handleExceptionInternal(ex, body, headers, statusCode, request!!)
     }
 
     @ExceptionHandler(FirewolfBadRequestException::class)
-    fun handle400(ex: FirewolfBadRequestException, request: WebRequest?): ResponseEntity<Any> {
+    fun handle400(ex: FirewolfBadRequestException, request: WebRequest?): ResponseEntity<Any>? {
         val headers = HttpHeaders()
         val body = FirewolfErrorResponse(400, ex.message)
-        val status = HttpStatus.BAD_REQUEST
-        return handleExceptionInternal(ex, body, headers, status, request!!)
+        val statusCode = HttpStatus.BAD_REQUEST
+        return handleExceptionInternal(ex, body, headers, statusCode, request!!)
     }
 
     @ExceptionHandler(Exception::class)
-    fun handle500(ex: Exception, request: WebRequest?): ResponseEntity<Any> {
+    fun handle500(ex: Exception, request: WebRequest?): ResponseEntity<Any>? {
         val headers = HttpHeaders()
         val body = null
-        val status = HttpStatus.INTERNAL_SERVER_ERROR
-        return handleExceptionInternal(ex, body, headers, status, request!!)
+        val statusCode = HttpStatus.INTERNAL_SERVER_ERROR
+        return handleExceptionInternal(ex, body, headers, statusCode, request!!)
     }
 }

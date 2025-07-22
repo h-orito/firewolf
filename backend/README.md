@@ -9,7 +9,11 @@
 
 ## Requirement for local development
 
-- Mysql
+- Java 21
+
+    - JDK 21以上が必須です
+
+- mysql
 
     - docker を使うなりインストールするなりして用意してください
     - ポートは 3306 を使用します

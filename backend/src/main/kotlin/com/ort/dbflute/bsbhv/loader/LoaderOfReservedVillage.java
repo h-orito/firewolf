@@ -7,35 +7,7 @@ import com.ort.dbflute.exbhv.*;
 import com.ort.dbflute.exentity.*;
 
 /**
- * The referrer loader of RESERVED_VILLAGE as TABLE. <br>
- * <pre>
- * [primary key]
- *     RESERVED_VILLAGE_ID
- *
- * [column]
- *     RESERVED_VILLAGE_ID, CREATE_DATETIME, START_DATETIME, ORGANIZATION, SILENT_HOURS, IS_AVAILABLE_DUMMY_SKILL, REGISTER_DATETIME, REGISTER_TRACE, UPDATE_DATETIME, UPDATE_TRACE
- *
- * [sequence]
- *     
- *
- * [identity]
- *     RESERVED_VILLAGE_ID
- *
- * [version-no]
- *     
- *
- * [foreign table]
- *     
- *
- * [referrer table]
- *     
- *
- * [foreign property]
- *     
- *
- * [referrer property]
- *     
- * </pre>
+ * The referrer loader of RESERVED_VILLAGE as TABLE.
  * @author DBFlute(AutoGenerator)
  */
 public class LoaderOfReservedVillage {
