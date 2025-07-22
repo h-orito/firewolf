@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.ProviderManager
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.access.AccessDeniedHandler
@@ -17,7 +16,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 /**
  * see https://qiita.com/rubytomato@github/items/6c6318c948398fa62275
  */
-@EnableWebSecurity
 @ConfigurationProperties(prefix = "security")
 class FirewolfSecurityConfig(
     private val authenticationProvider: FireWolfAuthenticationProvider
@@ -43,6 +41,9 @@ class FirewolfSecurityConfig(
                     // LoginFilterあたり？
                     // .requestMatchers("/admin/**").hasRole("ADMIN")
                     .anyRequest().permitAll()
+            }
+            .formLogin {
+                it.disable()
             }
             // EXCEPTION
             .exceptionHandling { exceptions ->
@@ -80,8 +81,8 @@ class FirewolfSecurityConfig(
     fun getCorsConfigurationSource(): CorsConfigurationSource {
         val corsConfiguration = CorsConfiguration()
 
-        // CORSを許可するURLの登録(Access-Control-Allow-Origin)
-        this.corsClientUrls.forEach { corsConfiguration.addAllowedOrigin(it) }
+        // CORSを許可するURLの登録(Access-Control-Allow-Origin) - Spring Boot 3対応
+        this.corsClientUrls.forEach { corsConfiguration.addAllowedOriginPattern(it) }
 
         // 許可するHeaderの登録(Access-Control-Allow-Headers)
         corsConfiguration.addAllowedHeader(CorsConfiguration.ALL)

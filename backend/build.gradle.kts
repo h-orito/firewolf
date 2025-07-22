@@ -46,11 +46,8 @@ dependencies {
         System.getenv("MYSQL_CONNECTOR_VERSION")
     } else "8.4.0"
     implementation("com.mysql:mysql-connector-j:$mysqlConnectorVersion")
-    // jwt
-    implementation("io.jsonwebtoken:jjwt-api:0.10.7")
-    implementation("io.jsonwebtoken:jjwt-impl:0.10.7")
-    implementation("io.jsonwebtoken:jjwt-jackson:0.10.7")
-    implementation("com.google.firebase:firebase-admin:6.8.1")
+    // firebase
+    implementation("com.google.firebase:firebase-admin:9.1.1")
     // twitter
     implementation("io.github.redouane59.twitter:twittered:2.13")
     // slack

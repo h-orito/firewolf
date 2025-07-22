@@ -6,6 +6,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 class FirewolfWebMvcConfigurer : WebMvcConfigurer {
     override fun addInterceptors(registry: InterceptorRegistry) {
-        registry!!.addInterceptor(FirewolfAccessContextInterceptor()).addPathPatterns("/**")
+        registry.addInterceptor(FirewolfAccessContextInterceptor()).addPathPatterns("/**")
     }
 }
