@@ -17,10 +17,11 @@ spring:
 security:
   corsClientUrls:
     - https://firewolf.netlify.app
+    - https://wolfort.dev/firewolf
 server:
   port: 8087
   servlet:
-    context-path: /firewolf
+    context-path: /firewolf-api
     session:
       timeout: 86400
   compression:
