@@ -37,7 +37,7 @@ class ControllerExceptionHandler : ResponseEntityExceptionHandler() {
         val message = ex.bindingResult.allErrors.mapNotNull { it.defaultMessage }.joinToString("\n")
         val newHeaders = HttpHeaders()
         val body = FirewolfErrorResponse(499, message)
-        val statusCode = HttpStatusCode.valueOf(404)
+        val statusCode = HttpStatus.BAD_REQUEST
         return handleExceptionInternal(ex, body, newHeaders, statusCode, request)
     }
 

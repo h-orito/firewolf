@@ -32,7 +32,8 @@ class CharachipController(
 
     @GetMapping("/charachips")
     fun charachips(form: CharachipsForm): CharachipsView {
-        val charachips: Charachips = charachipService.findCharachips(form.charachipIds!!)
+        val ids = form.charachipIds.orEmpty() + form.charachip_ids.orEmpty()
+        val charachips: Charachips = charachipService.findCharachips(ids)
         val charas: Charas = charachipService.findCharas(charachips)
         return CharachipsView(
             charachips = charachips,
@@ -52,7 +53,8 @@ class CharachipController(
 
     @GetMapping("/charas")
     fun charas(form: CharachipsForm): Charas {
-        return charachipService.findCharas(form.charachipIds!!)
+        val ids = form.charachipIds.orEmpty() + form.charachip_ids.orEmpty()
+        return charachipService.findCharas(ids)
     }
 
     @GetMapping("/chara/{charaId}")
