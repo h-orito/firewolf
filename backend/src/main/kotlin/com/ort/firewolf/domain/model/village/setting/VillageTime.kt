@@ -48,9 +48,9 @@ data class VillageTime(
 
     fun existsDifference(time: VillageTime): Boolean {
         return termType != time.termType
-            || startDatetime != time.startDatetime
-            || dayChangeIntervalSeconds != time.dayChangeIntervalSeconds
-            || silentHours != time.silentHours
+                || startDatetime != time.startDatetime
+                || dayChangeIntervalSeconds != time.dayChangeIntervalSeconds
+                || silentHours != time.silentHours
     }
 
     fun isSilentTime(dayStartDatetime: LocalDateTime): Boolean {
@@ -61,8 +61,13 @@ data class VillageTime(
     }
 
     fun extendPrologue(): VillageTime {
+        val now = FirewolfDateUtil.currentLocalDateTime()
+        var newStartDatetime = startDatetime.plusDays(1)
+        while (newStartDatetime.isBefore(now)) {
+            newStartDatetime = newStartDatetime.plusDays(1)
+        }
         return this.copy(
-            startDatetime = startDatetime.plusDays(1L)
+            startDatetime = newStartDatetime
         )
     }
 

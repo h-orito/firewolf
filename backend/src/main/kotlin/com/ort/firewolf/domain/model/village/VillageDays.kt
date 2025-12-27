@@ -1,6 +1,7 @@
 package com.ort.firewolf.domain.model.village
 
 import com.ort.dbflute.allcommon.CDef
+import com.ort.firewolf.fw.FirewolfDateUtil
 
 data class VillageDays(
     val dayList: List<VillageDay>
@@ -35,8 +36,13 @@ data class VillageDays(
     }
 
     fun extendPrologue(): VillageDays {
+        val now = FirewolfDateUtil.currentLocalDateTime()
+        var newDayChangeDatetime = latestDay().dayChangeDatetime.plusDays(1)
+        while (newDayChangeDatetime.isBefore(now)) {
+            newDayChangeDatetime = newDayChangeDatetime.plusDays(1)
+        }
         return this.copy(dayList = dayList.map {
-            if (it.id == latestDay().id) latestDay().copy(dayChangeDatetime = latestDay().dayChangeDatetime.plusDays(1L))
+            if (it.id == latestDay().id) latestDay().copy(dayChangeDatetime = newDayChangeDatetime)
             else it
         })
     }
@@ -50,7 +56,11 @@ data class VillageDays(
 
     fun extendLatestDay(): VillageDays {
         return this.copy(dayList = dayList.map {
-            if (it.id == latestDay().id) latestDay().copy(dayChangeDatetime = yesterday().dayChangeDatetime.plusHours(extendHours))
+            if (it.id == latestDay().id) latestDay().copy(
+                dayChangeDatetime = yesterday().dayChangeDatetime.plusHours(
+                    extendHours
+                )
+            )
             else it
         })
     }
