@@ -143,7 +143,8 @@ data class Village(
      * ダミーキャラの1日目発言
      */
     fun createDummyCharaFirstDayMessage(): Message? {
-        val firstDayMessage = setting.charachip.dummyCharaDay1Message ?: return null
+        val firstDayMessage = setting.charachip.dummyCharaDay1Message
+        if (firstDayMessage.isNullOrEmpty()) return null
         val messageContent = MessageContent.invoke(
             messageType = CDef.MessageType.通常発言.code(),
             text = firstDayMessage,
@@ -411,7 +412,12 @@ data class Village(
     fun changeAllSkillRequestLeftover(): Village =
         this.copy(
             participant = participant.copy(
-                memberList = participant.memberList.map { it.changeSkillRequest(CDef.Skill.おまかせ, CDef.Skill.おまかせ) }
+                memberList = participant.memberList.map {
+                    it.changeSkillRequest(
+                        CDef.Skill.おまかせ,
+                        CDef.Skill.おまかせ
+                    )
+                }
             )
         )
 
