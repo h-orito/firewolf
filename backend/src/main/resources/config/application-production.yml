@@ -18,6 +18,7 @@ security:
   corsClientUrls:
     - https://firewolf.netlify.app
     - https://wolfort.dev/firewolf
+    - https://695a8124127af60008bbfe63--firewolf.netlify.app
 server:
   port: 8087
   servlet:
