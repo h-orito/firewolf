@@ -345,12 +345,17 @@ data class Village(
     fun addNewDay(): Village {
         val dayList = mutableListOf<VillageDay>()
         dayList.addAll(day.dayList)
+        val latestDay = day.latestDay()
+        val dayChangeDatetime = latestDay.dayChangeDatetime
+        // 新しい日の開始日時は現在日時と本来の更新日時を比較して早い方
+        val now = LocalDateTime.now()
+        val newStartDatetime = if (now.isBefore(dayChangeDatetime)) now else dayChangeDatetime
         val newDay = VillageDay(
             id = 0, // dummy
             day = day.latestDay().day + 1, // 一旦長期だけを考えるので常に昼
             noonnight = CDef.Noonnight.昼.code(),
-            startDatetime = LocalDateTime.now(),
-            dayChangeDatetime = day.latestDay().dayChangeDatetime.plusSeconds(setting.time.dayChangeIntervalSeconds.toLong())
+            startDatetime = newStartDatetime,
+            dayChangeDatetime = dayChangeDatetime.plusSeconds(setting.time.dayChangeIntervalSeconds.toLong())
         )
         dayList.add(newDay)
         return this.copy(day = this.day.copy(dayList = dayList))

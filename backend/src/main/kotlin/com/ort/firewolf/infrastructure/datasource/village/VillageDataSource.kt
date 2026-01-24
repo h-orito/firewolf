@@ -645,6 +645,7 @@ class VillageDataSource(
         villageDay.day = day.day
         villageDay.noonnightCodeAsNoonnight = CDef.Noonnight.codeOf(day.noonnight)
         villageDay.daychangeDatetime = day.dayChangeDatetime
+        villageDay.registerDatetime = day.startDatetime
         villageDayBhv.insert(villageDay)
         return VillageDataConverter.convertVillageDayToVillageDay(villageDay)
     }
