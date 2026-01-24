@@ -60,7 +60,6 @@ class MessageCoordinator(
             villageDayId = villageDayId,
             query = query
         )
-        dayChangeCoordinator.dayChangeIfNeeded(village)
         return messages
     }
 
@@ -99,6 +98,7 @@ class MessageCoordinator(
             fromParticipantIdList = null,
             toParticipantIdList = null,
         )
+        dayChangeCoordinator.dayChangeIfNeeded(village)
 
         return messageService.findLatestMessagesUnixTimeMilli(village.id, village.day.latestDay().id, query)
     }
