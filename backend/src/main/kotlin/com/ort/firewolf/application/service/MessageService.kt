@@ -3,7 +3,6 @@ package com.ort.firewolf.application.service
 import com.ort.dbflute.allcommon.CDef
 import com.ort.firewolf.domain.model.ability.AbilityType
 import com.ort.firewolf.domain.model.charachip.Chara
-import com.ort.firewolf.domain.model.charachip.Charas
 import com.ort.firewolf.domain.model.message.Message
 import com.ort.firewolf.domain.model.message.MessageContent
 import com.ort.firewolf.domain.model.message.MessageQuery
@@ -155,14 +154,12 @@ class MessageService(
      * @param participant 村参加者
      * @param targetId 対象の村参加者ID
      * @param abilityType abilityType
-     * @param charas キャラ
      */
     fun registerAbilitySetMessage(
         village: Village,
         participant: VillageParticipant,
         targetId: Int?,
         abilityType: AbilityType,
-        charas: Charas
     ) {
         val target = targetId?.let { village.participant.member(it) }
         val message: Message = abilityDomainService.createAbilitySetMessage(village, participant, target, abilityType)

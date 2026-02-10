@@ -16,7 +16,11 @@ import com.ort.firewolf.fw.security.FirewolfUser
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RestController
 
 
 @RestController
@@ -73,9 +77,8 @@ class PlayerController(
     ): PlayerRecordsView {
         val player: Player = playerService.findPlayer(playerId)
         val playerRecords = playerCoordinator.findPlayerRecords(player)
-        val charachipIdList =
-            playerRecords.participateVillageList.flatMap { it.village.setting.charachip.charachipIds }.distinct()
-        val charas: Charas = charachipService.findCharas(charachipIdList)
+        val charaIds = playerRecords.participateVillageList.map { it.participant.charaId }.distinct()
+        val charas: Charas = charachipService.findCharasByCharaIds(charaIds)
         val playerIdList =
             playerRecords.participateVillageList.flatMap {
                 (it.village.participant.memberList + it.village.spectator.memberList).map { member -> member.playerId!! }

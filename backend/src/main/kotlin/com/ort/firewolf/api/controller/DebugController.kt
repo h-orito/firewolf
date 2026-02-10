@@ -167,7 +167,8 @@ class DebugController(
         if ("local" != env) throw FirewolfBusinessException("この環境では使用できません")
 
         val village: Village = villageService.findVillage(villageId)
-        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipIds)
+        val charaIds = village.allParticipants().memberList.map { it.charaId }.distinct()
+        val charas: Charas = charachipService.findCharasByCharaIds(charaIds)
         val players: Players = playerService.findPlayers(villageId)
         val createPlayer: com.ort.firewolf.domain.model.player.Player =
             playerService.findPlayer(village.creatorPlayerId)

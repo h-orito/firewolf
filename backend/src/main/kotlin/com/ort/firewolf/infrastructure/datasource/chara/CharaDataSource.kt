@@ -4,6 +4,8 @@ import com.ort.dbflute.exbhv.CharaBhv
 import com.ort.dbflute.exentity.Chara
 import com.ort.firewolf.domain.model.charachip.*
 import org.springframework.stereotype.Repository
+import kotlin.Int
+import kotlin.collections.map
 
 @Repository
 class CharaDataSource(
@@ -33,6 +35,18 @@ class CharaDataSource(
         if (charachipIdList.isEmpty()) return Charas(listOf())
         val charaList = charaBhv.selectList {
             it.query().setCharaGroupId_InScope(charachipIdList)
+        }
+        charaBhv.loadCharaImage(charaList) {
+            it.query().setFaceTypeCode_Equal_通常()
+            it.query().queryFaceType().addOrderBy_DispOrder_Asc()
+        }
+        return Charas(charaList.map { convertCharaToChara(it) })
+    }
+
+    fun findCharasByCharaIds(charaIdList: List<Int>): Charas {
+        if (charaIdList.isEmpty()) return Charas(listOf())
+        val charaList = charaBhv.selectList {
+            it.query().setCharaId_InScope(charaIdList)
         }
         charaBhv.loadCharaImage(charaList) {
             it.query().queryFaceType().addOrderBy_DispOrder_Asc()

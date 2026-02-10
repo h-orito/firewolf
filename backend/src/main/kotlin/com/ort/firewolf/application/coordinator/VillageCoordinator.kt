@@ -461,9 +461,8 @@ class VillageCoordinator(
         // 能力セット
         val villageAbility = VillageAbility(village.day.latestDay().id, myselfId ?: myself!!.id, targetId, abilityType)
         abilityService.updateAbility(villageAbility)
-        val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipIds)
         val participant = myselfId?.let { village.participant.member(it) } ?: myself!!
-        messageService.registerAbilitySetMessage(village, participant, targetId, abilityType, charas)
+        messageService.registerAbilitySetMessage(village, participant, targetId, abilityType)
     }
 
     /**

@@ -28,5 +28,7 @@ class CharachipService(
 
     fun findCharas(charachipIdList: List<Int>): Charas = charaDataSource.findCharas(charachipIdList)
 
+    fun findCharasByCharaIds(charaIds: List<Int>): Charas = charaDataSource.findCharasByCharaIds(charaIds)
+
     fun findDummyChara(charaChipId: Int): Chara = charaDataSource.findDummyChara(charaChipId)
 }
