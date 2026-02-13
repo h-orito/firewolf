@@ -79,11 +79,11 @@ map:{
         	; groupingMap = map:{
         		; viewableWerewolfSay = map:{
         			; groupComment=囁きを見られる
-        			; elementList= list:{人狼;呪狼;智狼;C国狂人}
+        			; elementList= list:{人狼;呪狼;智狼;大狼;C国狂人}
         		}
         		; availableWerewolfSay = map:{
         			; groupComment=囁き可能
-        			; elementList= list:{人狼;呪狼;智狼;C国狂人}
+        			; elementList= list:{人狼;呪狼;智狼;大狼;C国狂人}
         		}
         		; viewableSympathizeSay = map:{
 					; groupComment=共鳴発言を見られる
@@ -95,7 +95,7 @@ map:{
 				}
         		; notSelectableAttack = map:{
 					; groupComment=襲撃対象に選べない
-					; elementList= list:{人狼;呪狼;智狼}
+					; elementList= list:{人狼;呪狼;智狼;大狼}
 				}
 				; divineResultWolf = map:{
 					; groupComment=占い結果が人狼になる
@@ -103,11 +103,11 @@ map:{
 				}
 				; psychicResultWolf = map:{
 					; groupComment=霊能結果が人狼になる
-					; elementList= list:{人狼;呪狼;智狼}
+					; elementList= list:{人狼;呪狼;智狼;大狼}
 				}
 				; hasAttackAbility = map:{
 					; groupComment=襲撃能力を持つ
-					; elementList= list:{人狼;呪狼;智狼}
+					; elementList= list:{人狼;呪狼;智狼;大狼}
 				}
 				; hasDivineAbility = map:{
 					; groupComment=占い能力を持つ
@@ -151,7 +151,7 @@ map:{
 				}
 				; countWolf = map:{
 					; groupComment=勝敗判定時狼にカウントする
-					; elementList= list:{人狼;呪狼;智狼}
+					; elementList= list:{人狼;呪狼;智狼;大狼}
 				}
 				; noCount = map:{
 					; groupComment=勝敗判定時に人間としてカウントしない

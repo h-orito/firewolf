@@ -200,6 +200,14 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
     }
 
     /**
+     * Equal(=). As 大狼 (BIGWOLF). And OnlyOnceRegistered. <br>
+     * 大狼
+     */
+    public void setSkillCode_Equal_大狼() {
+        setSkillCode_Equal_AsSkill(CDef.Skill.大狼);
+    }
+
+    /**
      * Equal(=). As C国狂人 (CMADMAN). And OnlyOnceRegistered. <br>
      * C国狂人
      */
@@ -447,6 +455,14 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
     }
 
     /**
+     * NotEqual(&lt;&gt;). As 大狼 (BIGWOLF). And OnlyOnceRegistered. <br>
+     * 大狼
+     */
+    public void setSkillCode_NotEqual_大狼() {
+        setSkillCode_NotEqual_AsSkill(CDef.Skill.大狼);
+    }
+
+    /**
      * NotEqual(&lt;&gt;). As C国狂人 (CMADMAN). And OnlyOnceRegistered. <br>
      * C国狂人
      */
@@ -689,7 +705,7 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 囁きを見られる <br>
-     * The group elements:[人狼, 呪狼, 智狼, C国狂人]
+     * The group elements:[人狼, 呪狼, 智狼, 大狼, C国狂人]
      */
     public void setSkillCode_InScope_ViewableWerewolfSay() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfViewableWerewolfSay());
@@ -699,7 +715,7 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 囁き可能 <br>
-     * The group elements:[人狼, 呪狼, 智狼, C国狂人]
+     * The group elements:[人狼, 呪狼, 智狼, 大狼, C国狂人]
      */
     public void setSkillCode_InScope_AvailableWerewolfSay() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfAvailableWerewolfSay());
@@ -729,7 +745,7 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 襲撃対象に選べない <br>
-     * The group elements:[人狼, 呪狼, 智狼]
+     * The group elements:[人狼, 呪狼, 智狼, 大狼]
      */
     public void setSkillCode_InScope_NotSelectableAttack() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfNotSelectableAttack());
@@ -749,7 +765,7 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 霊能結果が人狼になる <br>
-     * The group elements:[人狼, 呪狼, 智狼]
+     * The group elements:[人狼, 呪狼, 智狼, 大狼]
      */
     public void setSkillCode_InScope_PsychicResultWolf() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfPsychicResultWolf());
@@ -759,7 +775,7 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 襲撃能力を持つ <br>
-     * The group elements:[人狼, 呪狼, 智狼]
+     * The group elements:[人狼, 呪狼, 智狼, 大狼]
      */
     public void setSkillCode_InScope_HasAttackAbility() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfHasAttackAbility());
@@ -869,7 +885,7 @@ public abstract class AbstractBsComingOutCQ extends AbstractConditionQuery {
      * InScope {in ('a', 'b')}. As Skill. And NullOrEmptyIgnored, NullOrEmptyElementIgnored, SeveralRegistered. <br>
      * 役職 <br>
      * 勝敗判定時狼にカウントする <br>
-     * The group elements:[人狼, 呪狼, 智狼]
+     * The group elements:[人狼, 呪狼, 智狼, 大狼]
      */
     public void setSkillCode_InScope_CountWolf() {
         setSkillCode_InScope_AsSkill(CDef.Skill.listOfCountWolf());

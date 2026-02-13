@@ -125,6 +125,14 @@ public abstract class BsSkill extends AbstractEntity implements DomainEntity {
     }
 
     /**
+     * Set the value of skillCode as 大狼 (BIGWOLF). <br>
+     * 大狼
+     */
+    public void setSkillCode_大狼() {
+        setSkillCodeAsSkill(CDef.Skill.大狼);
+    }
+
+    /**
      * Set the value of skillCode as C国狂人 (CMADMAN). <br>
      * C国狂人
      */
@@ -384,6 +392,17 @@ public abstract class BsSkill extends AbstractEntity implements DomainEntity {
     public boolean isSkillCodeパン屋() {
         CDef.Skill cdef = getSkillCodeAsSkill();
         return cdef != null ? cdef.equals(CDef.Skill.パン屋) : false;
+    }
+
+    /**
+     * Is the value of skillCode 大狼? <br>
+     * 大狼
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isSkillCode大狼() {
+        CDef.Skill cdef = getSkillCodeAsSkill();
+        return cdef != null ? cdef.equals(CDef.Skill.大狼) : false;
     }
 
     /**
@@ -685,7 +704,7 @@ public abstract class BsSkill extends AbstractEntity implements DomainEntity {
 
     /**
      * 囁きを見られる <br>
-     * The group elements:[人狼, 呪狼, 智狼, C国狂人]
+     * The group elements:[人狼, 呪狼, 智狼, 大狼, C国狂人]
      * @return The determination, true or false.
      */
     public boolean isSkillCode_ViewableWerewolfSay() {
@@ -695,7 +714,7 @@ public abstract class BsSkill extends AbstractEntity implements DomainEntity {
 
     /**
      * 囁き可能 <br>
-     * The group elements:[人狼, 呪狼, 智狼, C国狂人]
+     * The group elements:[人狼, 呪狼, 智狼, 大狼, C国狂人]
      * @return The determination, true or false.
      */
     public boolean isSkillCode_AvailableWerewolfSay() {
@@ -725,7 +744,7 @@ public abstract class BsSkill extends AbstractEntity implements DomainEntity {
 
     /**
      * 襲撃対象に選べない <br>
-     * The group elements:[人狼, 呪狼, 智狼]
+     * The group elements:[人狼, 呪狼, 智狼, 大狼]
      * @return The determination, true or false.
      */
     public boolean isSkillCode_NotSelectableAttack() {
@@ -745,7 +764,7 @@ public abstract class BsSkill extends AbstractEntity implements DomainEntity {
 
     /**
      * 霊能結果が人狼になる <br>
-     * The group elements:[人狼, 呪狼, 智狼]
+     * The group elements:[人狼, 呪狼, 智狼, 大狼]
      * @return The determination, true or false.
      */
     public boolean isSkillCode_PsychicResultWolf() {
@@ -755,7 +774,7 @@ public abstract class BsSkill extends AbstractEntity implements DomainEntity {
 
     /**
      * 襲撃能力を持つ <br>
-     * The group elements:[人狼, 呪狼, 智狼]
+     * The group elements:[人狼, 呪狼, 智狼, 大狼]
      * @return The determination, true or false.
      */
     public boolean isSkillCode_HasAttackAbility() {
@@ -865,7 +884,7 @@ public abstract class BsSkill extends AbstractEntity implements DomainEntity {
 
     /**
      * 勝敗判定時狼にカウントする <br>
-     * The group elements:[人狼, 呪狼, 智狼]
+     * The group elements:[人狼, 呪狼, 智狼, 大狼]
      * @return The determination, true or false.
      */
     public boolean isSkillCode_CountWolf() {
