@@ -28,7 +28,7 @@ data class PlayerRecordsView(
             ParticipateVillageView(
                 participateVillage.village,
                 participateVillage.participant,
-                Charas(charas.list.filter { participateVillage.village.setting.charachip.charachipIds.contains(it.charachipId) }),
+                Charas(charas.list.filter { participateVillage.participant.charaId == it.id }),
                 Players(players.list.filter { player ->
                     participateVillage.village.participant.memberList.any { member -> member.playerId == player.id }
                             || participateVillage.village.spectator.memberList.any { member -> member.playerId == player.id }
