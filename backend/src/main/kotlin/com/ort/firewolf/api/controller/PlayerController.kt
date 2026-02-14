@@ -77,7 +77,9 @@ class PlayerController(
     ): PlayerRecordsView {
         val player: Player = playerService.findPlayer(playerId)
         val playerRecords = playerCoordinator.findPlayerRecords(player)
-        val charaIds = playerRecords.participateVillageList.map { it.participant.charaId }.distinct()
+        val charaIds = playerRecords.participateVillageList
+            .flatMap { it.village.allParticipants().memberList.map { it.charaId } }
+            .distinct()
         val charas: Charas = charachipService.findCharasByCharaIds(charaIds)
         val playerIdList =
             playerRecords.participateVillageList.flatMap {
