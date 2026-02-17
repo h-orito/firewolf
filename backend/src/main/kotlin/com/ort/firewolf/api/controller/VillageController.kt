@@ -293,7 +293,7 @@ class VillageController(
     ): SituationAsParticipantView {
         val village: Village = villageService.findVillage(villageId)
         val charas = if (village.status.isPrologue()) {
-            charachipService.findCharasByCharaIds(village.setting.charachip.charachipIds)
+            charachipService.findCharas(village.setting.charachip.charachipIds)
         } else {
             val charaIds = village.allParticipants().memberList.map { it.charaId }.distinct()
             charachipService.findCharasByCharaIds(charaIds)
