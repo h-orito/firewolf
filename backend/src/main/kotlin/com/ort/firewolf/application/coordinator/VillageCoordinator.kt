@@ -561,7 +561,6 @@ class VillageCoordinator(
         village: Village,
         user: FirewolfUser?,
         players: Players,
-        charas: Charas
     ): SituationAsParticipant {
         val player: Player? = if (user == null) null else playerService.findPlayer(user)
         val participant: VillageParticipant? = findParticipant(village, user)
@@ -573,6 +572,17 @@ class VillageCoordinator(
         val latestDayMessageCountMap =
             messageService.findParticipateDayMessageList(village.id, village.day.latestDay(), participant)
         val charachips = charachipService.findCharachips(village.setting.charachip.charachipIds)
+
+        val charas = if (village.status.isPrologue() && participant == null) {
+            // プロローグ中で参加していない場合は選択可能なキャラすべて
+            charachipService.findCharas(village.setting.charachip.charachipIds)
+        } else if (participant != null) {
+            // 参加している場合は村にいる人だけを取得
+            charachipService.findCharasByCharaIds(village.allParticipants().memberList.map { it.charaId })
+        } else {
+            // 参加していない場合は空
+            Charas(emptyList())
+        }
 
         return SituationAsParticipant(
             participate = participateDomainService.convertToSituation(

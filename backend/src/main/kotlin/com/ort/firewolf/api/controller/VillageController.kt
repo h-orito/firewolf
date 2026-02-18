@@ -292,15 +292,10 @@ class VillageController(
         @AuthenticationPrincipal user: FirewolfUser?
     ): SituationAsParticipantView {
         val village: Village = villageService.findVillage(villageId)
-        val charas = if (village.status.isPrologue()) {
-            charachipService.findCharas(village.setting.charachip.charachipIds)
-        } else {
-            val charaIds = village.allParticipants().memberList.map { it.charaId }.distinct()
-            charachipService.findCharasByCharaIds(charaIds)
-        }
         val players: Players = playerService.findPlayers(villageId)
+        val charas = charachipService.findCharasByCharaIds(village.allParticipants().memberList.map { it.charaId })
         return SituationAsParticipantView(
-            situation = villageCoordinator.findActionSituation(village, user, players, charas),
+            situation = villageCoordinator.findActionSituation(village, user, players),
             village = village,
             charas = charas,
             players = players
