@@ -7,6 +7,15 @@ plugins {
     kotlin("jvm") version "1.9.25"
     kotlin("plugin.spring") version "1.9.25"
     id("com.google.cloud.tools.jib") version "3.3.2"
+    id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
+}
+
+ktlint {
+    filter {
+        exclude("**/com/ort/dbflute/**")
+        exclude("**/build/**")
+        exclude("**/generated/**")
+    }
 }
 
 group = "com.ort"
@@ -44,9 +53,12 @@ dependencies {
     // swagger
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0")
     // mysql
-    val mysqlConnectorVersion = if (System.getenv("MYSQL_CONNECTOR_VERSION") != null) {
-        System.getenv("MYSQL_CONNECTOR_VERSION")
-    } else "8.4.0"
+    val mysqlConnectorVersion =
+        if (System.getenv("MYSQL_CONNECTOR_VERSION") != null) {
+            System.getenv("MYSQL_CONNECTOR_VERSION")
+        } else {
+            "8.4.0"
+        }
     implementation("com.mysql:mysql-connector-j:$mysqlConnectorVersion")
     // firebase
     implementation("com.google.firebase:firebase-admin:9.1.1")
@@ -89,11 +101,12 @@ jib {
         image = "ghcr.io/h-orito/firewolf"
     }
     container {
-        jvmFlags = listOf(
-            "-server",
-            "-Djava.awt.headless=true",
-            "-Dspring.profiles.active=production"
-        )
+        jvmFlags =
+            listOf(
+                "-server",
+                "-Djava.awt.headless=true",
+                "-Dspring.profiles.active=production",
+            )
         creationTime = "USE_CURRENT_TIMESTAMP"
     }
 }
