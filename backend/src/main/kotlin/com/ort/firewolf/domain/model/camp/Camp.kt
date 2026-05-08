@@ -4,14 +4,13 @@ import com.ort.dbflute.allcommon.CDef
 
 data class Camp(
     val code: String,
-    val name: String
+    val name: String,
 ) {
-
     constructor(
-        cdefCamp: CDef.Camp
+        cdefCamp: CDef.Camp,
     ) : this(
         code = cdefCamp.code(),
-        name = cdefCamp.name
+        name = cdefCamp.name,
     )
 
     fun toCdef(): CDef.Camp = CDef.Camp.codeOf(code)

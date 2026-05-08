@@ -5,13 +5,13 @@ import com.ort.firewolf.domain.model.charachip.CharaName
 data class CharaNameView(
     val name: String,
     val shortName: String,
-    val fullName: String
+    val fullName: String,
 ) {
     constructor(
-        charaName: CharaName
+        charaName: CharaName,
     ) : this(
         name = charaName.name,
         shortName = charaName.shortName,
-        fullName = charaName.fullName()
+        fullName = charaName.fullName(),
     )
 }

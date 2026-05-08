@@ -3,11 +3,11 @@ package com.ort.firewolf.api.view.village
 import com.ort.firewolf.domain.model.village.setting.VillagePassword
 
 data class VillagePasswordView(
-    val joinPasswordRequired: Boolean
+    val joinPasswordRequired: Boolean,
 ) {
     constructor(
-        villagePassword: VillagePassword
+        villagePassword: VillagePassword,
     ) : this(
-        joinPasswordRequired = villagePassword.joinPasswordRequired
+        joinPasswordRequired = villagePassword.joinPasswordRequired,
     )
 }

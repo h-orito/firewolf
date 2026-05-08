@@ -15,7 +15,7 @@ data class Player(
     val participateProgressVillageIdList: List<Int> = listOf(),
     val participateFinishedVillageIdList: List<Int> = listOf(),
     val createProgressVillageIdList: List<Int> = listOf(),
-    val createFinishedVillageIdList: List<Int> = listOf()
+    val createFinishedVillageIdList: List<Int> = listOf(),
 ) {
     fun restrictParticipation(): Player {
         return this.copy(isRestrictedParticipation = true)

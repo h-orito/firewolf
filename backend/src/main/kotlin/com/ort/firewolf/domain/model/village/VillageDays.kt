@@ -4,7 +4,7 @@ import com.ort.dbflute.allcommon.CDef
 import com.ort.firewolf.fw.FirewolfDateUtil
 
 data class VillageDays(
-    val dayList: List<VillageDay>
+    val dayList: List<VillageDay>,
 ) {
     // ===================================================================================
     //                                                                          Definition
@@ -32,7 +32,6 @@ data class VillageDays(
         return dayList.any { day1 ->
             villageDays.dayList.none { day2 -> !day1.existsDifference(day2) }
         }
-
     }
 
     fun extendPrologue(): VillageDays {
@@ -41,27 +40,46 @@ data class VillageDays(
         while (newDayChangeDatetime.isBefore(now)) {
             newDayChangeDatetime = newDayChangeDatetime.plusDays(1)
         }
-        return this.copy(dayList = dayList.map {
-            if (it.id == latestDay().id) latestDay().copy(dayChangeDatetime = newDayChangeDatetime)
-            else it
-        })
+        return this.copy(
+            dayList =
+                dayList.map {
+                    if (it.id == latestDay().id) {
+                        latestDay().copy(dayChangeDatetime = newDayChangeDatetime)
+                    } else {
+                        it
+                    }
+                },
+        )
     }
 
     fun extendEpilogue(): VillageDays {
-        return this.copy(dayList = dayList.map {
-            if (it.id == latestDay().id) latestDay().copy(dayChangeDatetime = latestDay().dayChangeDatetime.plusDays(1L))
-            else it
-        })
+        return this.copy(
+            dayList =
+                dayList.map {
+                    if (it.id == latestDay().id) {
+                        latestDay().copy(dayChangeDatetime = latestDay().dayChangeDatetime.plusDays(1L))
+                    } else {
+                        it
+                    }
+                },
+        )
     }
 
     fun extendLatestDay(): VillageDays {
-        return this.copy(dayList = dayList.map {
-            if (it.id == latestDay().id) latestDay().copy(
-                dayChangeDatetime = yesterday().dayChangeDatetime.plusHours(
-                    extendHours
-                )
-            )
-            else it
-        })
+        return this.copy(
+            dayList =
+                dayList.map {
+                    if (it.id == latestDay().id) {
+                        latestDay().copy(
+                            dayChangeDatetime =
+                                yesterday().dayChangeDatetime.plusHours(
+                                    extendHours,
+                                ),
+                        )
+                    } else {
+                        it
+                    }
+                },
+        )
     }
 }

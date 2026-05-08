@@ -5,16 +5,14 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import java.io.FileInputStream
-import jakarta.annotation.PostConstruct
-
 
 @Configuration
 class FirebaseConfig {
-
     @Value("\${firebase.adminsdk.secretkey.path}")
     private val firebaseAdminsdkSecretkeyPath: String? = null
 
@@ -37,10 +35,11 @@ class FirebaseConfig {
             return
         }
         val serviceAccount = FileInputStream(firebaseAdminsdkSecretkeyPath)
-        val options = FirebaseOptions.builder()
-            .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-            .setDatabaseUrl(firebaseDatabaseUrl)
-            .build()
+        val options =
+            FirebaseOptions.builder()
+                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                .setDatabaseUrl(firebaseDatabaseUrl)
+                .build()
         FirebaseApp.initializeApp(options)
     }
 }

@@ -12,7 +12,7 @@ data class VillageTime(
     val epilogueStartDatetime: LocalDateTime?,
     val startDatetime: LocalDateTime,
     val dayChangeIntervalSeconds: Int,
-    val silentHours: Int?
+    val silentHours: Int?,
 ) {
     companion object {
         private const val DEFAULT_INTERVAL = 86400
@@ -26,7 +26,7 @@ data class VillageTime(
             epilogueStartDatetime: LocalDateTime?,
             startDatetime: LocalDateTime?,
             dayChangeIntervalSeconds: Int?,
-            silentHours: Int?
+            silentHours: Int?,
         ): VillageTime {
             require(termType == null || CDef.Term.codeOf(termType) != null)
             requireNotNull(startDatetime)
@@ -41,17 +41,16 @@ data class VillageTime(
                 epilogueStartDatetime = epilogueStartDatetime,
                 startDatetime = startDatetime,
                 dayChangeIntervalSeconds = dayChangeIntervalSeconds ?: DEFAULT_INTERVAL,
-                silentHours = silentHours
+                silentHours = silentHours,
             )
         }
     }
 
-    fun existsDifference(time: VillageTime): Boolean {
-        return termType != time.termType
-                || startDatetime != time.startDatetime
-                || dayChangeIntervalSeconds != time.dayChangeIntervalSeconds
-                || silentHours != time.silentHours
-    }
+    fun existsDifference(time: VillageTime): Boolean =
+        termType != time.termType ||
+            startDatetime != time.startDatetime ||
+            dayChangeIntervalSeconds != time.dayChangeIntervalSeconds ||
+            silentHours != time.silentHours
 
     fun isSilentTime(dayStartDatetime: LocalDateTime): Boolean {
         silentHours ?: return false
@@ -67,14 +66,13 @@ data class VillageTime(
             newStartDatetime = newStartDatetime.plusDays(1)
         }
         return this.copy(
-            startDatetime = newStartDatetime
+            startDatetime = newStartDatetime,
         )
     }
 
-    fun toEpilogue(villageDays: VillageDays): VillageTime {
-        return this.copy(
+    fun toEpilogue(villageDays: VillageDays): VillageTime =
+        this.copy(
             epilogueDay = villageDays.latestDay().day,
-            epilogueStartDatetime = FirewolfDateUtil.currentLocalDateTime()
+            epilogueStartDatetime = FirewolfDateUtil.currentLocalDateTime(),
         )
-    }
 }

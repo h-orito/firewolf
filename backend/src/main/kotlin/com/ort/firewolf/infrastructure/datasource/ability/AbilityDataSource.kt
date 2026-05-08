@@ -9,16 +9,16 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class AbilityDataSource(
-    val abilityBhv: AbilityBhv
+    val abilityBhv: AbilityBhv,
 ) {
-
     // ===================================================================================
     //                                                                              Select
     //                                                                              ======
     fun findAbilities(villageId: Int): VillageAbilities {
-        val abilityList = abilityBhv.selectList {
-            it.query().queryVillageDay().setVillageId_Equal(villageId)
-        }
+        val abilityList =
+            abilityBhv.selectList {
+                it.query().queryVillageDay().setVillageId_Equal(villageId)
+            }
         return VillageAbilities(abilityList.map { convertToAbilityToVillageAbility(it) })
     }
 
@@ -30,7 +30,10 @@ class AbilityDataSource(
         insertAbility(villageAbility)
     }
 
-    fun updateDifference(before: VillageAbilities, after: VillageAbilities) {
+    fun updateDifference(
+        before: VillageAbilities,
+        after: VillageAbilities,
+    ) {
         after.list.drop(before.list.size).forEach {
             insertAbility(it)
         }
@@ -67,7 +70,7 @@ class AbilityDataSource(
             villageDayId = ability.villageDayId,
             myselfId = ability.villagePlayerId,
             targetId = ability.targetVillagePlayerId,
-            abilityType = com.ort.firewolf.domain.model.ability.AbilityType(ability.abilityTypeCodeAsAbilityType)
+            abilityType = com.ort.firewolf.domain.model.ability.AbilityType(ability.abilityTypeCodeAsAbilityType),
         )
     }
 }

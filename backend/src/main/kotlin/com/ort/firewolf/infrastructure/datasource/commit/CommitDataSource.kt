@@ -8,9 +8,8 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class CommitDataSource(
-    val commitBhv: CommitBhv
+    val commitBhv: CommitBhv,
 ) {
-
     // ===================================================================================
     //                                                                              Select
     //                                                                              ======
@@ -22,41 +21,45 @@ class CommitDataSource(
      */
     fun findCommit(
         village: com.ort.firewolf.domain.model.village.Village,
-        participant: VillageParticipant
+        participant: VillageParticipant,
     ): com.ort.firewolf.domain.model.commit.Commit? {
         val latestDay = village.day.latestDay()
 
-        val optCommit = commitBhv.selectEntity {
-            it.query().setVillageDayId_Equal(latestDay.id)
-            it.query().setVillagePlayerId_Equal(participant.id)
-        }
+        val optCommit =
+            commitBhv.selectEntity {
+                it.query().setVillageDayId_Equal(latestDay.id)
+                it.query().setVillagePlayerId_Equal(participant.id)
+            }
         return optCommit.map { c ->
             com.ort.firewolf.domain.model.commit.Commit(
                 villageDayId = c.villageDayId,
                 myselfId = c.villagePlayerId,
-                isCommitting = true
+                isCommitting = true,
             )
         }.orElse(null)
     }
 
     fun findCommits(villageId: Int): Commits {
-        val commitList = commitBhv.selectList {
-            it.query().queryVillageDay().setVillageId_Equal(villageId)
-        }
-        return Commits(
-            list = commitList.map { c ->
-                com.ort.firewolf.domain.model.commit.Commit(
-                    villageDayId = c.villageDayId,
-                    myselfId = c.villagePlayerId,
-                    isCommitting = true
-                )
+        val commitList =
+            commitBhv.selectList {
+                it.query().queryVillageDay().setVillageId_Equal(villageId)
             }
+        return Commits(
+            list =
+                commitList.map { c ->
+                    com.ort.firewolf.domain.model.commit.Commit(
+                        villageDayId = c.villageDayId,
+                        myselfId = c.villagePlayerId,
+                        isCommitting = true,
+                    )
+                },
         )
     }
 
     // ===================================================================================
     //                                                                              Update
     //                                                                              ======
+
     /**
      * コミット/取り消し
      *

@@ -12,23 +12,23 @@ import org.springframework.stereotype.Service
 
 @Service("howlingWolfUserDetailsService")
 class FirewolfUserDetailService(
-    val playerBhv: PlayerBhv
+    val playerBhv: PlayerBhv,
 ) : UserDetailsService {
-
     // ===================================================================================
     //                                                                             Execute
     //                                                                           =========
     override fun loadUserByUsername(uid: String?): UserDetails {
         uid ?: throw UsernameNotFoundException("uid is empty")
 
-        val optPlayer = playerBhv.selectEntity {
-            it.query().setUid_Equal(uid)
-        }
+        val optPlayer =
+            playerBhv.selectEntity {
+                it.query().setUid_Equal(uid)
+            }
 
         return optPlayer.map {
             FirewolfUser(
                 uid = it.uid,
-                authority = it.authorityCodeAsAuthority
+                authority = it.authorityCodeAsAuthority,
             )
         }.orElseThrow {
             UsernameNotFoundException("User not found for userId: $uid")
@@ -49,10 +49,9 @@ class FirewolfUserDetailService(
         player.shouldCheckAccessInfo = true
         playerBhv.insert(player)
 
-
         return FirewolfUser(
             uid = uid,
-            authority = CDef.Authority.プレイヤー
+            authority = CDef.Authority.プレイヤー,
         )
     }
 }

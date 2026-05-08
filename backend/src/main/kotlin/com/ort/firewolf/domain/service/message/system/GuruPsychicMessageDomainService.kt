@@ -8,11 +8,10 @@ import org.springframework.stereotype.Service
 
 @Service
 class GuruPsychicMessageDomainService : MessageTypeDomainService {
-
     override fun isViewable(
         village: Village,
         myself: VillageParticipant?,
         player: Player?,
-        day: Int
+        day: Int,
     ): Boolean = village.isViewableGuruPsychicMessage() || myself?.isViewableGuruPsychicMessage() ?: false
 }

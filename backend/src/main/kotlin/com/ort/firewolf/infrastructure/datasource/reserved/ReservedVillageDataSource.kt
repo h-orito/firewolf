@@ -8,19 +8,19 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class ReservedVillageDataSource(
-    val reservedVillageBhv: ReservedVillageBhv
+    val reservedVillageBhv: ReservedVillageBhv,
 ) {
-
     fun findReservedVillages(excludePast: Boolean = true): ReservedVillages {
-        val reservedVillageList = reservedVillageBhv.selectList {
-            if (excludePast) {
-                it.query().setCreateDatetime_GreaterThan(FirewolfDateUtil.currentLocalDateTime())
+        val reservedVillageList =
+            reservedVillageBhv.selectList {
+                if (excludePast) {
+                    it.query().setCreateDatetime_GreaterThan(FirewolfDateUtil.currentLocalDateTime())
+                }
+                it.query().addOrderBy_CreateDatetime_Asc()
+                it.query().addOrderBy_StartDatetime_Asc()
             }
-            it.query().addOrderBy_CreateDatetime_Asc()
-            it.query().addOrderBy_StartDatetime_Asc()
-        }
         return ReservedVillages(
-            list = reservedVillageList.map { convertToReservedVillage(it) }
+            list = reservedVillageList.map { convertToReservedVillage(it) },
         )
     }
 
@@ -30,7 +30,7 @@ class ReservedVillageDataSource(
     }
 
     fun registerReservedVillage(
-        reservedVillage: com.ort.firewolf.domain.model.reserved.ReservedVillage
+        reservedVillage: com.ort.firewolf.domain.model.reserved.ReservedVillage,
     ): com.ort.firewolf.domain.model.reserved.ReservedVillage {
         val entity = ReservedVillage()
         entity.createDatetime = reservedVillage.villageCreateDatetime
@@ -56,7 +56,7 @@ class ReservedVillageDataSource(
             villageStartDatetime = reservedVillage.startDatetime,
             organization = reservedVillage.organization,
             silentHours = reservedVillage.silentHours,
-            availableDummySkill = reservedVillage.isAvailableDummySkill
+            availableDummySkill = reservedVillage.isAvailableDummySkill,
         )
     }
 }

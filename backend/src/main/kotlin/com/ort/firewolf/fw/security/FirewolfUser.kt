@@ -1,17 +1,16 @@
 package com.ort.firewolf.fw.security
 
 import com.ort.dbflute.allcommon.CDef
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
-import jakarta.servlet.http.HttpServletRequest
 
 data class FirewolfUser(
-        val uid: String,
-        val authority: CDef.Authority,
-        var ipAddress: String? = null
+    val uid: String,
+    val authority: CDef.Authority,
+    var ipAddress: String? = null,
 ) : UserDetails {
-
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
         return mutableListOf(SimpleGrantedAuthority(this.authority.code()))
     }
@@ -43,6 +42,9 @@ data class FirewolfUser(
 
 fun HttpServletRequest.getIpAddress(): String {
     val xForwardedFor = this.getHeader("X-Forwarded-For")
-    return if (xForwardedFor.isNullOrEmpty()) this.remoteAddr
-    else xForwardedFor
+    return if (xForwardedFor.isNullOrEmpty()) {
+        this.remoteAddr
+    } else {
+        xForwardedFor
+    }
 }

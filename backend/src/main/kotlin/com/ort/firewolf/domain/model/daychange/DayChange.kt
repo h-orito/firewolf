@@ -14,26 +14,28 @@ data class DayChange(
     val messages: Messages,
     val votes: VillageVotes,
     val abilities: VillageAbilities,
-    val players: Players
+    val players: Players,
 ) {
-
     constructor(
         village: Village,
         votes: VillageVotes,
         abilities: VillageAbilities,
-        players: Players
+        players: Players,
     ) : this(
         isChange = false,
         village = village,
         messages = Messages(listOf()),
         votes = votes,
         abilities = abilities,
-        players = players
+        players = players,
     )
 
     fun setIsChange(beforeDayChange: DayChange): DayChange {
-        return if (isChange) this
-        else this.copy(isChange = existsDifference(beforeDayChange))
+        return if (isChange) {
+            this
+        } else {
+            this.copy(isChange = existsDifference(beforeDayChange))
+        }
     }
 
     // ===================================================================================

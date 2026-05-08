@@ -18,34 +18,35 @@ data class DebugVillageView(
     val setting: VillageSettingsView,
     val participant: VillageParticipantsView,
     val spectator: VillageParticipantsView,
-    val day: VillageDays
+    val day: VillageDays,
 ) {
-
     constructor(
         village: Village,
         charas: Charas,
         players: Players,
-        createPlayer: Player
+        createPlayer: Player,
     ) : this(
         id = village.id,
         name = village.name,
         creatorPlayer = PlayerView(createPlayer),
         status = village.status,
         setting = VillageSettingsView(village.setting),
-        participant = VillageParticipantsView(
-            village = village,
-            participants = village.participant,
-            charas = charas,
-            players = players,
-            shouldHidePlayer = false
-        ),
-        spectator = VillageParticipantsView(
-            village = village,
-            participants = village.spectator,
-            charas = charas,
-            players = players,
-            shouldHidePlayer = false
-        ),
-        day = village.day
+        participant =
+            VillageParticipantsView(
+                village = village,
+                participants = village.participant,
+                charas = charas,
+                players = players,
+                shouldHidePlayer = false,
+            ),
+        spectator =
+            VillageParticipantsView(
+                village = village,
+                participants = village.spectator,
+                charas = charas,
+                players = players,
+                shouldHidePlayer = false,
+            ),
+        day = village.day,
     )
 }

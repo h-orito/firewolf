@@ -9,7 +9,7 @@ data class ReservedVillage(
     val villageStartDatetime: LocalDateTime,
     val organization: String,
     val silentHours: Int,
-    val availableDummySkill: Boolean
+    val availableDummySkill: Boolean,
 ) {
     fun shouldCreate(): Boolean = villageCreateDatetime.isBefore(FirewolfDateUtil.currentLocalDateTime())
 }

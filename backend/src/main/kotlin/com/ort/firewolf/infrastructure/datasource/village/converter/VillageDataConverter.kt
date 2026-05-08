@@ -35,14 +35,13 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 object VillageDataConverter {
-
     const val FLG_TRUE = "1"
     const val FLG_FALSE = "0"
     val DATETIME_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss")
 
     fun convertVillageListToVillages(villageList: ListResultBean<Village>): Villages {
         return Villages(
-            list = villageList.map { convertVillageToSimpleVillage(it) }
+            list = villageList.map { convertVillageToSimpleVillage(it) },
         )
     }
 
@@ -55,18 +54,21 @@ object VillageDataConverter {
             creatorPlayerId = village.createPlayerId,
             status = VillageStatus(village.villageStatusCodeAsVillageStatus),
             setting = convertVillageSettingListToVillageSetting(village),
-            participant = VillageParticipants(
-                count = participantList.size,
-                memberList = participantList.map { convertVillagePlayerToParticipant(it) }
-            ),
-            spectator = VillageParticipants(
-                count = visitorList.size,
-                memberList = visitorList.map { convertVillagePlayerToParticipant(it) }
-            ),
-            day = VillageDays(
-                dayList = village.villageDayList.map { convertVillageDayToVillageDay(it) }
-            ),
-            winCamp = village.winCampCodeAsCamp?.let { com.ort.firewolf.domain.model.camp.Camp(it) }
+            participant =
+                VillageParticipants(
+                    count = participantList.size,
+                    memberList = participantList.map { convertVillagePlayerToParticipant(it) },
+                ),
+            spectator =
+                VillageParticipants(
+                    count = visitorList.size,
+                    memberList = visitorList.map { convertVillagePlayerToParticipant(it) },
+                ),
+            day =
+                VillageDays(
+                    dayList = village.villageDayList.map { convertVillageDayToVillageDay(it) },
+                ),
+            winCamp = village.winCampCodeAsCamp?.let { com.ort.firewolf.domain.model.camp.Camp(it) },
         )
     }
 
@@ -77,7 +79,7 @@ object VillageDataConverter {
             day = day,
             noonnight = villageDay.noonnightCode,
             startDatetime = villageDay.registerDatetime,
-            dayChangeDatetime = villageDay.daychangeDatetime
+            dayChangeDatetime = villageDay.daychangeDatetime,
         )
     }
 
@@ -93,126 +95,152 @@ object VillageDataConverter {
             setting = convertVillageSettingListToVillageSetting(village),
             participant = VillageParticipants(count = village.participantCount),
             spectator = VillageParticipants(count = village.visitorCount),
-            day = VillageDays( // 最新の1日だけ
-                dayList = village.villageDayList.firstOrNull()?.let {
-                    listOf(convertVillageDayToVillageDay(it))
-                }.orEmpty()
-            ),
-            winCamp = village.winCampCodeAsCamp?.let { com.ort.firewolf.domain.model.camp.Camp(it) }
+            day =
+                VillageDays( // 最新の1日だけ
+                    dayList =
+                        village.villageDayList.firstOrNull()?.let {
+                            listOf(convertVillageDayToVillageDay(it))
+                        }.orEmpty(),
+                ),
+            winCamp = village.winCampCodeAsCamp?.let { com.ort.firewolf.domain.model.camp.Camp(it) },
         )
     }
 
-    private fun convertVillageSettingListToVillageSetting(
-        village: Village
-    ): VillageSettings {
+    private fun convertVillageSettingListToVillageSetting(village: Village): VillageSettings {
         val settingList = village.villageSettingList
         val restrictList = village.messageRestrictionList
         return VillageSettings(
-            capacity = PersonCapacity.invoke(
-                min = detectItemText(settingList, CDef.VillageSettingItem.最低人数)?.toInt(),
-                max = detectItemText(settingList, CDef.VillageSettingItem.最大人数)?.toInt()
-            ),
-            time = VillageTime.invoke(
-                termType = detectItemText(settingList, CDef.VillageSettingItem.期間形式),
-                prologueStartDatetime = village.registerDatetime,
-                epilogueDay = village.epilogueDay,
-                epilogueStartDatetime = Optional.ofNullable(village.epilogueDay).map { epilogueDay ->
-                    village.villageDayList.firstOrNull { it.day == epilogueDay - 1 }?.daychangeDatetime
-                }.orElse(null),
-                startDatetime = detectItemText(settingList, CDef.VillageSettingItem.開始予定日時)?.let {
-                    LocalDateTime.parse(
-                        it,
-                        DATETIME_FORMATTER
-                    )
-                },
-                dayChangeIntervalSeconds = detectItemText(settingList, CDef.VillageSettingItem.更新間隔秒)?.toInt(),
-                silentHours = detectItemText(settingList, CDef.VillageSettingItem.沈黙時間)?.toInt()
-            ),
-            charachip = VillageCharachip.invoke(
-                dummyCharaId = detectItemText(settingList, CDef.VillageSettingItem.ダミーキャラid)?.toInt(),
-                dummyCharaShortName = detectItemText(settingList, CDef.VillageSettingItem.ダミーキャラ略称).orEmpty(),
-                dummyCharaName = detectItemText(settingList, CDef.VillageSettingItem.ダミーキャラ名).orEmpty(),
-                dummyCharaDay0Message = detectItemText(
-                    settingList,
-                    CDef.VillageSettingItem.プロローグダミー発言
-                ).orEmpty(),
-                dummyCharaDay1Message = detectItemText(settingList, CDef.VillageSettingItem.N1日目ダミー発言).orEmpty(),
-                charachipIds = village.villageCharaGroupList.map { it.charaGroupId }
-            ),
+            capacity =
+                PersonCapacity.invoke(
+                    min = detectItemText(settingList, CDef.VillageSettingItem.最低人数)?.toInt(),
+                    max = detectItemText(settingList, CDef.VillageSettingItem.最大人数)?.toInt(),
+                ),
+            time =
+                VillageTime.invoke(
+                    termType = detectItemText(settingList, CDef.VillageSettingItem.期間形式),
+                    prologueStartDatetime = village.registerDatetime,
+                    epilogueDay = village.epilogueDay,
+                    epilogueStartDatetime =
+                        Optional.ofNullable(village.epilogueDay).map { epilogueDay ->
+                            village.villageDayList.firstOrNull { it.day == epilogueDay - 1 }?.daychangeDatetime
+                        }.orElse(null),
+                    startDatetime =
+                        detectItemText(settingList, CDef.VillageSettingItem.開始予定日時)?.let {
+                            LocalDateTime.parse(
+                                it,
+                                DATETIME_FORMATTER,
+                            )
+                        },
+                    dayChangeIntervalSeconds = detectItemText(settingList, CDef.VillageSettingItem.更新間隔秒)?.toInt(),
+                    silentHours = detectItemText(settingList, CDef.VillageSettingItem.沈黙時間)?.toInt(),
+                ),
+            charachip =
+                VillageCharachip.invoke(
+                    dummyCharaId = detectItemText(settingList, CDef.VillageSettingItem.ダミーキャラid)?.toInt(),
+                    dummyCharaShortName = detectItemText(settingList, CDef.VillageSettingItem.ダミーキャラ略称).orEmpty(),
+                    dummyCharaName = detectItemText(settingList, CDef.VillageSettingItem.ダミーキャラ名).orEmpty(),
+                    dummyCharaDay0Message =
+                        detectItemText(
+                            settingList,
+                            CDef.VillageSettingItem.プロローグダミー発言,
+                        ).orEmpty(),
+                    dummyCharaDay1Message = detectItemText(settingList, CDef.VillageSettingItem.N1日目ダミー発言).orEmpty(),
+                    charachipIds = village.villageCharaGroupList.map { it.charaGroupId },
+                ),
             organizations = VillageOrganizations.invoke(detectItemText(settingList, CDef.VillageSettingItem.構成)),
-            rules = VillageRules.invoke(
-                openVote = detectItemText(settingList, CDef.VillageSettingItem.記名投票か)?.let { it == FLG_TRUE },
-                availableSkillRequest = detectItemText(
-                    settingList,
-                    CDef.VillageSettingItem.役職希望可能か
-                )?.let { it == FLG_TRUE },
-                availableSpectate = detectItemText(
-                    settingList,
-                    CDef.VillageSettingItem.見学可能か
-                )?.let { it == FLG_TRUE },
-                openSkillInGrave = detectItemText(
-                    settingList,
-                    CDef.VillageSettingItem.墓下役職公開ありか
-                )?.let { it == FLG_TRUE },
-                visibleGraveMessage = detectItemText(
-                    settingList,
-                    CDef.VillageSettingItem.墓下見学発言を生存者が見られるか
-                )?.let { it == FLG_TRUE },
-                availableSuddenlyDeath = detectItemText(
-                    settingList,
-                    CDef.VillageSettingItem.突然死ありか
-                )?.let { it == FLG_TRUE },
-                availableCommit = detectItemText(
-                    settingList,
-                    CDef.VillageSettingItem.コミット可能か
-                )?.let { it == FLG_TRUE },
-                autoGenerated = detectItemText(
-                    settingList,
-                    CDef.VillageSettingItem.自動生成村か
-                )?.let { it == FLG_TRUE },
-                availableDummySkill = detectItemText(
-                    settingList,
-                    CDef.VillageSettingItem.役欠けありか
-                )?.let { it == FLG_TRUE },
-                availableAction = detectItemText(
-                    settingList,
-                    CDef.VillageSettingItem.アクション可能か
-                )?.let { it == FLG_TRUE },
-                availableSecretSay = detectItemText(
-                    settingList,
-                    CDef.VillageSettingItem.秘話可能か
-                )?.let { it == FLG_TRUE },
-                availableGuardSameTarget = detectItemText(
-                    settingList,
-                    CDef.VillageSettingItem.連続護衛可能か
-                )?.let { it == FLG_TRUE },
-                messageRestrict = VillageMessageRestricts(
-                    existRestricts = restrictList.isNotEmpty(),
-                    restrictList = restrictList.map {
-                        VillageMessageRestrict(
-                            type = com.ort.firewolf.domain.model.message.MessageType(CDef.MessageType.codeOf(it.messageTypeCode)),
-                            count = it.messageMaxNum,
-                            length = it.messageMaxLength
-                        )
-                    }
-                )
-            ),
-            tags = VillageTags(
-                list = village.villageTagList.map { it.villageTagItemCode }
-            ),
-            password = VillagePassword(
-                joinPassword = detectItemText(settingList, CDef.VillageSettingItem.入村パスワード)
-            )
+            rules =
+                VillageRules.invoke(
+                    openVote = detectItemText(settingList, CDef.VillageSettingItem.記名投票か)?.let { it == FLG_TRUE },
+                    availableSkillRequest =
+                        detectItemText(
+                            settingList,
+                            CDef.VillageSettingItem.役職希望可能か,
+                        )?.let { it == FLG_TRUE },
+                    availableSpectate =
+                        detectItemText(
+                            settingList,
+                            CDef.VillageSettingItem.見学可能か,
+                        )?.let { it == FLG_TRUE },
+                    openSkillInGrave =
+                        detectItemText(
+                            settingList,
+                            CDef.VillageSettingItem.墓下役職公開ありか,
+                        )?.let { it == FLG_TRUE },
+                    visibleGraveMessage =
+                        detectItemText(
+                            settingList,
+                            CDef.VillageSettingItem.墓下見学発言を生存者が見られるか,
+                        )?.let { it == FLG_TRUE },
+                    availableSuddenlyDeath =
+                        detectItemText(
+                            settingList,
+                            CDef.VillageSettingItem.突然死ありか,
+                        )?.let { it == FLG_TRUE },
+                    availableCommit =
+                        detectItemText(
+                            settingList,
+                            CDef.VillageSettingItem.コミット可能か,
+                        )?.let { it == FLG_TRUE },
+                    autoGenerated =
+                        detectItemText(
+                            settingList,
+                            CDef.VillageSettingItem.自動生成村か,
+                        )?.let { it == FLG_TRUE },
+                    availableDummySkill =
+                        detectItemText(
+                            settingList,
+                            CDef.VillageSettingItem.役欠けありか,
+                        )?.let { it == FLG_TRUE },
+                    availableAction =
+                        detectItemText(
+                            settingList,
+                            CDef.VillageSettingItem.アクション可能か,
+                        )?.let { it == FLG_TRUE },
+                    availableSecretSay =
+                        detectItemText(
+                            settingList,
+                            CDef.VillageSettingItem.秘話可能か,
+                        )?.let { it == FLG_TRUE },
+                    availableGuardSameTarget =
+                        detectItemText(
+                            settingList,
+                            CDef.VillageSettingItem.連続護衛可能か,
+                        )?.let { it == FLG_TRUE },
+                    messageRestrict =
+                        VillageMessageRestricts(
+                            existRestricts = restrictList.isNotEmpty(),
+                            restrictList =
+                                restrictList.map {
+                                    VillageMessageRestrict(
+                                        type =
+                                            com.ort.firewolf.domain.model.message.MessageType(
+                                                CDef.MessageType.codeOf(it.messageTypeCode),
+                                            ),
+                                        count = it.messageMaxNum,
+                                        length = it.messageMaxLength,
+                                    )
+                                },
+                        ),
+                ),
+            tags =
+                VillageTags(
+                    list = village.villageTagList.map { it.villageTagItemCode },
+                ),
+            password =
+                VillagePassword(
+                    joinPassword = detectItemText(settingList, CDef.VillageSettingItem.入村パスワード),
+                ),
         )
     }
 
     private fun convertVillagePlayerToParticipant(vp: VillagePlayer): VillageParticipant {
         return VillageParticipant(
             id = vp.villagePlayerId,
-            charaName = VillageParticipantName(
-                name = vp.charaName,
-                shortName = vp.charaShortName
-            ),
+            charaName =
+                VillageParticipantName(
+                    name = vp.charaName,
+                    shortName = vp.charaShortName,
+                ),
             charaId = vp.charaId,
             playerId = vp.playerId,
             dead = if (vp.isDead) convertToDeadReasonToDead(vp) else null,
@@ -220,19 +248,22 @@ object VillageDataConverter {
             isGone = vp.isGone,
             status = mapVillageParticipantStatus(vp),
             skill = if (vp.skillCodeAsSkill == null) null else Skill(vp.skillCodeAsSkill),
-            skillRequest = SkillRequest(
-                first = Skill(vp.requestSkillCodeAsSkill),
-                second = Skill(vp.secondRequestSkillCodeAsSkill)
-            ),
+            skillRequest =
+                SkillRequest(
+                    first = Skill(vp.requestSkillCodeAsSkill),
+                    second = Skill(vp.secondRequestSkillCodeAsSkill),
+                ),
             isWin = vp.isWin,
             camp = vp.campCode?.let { CDef.Camp.codeOf(it).toModel() },
-            commigOuts = ComingOuts(
-                list = vp.comingOutList.map {
-                    ComingOut(Skill(it.skillCodeAsSkill))
-                }
-            ),
+            commigOuts =
+                ComingOuts(
+                    list =
+                        vp.comingOutList.map {
+                            ComingOut(Skill(it.skillCodeAsSkill))
+                        },
+                ),
             ipAddresses = vp.villagePlayerAccessInfoList.map { it.ipAddress },
-            notification = mapNotification(vp)
+            notification = mapNotification(vp),
         )
     }
 
@@ -240,7 +271,10 @@ object VillageDataConverter {
         return Dead(vp.deadReasonCodeAsDeadReason, convertVillageDayToVillageDay(vp.villageDay.get()))
     }
 
-    private fun detectItemText(settingList: List<VillageSetting>, item: CDef.VillageSettingItem): String? {
+    private fun detectItemText(
+        settingList: List<VillageSetting>,
+        item: CDef.VillageSettingItem,
+    ): String? {
         return settingList.find { setting -> setting.villageSettingItemCodeAsVillageSettingItem == item }?.villageSettingText
     }
 
@@ -259,17 +293,19 @@ object VillageDataConverter {
         return villagePlayer.villagePlayerNotificationAsOne.map {
             VillageParticipantNotificationCondition(
                 discordWebhookUrl = it.discordWebhookUrl,
-                village = VillageParticipantNotificationCondition.VillageCondition(
-                    start = it.villageStart,
-                    dayChange = it.villageDaychange,
-                    epilogue = it.villageEpilogue
-                ),
-                message = VillageParticipantNotificationCondition.MessageCondition(
-                    secretSay = it.receiveSecretSay,
-                    abilitySay = it.receiveAbilitySay,
-                    anchor = it.receiveAnchorSay,
-                    keywords = it.keyword?.split(" ") ?: emptyList()
-                )
+                village =
+                    VillageParticipantNotificationCondition.VillageCondition(
+                        start = it.villageStart,
+                        dayChange = it.villageDaychange,
+                        epilogue = it.villageEpilogue,
+                    ),
+                message =
+                    VillageParticipantNotificationCondition.MessageCondition(
+                        secretSay = it.receiveSecretSay,
+                        abilitySay = it.receiveAbilitySay,
+                        anchor = it.receiveAnchorSay,
+                        keywords = it.keyword?.split(" ") ?: emptyList(),
+                    ),
             )
         }.orElse(null)
     }

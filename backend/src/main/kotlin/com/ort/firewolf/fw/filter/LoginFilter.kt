@@ -4,6 +4,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.ort.firewolf.fw.security.FirewolfUser
 import com.ort.firewolf.fw.security.FirewolfUserDetailService
 import com.ort.firewolf.fw.security.getIpAddress
+import jakarta.servlet.FilterChain
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
@@ -11,21 +14,18 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
-import jakarta.servlet.FilterChain
-import jakarta.servlet.http.HttpServletRequest
-import jakarta.servlet.http.HttpServletResponse
 
 /**
  * see https://qiita.com/mr-hisa-child/items/5ed2ae2fe4c86d4bb5c7
  */
 @Component
 class LoginFilter(
-    val userService: FirewolfUserDetailService
+    val userService: FirewolfUserDetailService,
 ) : OncePerRequestFilter() {
-
     override fun doFilterInternal(
-        request: HttpServletRequest, response: HttpServletResponse,
-        filterChain: FilterChain
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        filterChain: FilterChain,
     ) {
         // コンテキストにログインユーザ情報をセット
         val token = PreAuthenticatedAuthenticationToken(auth(request), null)
@@ -35,7 +35,6 @@ class LoginFilter(
 
     // ログインユーザ情報を取得
     private fun auth(request: HttpServletRequest): UserDetails? {
-
         // リクエストヘッダからJWTを取り出す
         val token: String? = getToken(request)
         token ?: return null

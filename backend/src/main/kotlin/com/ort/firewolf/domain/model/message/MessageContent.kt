@@ -8,17 +8,16 @@ data class MessageContent(
     val num: Int?,
     val count: Int?,
     val text: String,
-    val faceCode: String?
+    val faceCode: String?,
 ) {
     companion object {
-
         const val defaultLengthMax = 400
         const val defaultLineMax = 20
 
         operator fun invoke(
             messageType: String,
             text: String,
-            faceCode: String?
+            faceCode: String?,
         ): MessageContent {
             val cdefMessageType = checkNotNull(CDef.MessageType.codeOf(messageType))
             return MessageContent(
@@ -26,7 +25,7 @@ data class MessageContent(
                 num = null,
                 count = null,
                 text = removeSurrogate(text.trim()),
-                faceCode = faceCode
+                faceCode = faceCode,
             )
         }
 
@@ -44,7 +43,10 @@ data class MessageContent(
 
     fun shouldNotify(): Boolean = text.contains("@国主") || text.contains("＠国主")
 
-    fun assertMessageLength(maxLength: Int = defaultLengthMax, lineMax: Int = defaultLineMax) {
+    fun assertMessageLength(
+        maxLength: Int = defaultLengthMax,
+        lineMax: Int = defaultLineMax,
+    ) {
         // 行数
         if (text.replace("\r\n", "\n").split("\n").size > lineMax) throw FirewolfBadRequestException("行数オーバーです")
         // 文字数

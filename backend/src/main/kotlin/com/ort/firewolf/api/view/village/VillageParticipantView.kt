@@ -28,7 +28,7 @@ data class VillageParticipantView(
     val win: Boolean?,
     val camp: Camp?,
     val commingOuts: ComingOuts,
-    val notification: VillageParticipantNotificationCondition?
+    val notification: VillageParticipantNotificationCondition?,
 ) {
     constructor(
         village: Village,
@@ -36,14 +36,18 @@ data class VillageParticipantView(
         players: Players,
         charas: Charas,
         shouldHidePlayer: Boolean,
-        shouldHideNotificationSetting: Boolean = true
+        shouldHideNotificationSetting: Boolean = true,
     ) : this(
         id = village.memberById(villageParticipantId).id,
         name = village.memberById(villageParticipantId).name(),
         charaName = village.memberById(villageParticipantId).charaName,
         chara = CharaView(charas.chara(village.memberById(villageParticipantId).charaId)),
-        player = if (shouldHidePlayer || village.memberById(villageParticipantId).playerId == null) null
-        else PlayerView(players.list.find { it.id == village.memberById(villageParticipantId).playerId }!!),
+        player =
+            if (shouldHidePlayer || village.memberById(villageParticipantId).playerId == null) {
+                null
+            } else {
+                PlayerView(players.list.find { it.id == village.memberById(villageParticipantId).playerId }!!)
+            },
         status = if (shouldHidePlayer) VillageParticipantStatus() else village.memberById(villageParticipantId).status,
         dead = village.memberById(villageParticipantId).dead?.let { DeadView(it, shouldHidePlayer) },
         spectator = village.memberById(villageParticipantId).isSpectator,
@@ -52,6 +56,6 @@ data class VillageParticipantView(
         win = village.memberById(villageParticipantId).isWin,
         camp = if (shouldHidePlayer) null else village.memberById(villageParticipantId).camp,
         commingOuts = village.memberById(villageParticipantId).commigOuts,
-        notification = if (shouldHideNotificationSetting) null else village.memberById(villageParticipantId).notification
+        notification = if (shouldHideNotificationSetting) null else village.memberById(villageParticipantId).notification,
     )
 }

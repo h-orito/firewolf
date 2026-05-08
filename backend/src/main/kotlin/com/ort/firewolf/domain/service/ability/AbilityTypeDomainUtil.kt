@@ -9,23 +9,27 @@ internal fun getOnlyOneTimeAliveTargets(
     village: Village,
     myself: VillageParticipant,
     abilities: VillageAbilities,
-    abilityType: AbilityType
+    abilityType: AbilityType,
 ): List<VillageParticipant> {
     // 一度使うと使えない
-    return if (hasAlreadyUseAbility(village, myself, abilities, abilityType)) emptyList()
-    else village.notDummyParticipant()
-        .filterAlive()
-        .filterNotParticipant(myself)
-        .memberList
+    return if (hasAlreadyUseAbility(village, myself, abilities, abilityType)) {
+        emptyList()
+    } else {
+        village.notDummyParticipant()
+            .filterAlive()
+            .filterNotParticipant(myself)
+            .memberList
+    }
 }
 
 internal fun hasAlreadyUseAbility(
     village: Village,
     myself: VillageParticipant,
     abilities: VillageAbilities,
-    abilityType: AbilityType
-): Boolean = abilities
-    .filterByType(abilityType)
-    .filterByParticipantId(myself.id)
-    .filterPastDay(village.day.latestDay())
-    .list.isNotEmpty()
+    abilityType: AbilityType,
+): Boolean =
+    abilities
+        .filterByType(abilityType)
+        .filterByParticipantId(myself.id)
+        .filterPastDay(village.day.latestDay())
+        .list.isNotEmpty()

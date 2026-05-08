@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service
 
 @Service
 class GuruDomainService {
-
     fun processDayChangeAction(dayChange: DayChange): DayChange {
         // 導師がいない、または処刑・突然死がいない場合は何もしない
         val existsAliveGuru =
@@ -30,13 +29,15 @@ class GuruDomainService {
     //                                                                        ============
     private fun createGuruPrivateMessage(
         village: Village,
-        deadParticipant: VillageParticipant
+        deadParticipant: VillageParticipant,
     ): Message {
         val skill = village.participant.member(deadParticipant.id).skill!!.name
         val text = createGuruPrivateMessageString(deadParticipant, skill)
         return Message.createGuruPsychicPrivateMessage(text, village.day.latestDay().id)
     }
 
-    private fun createGuruPrivateMessageString(target: VillageParticipant, skill: String): String =
-        "${target.name()}は${skill}のようだ。"
+    private fun createGuruPrivateMessageString(
+        target: VillageParticipant,
+        skill: String,
+    ): String = "${target.name()}は${skill}のようだ。"
 }

@@ -3,11 +3,11 @@ package com.ort.firewolf.api.view.reserved
 import com.ort.firewolf.domain.model.reserved.ReservedVillages
 
 data class ReservedVillagesView(
-    val list: List<ReservedVillageView>
+    val list: List<ReservedVillageView>,
 ) {
     constructor(
-        reservedVillages: ReservedVillages
+        reservedVillages: ReservedVillages,
     ) : this(
-        list = reservedVillages.list.map { ReservedVillageView(it) }
+        list = reservedVillages.list.map { ReservedVillageView(it) },
     )
 }

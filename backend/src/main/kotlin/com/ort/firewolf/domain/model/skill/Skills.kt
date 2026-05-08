@@ -3,25 +3,28 @@ package com.ort.firewolf.domain.model.skill
 import com.ort.dbflute.allcommon.CDef
 
 data class Skills(
-    val list: List<Skill>
+    val list: List<Skill>,
 ) {
     companion object {
+        val all: Skills =
+            Skills(
+                list = CDef.Skill.listAll().map { it.toModel() },
+            ).filterNotSomeone().sorted()
 
-        val all: Skills = Skills(
-            list = CDef.Skill.listAll().map { it.toModel() }
-        ).filterNotSomeone().sorted()
+        val wolfs: Skills =
+            Skills(
+                list = CDef.Skill.listOfAvailableWerewolfSay().map { it.toModel() },
+            ).sorted()
 
-        val wolfs: Skills = Skills(
-            list = CDef.Skill.listOfAvailableWerewolfSay().map { it.toModel() }
-        ).sorted()
+        val masons: Skills =
+            Skills(
+                list = CDef.Skill.listOfRecognizableEachMason().map { it.toModel() },
+            ).sorted()
 
-        val masons: Skills = Skills(
-            list = CDef.Skill.listOfRecognizableEachMason().map { it.toModel() }
-        ).sorted()
-
-        val sympathizers: Skills = Skills(
-            list = CDef.Skill.listOfRecognizableEachSympathizer().map { it.toModel() }
-        ).sorted()
+        val sympathizers: Skills =
+            Skills(
+                list = CDef.Skill.listOfRecognizableEachSympathizer().map { it.toModel() },
+            ).sorted()
 
         val foxs: Skills = Skills(list = listOf(CDef.Skill.妖狐.toModel()))
     }

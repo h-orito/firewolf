@@ -2,16 +2,13 @@ package com.ort.firewolf.domain.model.village.setting
 
 data class VillagePassword(
     val joinPasswordRequired: Boolean,
-    val joinPassword: String?
+    val joinPassword: String?,
 ) {
     companion object {
-
-        operator fun invoke(
-            joinPassword: String?
-        ): VillagePassword {
+        operator fun invoke(joinPassword: String?): VillagePassword {
             return VillagePassword(
                 joinPasswordRequired = !joinPassword.isNullOrEmpty(),
-                joinPassword = joinPassword
+                joinPassword = joinPassword,
             )
         }
     }

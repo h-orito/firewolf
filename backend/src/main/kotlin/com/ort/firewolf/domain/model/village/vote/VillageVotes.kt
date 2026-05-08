@@ -4,9 +4,8 @@ import com.ort.firewolf.domain.model.village.Village
 import com.ort.firewolf.domain.model.village.VillageDay
 
 data class VillageVotes(
-    val list: List<VillageVote>
+    val list: List<VillageVote>,
 ) {
-
     fun filterLatestday(village: Village): VillageVotes = filterByDay(village.day.latestDay())
 
     fun filterYesterday(village: Village): VillageVotes = filterByDay(village.day.yesterday())
@@ -14,7 +13,7 @@ data class VillageVotes(
     fun addAll(voteList: List<VillageVote>): VillageVotes {
         if (voteList.isEmpty()) return this
         return this.copy(
-            list = list + voteList
+            list = list + voteList,
         )
     }
 
@@ -24,7 +23,7 @@ data class VillageVotes(
 
     private fun filterByDay(villageDay: VillageDay): VillageVotes {
         return this.copy(
-            list = list.filter { it.villageDayId == villageDay.id }
+            list = list.filter { it.villageDayId == villageDay.id },
         )
     }
 }

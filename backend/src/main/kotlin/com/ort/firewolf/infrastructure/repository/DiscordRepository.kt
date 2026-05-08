@@ -11,7 +11,6 @@ import org.springframework.web.client.RestTemplate
 
 @Repository
 class DiscordRepository {
-
     companion object {
         private val logger = LoggerFactory.getLogger(DiscordRepository::class.java)
     }
@@ -22,13 +21,17 @@ class DiscordRepository {
     @Value("\${discord.master-userid:}")
     private lateinit var masterUserId: String
 
-    fun post(villageId: Int, message: String) {
+    fun post(
+        villageId: Int,
+        message: String,
+    ) {
         if (webhookUrl.isEmpty()) return
         try {
             val restTemplate = RestTemplate()
-            val request = Request(
-                content = "<@!$masterUserId>\nhttps://firewolf.netlify.app/village?id=$villageId\n$message"
-            )
+            val request =
+                Request(
+                    content = "<@!$masterUserId>\nhttps://firewolf.netlify.app/village?id=$villageId\n$message",
+                )
             val formHeaders = HttpHeaders()
             formHeaders.contentType = MediaType.APPLICATION_JSON
             formHeaders.add(HttpHeaders.USER_AGENT, "RestTemplate")
@@ -43,17 +46,21 @@ class DiscordRepository {
         webhookUrl: String,
         villageId: Int,
         message: String,
-        shouldContainVillageUrl: Boolean = true
+        shouldContainVillageUrl: Boolean = true,
     ) {
         try {
             val restTemplate = RestTemplate()
             val content =
-                if (shouldContainVillageUrl) "https://firewolf.netlify.app/village?id=$villageId\n$message"
-                else message
-            val request = Request(
-                content = content,
-                username = "FIREWOLF ${villageId}村通知"
-            )
+                if (shouldContainVillageUrl) {
+                    "https://firewolf.netlify.app/village?id=$villageId\n$message"
+                } else {
+                    message
+                }
+            val request =
+                Request(
+                    content = content,
+                    username = "FIREWOLF ${villageId}村通知",
+                )
             val formHeaders = HttpHeaders()
             formHeaders.contentType = MediaType.APPLICATION_JSON
             formHeaders.add(HttpHeaders.USER_AGENT, "RestTemplate")

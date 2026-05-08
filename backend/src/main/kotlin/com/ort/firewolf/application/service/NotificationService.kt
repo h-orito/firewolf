@@ -11,15 +11,20 @@ import org.springframework.stereotype.Service
 @Service
 class NotificationService(
     private val discordRepository: DiscordRepository,
-    private val messageDomainService: MessageDomainService
+    private val messageDomainService: MessageDomainService,
 ) {
-
-    fun notifyToDeveloperIfNeeded(villageId: Int, message: Message) {
+    fun notifyToDeveloperIfNeeded(
+        villageId: Int,
+        message: Message,
+    ) {
         if (!message.shouldNotify()) return
         discordRepository.post(villageId, message.content.text)
     }
 
-    fun notifyToDeveloperTextIfNeeded(village: Village, text: String) {
+    fun notifyToDeveloperTextIfNeeded(
+        village: Village,
+        text: String,
+    ) {
         discordRepository.post(village.id, text)
     }
 
@@ -30,7 +35,7 @@ class NotificationService(
             discordRepository.postToWebhook(
                 webhookUrl = it.notification!!.discordWebhookUrl,
                 villageId = village.id,
-                message = "村が開始されました。"
+                message = "村が開始されました。",
             )
         }
     }
@@ -42,7 +47,7 @@ class NotificationService(
             discordRepository.postToWebhook(
                 webhookUrl = it.notification!!.discordWebhookUrl,
                 villageId = village.id,
-                message = "村がエピローグを迎えました。"
+                message = "村がエピローグを迎えました。",
             )
         }
     }
@@ -54,23 +59,26 @@ class NotificationService(
             discordRepository.postToWebhook(
                 webhookUrl = it.notification!!.discordWebhookUrl,
                 villageId = village.id,
-                message = "村の日付が${village.day.latestDay().day}日目に更新されました。"
+                message = "村の日付が${village.day.latestDay().day}日目に更新されました。",
             )
         }
     }
 
-    fun notifyTest(url: String, villageId: Int) {
+    fun notifyTest(
+        url: String,
+        villageId: Int,
+    ) {
         discordRepository.postToWebhook(
             webhookUrl = url,
             villageId = villageId,
-            message = "テスト通知です。"
+            message = "テスト通知です。",
         )
     }
 
     fun notifyReceiveMessageToCustomerIfNeeded(
         village: Village,
         players: Players,
-        message: Message
+        message: Message,
     ) {
         // 秘話→アンカー→キーワード→役職窓の順
         val alreadyNotifiedParticipantIds = mutableListOf<Int>()
@@ -101,7 +109,7 @@ class NotificationService(
                 webhookUrl = it.discordWebhookUrl,
                 villageId = village.id,
                 message = "${fromParticipant.name()}から秘話が届きました。",
-                shouldContainVillageUrl = false
+                shouldContainVillageUrl = false,
             )
             return toParticipant.id
         }
@@ -111,7 +119,7 @@ class NotificationService(
         village: Village,
         players: Players,
         message: Message,
-        alreadyNotifiedParticipantIds: List<Int>
+        alreadyNotifiedParticipantIds: List<Int>,
     ): List<Int> {
         val notifiedParticipantIds = mutableListOf<Int>()
         val fromParticipant = village.allParticipants().memberList.find { it.id == message.fromVillageParticipantId }
@@ -127,7 +135,7 @@ class NotificationService(
                     it,
                     player,
                     message.content.type.toCdef(),
-                    village.day.latestDay().day
+                    village.day.latestDay().day,
                 )
             }.filter {
                 it.notification?.message?.anchor ?: false
@@ -136,16 +144,17 @@ class NotificationService(
             }
             .toList().forEach {
                 val messageTypeName = message.content.type.name
-                val text = if (fromParticipant == null) {
-                    "${messageTypeName}であなたの発言がアンカー指定されました。"
-                } else {
-                    "${fromParticipant.name()}の${messageTypeName}であなたの発言がアンカー指定されました。"
-                }
+                val text =
+                    if (fromParticipant == null) {
+                        "${messageTypeName}であなたの発言がアンカー指定されました。"
+                    } else {
+                        "${fromParticipant.name()}の${messageTypeName}であなたの発言がアンカー指定されました。"
+                    }
                 discordRepository.postToWebhook(
                     webhookUrl = it.notification!!.discordWebhookUrl,
                     villageId = village.id,
                     message = text,
-                    shouldContainVillageUrl = false
+                    shouldContainVillageUrl = false,
                 )
                 notifiedParticipantIds.add(it.id)
             }
@@ -156,7 +165,7 @@ class NotificationService(
         village: Village,
         players: Players,
         message: Message,
-        alreadyNotifiedParticipantIds: List<Int>
+        alreadyNotifiedParticipantIds: List<Int>,
     ): List<Int> {
         val notifiedParticipantIds = mutableListOf<Int>()
         val fromParticipant = village.allParticipants().memberList.find { it.id == message.fromVillageParticipantId }
@@ -167,32 +176,33 @@ class NotificationService(
                 val keywords = it.notification?.message?.keywords
                 val player = players.player(it.playerId!!)
 
-                it.id != message.fromVillageParticipantId &&  // 自分の発言でない
-                        !alreadyNotifiedParticipantIds.contains(it.id) &&  // 通知済みでない
-                        // 発言を閲覧できる
-                        messageDomainService.isViewableMessage(
-                            village = village,
-                            myself = it,
-                            player = player,
-                            messageType = message.content.type.toCdef(),
-                            day = village.day.latestDay().day
-                        )
-                        // キーワードが含まれている
-                        && !keywords.isNullOrEmpty()
-                        && keywords.any { keyword -> message.content.text.contains(keyword) }
+                it.id != message.fromVillageParticipantId && // 自分の発言でない
+                    !alreadyNotifiedParticipantIds.contains(it.id) && // 通知済みでない
+                    // 発言を閲覧できる
+                    messageDomainService.isViewableMessage(
+                        village = village,
+                        myself = it,
+                        player = player,
+                        messageType = message.content.type.toCdef(),
+                        day = village.day.latestDay().day,
+                    ) &&
+                    // キーワードが含まれている
+                    !keywords.isNullOrEmpty() &&
+                    keywords.any { keyword -> message.content.text.contains(keyword) }
             }
             .toList().forEach {
                 val messageTypeName = message.content.type.name
-                val text = if (fromParticipant == null) {
-                    "${messageTypeName}に指定キーワードが含まれています。"
-                } else {
-                    "${fromParticipant.name()}の${messageTypeName}に指定キーワードが含まれています。"
-                }
+                val text =
+                    if (fromParticipant == null) {
+                        "${messageTypeName}に指定キーワードが含まれています。"
+                    } else {
+                        "${fromParticipant.name()}の${messageTypeName}に指定キーワードが含まれています。"
+                    }
                 discordRepository.postToWebhook(
                     webhookUrl = it.notification!!.discordWebhookUrl,
                     villageId = village.id,
                     message = text,
-                    shouldContainVillageUrl = false
+                    shouldContainVillageUrl = false,
                 )
                 notifiedParticipantIds.add(it.id)
             }
@@ -203,7 +213,7 @@ class NotificationService(
         village: Village,
         players: Players,
         message: Message,
-        alreadyNotifiedParticipantIds: List<Int>
+        alreadyNotifiedParticipantIds: List<Int>,
     ) {
         if (!message.content.type.isOwlViewableType()) return
         val fromParticipant =
@@ -218,7 +228,7 @@ class NotificationService(
                     it,
                     player,
                     message.content.type.toCdef(),
-                    village.day.latestDay().day
+                    village.day.latestDay().day,
                 )
             }.filter {
                 it.notification?.message?.abilitySay ?: false
@@ -227,7 +237,7 @@ class NotificationService(
                     webhookUrl = it.notification!!.discordWebhookUrl,
                     villageId = village.id,
                     message = "${fromParticipant.name()}から${message.content.type.name}が届きました。",
-                    shouldContainVillageUrl = false
+                    shouldContainVillageUrl = false,
                 )
             }
     }

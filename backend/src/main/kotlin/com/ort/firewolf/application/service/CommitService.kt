@@ -9,11 +9,14 @@ import org.springframework.stereotype.Service
 
 @Service
 class CommitService(
-    val commitDataSource: CommitDataSource
+    val commitDataSource: CommitDataSource,
 ) {
     fun findCommits(villageId: Int): Commits = commitDataSource.findCommits(villageId)
 
-    fun findCommit(village: Village, participant: VillageParticipant?): Commit? {
+    fun findCommit(
+        village: Village,
+        participant: VillageParticipant?,
+    ): Commit? {
         participant ?: return null
         return commitDataSource.findCommit(village, participant)
     }

@@ -10,17 +10,21 @@ data class VillageTimeView(
     val dayChangeIntervalSeconds: Int,
     val silentHours: Int?,
     val sayableStart: LocalTime,
-    val sayableEnd: LocalTime
+    val sayableEnd: LocalTime,
 ) {
     constructor(
-        villageTime: VillageTime
+        villageTime: VillageTime,
     ) : this(
         termType = villageTime.termType,
         startDatetime = villageTime.startDatetime,
         dayChangeIntervalSeconds = villageTime.dayChangeIntervalSeconds,
         silentHours = villageTime.silentHours,
-        sayableStart = if (villageTime.silentHours == null) villageTime.startDatetime.toLocalTime()
-        else villageTime.startDatetime.plusHours(villageTime.silentHours.toLong()).toLocalTime(),
-        sayableEnd = villageTime.startDatetime.toLocalTime()
+        sayableStart =
+            if (villageTime.silentHours == null) {
+                villageTime.startDatetime.toLocalTime()
+            } else {
+                villageTime.startDatetime.plusHours(villageTime.silentHours.toLong()).toLocalTime()
+            },
+        sayableEnd = villageTime.startDatetime.toLocalTime(),
     )
 }

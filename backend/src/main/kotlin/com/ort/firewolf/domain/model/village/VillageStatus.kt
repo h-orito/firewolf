@@ -4,14 +4,13 @@ import com.ort.dbflute.allcommon.CDef
 
 data class VillageStatus(
     val code: String,
-    val name: String
+    val name: String,
 ) {
-
     constructor(
-        cdefStatus: CDef.VillageStatus
+        cdefStatus: CDef.VillageStatus,
     ) : this(
         code = cdefStatus.code(),
-        name = cdefStatus.name
+        name = cdefStatus.name,
     )
 
     // ===================================================================================

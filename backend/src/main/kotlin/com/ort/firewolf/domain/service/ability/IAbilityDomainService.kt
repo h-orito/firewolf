@@ -8,7 +8,6 @@ import com.ort.firewolf.domain.model.village.ability.VillageAbility
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 
 interface IAbilityDomainService {
-
     fun getAbilityType(): AbilityType
 
     fun getSelectableTargetList(
@@ -20,17 +19,17 @@ interface IAbilityDomainService {
     fun getSelectingTarget(
         village: Village,
         participant: VillageParticipant?,
-        villageAbilities: VillageAbilities
+        villageAbilities: VillageAbilities,
     ): VillageParticipant?
 
     fun createSetMessage(
         myself: VillageParticipant,
-        target: VillageParticipant?
+        target: VillageParticipant?,
     ): String
 
     fun getDefaultAbilityList(
         village: Village,
-        villageAbilities: VillageAbilities
+        villageAbilities: VillageAbilities,
     ): List<VillageAbility>
 
     fun processDayChangeAction(dayChange: DayChange): DayChange
@@ -39,6 +38,6 @@ interface IAbilityDomainService {
 
     fun isUsable(
         village: Village,
-        participant: VillageParticipant
+        participant: VillageParticipant,
     ): Boolean
 }

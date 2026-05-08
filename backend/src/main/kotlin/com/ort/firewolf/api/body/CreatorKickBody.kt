@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull
 
 data class CreatorKickBody(
     @field:NotNull
-    val targetId: Int?
+    val targetId: Int?,
 ) {
     constructor() : this(null)
 }

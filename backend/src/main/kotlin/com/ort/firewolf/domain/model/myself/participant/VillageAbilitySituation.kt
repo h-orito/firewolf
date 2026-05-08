@@ -10,5 +10,5 @@ data class VillageAbilitySituation(
     val targetList: List<VillageParticipant>,
     val target: VillageParticipant?,
     val usable: Boolean,
-    val isAvailableNoTarget: Boolean
+    val isAvailableNoTarget: Boolean,
 )

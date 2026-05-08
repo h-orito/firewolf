@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
-
 /**
  * デバッグ用なのでDDDに拘らない
  */
@@ -40,14 +39,11 @@ class DebugController(
     val playerBhv: PlayerBhv,
     val villageDayBhv: VillageDayBhv,
     val villageSettingBhv: VillageSettingBhv,
-
     val villageCoordinator: VillageCoordinator,
-
     val villageService: VillageService,
     val charachipService: CharachipService,
-    val playerService: PlayerService
+    val playerService: PlayerService,
 ) {
-
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========
@@ -57,6 +53,7 @@ class DebugController(
     // ===================================================================================
     //                                                                             Execute
     //                                                                           =========
+
     /**
      * 人数指定で参加させる
      * @param villageId villageId
@@ -69,21 +66,22 @@ class DebugController(
     fun participateVillage(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: FirewolfUser,
-        @RequestBody @Validated body: AdminParticipateBody
+        @RequestBody @Validated body: AdminParticipateBody,
     ) {
         if ("local" != env) throw FirewolfBusinessException("この環境では使用できません")
 
         val village = villageService.findVillage(villageId)
 
         // 参戦していないキャラを人数分探す
-        val charaList = charaBhv.selectList { cb ->
-            cb.query().setCharaGroupId_InScope(village.setting.charachip.charachipIds)
-            cb.query().notExistsVillagePlayer { villagePlayerCB ->
-                villagePlayerCB.query().setVillageId_Equal(villageId)
-                villagePlayerCB.query().setIsGone_Equal(false)
+        val charaList =
+            charaBhv.selectList { cb ->
+                cb.query().setCharaGroupId_InScope(village.setting.charachip.charachipIds)
+                cb.query().notExistsVillagePlayer { villagePlayerCB ->
+                    villagePlayerCB.query().setVillageId_Equal(villageId)
+                    villagePlayerCB.query().setIsGone_Equal(false)
+                }
+                cb.fetchFirst(body.participateCount!!)
             }
-            cb.fetchFirst(body.participateCount!!)
-        }
         var playerId = 2
         for (chara in charaList) {
             // 希望役職をランダムに取得
@@ -96,11 +94,11 @@ class DebugController(
                 charaId = chara.charaId,
                 charaShortName = chara.charaShortName,
                 charaName = chara.charaName,
-                message = "テストアカウント入村 playerId: ${playerId}",
+                message = "テストアカウント入村 playerId: $playerId",
                 isSpectate = false,
                 firstRequestSkill = randomSkill.toCdef(),
                 secondRequestSkill = randomSkill2.toCdef(),
-                ipAddress = "test account $playerId"
+                ipAddress = "test account $playerId",
             )
             playerId++
         }
@@ -116,17 +114,19 @@ class DebugController(
     fun dummyLogin(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: FirewolfUser,
-        @RequestBody @Validated body: AdminDummyLoginBody
+        @RequestBody @Validated body: AdminDummyLoginBody,
     ) {
         if ("local" != env) throw FirewolfBusinessException("この環境では使用できません")
 
         // 現在接続しているユーザのuidと、指定されたプレイヤーのuidを入れ替える
-        val currentPlayer = playerBhv.selectEntityWithDeletedCheck {
-            it.query().setUid_Equal(user.uid)
-        }
-        val toPlayer = playerBhv.selectEntityWithDeletedCheck {
-            it.query().setPlayerId_Equal(body.targetId!!)
-        }
+        val currentPlayer =
+            playerBhv.selectEntityWithDeletedCheck {
+                it.query().setUid_Equal(user.uid)
+            }
+        val toPlayer =
+            playerBhv.selectEntityWithDeletedCheck {
+                it.query().setPlayerId_Equal(body.targetId!!)
+            }
         val current = currentPlayer.uid
         val to = toPlayer.uid
         updatePlayerUid(currentPlayer.playerId, "dummy_uid")
@@ -144,16 +144,17 @@ class DebugController(
     @CacheEvict(cacheNames = ["village"], allEntries = true)
     fun changeDay(
         @PathVariable("villageId") villageId: Int,
-        @AuthenticationPrincipal user: FirewolfUser
+        @AuthenticationPrincipal user: FirewolfUser,
     ) {
         if ("local" != env) throw FirewolfBusinessException("この環境では使用できません")
 
-        val latestDay = villageDayBhv.selectEntityWithDeletedCheck {
-            it.query().setVillageId_Equal(villageId)
-            it.query().addOrderBy_Day_Desc()
-            it.query().queryNoonnight().addOrderBy_DispOrder_Desc()
-            it.fetchFirst(1)
-        }
+        val latestDay =
+            villageDayBhv.selectEntityWithDeletedCheck {
+                it.query().setVillageId_Equal(villageId)
+                it.query().addOrderBy_Day_Desc()
+                it.query().queryNoonnight().addOrderBy_DispOrder_Desc()
+                it.fetchFirst(1)
+            }
         latestDay.daychangeDatetime = FirewolfDateUtil.currentLocalDateTime().minusSeconds(1L)
         villageDayBhv.update(latestDay)
     }
@@ -163,7 +164,9 @@ class DebugController(
      * @param villageId villageId
      */
     @GetMapping("/admin/village/{villageId}")
-    fun village(@PathVariable("villageId") villageId: Int): DebugVillageView {
+    fun village(
+        @PathVariable("villageId") villageId: Int,
+    ): DebugVillageView {
         if ("local" != env) throw FirewolfBusinessException("この環境では使用できません")
 
         val village: Village = villageService.findVillage(villageId)
@@ -176,7 +179,7 @@ class DebugController(
             village = village,
             charas = charas,
             players = players,
-            createPlayer = createPlayer
+            createPlayer = createPlayer,
         )
     }
 
@@ -189,7 +192,7 @@ class DebugController(
     @CacheEvict("village", allEntries = true)
     fun setNoSuddenlyDeath(
         @PathVariable("villageId") villageId: Int,
-        @AuthenticationPrincipal user: FirewolfUser
+        @AuthenticationPrincipal user: FirewolfUser,
     ) {
         if ("local" != env) throw FirewolfBusinessException("この環境では使用できません")
 
@@ -203,7 +206,7 @@ class DebugController(
     @PostMapping("/admin/village/{villageId}/multiple-say")
     fun multiSay(
         @PathVariable("villageId") villageId: Int,
-        @AuthenticationPrincipal user: FirewolfUser
+        @AuthenticationPrincipal user: FirewolfUser,
     ) {
         if ("local" != env) throw FirewolfBusinessException("この環境では使用できません")
 
@@ -215,7 +218,10 @@ class DebugController(
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
-    private fun updatePlayerUid(playerId: Int?, uid: String?) {
+    private fun updatePlayerUid(
+        playerId: Int?,
+        uid: String?,
+    ) {
         val p = Player()
         p.playerId = playerId
         p.uid = uid

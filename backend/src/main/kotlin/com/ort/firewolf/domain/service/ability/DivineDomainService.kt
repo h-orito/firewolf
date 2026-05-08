@@ -12,13 +12,12 @@ import org.springframework.stereotype.Service
 
 @Service
 open class DivineDomainService : IAbilityDomainService {
-
     override fun getAbilityType(): AbilityType = AbilityType(CDef.AbilityType.占い)
 
     override fun getSelectableTargetList(
         village: Village,
         participant: VillageParticipant,
-        villageAbilities: VillageAbilities
+        villageAbilities: VillageAbilities,
     ): List<VillageParticipant> {
         // 自分以外の生存者全員
         return village.participant.memberList.filter {
@@ -29,26 +28,30 @@ open class DivineDomainService : IAbilityDomainService {
     override fun getSelectingTarget(
         village: Village,
         participant: VillageParticipant?,
-        villageAbilities: VillageAbilities
+        villageAbilities: VillageAbilities,
     ): VillageParticipant? {
         participant ?: return null
 
-        val targetVillageParticipantId = villageAbilities
-            .filterLatestday(village)
-            .filterByType(getAbilityType()).list
-            .find { it.myselfId == participant.id }
-            ?.targetId
+        val targetVillageParticipantId =
+            villageAbilities
+                .filterLatestday(village)
+                .filterByType(getAbilityType()).list
+                .find { it.myselfId == participant.id }
+                ?.targetId
         targetVillageParticipantId ?: return null
         return village.participant.member(targetVillageParticipantId)
     }
 
-    override fun createSetMessage(myself: VillageParticipant, target: VillageParticipant?): String {
+    override fun createSetMessage(
+        myself: VillageParticipant,
+        target: VillageParticipant?,
+    ): String {
         return "${myself.name()}が占い対象を${target?.name() ?: "なし"}に設定しました。"
     }
 
     override fun getDefaultAbilityList(
         village: Village,
-        villageAbilities: VillageAbilities
+        villageAbilities: VillageAbilities,
     ): List<VillageAbility> {
         // 進行中のみ
         if (!village.status.isProgress()) return listOf()
@@ -65,7 +68,7 @@ open class DivineDomainService : IAbilityDomainService {
                         villageDayId = village.day.latestDay().id,
                         myselfId = seer.id,
                         targetId = it.id,
-                        abilityType = getAbilityType()
+                        abilityType = getAbilityType(),
                     )
                 }
         }
@@ -84,23 +87,30 @@ open class DivineDomainService : IAbilityDomainService {
             }?.let { ability ->
                 messages = messages.add(createDivineMessage(dayChange.village, ability, seer))
                 // 呪殺対象なら死亡
-                if (isDivineKill(dayChange, ability.targetId!!)) village =
-                    village.divineKillParticipant(ability.targetId, latestDay)
+                if (isDivineKill(dayChange, ability.targetId!!)) {
+                    village =
+                        village.divineKillParticipant(ability.targetId, latestDay)
+                }
                 // 逆呪殺対象なら自分が死亡
-                if (isCounterDivineKill(dayChange, ability.targetId)) village =
-                    village.divineKillParticipant(seer.id, latestDay)
+                if (isCounterDivineKill(dayChange, ability.targetId)) {
+                    village =
+                        village.divineKillParticipant(seer.id, latestDay)
+                }
             }
         }
 
         return dayChange.copy(
             messages = messages,
-            village = village
+            village = village,
         ).setIsChange(dayChange)
     }
 
     override fun isAvailableNoTarget(village: Village): Boolean = false
 
-    override fun isUsable(village: Village, participant: VillageParticipant): Boolean {
+    override fun isUsable(
+        village: Village,
+        participant: VillageParticipant,
+    ): Boolean {
         // 生存していたら行使できる
         return participant.isAlive()
     }
@@ -111,7 +121,7 @@ open class DivineDomainService : IAbilityDomainService {
     private fun createDivineMessage(
         village: Village,
         ability: VillageAbility,
-        seer: VillageParticipant
+        seer: VillageParticipant,
     ): Message {
         val myself = village.participant.member(ability.myselfId)
         val target = village.participant.member(ability.targetId!!)
@@ -123,18 +133,23 @@ open class DivineDomainService : IAbilityDomainService {
     private fun createDivineMessageString(
         seer: VillageParticipant,
         target: VillageParticipant,
-        isWolf: Boolean
-    ): String =
-        "${seer.name()}は、${target.name()}を占った。\n${target.name()}は人狼${if (isWolf) "の" else "ではない"}ようだ。"
+        isWolf: Boolean,
+    ): String = "${seer.name()}は、${target.name()}を占った。\n${target.name()}は人狼${if (isWolf) "の" else "ではない"}ようだ。"
 
-    private fun isDivineKill(dayChange: DayChange, targetId: Int): Boolean {
+    private fun isDivineKill(
+        dayChange: DayChange,
+        targetId: Int,
+    ): Boolean {
         // 対象が既に死亡していたら呪殺ではない
         if (!dayChange.village.participant.member(targetId).isAlive()) return false
         // 対象が呪殺対象でなければ呪殺ではない
         return dayChange.village.participant.member(targetId).skill!!.toCdef().isDeadByDivine
     }
 
-    private fun isCounterDivineKill(dayChange: DayChange, targetId: Int): Boolean {
+    private fun isCounterDivineKill(
+        dayChange: DayChange,
+        targetId: Int,
+    ): Boolean {
         // 対象が既に死亡していたら呪殺ではない
         if (!dayChange.village.participant.member(targetId).isAlive()) return false
         // 対象が逆呪殺対象でなければ逆呪殺されない

@@ -7,14 +7,13 @@ import org.springframework.stereotype.Service
 
 @Service
 class SkillService {
-
     fun findSkills(): Skills {
         return Skills(
             CDef.Skill.listAll().filterNot {
                 it.isSomeoneSkill
             }.sortedBy {
                 it.order().toInt()
-            }.map { it.toModel() }
+            }.map { it.toModel() },
         )
     }
 }

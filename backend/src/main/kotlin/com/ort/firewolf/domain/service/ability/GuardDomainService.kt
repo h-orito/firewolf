@@ -12,30 +12,31 @@ import org.springframework.stereotype.Service
 
 @Service
 class GuardDomainService : IAbilityDomainService {
-
     override fun getAbilityType(): AbilityType = AbilityType(CDef.AbilityType.護衛)
 
     override fun getSelectableTargetList(
         village: Village,
         participant: VillageParticipant,
-        villageAbilities: VillageAbilities
+        villageAbilities: VillageAbilities,
     ): List<VillageParticipant> {
         // 1日目は護衛できない
         if (village.day.latestDay().day <= 1) return emptyList()
 
         // 連続護衛可能なら自分以外の生存者全員
-        val base = village.participant
-            .filterAlive()
-            .filterNotParticipant(participant)
-            .memberList
+        val base =
+            village.participant
+                .filterAlive()
+                .filterNotParticipant(participant)
+                .memberList
         if (village.setting.rules.availableGuardSameTarget) return base
 
         // 昨日の護衛先
-        val yesterdayGuardTarget = villageAbilities.findYesterday(
-            village = village,
-            participant = participant,
-            type = getAbilityType()
-        ) ?: return base
+        val yesterdayGuardTarget =
+            villageAbilities.findYesterday(
+                village = village,
+                participant = participant,
+                type = getAbilityType(),
+            ) ?: return base
         // 昨日の護衛先は護衛できない
         return base.filterNot { it.id == yesterdayGuardTarget.targetId }
     }
@@ -43,26 +44,30 @@ class GuardDomainService : IAbilityDomainService {
     override fun getSelectingTarget(
         village: Village,
         participant: VillageParticipant?,
-        villageAbilities: VillageAbilities
+        villageAbilities: VillageAbilities,
     ): VillageParticipant? {
         participant ?: return null
 
-        val targetVillageParticipantId = villageAbilities
-            .filterLatestday(village)
-            .filterByType(getAbilityType()).list
-            .find { it.myselfId == participant.id }
-            ?.targetId
+        val targetVillageParticipantId =
+            villageAbilities
+                .filterLatestday(village)
+                .filterByType(getAbilityType()).list
+                .find { it.myselfId == participant.id }
+                ?.targetId
         targetVillageParticipantId ?: return null
         return village.participant.member(targetVillageParticipantId)
     }
 
-    override fun createSetMessage(myself: VillageParticipant, target: VillageParticipant?): String {
+    override fun createSetMessage(
+        myself: VillageParticipant,
+        target: VillageParticipant?,
+    ): String {
         return "${myself.name()}が護衛対象を${target?.name() ?: "なし"}に設定しました。"
     }
 
     override fun getDefaultAbilityList(
         village: Village,
-        villageAbilities: VillageAbilities
+        villageAbilities: VillageAbilities,
     ): List<VillageAbility> {
         // 進行中のみ
         if (!village.status.isProgress()) return listOf()
@@ -76,7 +81,7 @@ class GuardDomainService : IAbilityDomainService {
                     villageDayId = village.day.latestDay().id,
                     myselfId = hunter.id,
                     targetId = it.id,
-                    abilityType = getAbilityType()
+                    abilityType = getAbilityType(),
                 )
             }
         }
@@ -94,13 +99,16 @@ class GuardDomainService : IAbilityDomainService {
             }
 
         return dayChange.copy(
-            messages = messages
+            messages = messages,
         ).setIsChange(dayChange)
     }
 
     override fun isAvailableNoTarget(village: Village): Boolean = false
 
-    override fun isUsable(village: Village, participant: VillageParticipant): Boolean {
+    override fun isUsable(
+        village: Village,
+        participant: VillageParticipant,
+    ): Boolean {
         // 2日目以降、生存していたら行使できる
         return village.day.latestDay().day > 1 && participant.isAlive()
     }
@@ -108,17 +116,22 @@ class GuardDomainService : IAbilityDomainService {
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
-    private fun createGuardMessage(village: Village, ability: VillageAbility): Message {
+    private fun createGuardMessage(
+        village: Village,
+        ability: VillageAbility,
+    ): Message {
         val hunter = village.participant.member(ability.myselfId)
         val target = village.participant.member(ability.targetId!!)
         val text = createGuardMessageString(hunter, target)
         return Message.createPrivateAbilityMessage(
             text = text,
             villageDayId = village.day.latestDay().id,
-            villageParticipant = hunter
+            villageParticipant = hunter,
         )
     }
 
-    private fun createGuardMessageString(hunter: VillageParticipant, target: VillageParticipant): String =
-        "${hunter.name()}は、${target.name()}を護衛している。"
+    private fun createGuardMessageString(
+        hunter: VillageParticipant,
+        target: VillageParticipant,
+    ): String = "${hunter.name()}は、${target.name()}を護衛している。"
 }

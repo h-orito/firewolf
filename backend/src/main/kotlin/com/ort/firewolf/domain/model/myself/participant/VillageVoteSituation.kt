@@ -5,5 +5,5 @@ import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 data class VillageVoteSituation(
     val isAvailableVote: Boolean,
     val targetList: List<VillageParticipant>,
-    val target: VillageParticipant?
+    val target: VillageParticipant?,
 )

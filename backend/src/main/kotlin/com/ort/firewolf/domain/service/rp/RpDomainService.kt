@@ -9,21 +9,21 @@ import org.springframework.stereotype.Service
 
 @Service
 class RpDomainService {
-
     fun convertToSituation(
         village: Village,
         myself: VillageParticipant?,
         charachips: Charachips,
-        charas: Charas
-    ): ParticipantRpSituation = ParticipantRpSituation(
-        isAvailableChangeName = isAvailableChangeName(village, myself, charachips, charas),
-    )
+        charas: Charas,
+    ): ParticipantRpSituation =
+        ParticipantRpSituation(
+            isAvailableChangeName = isAvailableChangeName(village, myself, charachips, charas),
+        )
 
     private fun isAvailableChangeName(
         village: Village,
         myself: VillageParticipant?,
         charachips: Charachips,
-        charas: Charas
+        charas: Charas,
     ): Boolean {
         if (!village.canChangeName() || myself == null || !myself.canChangeName(village.status.isEpilogue())) return false
         val chara = charas.chara(myself.charaId)

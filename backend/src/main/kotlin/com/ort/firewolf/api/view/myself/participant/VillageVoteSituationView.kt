@@ -9,33 +9,35 @@ import com.ort.firewolf.domain.model.village.Village
 data class VillageVoteSituationView(
     val availableVote: Boolean,
     val targetList: List<VillageParticipantView>,
-    val target: VillageParticipantView?
+    val target: VillageParticipantView?,
 ) {
     constructor(
         situation: VillageVoteSituation,
         village: Village,
         players: Players,
         charas: Charas,
-        shouldHidePlayer: Boolean
+        shouldHidePlayer: Boolean,
     ) : this(
         availableVote = situation.isAvailableVote,
-        targetList = situation.targetList.map {
-            VillageParticipantView(
-                village = village,
-                villageParticipantId = it.id,
-                players = players,
-                charas = charas,
-                shouldHidePlayer = shouldHidePlayer
-            )
-        },
-        target = situation.target?.let {
-            VillageParticipantView(
-                village = village,
-                villageParticipantId = it.id,
-                players = players,
-                charas = charas,
-                shouldHidePlayer = shouldHidePlayer
-            )
-        }
+        targetList =
+            situation.targetList.map {
+                VillageParticipantView(
+                    village = village,
+                    villageParticipantId = it.id,
+                    players = players,
+                    charas = charas,
+                    shouldHidePlayer = shouldHidePlayer,
+                )
+            },
+        target =
+            situation.target?.let {
+                VillageParticipantView(
+                    village = village,
+                    villageParticipantId = it.id,
+                    players = players,
+                    charas = charas,
+                    shouldHidePlayer = shouldHidePlayer,
+                )
+            },
     )
 }

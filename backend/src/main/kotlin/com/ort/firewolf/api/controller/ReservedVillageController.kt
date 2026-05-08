@@ -18,9 +18,8 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class ReservedVillageController(
-    val reservedVillageService: ReservedVillageService
+    val reservedVillageService: ReservedVillageService,
 ) {
-
     /**
      * 予約村一覧取得
      */
@@ -36,7 +35,7 @@ class ReservedVillageController(
     @PostMapping("/reserved-village")
     fun register(
         @AuthenticationPrincipal user: FirewolfUser,
-        @RequestBody @Validated body: ReservedVillageRegisterBody
+        @RequestBody @Validated body: ReservedVillageRegisterBody,
     ) {
         if (user.authority != CDef.Authority.管理者) throw FirewolfBusinessException("管理者のみ可能な操作です")
         reservedVillageService.registerReservedVillage(
@@ -46,8 +45,8 @@ class ReservedVillageController(
                 villageStartDatetime = body.startDatetime!!,
                 organization = body.organization!!,
                 silentHours = body.silentHours!!,
-                availableDummySkill = body.availableDummySkill!!
-            )
+                availableDummySkill = body.availableDummySkill!!,
+            ),
         )
     }
 
@@ -60,7 +59,7 @@ class ReservedVillageController(
     @DeleteMapping("/reserved-village/{reservedVillageId}")
     fun register(
         @PathVariable("reservedVillageId") reservedVillageId: Int,
-        @AuthenticationPrincipal user: FirewolfUser
+        @AuthenticationPrincipal user: FirewolfUser,
     ) {
         if (user.authority != CDef.Authority.管理者) throw FirewolfBusinessException("管理者のみ可能な操作です")
         reservedVillageService.deleteReservedVillage(reservedVillageId)

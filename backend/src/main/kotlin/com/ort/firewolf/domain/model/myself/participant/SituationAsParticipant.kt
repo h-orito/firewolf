@@ -10,5 +10,5 @@ data class SituationAsParticipant(
     val ability: VillageAbilitySituations,
     val vote: VillageVoteSituation,
     val creator: VillageCreatorSituation,
-    val admin: VillageAdminSituation
+    val admin: VillageAdminSituation,
 )

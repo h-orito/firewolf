@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service
 
 @Service
 class SuicideDomainService {
-
     fun suicide(daychange: DayChange): DayChange {
         var village = daychange.village.copy()
         var messages = daychange.messages.copy()
@@ -17,12 +16,13 @@ class SuicideDomainService {
             val target = findSuicideTarget(village)!!
 
             val loverSuicideTarget = findLoverSuicideTarget(village)
-            messages = if (loverSuicideTarget != null) {
-                val lover = target.getTargetLovers(village).filterDead().memberList.shuffled().first()
-                messages.add(createLoverSuicideMessage(village, target, lover))
-            } else {
-                messages.add(createImmoralSuicideMessage(village, target))
-            }
+            messages =
+                if (loverSuicideTarget != null) {
+                    val lover = target.getTargetLovers(village).filterDead().memberList.shuffled().first()
+                    messages.add(createLoverSuicideMessage(village, target, lover))
+                } else {
+                    messages.add(createImmoralSuicideMessage(village, target))
+                }
             village = village.suicideParticipant(target.id)
         }
 
@@ -61,7 +61,7 @@ class SuicideDomainService {
     private fun createLoverSuicideMessage(
         village: Village,
         target: VillageParticipant,
-        lover: VillageParticipant
+        lover: VillageParticipant,
     ): Message {
         return Message.createPublicSystemMessage(
             text = "${target.name()}は、絆に引きずられるように${lover.name()}の後を追った。",
@@ -69,10 +69,13 @@ class SuicideDomainService {
         )
     }
 
-    private fun createImmoralSuicideMessage(village: Village, target: VillageParticipant): Message {
+    private fun createImmoralSuicideMessage(
+        village: Village,
+        target: VillageParticipant,
+    ): Message {
         return Message.createPublicSystemMessage(
             text = "${target.name()}は、妖狐の後を追い、いなくなってしまった。",
-            villageDayId = village.day.latestDay().id
+            villageDayId = village.day.latestDay().id,
         )
     }
 }

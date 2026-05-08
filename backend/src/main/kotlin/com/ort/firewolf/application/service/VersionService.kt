@@ -6,9 +6,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class VersionService(
-    val versionDataSource: VersionDataSource
+    val versionDataSource: VersionDataSource,
 ) {
-
     fun findVersion(): Version {
         return versionDataSource.findVersion()
     }

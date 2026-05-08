@@ -33,20 +33,20 @@ class CreatorController(
     private val messageService: MessageService,
     private val villageCoordinator: VillageCoordinator,
 ) {
-
     @PostMapping("/creator/village/{villageId}/kick")
     @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
     @CacheEvict(cacheNames = ["village", "messages", "latest-messages"], allEntries = true)
     fun kick(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: FirewolfUser,
-        @RequestBody @Validated body: CreatorKickBody
+        @RequestBody @Validated body: CreatorKickBody,
     ) {
         val village = villageService.findVillage(villageId)
         val player = playerService.findPlayer(user)
 
-        if (user.authority != CDef.Authority.管理者 && village.creatorPlayerId != player.id)
+        if (user.authority != CDef.Authority.管理者 && village.creatorPlayerId != player.id) {
             throw FirewolfBusinessException("村建てか管理者しか使えません")
+        }
 
         // キック
         val changedVillage = village.leaveParticipant(body.targetId!!)
@@ -62,13 +62,14 @@ class CreatorController(
     @CacheEvict(cacheNames = ["village", "messages", "latest-messages"], allEntries = true)
     fun cancel(
         @PathVariable("villageId") villageId: Int,
-        @AuthenticationPrincipal user: FirewolfUser
+        @AuthenticationPrincipal user: FirewolfUser,
     ) {
         val village = villageService.findVillage(villageId)
         val player = playerService.findPlayer(user)
 
-        if (user.authority != CDef.Authority.管理者 && village.creatorPlayerId != player.id)
+        if (user.authority != CDef.Authority.管理者 && village.creatorPlayerId != player.id) {
             throw FirewolfBusinessException("村建てか管理者しか使えません")
+        }
 
         val changedVillage = village.changeStatus(CDef.VillageStatus.廃村)
         villageService.updateVillageDifference(village, changedVillage)
@@ -80,36 +81,40 @@ class CreatorController(
     fun sayConfirm(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: FirewolfUser,
-        @RequestBody @Validated body: CreatorSayBody
+        @RequestBody @Validated body: CreatorSayBody,
     ): MessageView {
         val village = villageService.findVillage(villageId)
         val player = playerService.findPlayer(user)
 
-        if (user.authority != CDef.Authority.管理者 && village.creatorPlayerId != player.id)
+        if (user.authority != CDef.Authority.管理者 && village.creatorPlayerId != player.id) {
             throw FirewolfBusinessException("村建てか管理者しか使えません")
+        }
 
         villageCoordinator.confirmToCreatorSay(village, body.message!!)
         return MessageView(
-            message = Message(
-                fromVillageParticipantId = null,
-                fromCharacterName = null,
-                toVillageParticipantId = null,
-                toCharacterName = null,
-                time = MessageTime(
-                    villageDayId = village.day.latestDay().id,
-                    datetime = LocalDateTime.now(),
-                    unixTimeMilli = LocalDateTime.now().toInstant(ZoneOffset.ofHours(+9)).toEpochMilli()
+            message =
+                Message(
+                    fromVillageParticipantId = null,
+                    fromCharacterName = null,
+                    toVillageParticipantId = null,
+                    toCharacterName = null,
+                    time =
+                        MessageTime(
+                            villageDayId = village.day.latestDay().id,
+                            datetime = LocalDateTime.now(),
+                            unixTimeMilli = LocalDateTime.now().toInstant(ZoneOffset.ofHours(+9)).toEpochMilli(),
+                        ),
+                    content =
+                        MessageContent.invoke(
+                            messageType = CDef.MessageType.村建て発言.code(),
+                            text = body.message,
+                            faceCode = null,
+                        ).copy(num = 1),
                 ),
-                content = MessageContent.invoke(
-                    messageType = CDef.MessageType.村建て発言.code(),
-                    text = body.message,
-                    faceCode = null
-                ).copy(num = 1)
-            ),
             village = village,
             players = Players(listOf()),
             charas = Charas(listOf()),
-            shouldHidePlayer = true
+            shouldHidePlayer = true,
         )
     }
 
@@ -119,13 +124,14 @@ class CreatorController(
     fun say(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: FirewolfUser,
-        @RequestBody @Validated body: CreatorSayBody
+        @RequestBody @Validated body: CreatorSayBody,
     ) {
         val village = villageService.findVillage(villageId)
         val player = playerService.findPlayer(user)
 
-        if (user.authority != CDef.Authority.管理者 && village.creatorPlayerId != player.id)
+        if (user.authority != CDef.Authority.管理者 && village.creatorPlayerId != player.id) {
             throw FirewolfBusinessException("村建てか管理者しか使えません")
+        }
 
         villageCoordinator.confirmToCreatorSay(village, body.message!!)
         villageCoordinator.creatorSay(village, body.message)
@@ -136,13 +142,14 @@ class CreatorController(
     @CacheEvict(cacheNames = ["village", "messages", "latest-messages"], allEntries = true)
     fun extendEpilogue(
         @PathVariable("villageId") villageId: Int,
-        @AuthenticationPrincipal user: FirewolfUser
+        @AuthenticationPrincipal user: FirewolfUser,
     ) {
         val village = villageService.findVillage(villageId)
         val player = playerService.findPlayer(user)
 
-        if (user.authority != CDef.Authority.管理者 && village.creatorPlayerId != player.id)
+        if (user.authority != CDef.Authority.管理者 && village.creatorPlayerId != player.id) {
             throw FirewolfBusinessException("村建てか管理者しか使えません")
+        }
 
         val changedVillage = village.extendEpilogue()
         villageService.updateVillageDifference(village, changedVillage)

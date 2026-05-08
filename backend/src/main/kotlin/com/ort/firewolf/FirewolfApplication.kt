@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Import
     FirewolfAppConfig::class,
     FirewolfWebMvcConfigurer::class,
     FirebaseConfig::class,
-    FirewolfSecurityConfig::class
+    FirewolfSecurityConfig::class,
 )
 @EnableCaching
 class FirewolfApplication

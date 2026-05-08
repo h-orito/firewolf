@@ -4,14 +4,13 @@ import com.ort.dbflute.allcommon.CDef
 
 data class AbilityType(
     val code: String,
-    val name: String
+    val name: String,
 ) {
-
     constructor(
-        cdef: CDef.AbilityType
+        cdef: CDef.AbilityType,
     ) : this(
         code = cdef.code(),
-        name = cdef.alias()
+        name = cdef.alias(),
     )
 
     companion object {

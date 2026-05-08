@@ -37,7 +37,7 @@ class MessageService(
     fun findMessages(
         villageId: Int,
         villageDayId: Int,
-        query: MessageQuery
+        query: MessageQuery,
     ): Messages {
         return messageDataSource.findMessages(villageId, villageDayId, query)
     }
@@ -66,7 +66,11 @@ class MessageService(
      * @param messageNumber 発言番号
      * @return 発言
      */
-    fun findMessage(villageId: Int, messageType: CDef.MessageType, messageNumber: Int): Message? {
+    fun findMessage(
+        villageId: Int,
+        messageType: CDef.MessageType,
+        messageNumber: Int,
+    ): Message? {
         return messageDataSource.findMessage(villageId, messageType, messageNumber)
     }
 
@@ -76,7 +80,7 @@ class MessageService(
     fun findParticipateDayMessageList(
         villageId: Int,
         villageDay: com.ort.firewolf.domain.model.village.VillageDay,
-        participant: VillageParticipant?
+        participant: VillageParticipant?,
     ): Map<CDef.MessageType, Int> {
         participant ?: return mapOf()
         return messageDataSource.selectParticipateDayMessageList(villageId, villageDay.id, participant)
@@ -85,7 +89,10 @@ class MessageService(
     /**
      * 発言登録
      */
-    fun registerMessage(village: Village, message: Message): Message {
+    fun registerMessage(
+        village: Village,
+        message: Message,
+    ): Message {
         val registered = messageDataSource.registerMessage(village, message)
         notificationService.notifyToDeveloperIfNeeded(village.id, registered)
         return registered
@@ -107,22 +114,23 @@ class MessageService(
         charaName: String,
         charaShortName: String,
         message: String,
-        isSpectate: Boolean
+        isSpectate: Boolean,
     ) {
         // {N}人目、{キャラ名}。
         messageDataSource.registerMessage(
             village,
-            participateDomainService.createParticipateMessage(village, chara, charaName, charaShortName, isSpectate)
+            participateDomainService.createParticipateMessage(village, chara, charaName, charaShortName, isSpectate),
         )
         // 参加発言
-        val messageContent = MessageContent.invoke(
-            if (isSpectate) CDef.MessageType.見学発言.code() else CDef.MessageType.通常発言.code(),
-            message,
-            CDef.FaceType.通常.code()
-        )
+        val messageContent =
+            MessageContent.invoke(
+                if (isSpectate) CDef.MessageType.見学発言.code() else CDef.MessageType.通常発言.code(),
+                message,
+                CDef.FaceType.通常.code(),
+            )
         registerMessage(
             village,
-            Message.createSayMessage(participant, village.day.prologueDay().id, messageContent)
+            Message.createSayMessage(participant, village.day.prologueDay().id, messageContent),
         )
     }
 
@@ -132,21 +140,22 @@ class MessageService(
     fun registerChangeNameMessage(
         village: Village,
         before: VillageParticipant,
-        after: VillageParticipant
-    ) =
-        registerMessage(
-            village,
-            participateDomainService.createChangeNameMessage(village, before, after)
-        )
+        after: VillageParticipant,
+    ) = registerMessage(
+        village,
+        participateDomainService.createChangeNameMessage(village, before, after),
+    )
 
     /**
      * 退村する際のシステムメッセージを登録
      */
-    fun registerLeaveMessage(village: Village, participant: VillageParticipant) =
-        registerMessage(
-            village,
-            participateDomainService.createLeaveMessage(village, participant)
-        )
+    fun registerLeaveMessage(
+        village: Village,
+        participant: VillageParticipant,
+    ) = registerMessage(
+        village,
+        participateDomainService.createLeaveMessage(village, participant),
+    )
 
     /**
      * 能力セットする際のシステムメッセージを登録
@@ -169,24 +178,36 @@ class MessageService(
     /**
      * コミットする際のシステムメッセージを登録
      */
-    fun registerCommitMessage(village: Village, myself: VillageParticipant, doCommit: Boolean) {
+    fun registerCommitMessage(
+        village: Village,
+        myself: VillageParticipant,
+        doCommit: Boolean,
+    ) {
         registerMessage(
             village,
-            commitDomainService.createCommitMessage(myself, doCommit, village.day.latestDay().id)
+            commitDomainService.createCommitMessage(myself, doCommit, village.day.latestDay().id),
         )
     }
 
-    fun registerComingOutMessage(village: Village, myself: VillageParticipant, skills: Skills) {
+    fun registerComingOutMessage(
+        village: Village,
+        myself: VillageParticipant,
+        skills: Skills,
+    ) {
         registerMessage(
             village,
-            comingOutDomainService.createComingOutMessage(myself, skills, village.day.latestDay().id)
+            comingOutDomainService.createComingOutMessage(myself, skills, village.day.latestDay().id),
         )
     }
 
     /**
      * 差分更新
      */
-    fun updateDifference(village: Village, before: Messages, after: Messages) {
+    fun updateDifference(
+        village: Village,
+        before: Messages,
+        after: Messages,
+    ) {
         messageDataSource.updateDifference(village, before, after)
     }
 }

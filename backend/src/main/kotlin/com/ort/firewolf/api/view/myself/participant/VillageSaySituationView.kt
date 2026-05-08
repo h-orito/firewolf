@@ -11,27 +11,27 @@ data class VillageSaySituationView(
     val availableSay: Boolean,
     val selectableMessageTypeList: List<VillageSayMessageTypeSituationView>,
     val selectableFaceTypeList: List<CharaFace>,
-    val defaultMessageType: MessageType?
+    val defaultMessageType: MessageType?,
 ) {
-
     constructor(
         situation: VillageSaySituation,
         village: Village,
         players: Players,
         charas: Charas,
-        shouldHidePlayer: Boolean
+        shouldHidePlayer: Boolean,
     ) : this(
         availableSay = situation.isAvailableSay,
-        selectableMessageTypeList = situation.selectableMessageTypeList.map {
-            VillageSayMessageTypeSituationView(
-                situation = it,
-                village = village,
-                players = players,
-                charas = charas,
-                shouldHidePlayer = shouldHidePlayer
-            )
-        },
+        selectableMessageTypeList =
+            situation.selectableMessageTypeList.map {
+                VillageSayMessageTypeSituationView(
+                    situation = it,
+                    village = village,
+                    players = players,
+                    charas = charas,
+                    shouldHidePlayer = shouldHidePlayer,
+                )
+            },
         selectableFaceTypeList = situation.selectableFaceTypeList,
-        defaultMessageType = situation.defaultMessageType
+        defaultMessageType = situation.defaultMessageType,
     )
 }

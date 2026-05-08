@@ -6,5 +6,5 @@ data class Charachip(
     val designer: Designer,
     val descriptionUrl: String,
     val charaIdList: List<Int>,
-    val isAvailableChangeName: Boolean
+    val isAvailableChangeName: Boolean,
 )

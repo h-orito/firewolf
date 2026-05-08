@@ -10,9 +10,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class EpilogueDomainService(
-    private val campDomainService: CampDomainService
+    private val campDomainService: CampDomainService,
 ) {
-
     fun transitionToEpilogueIfNeeded(dayChange: DayChange): DayChange {
         // まだ決着がついていない
         if (!dayChange.village.isSettled()) return dayChange
@@ -52,11 +51,12 @@ class EpilogueDomainService(
     fun addMessageToEpilogue(dayChange: DayChange): DayChange {
         val latestDayId = dayChange.village.day.latestDay().id
         return dayChange.copy(
-            messages = dayChange.messages
-                // エピローグ遷移メッセージ登録
-                .add(campDomainService.createWinCampMessage(dayChange.village.winCamp!!.toCdef(), latestDayId))
-                // 参加者一覧メッセージ登録
-                .add(Message.createParticipantsMessage(latestDayId))
+            messages =
+                dayChange.messages
+                    // エピローグ遷移メッセージ登録
+                    .add(campDomainService.createWinCampMessage(dayChange.village.winCamp!!.toCdef(), latestDayId))
+                    // 参加者一覧メッセージ登録
+                    .add(Message.createParticipantsMessage(latestDayId)),
         )
     }
 
@@ -69,7 +69,7 @@ class EpilogueDomainService(
     // 日付追加
     private fun addNewDay(dayChange: DayChange): DayChange {
         return dayChange.copy(
-            village = dayChange.village.addNewDay()
+            village = dayChange.village.addNewDay(),
         )
     }
 }

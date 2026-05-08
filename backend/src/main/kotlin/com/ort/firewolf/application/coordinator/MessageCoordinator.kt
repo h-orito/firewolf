@@ -17,9 +17,8 @@ class MessageCoordinator(
     val villageCoordinator: VillageCoordinator,
     val playerService: PlayerService,
     val messageService: MessageService,
-    val messageDomainService: MessageDomainService
+    val messageDomainService: MessageDomainService,
 ) {
-
     // ===================================================================================
     //                                                                             Execute
     //                                                                           =========
@@ -35,69 +34,80 @@ class MessageCoordinator(
         messageTypeList: List<CDef.MessageType>?,
         isLatest: Boolean,
         fromParticipantIdList: List<Int>?,
-        toParticipantIdList: List<Int>?
+        toParticipantIdList: List<Int>?,
     ): Messages {
         val player = user?.let { playerService.findPlayer(it) }
         val participant: VillageParticipant? = villageCoordinator.findParticipant(village, user)
-        val query = messageDomainService.createQuery(
-            village = village,
-            participant = participant,
-            player = player,
-            day = day,
-            authority = user?.authority,
-            messageTypeList = messageTypeList,
-            from = from,
-            pageSize = pageSize,
-            pageNum = pageNum,
-            keyword = keyword,
-            isLatest = isLatest,
-            fromParticipantIdList = fromParticipantIdList,
-            toParticipantIdList = toParticipantIdList,
-        )
+        val query =
+            messageDomainService.createQuery(
+                village = village,
+                participant = participant,
+                player = player,
+                day = day,
+                authority = user?.authority,
+                messageTypeList = messageTypeList,
+                from = from,
+                pageSize = pageSize,
+                pageNum = pageNum,
+                keyword = keyword,
+                isLatest = isLatest,
+                fromParticipantIdList = fromParticipantIdList,
+                toParticipantIdList = toParticipantIdList,
+            )
         val villageDayId: Int = village.day.dayList.first { it.day == day && it.noonnight == noonnight }.id
-        val messages: Messages = messageService.findMessages(
-            villageId = village.id,
-            villageDayId = villageDayId,
-            query = query
-        )
+        val messages: Messages =
+            messageService.findMessages(
+                villageId = village.id,
+                villageDayId = villageDayId,
+                query = query,
+            )
         return messages
     }
 
-    fun findMessage(village: Village, messageType: String, messageNumber: Int, user: FirewolfUser?): Message? {
+    fun findMessage(
+        village: Village,
+        messageType: String,
+        messageNumber: Int,
+        user: FirewolfUser?,
+    ): Message? {
         val player = user?.let { playerService.findPlayer(it) }
         val participant: VillageParticipant? = villageCoordinator.findParticipant(village, user)
         return if (!messageDomainService.isViewableMessage(
                 village,
                 participant,
                 player,
-                CDef.MessageType.codeOf(messageType)
+                CDef.MessageType.codeOf(messageType),
             )
-        ) null
-        else messageService.findMessage(village.id, CDef.MessageType.codeOf(messageType), messageNumber) ?: return null
+        ) {
+            null
+        } else {
+            messageService.findMessage(village.id, CDef.MessageType.codeOf(messageType), messageNumber) ?: return null
+        }
     }
 
     fun findLatestMessagesUnixTimeMilli(
         village: Village,
         user: FirewolfUser?,
-        from: Long?
+        from: Long?,
     ): Long {
         val player = user?.let { playerService.findPlayer(it) }
         val participant: VillageParticipant? = villageCoordinator.findParticipant(village, user)
-        val query = messageDomainService.createQuery(
-            village = village,
-            participant = participant,
-            player = player,
-            day = village.day.latestDay().day,
-            authority = user?.authority,
-            messageTypeList = null,
-            from = from,
-            pageSize = null,
-            pageNum = null,
-            keyword = null,
-            isLatest = false,
-            fromParticipantIdList = null,
-            toParticipantIdList = null,
-        )
+        val query =
+            messageDomainService.createQuery(
+                village = village,
+                participant = participant,
+                player = player,
+                day = village.day.latestDay().day,
+                authority = user?.authority,
+                messageTypeList = null,
+                from = from,
+                pageSize = null,
+                pageNum = null,
+                keyword = null,
+                isLatest = false,
+                fromParticipantIdList = null,
+                toParticipantIdList = null,
+            )
         dayChangeCoordinator.dayChangeIfNeeded(village)
 
         return messageService.findLatestMessagesUnixTimeMilli(village.id, village.day.latestDay().id, query)

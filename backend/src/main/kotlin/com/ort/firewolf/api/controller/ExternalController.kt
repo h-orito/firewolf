@@ -17,62 +17,67 @@ import org.springframework.web.bind.annotation.RestController
 class ExternalController(
     val villageService: VillageService,
     val charachipService: CharachipService,
-    val playerService: PlayerService
+    val playerService: PlayerService,
 ) {
-
     @GetMapping("/recruiting-village-list")
     fun recruitingVillageList(): RecruitingVillagesView {
-        val villageList = villageService.findVillages(
-            villageStatusList = listOf(
-                VillageStatus(CDef.VillageStatus.プロローグ),
-                VillageStatus(CDef.VillageStatus.進行中),
-                VillageStatus(CDef.VillageStatus.エピローグ)
-            )
-        ).list.sortedBy { it.id }
+        val villageList =
+            villageService.findVillages(
+                villageStatusList =
+                    listOf(
+                        VillageStatus(CDef.VillageStatus.プロローグ),
+                        VillageStatus(CDef.VillageStatus.進行中),
+                        VillageStatus(CDef.VillageStatus.エピローグ),
+                    ),
+            ).list.sortedBy { it.id }
 
         val charachips = charachipService.findCharaChips()
 
         return RecruitingVillagesView(
             villageList = villageList,
-            charachips = charachips
+            charachips = charachips,
         )
     }
 
     @GetMapping("/village-record/list")
-    fun villageRecordList(
-        form: VillageRecordListForm
-    ): VillageRecordsView {
-        var villageIdList = villageService.findVillages(
-            villageStatusList = listOf(
-                VillageStatus(CDef.VillageStatus.廃村),
-                VillageStatus(CDef.VillageStatus.エピローグ),
-                VillageStatus(CDef.VillageStatus.終了)
-            )
-        ).list.map { it.id }
+    fun villageRecordList(form: VillageRecordListForm): VillageRecordsView {
+        var villageIdList =
+            villageService.findVillages(
+                villageStatusList =
+                    listOf(
+                        VillageStatus(CDef.VillageStatus.廃村),
+                        VillageStatus(CDef.VillageStatus.エピローグ),
+                        VillageStatus(CDef.VillageStatus.終了),
+                    ),
+            ).list.map { it.id }
         form.vid?.let { vid -> villageIdList = villageIdList.filter { vid.contains(it) } }
         if (villageIdList.isEmpty()) return VillageRecordsView(listOf())
         val villageList = villageService.findVillagesAsDetail(villageIdList).list.sortedBy { it.id }
-        val players = playerService.findPlayers(
-            playerIdList = villageList.flatMap {
-                (it.participant.memberList + it.spectator.memberList).map { member -> member.playerId!! }
-            }.distinct()
-        )
+        val players =
+            playerService.findPlayers(
+                playerIdList =
+                    villageList.flatMap {
+                        (it.participant.memberList + it.spectator.memberList).map { member -> member.playerId!! }
+                    }.distinct(),
+            )
         return VillageRecordsView(
             villages = Villages(villageList),
-            players = players
+            players = players,
         )
     }
 
     @GetMapping("/village-record/latest-vid")
     fun latestvillageRecord(): LatestVillageRecordView {
-        val maxVillageId = villageService.findVillages(
-            villageStatusList = listOf(
-                VillageStatus(CDef.VillageStatus.エピローグ),
-                VillageStatus(CDef.VillageStatus.終了)
-            )
-        ).list.maxOfOrNull { it.id } ?: 0
+        val maxVillageId =
+            villageService.findVillages(
+                villageStatusList =
+                    listOf(
+                        VillageStatus(CDef.VillageStatus.エピローグ),
+                        VillageStatus(CDef.VillageStatus.終了),
+                    ),
+            ).list.maxOfOrNull { it.id } ?: 0
         return LatestVillageRecordView(
-            vid = maxVillageId
+            vid = maxVillageId,
         )
     }
 }

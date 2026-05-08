@@ -10,15 +10,14 @@ import org.springframework.stereotype.Service
 
 @Service
 class CommitDomainService {
-
     fun convertToSituation(
         village: Village,
         participant: VillageParticipant?,
-        commit: Commit?
+        commit: Commit?,
     ): VillageCommitSituation {
         return VillageCommitSituation(
             availableCommit = isAvailableCommit(village, participant),
-            committing = commit != null
+            committing = commit != null,
         )
     }
 
@@ -29,7 +28,7 @@ class CommitDomainService {
      */
     fun isAvailableCommit(
         village: Village,
-        participant: VillageParticipant?
+        participant: VillageParticipant?,
     ): Boolean {
         // 村として可能か
         if (!village.isAvailableCommit()) return false
@@ -45,7 +44,7 @@ class CommitDomainService {
      */
     fun assertCommit(
         village: Village,
-        participant: VillageParticipant?
+        participant: VillageParticipant?,
     ) {
         if (!isAvailableCommit(village, participant)) throw FirewolfBusinessException("コミットできません")
     }
@@ -53,12 +52,17 @@ class CommitDomainService {
     /**
      * コミットメッセージ
      */
-    fun createCommitMessage(myself: VillageParticipant, doCommit: Boolean, villageDayId: Int): Message =
-        Message.createPrivateSystemMessage(getCommitSetMessage(doCommit, myself), villageDayId)
+    fun createCommitMessage(
+        myself: VillageParticipant,
+        doCommit: Boolean,
+        villageDayId: Int,
+    ): Message = Message.createPrivateSystemMessage(getCommitSetMessage(doCommit, myself), villageDayId)
 
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
-    private fun getCommitSetMessage(doCommit: Boolean, myself: VillageParticipant): String =
-        if (doCommit) "${myself.name()}が時短希望しました。" else "${myself.name()}が時短希望を取り消しました。"
+    private fun getCommitSetMessage(
+        doCommit: Boolean,
+        myself: VillageParticipant,
+    ): String = if (doCommit) "${myself.name()}が時短希望しました。" else "${myself.name()}が時短希望を取り消しました。"
 }

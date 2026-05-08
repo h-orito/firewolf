@@ -13,41 +13,50 @@ import org.springframework.stereotype.Service
 
 @Service
 class HiyashichukaDomainService : IAbilityDomainService {
-
     override fun getAbilityType(): AbilityType = AbilityType(CDef.AbilityType.冷やし中華)
 
     override fun getSelectableTargetList(
         village: Village,
         participant: VillageParticipant,
-        villageAbilities: VillageAbilities
+        villageAbilities: VillageAbilities,
     ): List<VillageParticipant> {
-        return if (hasAlreadyUseAbility(village, participant, villageAbilities, getAbilityType())) emptyList()
-        else listOf(participant)
+        return if (hasAlreadyUseAbility(village, participant, villageAbilities, getAbilityType())) {
+            emptyList()
+        } else {
+            listOf(participant)
+        }
     }
 
     override fun getSelectingTarget(
         village: Village,
         participant: VillageParticipant?,
-        villageAbilities: VillageAbilities
+        villageAbilities: VillageAbilities,
     ): VillageParticipant? {
         participant ?: return null
 
-        val targetVillageParticipantId = villageAbilities
-            .filterLatestday(village)
-            .filterByType(getAbilityType()).list
-            .find { it.myselfId == participant.id }
-            ?.targetId ?: return null
+        val targetVillageParticipantId =
+            villageAbilities
+                .filterLatestday(village)
+                .filterByType(getAbilityType()).list
+                .find { it.myselfId == participant.id }
+                ?.targetId ?: return null
         return village.participant.member(targetVillageParticipantId)
     }
 
-    override fun createSetMessage(myself: VillageParticipant, target: VillageParticipant?): String {
-        return if (target == null) "${myself.name()}が始まるのをやめました。"
-        else "${myself.name()}が始まることにしました。"
+    override fun createSetMessage(
+        myself: VillageParticipant,
+        target: VillageParticipant?,
+    ): String {
+        return if (target == null) {
+            "${myself.name()}が始まるのをやめました。"
+        } else {
+            "${myself.name()}が始まることにしました。"
+        }
     }
 
     override fun getDefaultAbilityList(
         village: Village,
-        villageAbilities: VillageAbilities
+        villageAbilities: VillageAbilities,
     ): List<VillageAbility> {
         return emptyList()
     }
@@ -72,14 +81,20 @@ class HiyashichukaDomainService : IAbilityDomainService {
 
     override fun isAvailableNoTarget(village: Village): Boolean = true
 
-    override fun isUsable(village: Village, participant: VillageParticipant): Boolean {
+    override fun isUsable(
+        village: Village,
+        participant: VillageParticipant,
+    ): Boolean {
         return participant.isAlive()
     }
 
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
-    private fun createMessage(village: Village, myself: VillageParticipant): Message {
+    private fun createMessage(
+        village: Village,
+        myself: VillageParticipant,
+    ): Message {
         return Message.createPublicSystemMessage(
             text = "${myself.name()}は、始まった。",
             villageDayId = village.day.latestDay().id,

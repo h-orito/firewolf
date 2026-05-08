@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull
 
 data class CreatorSayBody(
     @field:NotNull
-    val message: String?
+    val message: String?,
 ) {
     constructor() : this(null)
 }

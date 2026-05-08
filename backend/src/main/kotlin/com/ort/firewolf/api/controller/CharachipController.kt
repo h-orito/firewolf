@@ -14,9 +14,8 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class CharachipController(
-    val charachipService: CharachipService
+    val charachipService: CharachipService,
 ) {
-
     // ===================================================================================
     //                                                                             Execute
     //                                                                           =========
@@ -26,7 +25,7 @@ class CharachipController(
         val charas: Charas = charachipService.findCharas(charachips)
         return CharachipsView(
             charachips = charachips,
-            charas = charas
+            charas = charas,
         )
     }
 
@@ -37,17 +36,19 @@ class CharachipController(
         val charas: Charas = charachipService.findCharas(charachips)
         return CharachipsView(
             charachips = charachips,
-            charas = charas
+            charas = charas,
         )
     }
 
     @GetMapping("/charachips/{charaChipId}")
-    fun charachip(@PathVariable("charaChipId") charaChipId: Int): CharachipView {
+    fun charachip(
+        @PathVariable("charaChipId") charaChipId: Int,
+    ): CharachipView {
         val charachip: Charachip = charachipService.findCharaChip(charaChipId)
         val charas: Charas = charachipService.findCharas(charachip.id)
         return CharachipView(
             charachip = charachip,
-            charas = charas
+            charas = charas,
         )
     }
 
@@ -58,12 +59,16 @@ class CharachipController(
     }
 
     @GetMapping("/chara/{charaId}")
-    fun chara(@PathVariable("charaId") charaId: Int): Chara {
+    fun chara(
+        @PathVariable("charaId") charaId: Int,
+    ): Chara {
         return charachipService.findChara(charaId)
     }
 
     @GetMapping("/charachip/{charaChipId}/dummychara")
-    fun dummyChara(@PathVariable("charaChipId") charaChipId: Int): Chara {
+    fun dummyChara(
+        @PathVariable("charaChipId") charaChipId: Int,
+    ): Chara {
         return charachipService.findDummyChara(charaChipId)
     }
 }

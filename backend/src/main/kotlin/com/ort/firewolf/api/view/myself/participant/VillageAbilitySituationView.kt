@@ -14,53 +14,57 @@ data class VillageAbilitySituationView(
     val targetList: List<VillageParticipantView>,
     val target: VillageParticipantView?,
     val usable: Boolean,
-    val availableNoTarget: Boolean
+    val availableNoTarget: Boolean,
 ) {
     constructor(
         situation: VillageAbilitySituation,
         village: Village,
         players: Players,
         charas: Charas,
-        shouldHidePlayer: Boolean
+        shouldHidePlayer: Boolean,
     ) : this(
         type = situation.type,
-        attackerList = situation.attackerList.map {
-            VillageParticipantView(
-                village = village,
-                villageParticipantId = it.id,
-                players = players,
-                charas = charas,
-                shouldHidePlayer = shouldHidePlayer
-            )
-        },
-        attacker = situation.attacker?.let {
-            VillageParticipantView(
-                village = village,
-                villageParticipantId = it.id,
-                players = players,
-                charas = charas,
-                shouldHidePlayer = shouldHidePlayer
-            )
-        },
-        targetList = situation.targetList.map {
-            VillageParticipantView(
-                village = village,
-                villageParticipantId = it.id,
-                players = players,
-                charas = charas,
-                shouldHidePlayer = shouldHidePlayer
-            )
-        },
-        target = situation.target?.let {
-            VillageParticipantView(
-                village = village,
-                villageParticipantId = it.id,
-                players = players,
-                charas = charas,
-                shouldHidePlayer = shouldHidePlayer
-            )
-        },
+        attackerList =
+            situation.attackerList.map {
+                VillageParticipantView(
+                    village = village,
+                    villageParticipantId = it.id,
+                    players = players,
+                    charas = charas,
+                    shouldHidePlayer = shouldHidePlayer,
+                )
+            },
+        attacker =
+            situation.attacker?.let {
+                VillageParticipantView(
+                    village = village,
+                    villageParticipantId = it.id,
+                    players = players,
+                    charas = charas,
+                    shouldHidePlayer = shouldHidePlayer,
+                )
+            },
+        targetList =
+            situation.targetList.map {
+                VillageParticipantView(
+                    village = village,
+                    villageParticipantId = it.id,
+                    players = players,
+                    charas = charas,
+                    shouldHidePlayer = shouldHidePlayer,
+                )
+            },
+        target =
+            situation.target?.let {
+                VillageParticipantView(
+                    village = village,
+                    villageParticipantId = it.id,
+                    players = players,
+                    charas = charas,
+                    shouldHidePlayer = shouldHidePlayer,
+                )
+            },
         usable = situation.usable,
-        availableNoTarget = situation.isAvailableNoTarget
+        availableNoTarget = situation.isAvailableNoTarget,
     )
 }

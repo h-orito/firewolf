@@ -12,13 +12,12 @@ import org.springframework.stereotype.Service
 
 @Service
 class WandererGuardDomainService : GuardDomainService() {
-
     override fun getAbilityType(): AbilityType = AbilityType(CDef.AbilityType.風来護衛)
 
     override fun getSelectableTargetList(
         village: Village,
         participant: VillageParticipant,
-        villageAbilities: VillageAbilities
+        villageAbilities: VillageAbilities,
     ): List<VillageParticipant> {
         // 1日目は護衛できない
         if (village.day.latestDay().day <= 1) return listOf()
@@ -37,26 +36,30 @@ class WandererGuardDomainService : GuardDomainService() {
     override fun getSelectingTarget(
         village: Village,
         participant: VillageParticipant?,
-        villageAbilities: VillageAbilities
+        villageAbilities: VillageAbilities,
     ): VillageParticipant? {
         participant ?: return null
 
-        val targetVillageParticipantId = villageAbilities
-            .filterLatestday(village)
-            .filterByType(getAbilityType()).list
-            .find { it.myselfId == participant.id }
-            ?.targetId
+        val targetVillageParticipantId =
+            villageAbilities
+                .filterLatestday(village)
+                .filterByType(getAbilityType()).list
+                .find { it.myselfId == participant.id }
+                ?.targetId
         targetVillageParticipantId ?: return null
         return village.participant.member(targetVillageParticipantId)
     }
 
-    override fun createSetMessage(myself: VillageParticipant, target: VillageParticipant?): String {
+    override fun createSetMessage(
+        myself: VillageParticipant,
+        target: VillageParticipant?,
+    ): String {
         return "${myself.name()}が護衛対象を${target?.name() ?: "なし"}に設定しました。"
     }
 
     override fun getDefaultAbilityList(
         village: Village,
-        villageAbilities: VillageAbilities
+        villageAbilities: VillageAbilities,
     ): List<VillageAbility> {
         // 進行中のみ
         if (!village.status.isProgress()) return listOf()
@@ -76,7 +79,7 @@ class WandererGuardDomainService : GuardDomainService() {
                         villageDayId = village.day.latestDay().id,
                         myselfId = warnderer.id,
                         targetId = it.id,
-                        abilityType = getAbilityType()
+                        abilityType = getAbilityType(),
                     )
                 }
         }
@@ -96,13 +99,16 @@ class WandererGuardDomainService : GuardDomainService() {
         }
 
         return dayChange.copy(
-            messages = messages
+            messages = messages,
         ).setIsChange(dayChange)
     }
 
     override fun isAvailableNoTarget(village: Village): Boolean = true
 
-    override fun isUsable(village: Village, participant: VillageParticipant): Boolean {
+    override fun isUsable(
+        village: Village,
+        participant: VillageParticipant,
+    ): Boolean {
         // 2日目以降、生存していたら行使できる
         return village.day.latestDay().day > 1 && participant.isAlive()
     }
@@ -110,13 +116,18 @@ class WandererGuardDomainService : GuardDomainService() {
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
-    private fun createGuardMessage(village: Village, ability: VillageAbility): Message {
+    private fun createGuardMessage(
+        village: Village,
+        ability: VillageAbility,
+    ): Message {
         val hunter = village.participant.member(ability.myselfId)
         val target = village.participant.member(ability.targetId!!)
         val text = createGuardMessageString(hunter, target)
         return Message.createPrivateSystemMessage(text, village.day.latestDay().id)
     }
 
-    private fun createGuardMessageString(hunter: VillageParticipant, target: VillageParticipant): String =
-        "${hunter.name()}は、${target.name()}を護衛している。"
+    private fun createGuardMessageString(
+        hunter: VillageParticipant,
+        target: VillageParticipant,
+    ): String = "${hunter.name()}は、${target.name()}を護衛している。"
 }

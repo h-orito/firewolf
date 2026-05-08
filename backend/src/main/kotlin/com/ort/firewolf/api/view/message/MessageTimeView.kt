@@ -8,15 +8,15 @@ data class MessageTimeView(
     val villageDayId: Int,
     val day: Int,
     val datetime: LocalDateTime,
-    val unixTimeMilli: Long
+    val unixTimeMilli: Long,
 ) {
     constructor(
         messageTime: MessageTime,
-        villageDay: VillageDay
+        villageDay: VillageDay,
     ) : this(
         villageDayId = messageTime.villageDayId,
         day = villageDay.day,
         datetime = messageTime.datetime,
-        unixTimeMilli = messageTime.unixTimeMilli
+        unixTimeMilli = messageTime.unixTimeMilli,
     )
 }

@@ -5,5 +5,5 @@ data class VillageSayRestrictSituation(
     val maxCount: Int?,
     val remainingCount: Int?,
     val maxLength: Int,
-    val maxLine: Int
+    val maxLine: Int,
 )

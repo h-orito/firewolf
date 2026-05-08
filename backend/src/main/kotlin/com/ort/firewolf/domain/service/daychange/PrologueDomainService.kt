@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service
 @Service
 class PrologueDomainService(
     private val abilityDomainService: AbilityDomainService,
-    private val skillAssignDomainService: SkillAssignDomainService
+    private val skillAssignDomainService: SkillAssignDomainService,
 ) {
     fun extendIfNeeded(dayChange: DayChange): DayChange {
         // 開始時刻になっていない場合は何もしない
@@ -22,9 +22,7 @@ class PrologueDomainService(
         return extendPrologue(dayChange).setIsChange(dayChange)
     }
 
-    fun addDayIfNeeded(
-        dayChange: DayChange
-    ): DayChange {
+    fun addDayIfNeeded(dayChange: DayChange): DayChange {
         // 開始時刻になっていない場合は何もしない
         if (!shouldForward(dayChange.village)) return dayChange
         // 新しい日付追加
@@ -60,7 +58,7 @@ class PrologueDomainService(
     private fun extendPrologue(dayChange: DayChange): DayChange {
         return dayChange.copy(
             village = dayChange.village.extendPrologue(),
-            messages = dayChange.messages.add(dayChange.village.createExtendPrologueMessage())
+            messages = dayChange.messages.add(dayChange.village.createExtendPrologueMessage()),
         )
     }
 
@@ -69,20 +67,20 @@ class PrologueDomainService(
 
     private fun addStartMessage(dayChange: DayChange): DayChange {
         return dayChange.copy(
-            messages = dayChange.messages.add(dayChange.village.createVillageDay1Message())
+            messages = dayChange.messages.add(dayChange.village.createVillageDay1Message()),
         )
     }
 
     private fun addOrganizationMessage(dayChange: DayChange): DayChange {
         return dayChange.copy(
-            messages = dayChange.messages.add(dayChange.village.createOrganizationMessage())
+            messages = dayChange.messages.add(dayChange.village.createOrganizationMessage()),
         )
     }
 
     private fun addDummyCharaFirstDayMessageIfNeeded(dayChange: DayChange): DayChange {
         return dayChange.village.createDummyCharaFirstDayMessage()?.let {
             dayChange.copy(
-                messages = dayChange.messages.add(it)
+                messages = dayChange.messages.add(it),
             )
         } ?: dayChange
     }

@@ -7,9 +7,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class AbilityService(
-    val abilityDataSource: AbilityDataSource
+    val abilityDataSource: AbilityDataSource,
 ) {
-
     fun findVillageAbilities(villageId: Int): VillageAbilities = abilityDataSource.findAbilities(villageId)
 
     /**
@@ -18,5 +17,8 @@ class AbilityService(
      */
     fun updateAbility(villageAbility: VillageAbility) = abilityDataSource.updateAbility(villageAbility)
 
-    fun updateDifference(before: VillageAbilities, after: VillageAbilities) = abilityDataSource.updateDifference(before, after)
+    fun updateDifference(
+        before: VillageAbilities,
+        after: VillageAbilities,
+    ) = abilityDataSource.updateDifference(before, after)
 }

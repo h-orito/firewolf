@@ -13,12 +13,11 @@ import org.springframework.stereotype.Service
 
 @Service
 class ParticipateDomainService {
-
     fun convertToSituation(
         village: Village,
         participant: VillageParticipant?,
         player: Player?,
-        charas: Charas
+        charas: Charas,
     ): VillageParticipateSituation {
         return VillageParticipateSituation(
             isParticipating = participant != null,
@@ -26,7 +25,7 @@ class ParticipateDomainService {
             isAvailableSpectate = isAvailableSpectate(player, village, charas.list.size),
             selectableCharaList = getSelectableCharaList(village, charas),
             isAvailableLeave = isAvailableLeave(village, participant),
-            myself = participant
+            myself = participant,
         )
     }
 
@@ -45,7 +44,7 @@ class ParticipateDomainService {
         charaId: Int,
         firstRequestSkill: CDef.Skill,
         secondRequestSkill: CDef.Skill,
-        password: String?
+        password: String?,
     ) {
         // 参加できない状況ならNG
         if (!isAvailableParticipate(player, village)) throw FirewolfBusinessException("参加できません")
@@ -54,9 +53,11 @@ class ParticipateDomainService {
         // 役職希望無効の場合はおまかせのみ
         if (!village.setting.rules.isValidSkillRequest(
                 firstRequestSkill,
-                secondRequestSkill
+                secondRequestSkill,
             )
-        ) throw FirewolfBusinessException("希望役職が不正です")
+        ) {
+            throw FirewolfBusinessException("希望役職が不正です")
+        }
     }
 
     /**
@@ -70,7 +71,7 @@ class ParticipateDomainService {
         village: Village,
         charaId: Int,
         charachipCharaNum: Int,
-        password: String?
+        password: String?,
     ) {
         if (!isAvailableSpectate(player, village, charachipCharaNum)) throw FirewolfBusinessException("見学できません")
         // 既にそのキャラが参加していたりパスワードを間違えていたらNG
@@ -85,19 +86,21 @@ class ParticipateDomainService {
         chara: Chara,
         charaName: String,
         charaShortName: String,
-        isSpectate: Boolean
+        isSpectate: Boolean,
     ): Message {
         // 何人目か
-        val number = if (isSpectate) {
-            village.spectator.count
-        } else {
-            village.participant.count
-        }
-        val text = if (isSpectate) {
-            "（見学）${number}人目、[${charaShortName}] ${charaName}。"
-        } else {
-            "${number}人目、[${charaShortName}] ${charaName}。"
-        }
+        val number =
+            if (isSpectate) {
+                village.spectator.count
+            } else {
+                village.participant.count
+            }
+        val text =
+            if (isSpectate) {
+                "（見学）${number}人目、[$charaShortName] $charaName。"
+            } else {
+                "${number}人目、[$charaShortName] $charaName。"
+            }
         return Message.createPublicSystemMessage(text, village.day.prologueDay().id)
     }
 
@@ -106,10 +109,13 @@ class ParticipateDomainService {
      * @param charas charas
      * @return 参加/見学できるキャラ
      */
-    fun getSelectableCharaList(village: Village, charas: Charas): List<Chara> {
+    fun getSelectableCharaList(
+        village: Village,
+        charas: Charas,
+    ): List<Chara> {
         return charas.list.filterNot { chara ->
-            village.participant.memberList.any { it.charaId == chara.id }
-                    || village.spectator.memberList.any { it.charaId == chara.id }
+            village.participant.memberList.any { it.charaId == chara.id } ||
+                village.spectator.memberList.any { it.charaId == chara.id }
         }
     }
 
@@ -120,7 +126,7 @@ class ParticipateDomainService {
      */
     fun isAvailableLeave(
         village: Village,
-        participant: VillageParticipant?
+        participant: VillageParticipant?,
     ): Boolean {
         // 村として退村可能か
         if (!village.isAvailableLeave()) return false
@@ -137,17 +143,18 @@ class ParticipateDomainService {
      */
     fun assertLeave(
         village: Village,
-        participant: VillageParticipant?
+        participant: VillageParticipant?,
     ) {
         if (!isAvailableLeave(village, participant)) throw FirewolfBusinessException("退村できません")
     }
 
-
     /**
      * 退村メッセージ
      */
-    fun createLeaveMessage(village: Village, participant: VillageParticipant): Message =
-        Message.createPublicSystemMessage(createLeaveMessageString(participant), village.day.latestDay().id)
+    fun createLeaveMessage(
+        village: Village,
+        participant: VillageParticipant,
+    ): Message = Message.createPublicSystemMessage(createLeaveMessageString(participant), village.day.latestDay().id)
 
     /**
      * 名前変更メッセージ
@@ -155,23 +162,24 @@ class ParticipateDomainService {
     fun createChangeNameMessage(
         village: Village,
         before: VillageParticipant,
-        after: VillageParticipant
+        after: VillageParticipant,
     ): Message =
         Message.createPublicSystemMessage(
             createChangeNameMessageString(before, after),
-            village.day.latestDay().id
+            village.day.latestDay().id,
         )
 
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
+
     /**
      * @param player player
      * @return 参加可能な状況か
      */
     private fun isAvailableParticipate(
         player: Player?,
-        village: Village
+        village: Village,
     ): Boolean {
         // プレイヤーとして参加可能か
         player ?: return false
@@ -188,7 +196,7 @@ class ParticipateDomainService {
     private fun isAvailableSpectate(
         player: Player?,
         village: Village,
-        charachipCharaNum: Int
+        charachipCharaNum: Int,
     ): Boolean {
         // プレイヤーとして参加可能か
         player ?: return false
@@ -197,9 +205,10 @@ class ParticipateDomainService {
         return village.isAvailableSpectate(charachipCharaNum)
     }
 
-    private fun createLeaveMessageString(participant: VillageParticipant): String =
-        "${participant.name()}は村を去った。"
+    private fun createLeaveMessageString(participant: VillageParticipant): String = "${participant.name()}は村を去った。"
 
-    private fun createChangeNameMessageString(before: VillageParticipant, after: VillageParticipant): String =
-        "名前を変更しました。\n${before.name()} → ${after.name()}"
+    private fun createChangeNameMessageString(
+        before: VillageParticipant,
+        after: VillageParticipant,
+    ): String = "名前を変更しました。\n${before.name()} → ${after.name()}"
 }

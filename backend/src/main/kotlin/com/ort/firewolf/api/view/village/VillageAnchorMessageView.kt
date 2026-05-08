@@ -7,20 +7,25 @@ import com.ort.firewolf.domain.model.player.Players
 import com.ort.firewolf.domain.model.village.Village
 
 data class VillageAnchorMessageView(
-    val message: MessageView?
+    val message: MessageView?,
 ) {
     constructor(
         message: Message?,
         village: Village,
         players: Players,
-        charas: Charas
+        charas: Charas,
     ) : this(
-        message = if (message == null) null else MessageView(
-            message = message,
-            village = village,
-            players = players,
-            charas = charas,
-            shouldHidePlayer = !village.status.isSolved()
-        )
+        message =
+            if (message == null) {
+                null
+            } else {
+                MessageView(
+                    message = message,
+                    village = village,
+                    players = players,
+                    charas = charas,
+                    shouldHidePlayer = !village.status.isSolved(),
+                )
+            },
     )
 }

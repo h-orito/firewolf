@@ -8,7 +8,6 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedA
 
 @Configuration
 class FireWolfAuthenticationProvider : AuthenticationProvider {
-
     @Throws(AuthenticationException::class)
     override fun authenticate(authentication: Authentication): Authentication {
         return authentication

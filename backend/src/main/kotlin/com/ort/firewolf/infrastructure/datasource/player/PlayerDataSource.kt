@@ -13,15 +13,15 @@ import org.springframework.stereotype.Repository
 class PlayerDataSource(
     private val playerBhv: PlayerBhv,
     private val playerDetailBhv: PlayerDetailBhv,
-    private val twitterUserBhv: TwitterUserBhv
+    private val twitterUserBhv: TwitterUserBhv,
 ) {
-
     fun findPlayer(id: Int): com.ort.firewolf.domain.model.player.Player {
-        val player = playerBhv.selectEntityWithDeletedCheck {
-            it.setupSelect_TwitterUserAsOne()
-            it.setupSelect_PlayerDetailAsOne()
-            it.query().setPlayerId_Equal(id)
-        }
+        val player =
+            playerBhv.selectEntityWithDeletedCheck {
+                it.setupSelect_TwitterUserAsOne()
+                it.setupSelect_PlayerDetailAsOne()
+                it.query().setPlayerId_Equal(id)
+            }
         playerBhv.load(player) {
             it.loadVillage { } // creator village
             it.loadVillagePlayer { vpCB ->
@@ -33,11 +33,12 @@ class PlayerDataSource(
     }
 
     fun findPlayer(uid: String): com.ort.firewolf.domain.model.player.Player {
-        val player = playerBhv.selectEntityWithDeletedCheck {
-            it.setupSelect_TwitterUserAsOne()
-            it.setupSelect_PlayerDetailAsOne()
-            it.query().setUid_Equal(uid)
-        }
+        val player =
+            playerBhv.selectEntityWithDeletedCheck {
+                it.setupSelect_TwitterUserAsOne()
+                it.setupSelect_PlayerDetailAsOne()
+                it.query().setUid_Equal(uid)
+            }
         playerBhv.load(player) {
             it.loadVillage { } // creator village
             it.loadVillagePlayer { vpCB ->
@@ -49,27 +50,34 @@ class PlayerDataSource(
     }
 
     fun findPlayers(villageId: Int): Players {
-        val playerList = playerBhv.selectList {
-            it.setupSelect_TwitterUserAsOne()
-            it.setupSelect_PlayerDetailAsOne()
-            it.query().existsVillagePlayer {
-                it.query().setVillageId_Equal(villageId)
+        val playerList =
+            playerBhv.selectList {
+                it.setupSelect_TwitterUserAsOne()
+                it.setupSelect_PlayerDetailAsOne()
+                it.query().existsVillagePlayer {
+                    it.query().setVillageId_Equal(villageId)
+                }
             }
-        }
         return Players(list = playerList.map { convertPlayerToSimplePlayer(it) })
     }
 
     fun findPlayers(playerIdList: List<Int>): Players {
         if (playerIdList.isEmpty()) return Players(listOf())
-        val playerList = playerBhv.selectList {
-            it.setupSelect_TwitterUserAsOne()
-            it.setupSelect_PlayerDetailAsOne()
-            it.query().setPlayerId_InScope(playerIdList)
-        }
+        val playerList =
+            playerBhv.selectList {
+                it.setupSelect_TwitterUserAsOne()
+                it.setupSelect_PlayerDetailAsOne()
+                it.query().setPlayerId_InScope(playerIdList)
+            }
         return Players(list = playerList.map { convertPlayerToSimplePlayer(it) })
     }
 
-    fun update(uid: String, nickname: String, twitterUserName: String?, twitterUserId: String?) {
+    fun update(
+        uid: String,
+        nickname: String,
+        twitterUserName: String?,
+        twitterUserId: String?,
+    ) {
         val existingPlayer = findPlayer(uid)
         // 既に自分で変更している可能性があるので、名無しのままの場合のみ変更する
         if (existingPlayer.nickname == "名無し") {
@@ -97,7 +105,7 @@ class PlayerDataSource(
         uid: String,
         nickname: String,
         otherSiteName: String?,
-        introduction: String?
+        introduction: String?,
     ) {
         val player = Player()
         player.uniqueBy(uid)
@@ -107,9 +115,10 @@ class PlayerDataSource(
         val detail = PlayerDetail()
         detail.otherSiteName = otherSiteName
         detail.introduction = introduction
-        val entity = playerDetailBhv.selectEntity {
-            it.query().queryPlayer().setUid_Equal(uid)
-        }
+        val entity =
+            playerDetailBhv.selectEntity {
+                it.query().queryPlayer().setUid_Equal(uid)
+            }
         if (entity.isPresent) {
             playerDetailBhv.queryUpdate(detail) {
                 it.query().queryPlayer().setUid_Equal(uid)
@@ -121,7 +130,10 @@ class PlayerDataSource(
         }
     }
 
-    fun updateDifference(before: Players, after: Players) {
+    fun updateDifference(
+        before: Players,
+        after: Players,
+    ) {
         // player
         after.list.forEach {
             val beforePlayer = before.list.first { bP -> bP.id == it.id }
@@ -146,18 +158,22 @@ class PlayerDataSource(
             introduction = player.playerDetailAsOne.map { it.introduction }.orElse(null),
             isRestrictedParticipation = player.isRestrictedParticipation,
             shouldCheckAccessInfo = player.shouldCheckAccessInfo,
-            participateProgressVillageIdList = player.villagePlayerList.filter {
-                !it.village.get().villageStatusCodeAsVillageStatus.isSolvedVillage
-            }.map { it.villageId },
-            participateFinishedVillageIdList = player.villagePlayerList.filter {
-                it.village.get().villageStatusCodeAsVillageStatus.isSolvedVillage
-            }.map { it.villageId },
-            createProgressVillageIdList = player.villageList.filter {
-                !it.villageStatusCodeAsVillageStatus.isSolvedVillage
-            }.map { it.villageId },
-            createFinishedVillageIdList = player.villageList.filter {
-                it.villageStatusCodeAsVillageStatus.isSolvedVillage
-            }.map { it.villageId }
+            participateProgressVillageIdList =
+                player.villagePlayerList.filter {
+                    !it.village.get().villageStatusCodeAsVillageStatus.isSolvedVillage
+                }.map { it.villageId },
+            participateFinishedVillageIdList =
+                player.villagePlayerList.filter {
+                    it.village.get().villageStatusCodeAsVillageStatus.isSolvedVillage
+                }.map { it.villageId },
+            createProgressVillageIdList =
+                player.villageList.filter {
+                    !it.villageStatusCodeAsVillageStatus.isSolvedVillage
+                }.map { it.villageId },
+            createFinishedVillageIdList =
+                player.villageList.filter {
+                    it.villageStatusCodeAsVillageStatus.isSolvedVillage
+                }.map { it.villageId },
         )
     }
 
@@ -169,13 +185,14 @@ class PlayerDataSource(
             otherSiteName = player.playerDetailAsOne.map { it.otherSiteName }.orElse(null),
             introduction = player.playerDetailAsOne.map { it.introduction }.orElse(null),
             isRestrictedParticipation = player.isRestrictedParticipation,
-            shouldCheckAccessInfo = player.shouldCheckAccessInfo
+            shouldCheckAccessInfo = player.shouldCheckAccessInfo,
         )
     }
 
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
+
     /**
      * 絵文字を除く文字列を返す
      * @param text

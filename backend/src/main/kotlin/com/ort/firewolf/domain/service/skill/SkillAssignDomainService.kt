@@ -9,20 +9,18 @@ import org.springframework.stereotype.Service
 
 @Service
 class SkillAssignDomainService {
-
-    fun assign(
-        dayChange: DayChange
-    ): DayChange {
+    fun assign(dayChange: DayChange): DayChange {
         val village = dayChange.village
         val skillPersonCountMap = village.setting.organizations.mapToSkillCount(village.participant.count)
 
         // ダミー配役
-        var participants = assignDummy(
-            village.participant,
-            skillPersonCountMap,
-            village.dummyChara(),
-            village.setting.rules.availableDummySkill
-        )
+        var participants =
+            assignDummy(
+                village.participant,
+                skillPersonCountMap,
+                village.dummyChara(),
+                village.setting.rules.availableDummySkill,
+            )
 
         // 第1希望で役職希望した人を割り当て
         participants = assignFirstSpecifyRequest(participants, skillPersonCountMap)
@@ -40,7 +38,7 @@ class SkillAssignDomainService {
         participants = assignOther(participants, skillPersonCountMap)
 
         return dayChange.copy(
-            village = village.assignSkill(participants)
+            village = village.assignSkill(participants),
         )
     }
 
@@ -51,7 +49,7 @@ class SkillAssignDomainService {
         participants: VillageParticipants,
         skillPersonCountMap: Map<CDef.Skill, Int>,
         dummyChara: VillageParticipant,
-        availableDummySkill: Boolean
+        availableDummySkill: Boolean,
     ): VillageParticipants {
         // 役欠け無しの場合は村人固定
         if (!availableDummySkill) return participants.assignSkill(dummyChara.id, Skill(CDef.Skill.村人))
@@ -61,7 +59,9 @@ class SkillAssignDomainService {
             if (cdefSkill.isNoDeadByAttack ||
                 cdefSkill.isNotSelectableAttack ||
                 cdefSkill.isForceDoubleSuicide
-            ) continue
+            ) {
+                continue
+            }
             repeat(capacity) {
                 availableSkillList.add(cdefSkill)
             }
@@ -72,14 +72,15 @@ class SkillAssignDomainService {
 
     private fun assignFirstSpecifyRequest(
         participants: VillageParticipants,
-        skillPersonCountMap: Map<CDef.Skill, Int>
+        skillPersonCountMap: Map<CDef.Skill, Int>,
     ): VillageParticipants {
         var changedParticipants = participants.copy()
         for ((cdefSkill, capacity) in skillPersonCountMap.entries) {
             // この役職を希望していてまだ割り当たってない人
-            var requestPlayerList = changedParticipants.memberList.filter {
-                it.skillRequest.first.code == cdefSkill.code() && it.skill == null
-            }
+            var requestPlayerList =
+                changedParticipants.memberList.filter {
+                    it.skillRequest.first.code == cdefSkill.code() && it.skill == null
+                }
             // 希望している人がいない
             if (requestPlayerList.isEmpty()) continue
 
@@ -101,14 +102,15 @@ class SkillAssignDomainService {
 
     private fun assignSecondSpecifyRequest(
         participants: VillageParticipants,
-        skillPersonCountMap: Map<CDef.Skill, Int>
+        skillPersonCountMap: Map<CDef.Skill, Int>,
     ): VillageParticipants {
         var changedParticipants = participants.copy()
         for ((cdefSkill, capacity) in skillPersonCountMap.entries) {
             // この役職を希望していてまだ割り当たってない人
-            var requestPlayerList = changedParticipants.memberList.filter {
-                it.skillRequest.second.code == cdefSkill.code() && it.skill == null
-            }
+            var requestPlayerList =
+                changedParticipants.memberList.filter {
+                    it.skillRequest.second.code == cdefSkill.code() && it.skill == null
+                }
             // 希望している人がいない
             if (requestPlayerList.isEmpty()) continue
 
@@ -128,11 +130,16 @@ class SkillAssignDomainService {
         return changedParticipants
     }
 
-    private fun assignFirstRangeRequest(participants: VillageParticipants, skillPersonCountMap: Map<CDef.Skill, Int>): VillageParticipants {
+    private fun assignFirstRangeRequest(
+        participants: VillageParticipants,
+        skillPersonCountMap: Map<CDef.Skill, Int>,
+    ): VillageParticipants {
         var changedParticipants = participants.copy()
         // 範囲指定している人
         changedParticipants.memberList
-            .filter { it.skill == null && CDef.Skill.listOfSomeoneSkill().contains(it.skillRequest.first.toCdef()) && it.skillRequest.first.toCdef() != CDef.Skill.おまかせ }
+            .filter {
+                it.skill == null && CDef.Skill.listOfSomeoneSkill().contains(it.skillRequest.first.toCdef()) && it.skillRequest.first.toCdef() != CDef.Skill.おまかせ
+            }
             .shuffled()
             .forEach {
                 // 役職候補
@@ -150,24 +157,28 @@ class SkillAssignDomainService {
 
     private fun getCandidateSkillList(cdefSomeoneSkill: CDef.Skill): List<CDef.Skill> {
         return when (cdefSomeoneSkill) {
-            CDef.Skill.おまかせ村人陣営 -> CDef.Skill.listAll().filter {
-                !CDef.Skill.listOfSomeoneSkill().contains(it) && it.campCode() == CDef.Camp.村人陣営.code()
-            }
-            CDef.Skill.おまかせ人狼陣営 -> CDef.Skill.listAll().filter {
-                !CDef.Skill.listOfSomeoneSkill().contains(it) && it.campCode() == CDef.Camp.人狼陣営.code()
-            }
+            CDef.Skill.おまかせ村人陣営 ->
+                CDef.Skill.listAll().filter {
+                    !CDef.Skill.listOfSomeoneSkill().contains(it) && it.campCode() == CDef.Camp.村人陣営.code()
+                }
+            CDef.Skill.おまかせ人狼陣営 ->
+                CDef.Skill.listAll().filter {
+                    !CDef.Skill.listOfSomeoneSkill().contains(it) && it.campCode() == CDef.Camp.人狼陣営.code()
+                }
             else -> throw IllegalStateException("謎のおまかせ希望")
         }
     }
 
     private fun assignSecondRangeRequest(
         participants: VillageParticipants,
-        skillPersonCountMap: Map<CDef.Skill, Int>
+        skillPersonCountMap: Map<CDef.Skill, Int>,
     ): VillageParticipants {
         var changedParticipants = participants.copy()
         // 範囲指定している人
         changedParticipants.memberList
-            .filter { it.skill == null && CDef.Skill.listOfSomeoneSkill().contains(it.skillRequest.second.toCdef()) && it.skillRequest.second.toCdef() != CDef.Skill.おまかせ }
+            .filter {
+                it.skill == null && CDef.Skill.listOfSomeoneSkill().contains(it.skillRequest.second.toCdef()) && it.skillRequest.second.toCdef() != CDef.Skill.おまかせ
+            }
             .shuffled()
             .forEach {
                 // 役職候補
@@ -183,7 +194,10 @@ class SkillAssignDomainService {
         return changedParticipants
     }
 
-    private fun assignOther(participants: VillageParticipants, skillPersonCountMap: Map<CDef.Skill, Int>): VillageParticipants {
+    private fun assignOther(
+        participants: VillageParticipants,
+        skillPersonCountMap: Map<CDef.Skill, Int>,
+    ): VillageParticipants {
         var changedParticipants = participants.copy()
 
         // 役職が決まっていない参加者に

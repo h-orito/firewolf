@@ -7,16 +7,18 @@ import com.ort.firewolf.domain.model.player.PlayerRecords
 import com.ort.firewolf.domain.model.village.Villages
 import org.springframework.stereotype.Service
 
-
 @Service
 class PlayerCoordinator(
-    private val villageService: VillageService
+    private val villageService: VillageService,
 ) {
     fun findPlayerRecords(player: Player): PlayerRecords {
         if (player.participateFinishedVillageIdList.isEmpty()) return PlayerRecords(player, Villages(listOf()))
         val villages = villageService.findVillagesAsDetail(player.participateFinishedVillageIdList)
-        return PlayerRecords(player, villages.copy(
-            list = villages.list.filter { it.status.toCdef() != CDef.VillageStatus.廃村 }
-        ))
+        return PlayerRecords(
+            player,
+            villages.copy(
+                list = villages.list.filter { it.status.toCdef() != CDef.VillageStatus.廃村 },
+            ),
+        )
     }
 }

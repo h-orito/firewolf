@@ -6,14 +6,15 @@ import org.springframework.stereotype.Service
 
 @Service
 class CampDomainService {
-
     /**
      * 勝利陣営メッセージ
      * @param cdefWinCamp 勝利した陣営
      * @param villageDayId 村日付ID
      */
-    fun createWinCampMessage(cdefWinCamp: CDef.Camp, villageDayId: Int): Message =
-        Message.createPublicSystemMessage(getWinCampMessage(cdefWinCamp), villageDayId)
+    fun createWinCampMessage(
+        cdefWinCamp: CDef.Camp,
+        villageDayId: Int,
+    ): Message = Message.createPublicSystemMessage(getWinCampMessage(cdefWinCamp), villageDayId)
 
     // ===================================================================================
     //                                                                        Assist Logic

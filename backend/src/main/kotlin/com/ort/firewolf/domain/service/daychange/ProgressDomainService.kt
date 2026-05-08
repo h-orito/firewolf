@@ -42,10 +42,12 @@ class ProgressDomainService(
     private val suicideDomainService: SuicideDomainService,
     private val epilogueDomainService: EpilogueDomainService,
     private val abilityDomainService: AbilityDomainService,
-    private val voteDomainService: VoteDomainService
+    private val voteDomainService: VoteDomainService,
 ) {
-
-    fun addDayIfNeeded(dayChange: DayChange, commits: Commits): DayChange {
+    fun addDayIfNeeded(
+        dayChange: DayChange,
+        commits: Commits,
+    ): DayChange {
         // 日付更新の必要がなかったら終了
         if (!shouldForward(dayChange.village, commits)) return dayChange
         // 日付追加
@@ -55,7 +57,7 @@ class ProgressDomainService(
     fun dayChange(
         beforeDayChange: DayChange,
         todayMessages: Messages,
-        commits: Commits
+        commits: Commits,
     ): DayChange {
         // 突然死
         var dayChange =
@@ -129,14 +131,20 @@ class ProgressDomainService(
     //                                                                        Assist Logic
     //                                                                        ============
     // 日付を進める必要があるか
-    private fun shouldForward(village: Village, commits: Commits): Boolean {
+    private fun shouldForward(
+        village: Village,
+        commits: Commits,
+    ): Boolean {
         // 全員コミットしている
         if (allCommitted(village, commits)) return true
         // 更新日時を過ぎている
         return !FirewolfDateUtil.currentLocalDateTime().isBefore(village.day.latestDay().dayChangeDatetime)
     }
 
-    private fun allCommitted(village: Village, commits: Commits): Boolean {
+    private fun allCommitted(
+        village: Village,
+        commits: Commits,
+    ): Boolean {
         if (!village.setting.rules.availableCommit) return false
         // ダミーを除く最新日の生存者数
         val livingPersonCount = village.notDummyParticipant().filterAlive().count
@@ -149,7 +157,7 @@ class ProgressDomainService(
     // 日付追加
     private fun addNewDay(dayChange: DayChange): DayChange {
         return dayChange.copy(
-            village = dayChange.village.addNewDay()
+            village = dayChange.village.addNewDay(),
         ).setIsChange(dayChange)
     }
 
@@ -157,22 +165,23 @@ class ProgressDomainService(
         val village = dayChange.village
         if (village.day.latestDay().day != 2) return dayChange
         return dayChange.copy(
-            messages = dayChange.messages.add(village.createVillageDay2Message())
+            messages = dayChange.messages.add(village.createVillageDay2Message()),
         )
     }
 
     // 生存者メッセージ
     private fun addAliveMemberMessage(dayChange: DayChange): DayChange {
         return dayChange.copy(
-            messages = dayChange.messages.add(createAliveMemberMessage(dayChange.village))
+            messages = dayChange.messages.add(createAliveMemberMessage(dayChange.village)),
         )
     }
 
     private fun createAliveMemberMessage(village: Village): Message {
-        val text = village.participant.filterAlive().memberList.joinToString(
-            separator = "\n",
-            prefix = "現在の生存者は以下の${village.participant.filterAlive().count}名。\n"
-        ) { member -> member.name() }
+        val text =
+            village.participant.filterAlive().memberList.joinToString(
+                separator = "\n",
+                prefix = "現在の生存者は以下の${village.participant.filterAlive().count}名。\n",
+            ) { member -> member.name() }
         return Message.createPublicSystemMessage(text, village.day.latestDay().id)
     }
 }

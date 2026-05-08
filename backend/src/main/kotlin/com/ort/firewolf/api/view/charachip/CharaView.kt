@@ -11,17 +11,16 @@ data class CharaView(
     val charachipId: Int,
     val defaultMessage: CharaDefaultMessage,
     val display: CharaSize,
-    val faceList: List<CharaFace>
+    val faceList: List<CharaFace>,
 ) {
-
     constructor(
-        chara: Chara
+        chara: Chara,
     ) : this(
         id = chara.id,
         charaName = CharaNameView(chara.charaName),
         charachipId = chara.charachipId,
         defaultMessage = chara.defaultMessage,
         display = chara.display,
-        faceList = chara.faceList
+        faceList = chara.faceList,
     )
 }

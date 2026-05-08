@@ -7,15 +7,15 @@ data class PlayerView(
     val nickname: String,
     val twitterUserName: String?,
     val otherSiteName: String?,
-    val introduction: String?
+    val introduction: String?,
 ) {
     constructor(
-        player: Player
+        player: Player,
     ) : this(
         id = player.id,
         nickname = player.nickname,
         twitterUserName = player.twitterUserName,
         otherSiteName = player.otherSiteName,
-        introduction = player.introduction
+        introduction = player.introduction,
     )
 }

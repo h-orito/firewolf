@@ -12,26 +12,31 @@ import org.springframework.stereotype.Service
 
 @Service
 class VoteDomainService {
-
     fun convertToSituation(
         village: Village,
         participant: VillageParticipant?,
-        votes: VillageVotes
+        votes: VillageVotes,
     ): VillageVoteSituation {
         return VillageVoteSituation(
             isAvailableVote = isAvailableVote(village, participant),
             targetList = getSelectableTargetList(village, participant),
-            target = getSelectingTarget(village, participant, votes)
+            target = getSelectingTarget(village, participant, votes),
         )
     }
 
-    fun assertVote(village: Village, participant: VillageParticipant?, targetId: Int) {
+    fun assertVote(
+        village: Village,
+        participant: VillageParticipant?,
+        targetId: Int,
+    ) {
         if (!isAvailableVote(village, participant)) throw FirewolfBusinessException("投票できません")
         if (getSelectableTargetList(
                 village,
-                participant
+                participant,
             ).none { it.id == targetId }
-        ) throw FirewolfBusinessException("投票できません")
+        ) {
+            throw FirewolfBusinessException("投票できません")
+        }
     }
 
     /**
@@ -39,30 +44,33 @@ class VoteDomainService {
      */
     fun createEachVoteMessage(
         village: Village,
-        votedMap: Map<Int, List<VillageVote>>
+        votedMap: Map<Int, List<VillageVote>>,
     ): Message {
-        val maxFromCharaNameLength = votedMap.values.flatten().map { vote ->
-            village.participant.member(vote.myselfId).name().length
-        }.max()!!
-        val maxToCharaNameLength = votedMap.values.flatten().map { vote ->
-            village.participant.member(vote.targetId).name().length
-        }.max()!!
+        val maxFromCharaNameLength =
+            votedMap.values.flatten().map { vote ->
+                village.participant.member(vote.myselfId).name().length
+            }.max()!!
+        val maxToCharaNameLength =
+            votedMap.values.flatten().map { vote ->
+                village.participant.member(vote.targetId).name().length
+            }.max()!!
 
-        val text = votedMap.entries.sortedBy { it.value.size }.reversed().map { entry ->
-            // 得票数が多い順
-            entry.value.map { vote ->
-                createEachVoteResultString(
-                    village.participant.member(vote.myselfId),
-                    village.participant.member(vote.targetId),
-                    maxFromCharaNameLength,
-                    maxToCharaNameLength,
-                    entry.value.size
-                )
-            }
-        }.flatten().joinToString(
-            prefix = "投票結果は以下の通り。\n",
-            separator = "\n"
-        )
+        val text =
+            votedMap.entries.sortedBy { it.value.size }.reversed().map { entry ->
+                // 得票数が多い順
+                entry.value.map { vote ->
+                    createEachVoteResultString(
+                        village.participant.member(vote.myselfId),
+                        village.participant.member(vote.targetId),
+                        maxFromCharaNameLength,
+                        maxToCharaNameLength,
+                        entry.value.size,
+                    )
+                }
+            }.flatten().joinToString(
+                prefix = "投票結果は以下の通り。\n",
+                separator = "\n",
+            )
 
         return if (village.setting.rules.openVote) {
             Message.createPublicSystemMessage(text, village.day.latestDay().id)
@@ -78,21 +86,23 @@ class VoteDomainService {
         // 最新日
         val latestVillageDayId = village.day.latestDay().id
         // 生存している人だけ自分に投票
-        val newVoteList = village.participant.filterAlive().memberList.map { member ->
-            VillageVote(
-                villageDayId = latestVillageDayId,
-                myselfId = member.id,
-                targetId = member.id
-            )
-        }
+        val newVoteList =
+            village.participant.filterAlive().memberList.map { member ->
+                VillageVote(
+                    villageDayId = latestVillageDayId,
+                    myselfId = member.id,
+                    targetId = member.id,
+                )
+            }
         return dayChange.copy(
-            votes = votes.addAll(newVoteList)
+            votes = votes.addAll(newVoteList),
         )
     }
 
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
+
     /**
      * @return {キャラ名} -> {キャラ名}（{N}票）
      */
@@ -101,23 +111,28 @@ class VoteDomainService {
         target: VillageParticipant,
         maxFromCharaNameLength: Int,
         maxToCharaNameLength: Int,
-        count: Int
+        count: Int,
     ): String {
-        val fromString = from.name().padEnd(
-            length = maxFromCharaNameLength,
-            padChar = '　'
-        )
-        val toString = target.name().padEnd(
-            length = maxToCharaNameLength,
-            padChar = '　'
-        )
-        return "$fromString → ${toString}(${count}票)"
+        val fromString =
+            from.name().padEnd(
+                length = maxFromCharaNameLength,
+                padChar = '　',
+            )
+        val toString =
+            target.name().padEnd(
+                length = maxToCharaNameLength,
+                padChar = '　',
+            )
+        return "$fromString → $toString(${count}票)"
     }
 
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
-    private fun isAvailableVote(village: Village, participant: VillageParticipant?): Boolean {
+    private fun isAvailableVote(
+        village: Village,
+        participant: VillageParticipant?,
+    ): Boolean {
         // 参加者として可能か
         participant ?: return false
         if (!participant.isAvailableVote()) return false
@@ -125,7 +140,10 @@ class VoteDomainService {
         return village.isAvailableVote()
     }
 
-    fun getSelectableTargetList(village: Village, participant: VillageParticipant?): List<VillageParticipant> {
+    fun getSelectableTargetList(
+        village: Village,
+        participant: VillageParticipant?,
+    ): List<VillageParticipant> {
         if (!isAvailableVote(village, participant)) return listOf()
         return village.participant.memberList.filter { it.isAlive() }
     }
@@ -133,13 +151,14 @@ class VoteDomainService {
     fun getSelectingTarget(
         village: Village,
         participant: VillageParticipant?,
-        votes: VillageVotes
+        votes: VillageVotes,
     ): VillageParticipant? {
         if (!isAvailableVote(village, participant)) return null
-        val voteTargetParticipantId = votes.list.find {
-            it.villageDayId == village.day.latestDay().id
-                    && it.myselfId == participant!!.id
-        }?.targetId ?: return null
+        val voteTargetParticipantId =
+            votes.list.find {
+                it.villageDayId == village.day.latestDay().id &&
+                    it.myselfId == participant!!.id
+            }?.targetId ?: return null
         return village.participant.member(voteTargetParticipantId)
     }
 }

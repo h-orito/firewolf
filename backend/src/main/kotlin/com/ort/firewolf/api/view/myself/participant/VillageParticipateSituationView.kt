@@ -13,28 +13,29 @@ data class VillageParticipateSituationView(
     val availableSpectate: Boolean,
     val selectableCharaList: List<Chara>,
     val availableLeave: Boolean,
-    val myself: VillageParticipantView?
+    val myself: VillageParticipantView?,
 ) {
     constructor(
         situation: VillageParticipateSituation,
         village: Village,
         players: Players,
-        charas: Charas
+        charas: Charas,
     ) : this(
         participating = situation.isParticipating,
         availableParticipate = situation.isAvailableParticipate,
         availableSpectate = situation.isAvailableSpectate,
         selectableCharaList = situation.selectableCharaList,
         availableLeave = situation.isAvailableLeave,
-        myself = situation.myself?.let {
-            VillageParticipantView(
-                village = village,
-                villageParticipantId = it.id,
-                players = players,
-                charas = charas,
-                shouldHidePlayer = false, // 自分自身なので見えても問題なし
-                shouldHideNotificationSetting = false // 自分自身なので
-            )
-        }
+        myself =
+            situation.myself?.let {
+                VillageParticipantView(
+                    village = village,
+                    villageParticipantId = it.id,
+                    players = players,
+                    charas = charas,
+                    shouldHidePlayer = false, // 自分自身なので見えても問題なし
+                    shouldHideNotificationSetting = false, // 自分自身なので
+                )
+            },
     )
 }

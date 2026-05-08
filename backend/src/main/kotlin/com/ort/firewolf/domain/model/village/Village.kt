@@ -27,7 +27,6 @@ data class Village(
     val spectator: VillageParticipants,
     val day: VillageDays,
 ) {
-
     // ===================================================================================
     //                                                                          Definition
     //                                                                          ==========
@@ -49,38 +48,35 @@ data class Village(
     // ===================================================================================
     //                                                                             message
     //                                                                           =========
+
     /** 村作成時のメッセージ */
-    fun createVillagePrologueMessage(): Message =
-        Message.createPublicSystemMessage(initialMessage, day.latestDay().id)
+    fun createVillagePrologueMessage(): Message = Message.createPublicSystemMessage(initialMessage, day.latestDay().id)
 
     /** 1日目のメッセージ */
-    fun createVillageDay1Message(): Message =
-        Message.createPublicSystemMessage(day1Message, day.latestDay().id)
+    fun createVillageDay1Message(): Message = Message.createPublicSystemMessage(day1Message, day.latestDay().id)
 
     /** 2日目のメッセージ */
-    fun createVillageDay2Message(): Message =
-        Message.createPublicSystemMessage(day2Message, day.latestDay().id)
+    fun createVillageDay2Message(): Message = Message.createPublicSystemMessage(day2Message, day.latestDay().id)
 
     /** 村建て廃村メッセージ */
-    fun createCreatorCancelVillageMessage(): Message =
-        Message.createPublicSystemMessage(creatorCancelMessage, day.latestDay().id)
+    fun createCreatorCancelVillageMessage(): Message = Message.createPublicSystemMessage(creatorCancelMessage, day.latestDay().id)
 
     /** エピローグ延長メッセージ */
-    fun createCreatorExtendEpilogueMessage(): Message =
-        Message.createPublicSystemMessage(extendEpilogueMessage, day.latestDay().id)
+    fun createCreatorExtendEpilogueMessage(): Message = Message.createPublicSystemMessage(extendEpilogueMessage, day.latestDay().id)
 
     /** 構成メッセージ */
     fun createOrganizationMessage(): Message {
         val skillCountMap = setting.organizations.mapToSkillCount(participant.count)
-        val text = CDef.Skill.listAll().sortedBy { Integer.parseInt(it.order()) }.mapNotNull { cdefSkill ->
-            val skill = Skill(cdefSkill)
-            val count = skillCountMap[cdefSkill]
-            if (count == null || count == 0) null else "${skill.name}が${count}人"
-        }.joinToString(
-            separator = "、\n",
-            prefix = "この村には\n",
-            postfix = "\nいるようだ。"
-        )
+        val text =
+            CDef.Skill.listAll().sortedBy { Integer.parseInt(it.order()) }.mapNotNull { cdefSkill ->
+                val skill = Skill(cdefSkill)
+                val count = skillCountMap[cdefSkill]
+                if (count == null || count == 0) null else "${skill.name}が${count}人"
+            }.joinToString(
+                separator = "、\n",
+                prefix = "この村には\n",
+                postfix = "\nいるようだ。",
+            )
         return Message.createPublicSystemMessage(text, day.latestDay().id)
     }
 
@@ -95,11 +91,12 @@ data class Village(
         // 狂信者がいなければなし
         if (participant.memberList.none { it.skill!!.canRecognizeWolf() }) return null
         // 襲撃役職を一括りにして人狼とする
-        val text = participant.memberList.filter { it.skill!!.hasAttackAbility() }.joinToString(
-            separator = "、",
-            prefix = "この村の人狼は",
-            postfix = "のようだ。"
-        ) { it.name() }
+        val text =
+            participant.memberList.filter { it.skill!!.hasAttackAbility() }.joinToString(
+                separator = "、",
+                prefix = "この村の人狼は",
+                postfix = "のようだ。",
+            ) { it.name() }
         return Message.createFanaticPrivateMessage(text, day.latestDay().id)
     }
 
@@ -130,12 +127,15 @@ data class Village(
     private fun createRecognizeSkillMessageText(skills: List<Skill>): String {
         return skills.mapNotNull { skill ->
             val list = participant.filterBySkill(skill).memberList
-            if (list.isEmpty()) null
-            else "${skill.name}は${list.joinToString(separator = "、") { it.name() }}"
+            if (list.isEmpty()) {
+                null
+            } else {
+                "${skill.name}は${list.joinToString(separator = "、") { it.name() }}"
+            }
         }.joinToString(
             separator = "、\n",
             prefix = "この村の",
-            postfix = "のようだ。"
+            postfix = "のようだ。",
         )
     }
 
@@ -145,52 +145,54 @@ data class Village(
     fun createDummyCharaFirstDayMessage(): Message? {
         val firstDayMessage = setting.charachip.dummyCharaDay1Message
         if (firstDayMessage.isNullOrEmpty()) return null
-        val messageContent = MessageContent.invoke(
-            messageType = CDef.MessageType.通常発言.code(),
-            text = firstDayMessage,
-            faceCode = CDef.FaceType.通常.code()
-        )
+        val messageContent =
+            MessageContent.invoke(
+                messageType = CDef.MessageType.通常発言.code(),
+                text = firstDayMessage,
+                faceCode = CDef.FaceType.通常.code(),
+            )
         return Message.createSayMessage(
             from = dummyChara(),
             villageDayId = day.latestDay().id,
-            messageContent = messageContent
+            messageContent = messageContent,
         )
     }
 
-    fun createExtendPrologueMessage(): Message =
-        Message.createPublicSystemMessage(extendPrologueMessage, day.latestDay().id)
+    fun createExtendPrologueMessage(): Message = Message.createPublicSystemMessage(extendPrologueMessage, day.latestDay().id)
 
     // ===================================================================================
     //                                                                                read
     //                                                                           =========
     fun dummyChara(): VillageParticipant = participant.memberList.first { it.charaId == setting.charachip.dummyCharaId }
+
     fun isCreator(player: Player?): Boolean = player?.id == creatorPlayerId
 
     fun notDummyParticipant(): VillageParticipants {
         val notDummyMembers = participant.memberList.filter { it.charaId != setting.charachip.dummyCharaId }
         return VillageParticipants(
             count = notDummyMembers.size,
-            memberList = notDummyMembers
+            memberList = notDummyMembers,
         )
     }
 
     fun todayDeadParticipants(): VillageParticipants {
-        val deadTodayMemberList = participant.memberList.filter {
-            !it.isAlive() && it.dead?.villageDay?.id == day.latestDay().id
-        }
+        val deadTodayMemberList =
+            participant.memberList.filter {
+                !it.isAlive() && it.dead?.villageDay?.id == day.latestDay().id
+            }
         return VillageParticipants(
             count = deadTodayMemberList.size,
-            memberList = deadTodayMemberList
+            memberList = deadTodayMemberList,
         )
     }
 
     // 差分があるか
     fun existsDifference(village: Village): Boolean {
-        return status.code != village.status.code
-                || winCamp?.code != village.winCamp?.code
-                || participant.existsDifference(village.participant)
-                || day.existsDifference(village.day)
-                || setting.existsDifference(village.setting)
+        return status.code != village.status.code ||
+            winCamp?.code != village.winCamp?.code ||
+            participant.existsDifference(village.participant) ||
+            day.existsDifference(village.day) ||
+            setting.existsDifference(village.setting)
     }
 
     // 決着がついたか
@@ -219,13 +221,14 @@ data class Village(
         val list = participant.memberList + spectator.memberList
         return VillageParticipants(
             count = list.size,
-            memberList = list
+            memberList = list,
         )
     }
 
     // ===================================================================================
     //                                                                                 権限
     //                                                                           =========
+
     /** 村として参加可能か */
     fun isAvailableParticipate(): Boolean = status.isPrologue() && participant.count < setting.capacity.max
 
@@ -236,7 +239,7 @@ data class Village(
      */
     fun assertParticipate(
         charaId: Int,
-        password: String?
+        password: String?,
     ) {
         // 既に参加しているキャラはNG
         if (isAlreadyParticipateCharacter(charaId)) throw FirewolfBusinessException("既に参加されているキャラクターです")
@@ -248,9 +251,7 @@ data class Village(
      * @param charachipCharaNum 使用するキャラチップのキャラ数
      * @return 村として見学可能な状況か
      */
-    fun isAvailableSpectate(
-        charachipCharaNum: Int
-    ): Boolean {
+    fun isAvailableSpectate(charachipCharaNum: Int): Boolean {
         // プロローグでない
         if (!status.isPrologue()) return false
         // 既に最大人数まで参加している
@@ -280,51 +281,87 @@ data class Village(
      * @param first 第1役職希望
      * @param second 第2役職希望
      */
-    fun assertSkillRequest(first: CDef.Skill, second: CDef.Skill) {
+    fun assertSkillRequest(
+        first: CDef.Skill,
+        second: CDef.Skill,
+    ) {
         if (setting.organizations.allRequestableSkillList()
                 .none { it.code == first.code() }
-        ) throw FirewolfBusinessException("役職希望変更できません")
+        ) {
+            throw FirewolfBusinessException("役職希望変更できません")
+        }
         if (setting.organizations.allRequestableSkillList()
                 .none { it.code == second.code() }
-        ) throw FirewolfBusinessException("役職希望変更できません")
+        ) {
+            throw FirewolfBusinessException("役職希望変更できません")
+        }
     }
 
-    fun isSilentTime(): Boolean =
-        status.isProgress() && setting.time.isSilentTime(day.latestDay().startDatetime)
+    fun isSilentTime(): Boolean = status.isProgress() && setting.time.isSilentTime(day.latestDay().startDatetime)
 
     fun isAvailableCommit(): Boolean = setting.rules.availableCommit && status.isProgress()
+
     fun isAvailableComingOut(): Boolean = !isSilentTime() && status.isProgress()
+
     fun isAvailableSay(): Boolean = !status.toCdef().isFinishedVillage
+
     fun isSayableNormalSay(): Boolean = !status.isFinished() && !isSilentTime()
+
     fun isViewableWerewolfSay(player: Player?): Boolean = status.isSolved()
+
     fun isSayableWerewolfSay(): Boolean = status.isProgress()
+
     fun isViewableSympathizeSay(player: Player?): Boolean = status.isSolved()
+
     fun isSayableSympathizeSay(): Boolean = status.isProgress()
+
     fun isViewableGraveSay(player: Player?): Boolean = status.isSolved() || setting.rules.visibleGraveMessage
+
     fun isSayableGraveSay(): Boolean = status.isProgress()
+
     fun isViewableMonologueSay(player: Player?): Boolean = status.isSolved()
+
     fun isSayableMonologueSay(): Boolean = true
+
     fun isViewableSpectateSay(player: Player?): Boolean = !status.isProgress() || setting.rules.visibleGraveMessage
+
     fun isSayableActionSay(): Boolean = !status.isFinished() && setting.rules.availableAction
+
     fun isSayableSpectateSay(): Boolean = true
+
     fun isViewableLoversSay(player: Player?): Boolean = status.isSolved()
+
     fun isSayableLoversSay(): Boolean = status.isProgress()
+
     fun isViewableAttackMessage(): Boolean = status.isSolved()
+
     fun isViewableAutopsyMessage(): Boolean = status.isSolved()
+
     fun isViewableMasonMessage(): Boolean = status.isSolved()
+
     fun isViewableSympathizerMessage(): Boolean = status.isSolved()
+
     fun isViewableFoxMessage(): Boolean = status.isSolved()
+
     fun isViewableFanaticMessage(): Boolean = status.isSolved()
+
     fun isViewablePsychicMessage(): Boolean = status.isSolved()
+
     fun isViewableGuruPsychicMessage(): Boolean = status.isSolved()
+
     fun isViewableSecretSay(player: Player?): Boolean = status.isSolved()
+
     fun isSayableSecretSay(): Boolean = !status.isFinished() && setting.rules.availableSecretSay
+
     fun isViewablePrivateSystemMessage(): Boolean = status.isSolved()
 
     /**
      * 発言制限チェック
      */
-    fun assertMessageRestrict(messageContent: MessageContent, latestDayMessageCountMap: Map<CDef.MessageType, Int>) {
+    fun assertMessageRestrict(
+        messageContent: MessageContent,
+        latestDayMessageCountMap: Map<CDef.MessageType, Int>,
+    ) {
         val restrict = setting.rules.messageRestrict.restrict(messageContent.type.toCdef()) ?: return // 制限なし
         restrict.assertSay(messageContent, status.toCdef(), latestDayMessageCountMap)
     }
@@ -350,13 +387,14 @@ data class Village(
         // 新しい日の開始日時は現在日時と本来の更新日時を比較して早い方
         val now = LocalDateTime.now()
         val newStartDatetime = if (now.isBefore(dayChangeDatetime)) now else dayChangeDatetime
-        val newDay = VillageDay(
-            id = 0, // dummy
-            day = day.latestDay().day + 1, // 一旦長期だけを考えるので常に昼
-            noonnight = CDef.Noonnight.昼.code(),
-            startDatetime = newStartDatetime,
-            dayChangeDatetime = dayChangeDatetime.plusSeconds(setting.time.dayChangeIntervalSeconds.toLong())
-        )
+        val newDay =
+            VillageDay(
+                id = 0, // dummy
+                day = day.latestDay().day + 1, // 一旦長期だけを考えるので常に昼
+                noonnight = CDef.Noonnight.昼.code(),
+                startDatetime = newStartDatetime,
+                dayChangeDatetime = dayChangeDatetime.plusSeconds(setting.time.dayChangeIntervalSeconds.toLong()),
+            )
         dayList.add(newDay)
         return this.copy(day = this.day.copy(dayList = dayList))
     }
@@ -370,41 +408,50 @@ data class Village(
         firstRequestSkill: CDef.Skill = CDef.Skill.おまかせ,
         secondRequestSkill: CDef.Skill = CDef.Skill.おまかせ,
         isSpectate: Boolean,
-        ipAddress: String
+        ipAddress: String,
     ): Village {
         return if (isSpectate) {
             this.copy(
-                spectator = spectator.addParticipant(
-                    chara = chara,
-                    charaShortName = charaShortName,
-                    charaName = charaName,
-                    playerId = playerId,
-                    skillRequest = SkillRequest(Skill(firstRequestSkill), Skill(secondRequestSkill)),
-                    isSpectator = true,
-                    ipAddress = ipAddress
-                )
+                spectator =
+                    spectator.addParticipant(
+                        chara = chara,
+                        charaShortName = charaShortName,
+                        charaName = charaName,
+                        playerId = playerId,
+                        skillRequest = SkillRequest(Skill(firstRequestSkill), Skill(secondRequestSkill)),
+                        isSpectator = true,
+                        ipAddress = ipAddress,
+                    ),
             )
         } else {
             this.copy(
-                participant = participant.addParticipant(
-                    chara = chara,
-                    charaShortName = charaShortName,
-                    charaName = charaName,
-                    playerId = playerId,
-                    skillRequest = SkillRequest(Skill(firstRequestSkill), Skill(secondRequestSkill)),
-                    isSpectator = false,
-                    ipAddress = ipAddress
-                )
+                participant =
+                    participant.addParticipant(
+                        chara = chara,
+                        charaShortName = charaShortName,
+                        charaName = charaName,
+                        playerId = playerId,
+                        skillRequest = SkillRequest(Skill(firstRequestSkill), Skill(secondRequestSkill)),
+                        isSpectator = false,
+                        ipAddress = ipAddress,
+                    ),
             )
         }
     }
 
     // 希望役職変更
-    fun changeSkillRequest(participantId: Int, first: CDef.Skill, second: CDef.Skill): Village =
-        this.copy(participant = participant.changeSkillRequest(participantId, first, second))
+    fun changeSkillRequest(
+        participantId: Int,
+        first: CDef.Skill,
+        second: CDef.Skill,
+    ): Village = this.copy(participant = participant.changeSkillRequest(participantId, first, second))
 
     // 名前変更
-    fun changeName(participantId: Int, name: String, shortName: String): Village {
+    fun changeName(
+        participantId: Int,
+        name: String,
+        shortName: String,
+    ): Village {
         val member = findMemberById(participantId) ?: return this
         return if (member.isSpectator) {
             this.copy(spectator = spectator.changeName(participantId, name, shortName))
@@ -416,14 +463,16 @@ data class Village(
     // 全員おまかせに変更
     fun changeAllSkillRequestLeftover(): Village =
         this.copy(
-            participant = participant.copy(
-                memberList = participant.memberList.map {
-                    it.changeSkillRequest(
-                        CDef.Skill.おまかせ,
-                        CDef.Skill.おまかせ
-                    )
-                }
-            )
+            participant =
+                participant.copy(
+                    memberList =
+                        participant.memberList.map {
+                            it.changeSkillRequest(
+                                CDef.Skill.おまかせ,
+                                CDef.Skill.おまかせ,
+                            )
+                        },
+                ),
         )
 
     // 退村
@@ -437,33 +486,45 @@ data class Village(
     }
 
     // 突然死
-    fun suddenlyDeathParticipant(participantId: Int, latestDay: VillageDay): Village =
-        this.copy(participant = this.participant.suddenlyDeath(participantId, latestDay))
+    fun suddenlyDeathParticipant(
+        participantId: Int,
+        latestDay: VillageDay,
+    ): Village = this.copy(participant = this.participant.suddenlyDeath(participantId, latestDay))
 
     // 処刑
-    fun executeParticipant(participantId: Int, latestDay: VillageDay): Village =
-        this.copy(participant = this.participant.execute(participantId, latestDay))
+    fun executeParticipant(
+        participantId: Int,
+        latestDay: VillageDay,
+    ): Village = this.copy(participant = this.participant.execute(participantId, latestDay))
 
     // 襲撃
-    fun attackParticipant(participantId: Int, latestDay: VillageDay): Village =
-        this.copy(participant = this.participant.attack(participantId, latestDay))
+    fun attackParticipant(
+        participantId: Int,
+        latestDay: VillageDay,
+    ): Village = this.copy(participant = this.participant.attack(participantId, latestDay))
 
     // 呪殺
-    fun divineKillParticipant(participantId: Int, latestDay: VillageDay): Village =
-        this.copy(participant = this.participant.divineKill(participantId, latestDay))
+    fun divineKillParticipant(
+        participantId: Int,
+        latestDay: VillageDay,
+    ): Village = this.copy(participant = this.participant.divineKill(participantId, latestDay))
 
     // 後追い
-    fun suicideParticipant(participantId: Int): Village =
-        this.copy(participant = this.participant.suicide(participantId, day.latestDay()))
+    fun suicideParticipant(participantId: Int): Village = this.copy(participant = this.participant.suicide(participantId, day.latestDay()))
 
     // 求愛
-    fun courtParticipant(fromParticipantId: Int, toParticipantId: Int): Village {
+    fun courtParticipant(
+        fromParticipantId: Int,
+        toParticipantId: Int,
+    ): Village {
         return copy(participant = participant.court(fromParticipantId, toParticipantId))
     }
 
     // IPアドレス追加
-    fun addParticipantIpAddress(id: Int, ipAddress: String): Village =
-        this.copy(participant = this.participant.addIpAddress(id, ipAddress))
+    fun addParticipantIpAddress(
+        id: Int,
+        ipAddress: String,
+    ): Village = this.copy(participant = this.participant.addIpAddress(id, ipAddress))
 
     // 役職割り当て
     fun assignSkill(participants: VillageParticipants): Village {
@@ -471,8 +532,7 @@ data class Village(
     }
 
     // ステータス変更
-    fun changeStatus(cdefVillageStatus: CDef.VillageStatus): Village =
-        this.copy(status = VillageStatus(cdefVillageStatus))
+    fun changeStatus(cdefVillageStatus: CDef.VillageStatus): Village = this.copy(status = VillageStatus(cdefVillageStatus))
 
     // エピローグ遷移
     fun toEpilogue(): Village {
@@ -486,21 +546,23 @@ data class Village(
     // 最新の日を24時間にする
     fun extendLatestDay(): Village = this.copy(day = this.day.extendLatestDay())
 
-    fun extendPrologue(): Village = this.copy(
-        setting = setting.extendPrologue(),
-        day = day.extendPrologue()
-    )
+    fun extendPrologue(): Village =
+        this.copy(
+            setting = setting.extendPrologue(),
+            day = day.extendPrologue(),
+        )
 
-    fun extendEpilogue(): Village = this.copy(
-        day = day.extendEpilogue()
-    )
+    fun extendEpilogue(): Village =
+        this.copy(
+            day = day.extendEpilogue(),
+        )
 
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
     private fun isAlreadyParticipateCharacter(charaId: Int): Boolean {
-        return participant.memberList.any { it.charaId == charaId }
-                || spectator.memberList.any { it.charaId == charaId }
+        return participant.memberList.any { it.charaId == charaId } ||
+            spectator.memberList.any { it.charaId == charaId }
     }
 
     private fun assertPassword(password: String?) {
@@ -514,6 +576,7 @@ data class Village(
     private fun wolfCount(): Int = participant.filterAlive().memberList.count { it.skill!!.toCdef().isCountWolf }
 
     private fun isLoversAlive(): Boolean = participant.filterAlive().memberList.any { it.status.hasLover() }
+
     private fun isFoxAlive(): Boolean = participant.filterAlive().memberList.any { it.skill!!.toCdef().isNoCount }
 
     // 勝利陣営設定
@@ -521,13 +584,13 @@ data class Village(
         if (!isSettled()) return this
         return this.copy(
             winCamp = judgeWinCamp(), // 村自体の勝利陣営
-            participant = this.participant.winLose(judgeWinCamp()!!) // 個人ごとの勝敗
+            participant = this.participant.winLose(judgeWinCamp()!!), // 個人ごとの勝敗
         )
     }
 
     private fun setEpilogueTime(): Village {
         return this.copy(
-            setting = setting.toEpilogue(day)
+            setting = setting.toEpilogue(day),
         )
     }
 
@@ -543,53 +606,60 @@ data class Village(
     //                                                                    companion object
     //                                                                             =======
     companion object {
-
-        fun createForRegister(
-            resource: VillageCreateResource
-        ): Village {
+        fun createForRegister(resource: VillageCreateResource): Village {
             return Village(
                 id = 1, // dummy
                 name = resource.villageName,
                 creatorPlayerId = resource.createPlayerId,
                 status = VillageStatus(CDef.VillageStatus.プロローグ),
-                setting = VillageSettings.createForRegister(
-                    resource.setting
-                ),
-                participant = VillageParticipants(
-                    count = 0,
-                    memberList = listOf()
-                ),
-                spectator = VillageParticipants(
-                    count = 0,
-                    memberList = listOf()
-                ),
-                day = VillageDays(
-                    dayList = listOf()
-                ),
+                setting =
+                    VillageSettings.createForRegister(
+                        resource.setting,
+                    ),
+                participant =
+                    VillageParticipants(
+                        count = 0,
+                        memberList = listOf(),
+                    ),
+                spectator =
+                    VillageParticipants(
+                        count = 0,
+                        memberList = listOf(),
+                    ),
+                day =
+                    VillageDays(
+                        dayList = listOf(),
+                    ),
                 winCamp = null,
             )
         }
 
         fun createForUpdate(
             village: Village,
-            resource: VillageCreateResource
+            resource: VillageCreateResource,
         ): Village {
             return Village(
                 id = village.id,
                 name = resource.villageName,
                 creatorPlayerId = village.creatorPlayerId,
                 status = village.status,
-                setting = VillageSettings.createForRegister(
-                    resource.setting
-                ),
+                setting =
+                    VillageSettings.createForRegister(
+                        resource.setting,
+                    ),
                 participant = village.participant,
                 spectator = village.spectator,
-                day = village.day.copy(
-                    dayList = village.day.dayList.map {
-                        if (it.day == 0) it.copy(dayChangeDatetime = resource.setting.time.startDatetime)
-                        else it
-                    }
-                ),
+                day =
+                    village.day.copy(
+                        dayList =
+                            village.day.dayList.map {
+                                if (it.day == 0) {
+                                    it.copy(dayChangeDatetime = resource.setting.time.startDatetime)
+                                } else {
+                                    it
+                                }
+                            },
+                    ),
                 winCamp = null,
             )
         }

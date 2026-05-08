@@ -11,16 +11,15 @@ import org.springframework.stereotype.Service
 
 @Service
 class SkillRequestDomainService {
-
     fun convertToSituation(
         village: Village,
         participant: VillageParticipant?,
-        skillRequest: SkillRequest?
+        skillRequest: SkillRequest?,
     ): VillageSkillRequestSituation {
         return VillageSkillRequestSituation(
             availableSkillRequest = isAvailableSkillRequest(village, participant),
             selectableSkillList = village.setting.organizations.allRequestableSkillList(),
-            skillRequest = skillRequest
+            skillRequest = skillRequest,
         )
     }
 
@@ -31,7 +30,7 @@ class SkillRequestDomainService {
      */
     fun isAvailableSkillRequest(
         village: Village,
-        participant: VillageParticipant?
+        participant: VillageParticipant?,
     ): Boolean {
         // 村として可能か
         if (!village.isAvailableSkillRequest()) return false
@@ -51,7 +50,7 @@ class SkillRequestDomainService {
         village: Village,
         participant: VillageParticipant?,
         firstRequestSkill: String,
-        secondRequestSkill: String
+        secondRequestSkill: String,
     ) {
         if (!isAvailableSkillRequest(village, participant)) throw FirewolfBusinessException("役職希望変更できません")
         val first = CDef.Skill.codeOf(firstRequestSkill) ?: throw FirewolfBadRequestException("第1希望が不正")

@@ -7,12 +7,11 @@ data class VillageDay(
     val day: Int,
     val noonnight: String,
     val startDatetime: LocalDateTime,
-    val dayChangeDatetime: LocalDateTime
+    val dayChangeDatetime: LocalDateTime,
 ) {
-
     fun existsDifference(villageDay: VillageDay): Boolean {
-        return day != villageDay.day
-            || noonnight != villageDay.noonnight
-            || dayChangeDatetime != villageDay.dayChangeDatetime
+        return day != villageDay.day ||
+            noonnight != villageDay.noonnight ||
+            dayChangeDatetime != villageDay.dayChangeDatetime
     }
 }

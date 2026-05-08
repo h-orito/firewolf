@@ -11,9 +11,8 @@ import org.springframework.stereotype.Service
 @Service
 class CharachipService(
     private val charachipDataSource: CharachipDataSource,
-    private val charaDataSource: CharaDataSource
+    private val charaDataSource: CharaDataSource,
 ) {
-
     fun findCharaChips(): Charachips = charachipDataSource.findCharachips()
 
     fun findCharachips(ids: List<Int>): Charachips = charachipDataSource.findCharachips(ids)

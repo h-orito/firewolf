@@ -21,47 +21,50 @@ data class SituationAsParticipantView(
     val ability: VillageAbilitySituationsView,
     val vote: VillageVoteSituationView,
     val creator: VillageCreatorSituation,
-    val admin: VillageAdminSituation
+    val admin: VillageAdminSituation,
 ) {
-
     constructor(
         situation: SituationAsParticipant,
         village: Village,
         players: Players,
-        charas: Charas
+        charas: Charas,
     ) : this(
-        participate = VillageParticipateSituationView(
-            situation = situation.participate,
-            village = village,
-            players = players,
-            charas = charas
-        ),
+        participate =
+            VillageParticipateSituationView(
+                situation = situation.participate,
+                village = village,
+                players = players,
+                charas = charas,
+            ),
         skillRequest = situation.skillRequest,
         commit = situation.commit,
         comingOut = situation.comingOut,
-        say = VillageSaySituationView(
-            situation = situation.say,
-            village = village,
-            players = players,
-            charas = charas,
-            shouldHidePlayer = !village.status.isSolved()
-        ),
+        say =
+            VillageSaySituationView(
+                situation = situation.say,
+                village = village,
+                players = players,
+                charas = charas,
+                shouldHidePlayer = !village.status.isSolved(),
+            ),
         rp = situation.rp,
-        ability = VillageAbilitySituationsView(
-            situation = situation.ability,
-            village = village,
-            players = players,
-            charas = charas,
-            shouldHidePlayer = !village.status.isSolved()
-        ),
-        vote = VillageVoteSituationView(
-            situation = situation.vote,
-            village = village,
-            players = players,
-            charas = charas,
-            shouldHidePlayer = !village.status.isSolved()
-        ),
+        ability =
+            VillageAbilitySituationsView(
+                situation = situation.ability,
+                village = village,
+                players = players,
+                charas = charas,
+                shouldHidePlayer = !village.status.isSolved(),
+            ),
+        vote =
+            VillageVoteSituationView(
+                situation = situation.vote,
+                village = village,
+                players = players,
+                charas = charas,
+                shouldHidePlayer = !village.status.isSolved(),
+            ),
         creator = situation.creator,
-        admin = situation.admin
+        admin = situation.admin,
     )
 }

@@ -6,18 +6,18 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class VersionDataSource(
-    val appVersionBhv: AppVersionBhv
+    val appVersionBhv: AppVersionBhv,
 ) {
-
     // ===================================================================================
     //                                                                              Select
     //                                                                              ======
     fun findVersion(): Version {
-        val version = appVersionBhv.selectEntityWithDeletedCheck {
-            it.fetchFirst(1)
-        }
+        val version =
+            appVersionBhv.selectEntityWithDeletedCheck {
+                it.fetchFirst(1)
+            }
         return Version(
-            clientVersion = version.clientVersion
+            clientVersion = version.clientVersion,
         )
     }
 }

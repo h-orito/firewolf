@@ -12,18 +12,17 @@ data class CharachipView(
     val designer: Designer,
     val descriptionUrl: String,
     val charaList: List<Chara>, // domainとの違い
-    @JsonProperty("is_available_change_name") val isAvailableChangeName: Boolean
+    @JsonProperty("is_available_change_name") val isAvailableChangeName: Boolean,
 ) {
-
     constructor(
         charachip: Charachip,
-        charas: Charas
+        charas: Charas,
     ) : this(
         id = charachip.id,
         name = charachip.name,
         designer = charachip.designer,
         descriptionUrl = charachip.descriptionUrl,
         charaList = charas.list.filter { it.charachipId == charachip.id },
-        isAvailableChangeName = charachip.isAvailableChangeName
+        isAvailableChangeName = charachip.isAvailableChangeName,
     )
 }

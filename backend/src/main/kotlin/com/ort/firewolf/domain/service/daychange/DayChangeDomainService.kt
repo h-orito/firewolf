@@ -9,15 +9,21 @@ import org.springframework.stereotype.Service
 class DayChangeDomainService(
     private val prologueDomainService: PrologueDomainService,
     private val progressDomainService: ProgressDomainService,
-    private val epilogueDomainService: EpilogueDomainService
+    private val epilogueDomainService: EpilogueDomainService,
 ) {
     fun extendVillageIfNeeded(dayChange: DayChange): DayChange {
-        return if (!dayChange.village.status.isPrologue()) dayChange
-        else prologueDomainService.extendIfNeeded(dayChange)
+        return if (!dayChange.village.status.isPrologue()) {
+            dayChange
+        } else {
+            prologueDomainService.extendIfNeeded(dayChange)
+        }
     }
 
     // コミットや時間経過で次の日に遷移させる場合は村日付を追加
-    fun addDayIfNeeded(dayChange: DayChange, commits: Commits): DayChange {
+    fun addDayIfNeeded(
+        dayChange: DayChange,
+        commits: Commits,
+    ): DayChange {
         val status = dayChange.village.status
         return when {
             // プロローグ
@@ -32,7 +38,11 @@ class DayChangeDomainService(
     }
 
     // 日付変更処理
-    fun process(dayChange: DayChange, todayMessages: Messages, commits: Commits): DayChange {
+    fun process(
+        dayChange: DayChange,
+        todayMessages: Messages,
+        commits: Commits,
+    ): DayChange {
         val status = dayChange.village.status
         return when {
             // プロローグ

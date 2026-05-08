@@ -10,16 +10,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 
-
 @RestControllerAdvice
 class ControllerExceptionHandler : ResponseEntityExceptionHandler() {
-
     override fun handleExceptionInternal(
         ex: Exception,
         body: Any?,
         headers: HttpHeaders,
         statusCode: HttpStatusCode,
-        request: WebRequest
+        request: WebRequest,
     ): ResponseEntity<Any>? {
         var body = body
         if (body !is FirewolfErrorResponse) {
@@ -32,7 +30,7 @@ class ControllerExceptionHandler : ResponseEntityExceptionHandler() {
         ex: MethodArgumentNotValidException,
         headers: HttpHeaders,
         status: HttpStatusCode,
-        request: WebRequest
+        request: WebRequest,
     ): ResponseEntity<Any>? {
         val message = ex.bindingResult.allErrors.mapNotNull { it.defaultMessage }.joinToString("\n")
         val newHeaders = HttpHeaders()
@@ -42,7 +40,10 @@ class ControllerExceptionHandler : ResponseEntityExceptionHandler() {
     }
 
     @ExceptionHandler(FirewolfBusinessException::class)
-    fun handleBusinessException(ex: FirewolfBusinessException, request: WebRequest?): ResponseEntity<Any>? {
+    fun handleBusinessException(
+        ex: FirewolfBusinessException,
+        request: WebRequest?,
+    ): ResponseEntity<Any>? {
         val headers = HttpHeaders()
         val body = FirewolfErrorResponse(499, ex.message)
         val statusCode = HttpStatus.NOT_FOUND // dummy
@@ -50,7 +51,10 @@ class ControllerExceptionHandler : ResponseEntityExceptionHandler() {
     }
 
     @ExceptionHandler(FirewolfBadRequestException::class)
-    fun handle400(ex: FirewolfBadRequestException, request: WebRequest?): ResponseEntity<Any>? {
+    fun handle400(
+        ex: FirewolfBadRequestException,
+        request: WebRequest?,
+    ): ResponseEntity<Any>? {
         val headers = HttpHeaders()
         val body = FirewolfErrorResponse(400, ex.message)
         val statusCode = HttpStatus.BAD_REQUEST
@@ -58,7 +62,10 @@ class ControllerExceptionHandler : ResponseEntityExceptionHandler() {
     }
 
     @ExceptionHandler(Exception::class)
-    fun handle500(ex: Exception, request: WebRequest?): ResponseEntity<Any>? {
+    fun handle500(
+        ex: Exception,
+        request: WebRequest?,
+    ): ResponseEntity<Any>? {
         val headers = HttpHeaders()
         val body = null
         val statusCode = HttpStatus.INTERNAL_SERVER_ERROR

@@ -15,7 +15,7 @@ data class VillageRules(
     val availableAction: Boolean = false,
     val availableSecretSay: Boolean = false,
     val availableGuardSameTarget: Boolean = true,
-    val messageRestrict: VillageMessageRestricts = VillageMessageRestricts()
+    val messageRestrict: VillageMessageRestricts = VillageMessageRestricts(),
 ) {
     companion object {
         operator fun invoke(
@@ -31,7 +31,7 @@ data class VillageRules(
             availableAction: Boolean?,
             availableSecretSay: Boolean?,
             availableGuardSameTarget: Boolean?,
-            messageRestrict: VillageMessageRestricts?
+            messageRestrict: VillageMessageRestricts?,
         ): VillageRules {
             val defaultRules = VillageRules()
             return VillageRules(
@@ -47,28 +47,31 @@ data class VillageRules(
                 availableAction = availableAction ?: defaultRules.availableAction,
                 availableSecretSay = availableSecretSay ?: defaultRules.availableSecretSay,
                 availableGuardSameTarget = availableGuardSameTarget ?: defaultRules.availableGuardSameTarget,
-                messageRestrict = messageRestrict ?: defaultRules.messageRestrict
+                messageRestrict = messageRestrict ?: defaultRules.messageRestrict,
             )
         }
     }
 
-    fun isValidSkillRequest(firstRequest: CDef.Skill, secondRequest: CDef.Skill): Boolean {
+    fun isValidSkillRequest(
+        firstRequest: CDef.Skill,
+        secondRequest: CDef.Skill,
+    ): Boolean {
         if (availableSkillRequest) return true
         return firstRequest == CDef.Skill.おまかせ && secondRequest == CDef.Skill.おまかせ
     }
 
     fun existsDifference(rules: VillageRules): Boolean {
-        return openVote != rules.openVote
-                || availableSkillRequest != rules.availableSkillRequest
-                || availableSpectate != rules.availableSpectate
-                || openSkillInGrave != rules.openSkillInGrave
-                || visibleGraveMessage != rules.visibleGraveMessage
-                || availableSuddenlyDeath != rules.availableSuddenlyDeath
-                || availableCommit != rules.availableCommit
-                || availableDummySkill != rules.availableDummySkill
-                || availableAction != rules.availableAction
-                || availableSecretSay != rules.availableSecretSay
-                || availableGuardSameTarget != rules.availableGuardSameTarget
-                || messageRestrict.existsDifference(rules.messageRestrict)
+        return openVote != rules.openVote ||
+            availableSkillRequest != rules.availableSkillRequest ||
+            availableSpectate != rules.availableSpectate ||
+            openSkillInGrave != rules.openSkillInGrave ||
+            visibleGraveMessage != rules.visibleGraveMessage ||
+            availableSuddenlyDeath != rules.availableSuddenlyDeath ||
+            availableCommit != rules.availableCommit ||
+            availableDummySkill != rules.availableDummySkill ||
+            availableAction != rules.availableAction ||
+            availableSecretSay != rules.availableSecretSay ||
+            availableGuardSameTarget != rules.availableGuardSameTarget ||
+            messageRestrict.existsDifference(rules.messageRestrict)
     }
 }

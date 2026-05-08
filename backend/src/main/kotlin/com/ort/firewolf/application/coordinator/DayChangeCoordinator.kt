@@ -35,9 +35,8 @@ class DayChangeCoordinator(
     // domain service
     val dayChangeDomainService: DayChangeDomainService,
     // other
-    val cacheManager: CacheManager
+    val cacheManager: CacheManager,
 ) {
-
     /**
      * 必要あれば日付更新
      *
@@ -49,36 +48,45 @@ class DayChangeCoordinator(
         val abilities: VillageAbilities = abilityService.findVillageAbilities(village.id)
         val commits: Commits = commitService.findCommits(village.id)
         // 最新日の通常発言
-        val todayMessages = messageService.findMessages(
-            village.id,
-            village.day.latestDay().id,
-            MessageQuery(listOf(CDef.MessageType.通常発言))
-        )
+        val todayMessages =
+            messageService.findMessages(
+                village.id,
+                village.day.latestDay().id,
+                MessageQuery(listOf(CDef.MessageType.通常発言)),
+            )
         val players: Players = playerService.findPlayers(village.id)
 
-        val beforeDayChange = DayChange(
-            village.copy(
-                participant = village.participant.copy(
-                    count = village.participant.memberList.count { !it.isGone },
-                    memberList = village.participant.memberList.filter { !it.isGone }
-                )
-            ), votes, abilities, players)
+        val beforeDayChange =
+            DayChange(
+                village.copy(
+                    participant =
+                        village.participant.copy(
+                            count = village.participant.memberList.count { !it.isGone },
+                            memberList = village.participant.memberList.filter { !it.isGone },
+                        ),
+                ),
+                votes,
+                abilities,
+                players,
+            )
 
         // プロローグ延長処理
-        var dayChange = updateIfNeeded(
-            beforeDayChange,
-            dayChangeDomainService.extendVillageIfNeeded(beforeDayChange)
-        )
+        var dayChange =
+            updateIfNeeded(
+                beforeDayChange,
+                dayChangeDomainService.extendVillageIfNeeded(beforeDayChange),
+            )
         val shouldClearCache: Boolean = dayChange.isChange
 
         // 必要あれば日付追加
-        dayChange = dayChangeDomainService.addDayIfNeeded(dayChange, commits).let {
-            if (!it.isChange) {
-                if (shouldClearCache) clearCache()
-                return
+        dayChange =
+            dayChangeDomainService.addDayIfNeeded(dayChange, commits).let {
+                if (!it.isChange) {
+                    if (shouldClearCache) clearCache()
+                    return
+                }
+                updateIfNeeded(dayChange, it)
             }
-            updateIfNeeded(dayChange, it)
-        }
 
         // 登録後の村日付idが必要になるので取得し直す
         dayChange = dayChange.copy(village = villageService.findVillageWithoutCache(village.id))
@@ -96,13 +104,19 @@ class DayChangeCoordinator(
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
-    private fun updateIfNeeded(before: DayChange, after: DayChange): DayChange {
+    private fun updateIfNeeded(
+        before: DayChange,
+        after: DayChange,
+    ): DayChange {
         if (!after.isChange) return after
         update(before, after)
         return after.copy(isChange = false)
     }
 
-    private fun update(before: DayChange, after: DayChange) {
+    private fun update(
+        before: DayChange,
+        after: DayChange,
+    ) {
         // player
         if (before.players.existsDifference(after.players)) {
             playerService.updateDifference(before.players, after.players)
@@ -125,7 +139,10 @@ class DayChangeCoordinator(
         }
     }
 
-    private fun notifyIfNeeded(current: DayChange, changed: DayChange) {
+    private fun notifyIfNeeded(
+        current: DayChange,
+        changed: DayChange,
+    ) {
         if (current.village.status.isPrologue() && changed.village.status.isProgress()) {
             notificationService.notifyVillageStartToCustomerIfNeeded(changed.village)
         } else if (current.village.status.isProgress() && changed.village.status.isEpilogue()) {

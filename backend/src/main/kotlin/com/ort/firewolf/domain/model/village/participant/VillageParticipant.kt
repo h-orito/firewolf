@@ -25,43 +25,75 @@ data class VillageParticipant(
     val camp: Camp?,
     val commigOuts: ComingOuts,
     val ipAddresses: List<String>,
-    val notification: VillageParticipantNotificationCondition?
+    val notification: VillageParticipantNotificationCondition?,
 ) {
     // ===================================================================================
     //                                                                                read
     //                                                                           =========
     fun name(): String = "[${shortName()}] ${charaName.name}"
+
     fun shortName(): String = charaName.shortName
+
     fun isAdmin(): Boolean = playerId == 1
+
     fun isAlive(): Boolean = dead == null
+
     fun isDead(): Boolean = !isAlive()
+
     fun isAvailableSkillRequest(): Boolean = !isSpectator
+
     fun isAvailableCommit(dummyParticipantId: Int): Boolean = !isSpectator && isAlive() && id != dummyParticipantId
+
     fun isAvailableComingOut(): Boolean = !isSpectator && isAlive()
+
     fun isAvailableSay(isEpilogue: Boolean): Boolean = !isDead() || !dead!!.isSuddenly() || isEpilogue
+
     fun isSayableNormalSay(isEpilogue: Boolean): Boolean = isAdmin() || (!isSpectator && (isAlive() || isEpilogue))
+
     fun isViewableWerewolfSay(): Boolean = isAdmin() || skill?.isViewableWerewolfSay() ?: false
+
     fun isSayableWerewolfSay(): Boolean = isAdmin() || (isAlive() && skill?.isAvailableWerewolfSay() ?: false)
+
     fun isViewableSympathizeSay(): Boolean = isAdmin() || skill?.isViewableSympathizeSay() ?: false
+
     fun isSayableSympathizeSay(): Boolean = isAdmin() || (isAlive() && skill?.isAvailableSympathizeSay() ?: false)
+
     fun isViewableLoversSay(): Boolean = isAdmin() || status.hasLover()
+
     fun isSayableLoversSay(): Boolean = isAdmin() || (isAlive() && status.hasLover())
+
     fun isViewableGraveSay(): Boolean = isAdmin() || isSpectator || (isDead() && !dead!!.isSuddenly())
+
     fun isSayableGraveSay(): Boolean = isAdmin() || (!isSpectator && isDead() && !dead!!.isSuddenly())
+
     fun isViewableMonologueSay(): Boolean = isAdmin()
+
     fun isSayableMonologueSay(): Boolean = true
+
     fun isViewableSpectateSay(): Boolean = isAdmin() || isSpectator || (isDead() && !dead!!.isSuddenly())
+
     fun isSayableSpectateSay(): Boolean = isAdmin() || isSpectator
+
     fun isViewableAttackMessage(): Boolean = skill?.isAvailableWerewolfSay() ?: false
+
     fun isViewableAutopsyMessage(): Boolean = skill?.hasAutopsyAbility() ?: false
+
     fun isViewableFanaticMessage(): Boolean = skill?.canRecognizeWolf() ?: false
+
     fun isViewableMasonMessage(): Boolean = skill?.canRecognizeEachMason() ?: false
+
     fun isViewableSympathizerMessage(): Boolean = skill?.canRecognizeEachSympathizer() ?: false
+
     fun isViewableFoxMessage(): Boolean = skill?.canRecognizeFoxs() ?: false
+
     fun isViewablePsychicMessage(): Boolean = skill?.hasPsychicAbility() ?: false
+
     fun isViewableGuruPsychicMessage(): Boolean = skill?.hasGuruPsychicAbility() ?: false
+
     fun isViewableSecretSay(): Boolean = isAdmin()
+
     fun isSayableSecretSay(): Boolean = true
+
     fun isViewablePrivateSystemMessage(): Boolean = isAdmin()
 
     // 能力行使可能か
@@ -104,8 +136,7 @@ data class VillageParticipant(
     fun gone(): VillageParticipant = this.copy(isGone = true)
 
     // 突然死
-    fun suddenlyDeath(villageDay: VillageDay): VillageParticipant =
-        this.copy(dead = Dead(CDef.DeadReason.突然, villageDay))
+    fun suddenlyDeath(villageDay: VillageDay): VillageParticipant = this.copy(dead = Dead(CDef.DeadReason.突然, villageDay))
 
     // 処刑
     fun execute(villageDay: VillageDay): VillageParticipant = this.copy(dead = Dead(CDef.DeadReason.処刑, villageDay))
@@ -114,8 +145,7 @@ data class VillageParticipant(
     fun attack(villageDay: VillageDay): VillageParticipant = this.copy(dead = Dead(CDef.DeadReason.襲撃, villageDay))
 
     // 呪殺
-    fun divineKill(villageDay: VillageDay): VillageParticipant =
-        this.copy(dead = Dead(CDef.DeadReason.呪殺, villageDay))
+    fun divineKill(villageDay: VillageDay): VillageParticipant = this.copy(dead = Dead(CDef.DeadReason.呪殺, villageDay))
 
     // 後追い
     fun suicide(villageDay: VillageDay): VillageParticipant = this.copy(dead = Dead(CDef.DeadReason.後追, villageDay))
@@ -130,37 +160,46 @@ data class VillageParticipant(
     fun assignSkill(skill: Skill): VillageParticipant =
         this.copy(
             skill = skill,
-            camp = getCurrentWinCamp(status, skill)
+            camp = getCurrentWinCamp(status, skill),
         )
 
     // 希望役職
-    fun changeSkillRequest(first: CDef.Skill, second: CDef.Skill): VillageParticipant =
-        this.copy(skillRequest = SkillRequest(Skill(first), Skill(second)))
+    fun changeSkillRequest(
+        first: CDef.Skill,
+        second: CDef.Skill,
+    ): VillageParticipant = this.copy(skillRequest = SkillRequest(Skill(first), Skill(second)))
 
     // 名前変更
-    fun changeName(name: String, shortName: String): VillageParticipant =
-        this.copy(charaName = VillageParticipantName(name = name, shortName = shortName))
+    fun changeName(
+        name: String,
+        shortName: String,
+    ): VillageParticipant = this.copy(charaName = VillageParticipantName(name = name, shortName = shortName))
 
     // 勝敗
-    fun judgeWin(winCamp: Camp): VillageParticipant = copy(
-        isWin = when {
-            // 突然死したことがあったら必ず敗北
-            dead?.isSuddenly() == true -> false
-            // 勝敗判定陣営が一致していたら勝利
-            else -> winCamp.toCdef() == camp?.toCdef()
-        }
-    )
+    fun judgeWin(winCamp: Camp): VillageParticipant =
+        copy(
+            isWin =
+                when {
+                    // 突然死したことがあったら必ず敗北
+                    dead?.isSuddenly() == true -> false
+                    // 勝敗判定陣営が一致していたら勝利
+                    else -> winCamp.toCdef() == camp?.toCdef()
+                },
+        )
 
     // IPアドレス追加
-    fun addIpAddress(ipAddress: String): VillageParticipant =
-        this.copy(ipAddresses = (ipAddresses + ipAddress).distinct())
+    fun addIpAddress(ipAddress: String): VillageParticipant = this.copy(ipAddresses = (ipAddresses + ipAddress).distinct())
 
-    private fun love(participantId: Int): VillageParticipant = copy(
-        status = status.addLover(participantId),
-        camp = CDef.Camp.恋人陣営.toModel()
-    )
+    private fun love(participantId: Int): VillageParticipant =
+        copy(
+            status = status.addLover(participantId),
+            camp = CDef.Camp.恋人陣営.toModel(),
+        )
 
-    private fun getCurrentWinCamp(currentStatus: VillageParticipantStatus, currentSkill: Skill): Camp =
+    private fun getCurrentWinCamp(
+        currentStatus: VillageParticipantStatus,
+        currentSkill: Skill,
+    ): Camp =
         when {
             currentStatus.hasLover() -> CDef.Camp.恋人陣営.toModel()
             else -> currentSkill.camp()

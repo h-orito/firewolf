@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service
 
 @Service
 class WiseDivineDomainService : DivineDomainService() {
-
     override fun processDayChangeAction(dayChange: DayChange): DayChange {
         val latestDay = dayChange.village.day.latestDay()
         var messages = dayChange.messages.copy()
@@ -24,23 +23,27 @@ class WiseDivineDomainService : DivineDomainService() {
             }?.let { ability ->
                 messages = messages.add(createWiseDivineMessage(dayChange.village, ability, wise))
                 // 呪殺対象なら死亡
-                if (isDivineKill(dayChange, ability.targetId!!)) village =
-                    village.divineKillParticipant(ability.targetId, latestDay)
+                if (isDivineKill(dayChange, ability.targetId!!)) {
+                    village =
+                        village.divineKillParticipant(ability.targetId, latestDay)
+                }
                 // 逆呪殺対象なら自分が死亡
-                if (isCounterDivineKill(dayChange, ability.targetId)) village =
-                    village.divineKillParticipant(wise.id, latestDay)
+                if (isCounterDivineKill(dayChange, ability.targetId)) {
+                    village =
+                        village.divineKillParticipant(wise.id, latestDay)
+                }
             }
         }
 
         return dayChange.copy(
             messages = messages,
-            village = village
+            village = village,
         ).setIsChange(dayChange)
     }
 
     override fun getDefaultAbilityList(
         village: Village,
-        villageAbilities: VillageAbilities
+        villageAbilities: VillageAbilities,
     ): List<VillageAbility> {
         // 進行中のみ
         if (!village.status.isProgress()) return listOf()
@@ -57,7 +60,7 @@ class WiseDivineDomainService : DivineDomainService() {
                         villageDayId = village.day.latestDay().id,
                         myselfId = seer.id,
                         targetId = it.id,
-                        abilityType = getAbilityType()
+                        abilityType = getAbilityType(),
                     )
                 }
         }
@@ -69,7 +72,7 @@ class WiseDivineDomainService : DivineDomainService() {
     private fun createWiseDivineMessage(
         village: Village,
         ability: VillageAbility,
-        wise: VillageParticipant
+        wise: VillageParticipant,
     ): Message {
         val myself = village.participant.member(ability.myselfId)
         val target = village.participant.member(ability.targetId!!)
@@ -81,18 +84,23 @@ class WiseDivineDomainService : DivineDomainService() {
     private fun createDivineMessageString(
         myself: VillageParticipant,
         target: VillageParticipant,
-        skill: String
-    ): String =
-        "${myself.name()}は、${target.name()}を占った。\n${target.name()}は${skill}のようだ。"
+        skill: String,
+    ): String = "${myself.name()}は、${target.name()}を占った。\n${target.name()}は${skill}のようだ。"
 
-    private fun isDivineKill(dayChange: DayChange, targetId: Int): Boolean {
+    private fun isDivineKill(
+        dayChange: DayChange,
+        targetId: Int,
+    ): Boolean {
         // 対象が既に死亡していたら呪殺ではない
         if (!dayChange.village.participant.member(targetId).isAlive()) return false
         // 対象が呪殺対象でなければ呪殺ではない
         return dayChange.village.participant.member(targetId).skill!!.toCdef().isDeadByDivine
     }
 
-    private fun isCounterDivineKill(dayChange: DayChange, targetId: Int): Boolean {
+    private fun isCounterDivineKill(
+        dayChange: DayChange,
+        targetId: Int,
+    ): Boolean {
         // 対象が既に死亡していたら呪殺ではない
         if (!dayChange.village.participant.member(targetId).isAlive()) return false
         // 対象が逆呪殺対象でなければ逆呪殺されない

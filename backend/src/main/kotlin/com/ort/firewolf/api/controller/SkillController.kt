@@ -7,16 +7,15 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class SkillController(
-    val skillService: SkillService
+    val skillService: SkillService,
 ) {
-
     // ===================================================================================
     //                                                                             Execute
     //                                                                           =========
     @GetMapping("/skill/list")
     fun skills(): SkillsView {
         return SkillsView(
-            list = skillService.findSkills().list
+            list = skillService.findSkills().list,
         )
     }
 }

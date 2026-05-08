@@ -7,10 +7,9 @@ import org.springframework.stereotype.Service
 
 @Service
 class CreatorDomainService {
-
     fun convertToSituation(
         village: Village,
-        player: Player?
+        player: Player?,
     ): VillageCreatorSituation {
         return VillageCreatorSituation(
             availableCreatorSetting = isAvailableCreatorSetting(village, player),
@@ -18,7 +17,7 @@ class CreatorDomainService {
             availableCancelVillage = isAvailableCancelVillage(village, player),
             availableKick = isAvailableKick(village, player),
             availableModifySetting = isAvailableModifySetting(village, player),
-            availableExtendEpilogue = isAvailableExtendEpilogue(village, player)
+            availableExtendEpilogue = isAvailableExtendEpilogue(village, player),
         )
     }
 
@@ -27,7 +26,7 @@ class CreatorDomainService {
     //                                                                        ============
     private fun isAvailableCreatorSetting(
         village: Village,
-        player: Player?
+        player: Player?,
     ): Boolean {
         player ?: return false
         if (village.status.isFinished()) return false
@@ -39,7 +38,7 @@ class CreatorDomainService {
 
     private fun isAvailableCreatorSay(
         village: Village,
-        player: Player?
+        player: Player?,
     ): Boolean {
         if (!this.isAvailableCreatorSetting(village, player)) return false
         return true
@@ -47,7 +46,7 @@ class CreatorDomainService {
 
     private fun isAvailableCancelVillage(
         village: Village,
-        player: Player?
+        player: Player?,
     ): Boolean {
         if (!this.isAvailableCreatorSetting(village, player)) return false
         return village.status.isPrologue() // プロローグ中のみ可能
@@ -55,7 +54,7 @@ class CreatorDomainService {
 
     private fun isAvailableKick(
         village: Village,
-        player: Player?
+        player: Player?,
     ): Boolean {
         if (!this.isAvailableCreatorSetting(village, player)) return false
         return village.status.isPrologue() // プロローグ中のみ可能
@@ -63,13 +62,16 @@ class CreatorDomainService {
 
     private fun isAvailableModifySetting(
         village: Village,
-        player: Player?
+        player: Player?,
     ): Boolean {
         if (!this.isAvailableCreatorSetting(village, player)) return false
         return village.status.isPrologue() // プロローグ中のみ可能
     }
 
-    private fun isAvailableExtendEpilogue(village: Village, player: Player?): Boolean {
+    private fun isAvailableExtendEpilogue(
+        village: Village,
+        player: Player?,
+    ): Boolean {
         if (!this.isAvailableCreatorSetting(village, player)) return false
         return village.status.isEpilogue() // エピローグ中のみ可能
     }

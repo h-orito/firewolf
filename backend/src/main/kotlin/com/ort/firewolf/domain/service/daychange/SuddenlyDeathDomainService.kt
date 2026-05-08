@@ -10,11 +10,10 @@ import org.springframework.stereotype.Service
 
 @Service
 class SuddenlyDeathDomainService {
-
     fun processDayChangeAction(
         dayChange: DayChange,
         todayMessages: Messages,
-        commits: Commits
+        commits: Commits,
     ): DayChange {
         var village = dayChange.village.copy()
         var players = dayChange.players.copy()
@@ -43,30 +42,34 @@ class SuddenlyDeathDomainService {
         return dayChange.copy(
             village = village,
             messages = messages,
-            players = players
+            players = players,
         ).setIsChange(dayChange)
     }
 
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
+
     /**
      * 突然死メッセージ
      */
     private fun createSuddenlyDeathMessage(
         villageParticipant: VillageParticipant,
-        villageDayId: Int
+        villageDayId: Int,
     ): Message {
         return Message.createPublicSystemMessage(
-            createSuddenlyDeathMessageString(villageParticipant), villageDayId
+            createSuddenlyDeathMessageString(villageParticipant),
+            villageDayId,
         )
     }
 
-    private fun createSuddenlyDeathMessageString(villageParticipant: VillageParticipant): String =
-        "${villageParticipant.name()}は突然死した。"
+    private fun createSuddenlyDeathMessageString(villageParticipant: VillageParticipant): String = "${villageParticipant.name()}は突然死した。"
 
     // 前日がコミットで終了したか
-    private fun isAllCommitted(village: Village, commits: Commits): Boolean {
+    private fun isAllCommitted(
+        village: Village,
+        commits: Commits,
+    ): Boolean {
         if (!village.setting.rules.availableCommit) return false
         // ダミーを除く最新日の生存者数
         val livingPersonCount = village.notDummyParticipant().filterAlive().count

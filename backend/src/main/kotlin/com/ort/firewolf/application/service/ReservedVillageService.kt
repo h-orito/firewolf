@@ -7,9 +7,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class ReservedVillageService(
-    val reservedVillageDataSource: ReservedVillageDataSource
+    val reservedVillageDataSource: ReservedVillageDataSource,
 ) {
-
     fun findReservedVillages(): ReservedVillages {
         return reservedVillageDataSource.findReservedVillages(true)
     }

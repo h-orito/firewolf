@@ -10,17 +10,16 @@ import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 
 data class ParticipateVillageView(
     val village: VillageView,
-    val participant: VillageParticipantView
+    val participant: VillageParticipantView,
 ) {
-
     constructor(
         village: Village,
         participant: VillageParticipant,
         charas: Charas,
         players: Players,
-        createPlayer: Player
+        createPlayer: Player,
     ) : this(
         village = VillageView(village, charas, players, createPlayer),
-        participant = VillageParticipantView(village, participant.id, players, charas, false)
+        participant = VillageParticipantView(village, participant.id, players, charas, false),
     )
 }

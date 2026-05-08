@@ -7,12 +7,11 @@ import org.springframework.stereotype.Service
 
 @Service
 class GraveSayDomainService : SayTypeDomainService {
-
     override fun isViewable(
         village: Village,
         myself: VillageParticipant?,
         player: Player?,
-        day: Int
+        day: Int,
     ): Boolean {
         return village.isViewableGraveSay(player) || myself?.isViewableGraveSay() ?: false
     }
@@ -20,7 +19,7 @@ class GraveSayDomainService : SayTypeDomainService {
     override fun isSayable(
         village: Village,
         myself: VillageParticipant?,
-        player: Player?
+        player: Player?,
     ): Boolean {
         return village.isSayableGraveSay() && myself?.isSayableGraveSay() ?: false
     }

@@ -14,32 +14,42 @@ data class MessageView(
     val to: VillageParticipantView?,
     val toCharacterName: VillageParticipantName?,
     val time: MessageTimeView,
-    val content: MessageContent
+    val content: MessageContent,
 ) {
     constructor(
         message: Message,
         village: Village,
         players: Players,
         charas: Charas,
-        shouldHidePlayer: Boolean
+        shouldHidePlayer: Boolean,
     ) : this(
-        from = if (message.fromVillageParticipantId == null) null else VillageParticipantView(
-            village,
-            message.fromVillageParticipantId,
-            players,
-            charas,
-            shouldHidePlayer
-        ),
+        from =
+            if (message.fromVillageParticipantId == null) {
+                null
+            } else {
+                VillageParticipantView(
+                    village,
+                    message.fromVillageParticipantId,
+                    players,
+                    charas,
+                    shouldHidePlayer,
+                )
+            },
         fromCharacterName = message.fromCharacterName,
-        to = if (message.toVillageParticipantId == null) null else VillageParticipantView(
-            village,
-            message.toVillageParticipantId,
-            players,
-            charas,
-            shouldHidePlayer
-        ),
+        to =
+            if (message.toVillageParticipantId == null) {
+                null
+            } else {
+                VillageParticipantView(
+                    village,
+                    message.toVillageParticipantId,
+                    players,
+                    charas,
+                    shouldHidePlayer,
+                )
+            },
         toCharacterName = message.toCharacterName,
         time = MessageTimeView(message.time, village.day.dayList.first { it.id == message.time.villageDayId }),
-        content = message.content
+        content = message.content,
     )
 }

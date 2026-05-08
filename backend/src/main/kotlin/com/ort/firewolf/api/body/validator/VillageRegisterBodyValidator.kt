@@ -13,7 +13,10 @@ class VillageRegisterBodyValidator : Validator {
         return VillageRegisterBody::class.java.isAssignableFrom(clazz)
     }
 
-    override fun validate(target: Any, errors: Errors) {
+    override fun validate(
+        target: Any,
+        errors: Errors,
+    ) {
         if (errors.hasErrors()) return
 
         val body = target as VillageRegisterBody
@@ -28,7 +31,10 @@ class VillageRegisterBodyValidator : Validator {
         validateOrganization(body, errors)
     }
 
-    private fun validateOrganization(body: VillageRegisterBody, errors: Errors) {
+    private fun validateOrganization(
+        body: VillageRegisterBody,
+        errors: Errors,
+    ) {
         val organizationList = body.setting!!.organization!!.organization!!.replace("\r\n", "\n").split("\n")
         val min = organizationList.map { it.length }.min() ?: 0
         val max = organizationList.map { it.length }.max() ?: 0
@@ -45,20 +51,21 @@ class VillageRegisterBodyValidator : Validator {
         // 存在しない役職がいる
         if (organizationList.any { org ->
                 org.toCharArray().any { Skill.skillByShortName(it.toString()) == null }
-            }) {
+            }
+        ) {
             errors.reject("", "存在しない役職があります")
             return
         }
 
         // 役欠けありだが噛まれることができる役職が存在しない
         val isAvailableDummySkill = body.setting.rule!!.availableDummySkill!!
-        if (isAvailableDummySkill
-            && organizationList.any { org ->
+        if (isAvailableDummySkill &&
+            organizationList.any { org ->
                 org.toCharArray().map { it.toString() }.none {
                     val cdefSkill = Skill.skillByShortName(it)!!.toCdef()
-                    !cdefSkill.isNoDeadByAttack
-                            && !cdefSkill.isNotSelectableAttack
-                            && !cdefSkill.isForceDoubleSuicide
+                    !cdefSkill.isNoDeadByAttack &&
+                        !cdefSkill.isNotSelectableAttack &&
+                        !cdefSkill.isForceDoubleSuicide
                 }
             }
         ) {
@@ -70,7 +77,8 @@ class VillageRegisterBodyValidator : Validator {
         if (organizationList.any { org ->
                 org.toCharArray().map { it.toString() }
                     .none { Skill.skillByShortName(it)!!.toCdef().isHasAttackAbility }
-            }) {
+            }
+        ) {
             errors.reject("", "襲撃役職が必要です")
             return
         }
@@ -78,8 +86,9 @@ class VillageRegisterBodyValidator : Validator {
         // 人狼が半数以上
         if (organizationList.any { org ->
                 val personCount = org.length
-                val wolfCount = org.toCharArray().map { it.toString() }
-                    .count { Skill.skillByShortName(it)!!.toCdef().isHasAttackAbility }
+                val wolfCount =
+                    org.toCharArray().map { it.toString() }
+                        .count { Skill.skillByShortName(it)!!.toCdef().isHasAttackAbility }
                 wolfCount >= personCount / 2
             }
         ) {

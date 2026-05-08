@@ -7,5 +7,5 @@ data class VillageSaySituation(
     val isAvailableSay: Boolean,
     val selectableMessageTypeList: List<VillageSayMessageTypeSituation> = listOf(),
     val selectableFaceTypeList: List<CharaFace>,
-    val defaultMessageType: MessageType?
+    val defaultMessageType: MessageType?,
 )

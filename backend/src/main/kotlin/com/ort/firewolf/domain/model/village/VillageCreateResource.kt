@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 data class VillageCreateResource(
     val villageName: String,
     val createPlayerId: Int,
-    val setting: VillageSettingCreateResource
+    val setting: VillageSettingCreateResource,
 )
 
 data class VillageSettingCreateResource(
@@ -19,11 +19,11 @@ data class VillageSettingCreateResource(
 
 data class VillageTimeCreateResource(
     val startDatetime: LocalDateTime,
-    val silentHours: Int?
+    val silentHours: Int?,
 )
 
 data class VillageOrganizationCreateResource(
-    val organization: String
+    val organization: String,
 )
 
 data class VillageCharachipCreateResource(
@@ -32,7 +32,7 @@ data class VillageCharachipCreateResource(
     val dummyCharaName: String,
     val dummyCharaDay0Message: String,
     val dummyCharaDay1Message: String?,
-    val charachipIds: List<Int>
+    val charachipIds: List<Int>,
 )
 
 data class VillageRuleCreateResource(
@@ -48,15 +48,15 @@ data class VillageRuleCreateResource(
     val isAvailableSecretSay: Boolean,
     val isAvailableGuardSameTarget: Boolean,
     val restrictList: List<VillageMessageRestrictCreateResource>,
-    val joinPassword: String?
+    val joinPassword: String?,
 )
 
 data class VillageTagCreateResource(
-    val tagCodes: List<String>
+    val tagCodes: List<String>,
 )
 
 data class VillageMessageRestrictCreateResource(
     val type: MessageType,
     val count: Int,
-    val length: Int
+    val length: Int,
 )

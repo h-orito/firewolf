@@ -29,9 +29,8 @@ class MessageDomainService(
     private val sympathizerMessageDomainService: SympathizerMessageDomainService,
     private val foxMessageDomainService: FoxMessageDomainService,
     private val fanaticMessageDomainService: FanaticMessageDomainService,
-    private val privateSystemMessageDomainService: PrivateSystemMessageDomainService
+    private val privateSystemMessageDomainService: PrivateSystemMessageDomainService,
 ) {
-
     /**
      * 閲覧できる発言種別リスト
      */
@@ -40,7 +39,7 @@ class MessageDomainService(
         participant: VillageParticipant?,
         player: Player?,
         day: Int,
-        authority: CDef.Authority?
+        authority: CDef.Authority?,
     ): List<CDef.MessageType> {
         // 管理者は全て見られる
         if (authority == CDef.Authority.管理者) return CDef.MessageType.listAll()
@@ -61,10 +60,13 @@ class MessageDomainService(
         myself: VillageParticipant?,
         player: Player?,
         messageType: CDef.MessageType,
-        day: Int = 1
+        day: Int = 1,
     ): Boolean {
-        return if (messageType == CDef.MessageType.村建て発言) true
-        else detectMessageTypeDomainService(messageType).isViewable(village, myself, player, day)
+        return if (messageType == CDef.MessageType.村建て発言) {
+            true
+        } else {
+            detectMessageTypeDomainService(messageType).isViewable(village, myself, player, day)
+        }
     }
 
     fun createQuery(
@@ -80,7 +82,7 @@ class MessageDomainService(
         keyword: String?,
         isLatest: Boolean,
         fromParticipantIdList: List<Int>?,
-        toParticipantIdList: List<Int>?
+        toParticipantIdList: List<Int>?,
     ): MessageQuery {
         val availableMessageTypeList = viewableMessageTypeList(village, participant, player, day, authority)
         val requestMessageTypeList =
@@ -95,21 +97,23 @@ class MessageDomainService(
             messageTypeList = queryMessageTypeList,
             fromParticipantIdList = fromParticipantIdList,
             toParticipantIdList = toParticipantIdList,
-            includeMonologue = isIncludeMonologue(
-                participant,
-                fromParticipantIdList,
-                requestMessageTypeList,
-                queryMessageTypeList
-            ),
-            includeSecret = isIncludeSecret(
-                participant,
-                fromParticipantIdList,
-                toParticipantIdList,
-                requestMessageTypeList,
-                queryMessageTypeList
-            ),
+            includeMonologue =
+                isIncludeMonologue(
+                    participant,
+                    fromParticipantIdList,
+                    requestMessageTypeList,
+                    queryMessageTypeList,
+                ),
+            includeSecret =
+                isIncludeSecret(
+                    participant,
+                    fromParticipantIdList,
+                    toParticipantIdList,
+                    requestMessageTypeList,
+                    queryMessageTypeList,
+                ),
             includePrivateAbility = isIncludePrivateAbility(participant, requestMessageTypeList),
-            isLatest = isLatest
+            isLatest = isLatest,
         )
     }
 
@@ -117,7 +121,7 @@ class MessageDomainService(
         participant: VillageParticipant?,
         participantIdList: List<Int>?,
         requestMessageTypeList: List<CDef.MessageType>,
-        queryMessageTypeList: List<CDef.MessageType>
+        queryMessageTypeList: List<CDef.MessageType>,
     ): Boolean {
         // 既に取得対象になっていれば不要
         if (queryMessageTypeList.contains(CDef.MessageType.独り言)) return false
@@ -135,7 +139,7 @@ class MessageDomainService(
         fromParticipantIdList: List<Int>?,
         toParticipantIdList: List<Int>?,
         requestMessageTypeList: List<CDef.MessageType>,
-        queryMessageTypeList: List<CDef.MessageType>
+        queryMessageTypeList: List<CDef.MessageType>,
     ): Boolean {
         // 既に取得対象になっていれば不要
         if (queryMessageTypeList.contains(CDef.MessageType.秘話)) return false
@@ -153,7 +157,7 @@ class MessageDomainService(
     // 霊視や襲撃でなく、占いなどの個別のが対象
     private fun isIncludePrivateAbility(
         participant: VillageParticipant?,
-        requestMessageTypeList: List<CDef.MessageType>
+        requestMessageTypeList: List<CDef.MessageType>,
     ): Boolean {
         participant ?: return false
         return requestMessageTypeList.contains(CDef.MessageType.公開システムメッセージ)

@@ -9,15 +9,18 @@ import java.time.ZoneOffset
 
 @Repository
 class MessageLatestDatetimeDataSource {
-
-    fun initSet(villageId: Int, datetime: LocalDateTime) {
+    fun initSet(
+        villageId: Int,
+        datetime: LocalDateTime,
+    ) {
         val ref: DatabaseReference = getDatabaseReference(villageId)
 
         val epocMilli: Long = datetime.toInstant(ZoneOffset.ofHours(+9)).toEpochMilli()
-        val datetimes: Map<String, Long> = mapOf(
-            CDef.MessageType.通常発言.code() to epocMilli,
-            CDef.MessageType.人狼の囁き.code() to epocMilli
-        )
+        val datetimes: Map<String, Long> =
+            mapOf(
+                CDef.MessageType.通常発言.code() to epocMilli,
+                CDef.MessageType.人狼の囁き.code() to epocMilli,
+            )
         ref.setValueAsync(datetimes)
     }
 
@@ -32,5 +35,4 @@ class MessageLatestDatetimeDataSource {
     private fun getVillageIdString(villageId: Int): String {
         return String.format("village%05d", villageId)
     }
-
 }

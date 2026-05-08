@@ -12,9 +12,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class ExecuteDomainService(
-    private val voteDomainService: VoteDomainService
+    private val voteDomainService: VoteDomainService,
 ) {
-
     fun processDayChangeAction(dayChange: DayChange): DayChange {
         // 1→2日目は処刑なし
         if (dayChange.village.day.latestDay().day <= 2) {
@@ -25,12 +24,13 @@ class ExecuteDomainService(
         var messages = dayChange.messages.copy()
 
         // 得票 key: target participant id, value: vote list
-        val votedMap = dayChange.votes.list
-            .filter {
-                it.villageDayId == village.day.yesterday().id &&
+        val votedMap =
+            dayChange.votes.list
+                .filter {
+                    it.villageDayId == village.day.yesterday().id &&
                         village.participant.member(it.myselfId).isAlive()
-            }
-            .groupBy { it.targetId }
+                }
+                .groupBy { it.targetId }
 
         if (votedMap.isEmpty()) return dayChange // 全員突然死
 
@@ -60,7 +60,7 @@ class ExecuteDomainService(
         }
         return dayChange.copy(
             village = village,
-            messages = messages
+            messages = messages,
         ).setIsChange(dayChange)
     }
 
@@ -89,23 +89,24 @@ class ExecuteDomainService(
         votedMap: Map<Int, List<VillageVote>>,
     ): Message {
         val executedCharaName = village.participant.member(participantId).name()
-        val message = votedMap.entries.sortedBy { it.value.size }.reversed().joinToString(
-            separator = "\n",
-            postfix = "\n\n${executedCharaName}は村人達の手により処刑された。"
-        ) { entry ->
-            val votedCharaName = village.participant.member(entry.key).name()
-            "${votedCharaName}、${entry.value.size}票"
-        }
+        val message =
+            votedMap.entries.sortedBy { it.value.size }.reversed().joinToString(
+                separator = "\n",
+                postfix = "\n\n${executedCharaName}は村人達の手により処刑された。",
+            ) { entry ->
+                val votedCharaName = village.participant.member(entry.key).name()
+                "$votedCharaName、${entry.value.size}票"
+            }
         return Message.createPublicSystemMessage(
             message,
-            village.day.latestDay().id
+            village.day.latestDay().id,
         )
     }
 
     private fun forceSuicidedParticipant(
         village: Village,
         votes: VillageVotes,
-        executedParticipant: VillageParticipant
+        executedParticipant: VillageParticipant,
     ): VillageParticipant? {
         // 処刑されたのが道連れ役職でなければ何もしない
         if (!executedParticipant.skill!!.toCdef().isForceDoubleSuicide) return null
@@ -125,16 +126,22 @@ class ExecuteDomainService(
         val message = "${executedCharaName}は、${forceSuicidedCharaName}を道連れにした。"
         return Message.createPrivateSystemMessage(
             message,
-            latestDay.id
+            latestDay.id,
         )
     }
 
-    private fun getExecutedParticipantId(maxVotedParticipantIdList: List<Int>, village: Village): Int {
+    private fun getExecutedParticipantId(
+        maxVotedParticipantIdList: List<Int>,
+        village: Village,
+    ): Int {
         // 強運者を除いて1名以上存在したら強運者以外から選択
         val excludeLuckyManList =
             maxVotedParticipantIdList.filterNot { village.participant.member(it).skill!!.toCdef().isHasLuckyAbility }
-        return if (excludeLuckyManList.isNotEmpty()) excludeLuckyManList.shuffled().first()
-        // 全員強運者
-        else maxVotedParticipantIdList.shuffled().first()
+        return if (excludeLuckyManList.isNotEmpty()) {
+            excludeLuckyManList.shuffled().first()
+        } // 全員強運者
+        else {
+            maxVotedParticipantIdList.shuffled().first()
+        }
     }
 }

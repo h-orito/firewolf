@@ -4,5 +4,5 @@ data class VillageParticipantSituation(
     val name: String,
     val nickname: String,
     val twitterUserName: String?,
-    val skillName: String?
+    val skillName: String?,
 )

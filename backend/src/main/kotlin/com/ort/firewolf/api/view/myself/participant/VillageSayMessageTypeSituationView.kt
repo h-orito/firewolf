@@ -12,26 +12,26 @@ data class VillageSayMessageTypeSituationView(
     val messageType: MessageType,
     val restrict: VillageSayRestrictSituation,
     // 秘話用
-    val targetList: List<VillageParticipantView>
+    val targetList: List<VillageParticipantView>,
 ) {
     constructor(
         situation: VillageSayMessageTypeSituation,
         village: Village,
         players: Players,
         charas: Charas,
-        shouldHidePlayer: Boolean
+        shouldHidePlayer: Boolean,
     ) : this(
         messageType = situation.messageType,
         restrict = situation.restrict,
-        targetList = situation.targetList.map {
-            VillageParticipantView(
-                village = village,
-                villageParticipantId = it.id,
-                players = players,
-                charas = charas,
-                shouldHidePlayer = shouldHidePlayer
-            )
-        }
+        targetList =
+            situation.targetList.map {
+                VillageParticipantView(
+                    village = village,
+                    villageParticipantId = it.id,
+                    players = players,
+                    charas = charas,
+                    shouldHidePlayer = shouldHidePlayer,
+                )
+            },
     )
-
 }

@@ -13,13 +13,12 @@ import org.springframework.stereotype.Service
 
 @Service
 class EmotionDomainService : IAbilityDomainService {
-
     override fun getAbilityType(): AbilityType = AbilityType(CDef.AbilityType.情緒)
 
     override fun getSelectableTargetList(
         village: Village,
         participant: VillageParticipant,
-        villageAbilities: VillageAbilities
+        villageAbilities: VillageAbilities,
     ): List<VillageParticipant> {
         return listOf(participant)
     }
@@ -27,26 +26,33 @@ class EmotionDomainService : IAbilityDomainService {
     override fun getSelectingTarget(
         village: Village,
         participant: VillageParticipant?,
-        villageAbilities: VillageAbilities
+        villageAbilities: VillageAbilities,
     ): VillageParticipant? {
         participant ?: return null
 
-        val targetVillageParticipantId = villageAbilities
-            .filterLatestday(village)
-            .filterByType(getAbilityType()).list
-            .find { it.myselfId == participant.id }
-            ?.targetId ?: return null
+        val targetVillageParticipantId =
+            villageAbilities
+                .filterLatestday(village)
+                .filterByType(getAbilityType()).list
+                .find { it.myselfId == participant.id }
+                ?.targetId ?: return null
         return village.participant.member(targetVillageParticipantId)
     }
 
-    override fun createSetMessage(myself: VillageParticipant, target: VillageParticipant?): String {
-        return if (target == null) "${myself.name()}が終わるのをやめました。"
-        else "${myself.name()}が終わることにしました。"
+    override fun createSetMessage(
+        myself: VillageParticipant,
+        target: VillageParticipant?,
+    ): String {
+        return if (target == null) {
+            "${myself.name()}が終わるのをやめました。"
+        } else {
+            "${myself.name()}が終わることにしました。"
+        }
     }
 
     override fun getDefaultAbilityList(
         village: Village,
-        villageAbilities: VillageAbilities
+        villageAbilities: VillageAbilities,
     ): List<VillageAbility> {
         return emptyList()
     }
@@ -71,14 +77,20 @@ class EmotionDomainService : IAbilityDomainService {
 
     override fun isAvailableNoTarget(village: Village): Boolean = true
 
-    override fun isUsable(village: Village, participant: VillageParticipant): Boolean {
+    override fun isUsable(
+        village: Village,
+        participant: VillageParticipant,
+    ): Boolean {
         return participant.isAlive()
     }
 
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
-    private fun createMessage(village: Village, myself: VillageParticipant): Message {
+    private fun createMessage(
+        village: Village,
+        myself: VillageParticipant,
+    ): Message {
         return Message.createPublicSystemMessage(
             text = "${myself.name()}は、終わった。",
             villageDayId = village.day.latestDay().id,

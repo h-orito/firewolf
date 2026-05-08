@@ -9,26 +9,28 @@ data class VillageMessageRestrict(
     val type: MessageType,
     val count: Int,
     val length: Int,
-    val line: Int = MessageContent.defaultLineMax
+    val line: Int = MessageContent.defaultLineMax,
 ) {
     fun assertSay(
         messageContent: MessageContent,
         cdefVillageStatus: CDef.VillageStatus,
-        latestDayMessageCountMap: Map<CDef.MessageType, Int>
+        latestDayMessageCountMap: Map<CDef.MessageType, Int>,
     ) {
         // 回数
         if (remainingCount(
                 cdefVillageStatus,
-                latestDayMessageCountMap
+                latestDayMessageCountMap,
             ) <= 0
-        ) throw FirewolfBusinessException("発言残り回数が0回です")
+        ) {
+            throw FirewolfBusinessException("発言残り回数が0回です")
+        }
         // 文字数
         messageContent.assertMessageLength(length)
     }
 
     fun remainingCount(
         cdefVillageStatus: CDef.VillageStatus,
-        latestDayMessageCountMap: Map<CDef.MessageType, Int>
+        latestDayMessageCountMap: Map<CDef.MessageType, Int>,
     ): Int {
         if (cdefVillageStatus == CDef.VillageStatus.プロローグ || cdefVillageStatus == CDef.VillageStatus.エピローグ) {
             return count // プロローグ、エピローグでは制限なし状態にする

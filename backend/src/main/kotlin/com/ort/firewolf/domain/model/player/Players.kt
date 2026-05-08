@@ -1,17 +1,20 @@
 package com.ort.firewolf.domain.model.player
 
 data class Players(
-    val list: List<Player>
+    val list: List<Player>,
 ) {
-
     fun player(id: Int): Player = list.first { it.id == id }
 
     fun restrictParticipation(playerId: Int?): Players {
         return Players(
-            list = this.list.map { player ->
-                if (player.id == playerId) player.restrictParticipation()
-                else player.copy()
-            }
+            list =
+                this.list.map { player ->
+                    if (player.id == playerId) {
+                        player.restrictParticipation()
+                    } else {
+                        player.copy()
+                    }
+                },
         )
     }
 

@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull
 
 data class VillageCommitBody(
     @field:NotNull(message = "コミット有無は必須")
-    val commit: Boolean?
+    val commit: Boolean?,
 ) {
     constructor() : this(null)
 }

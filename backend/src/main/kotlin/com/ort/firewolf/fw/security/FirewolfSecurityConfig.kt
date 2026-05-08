@@ -12,15 +12,13 @@ import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
-
 /**
  * see https://qiita.com/rubytomato@github/items/6c6318c948398fa62275
  */
 @ConfigurationProperties(prefix = "security")
 class FirewolfSecurityConfig(
-    private val authenticationProvider: FireWolfAuthenticationProvider
+    private val authenticationProvider: FireWolfAuthenticationProvider,
 ) {
-
     // ===================================================================================
     //                                                                           Attribute
     //                                                                           =========

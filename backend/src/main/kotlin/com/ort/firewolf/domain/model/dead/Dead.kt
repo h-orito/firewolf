@@ -6,16 +6,15 @@ import com.ort.firewolf.domain.model.village.VillageDay
 data class Dead(
     val code: String,
     val reason: String,
-    val villageDay: VillageDay
+    val villageDay: VillageDay,
 ) {
-
     constructor(
         cdefDeadReason: CDef.DeadReason,
-        villageDay: VillageDay
+        villageDay: VillageDay,
     ) : this(
         code = cdefDeadReason.code(),
         reason = cdefDeadReason.alias(),
-        villageDay = villageDay
+        villageDay = villageDay,
     )
 
     fun toCdef(): CDef.DeadReason {

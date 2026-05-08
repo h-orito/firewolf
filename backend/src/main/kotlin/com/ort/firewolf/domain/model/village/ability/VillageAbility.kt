@@ -6,6 +6,5 @@ data class VillageAbility(
     val villageDayId: Int,
     val myselfId: Int,
     val targetId: Int?,
-    val abilityType: AbilityType
-) {
-}
+    val abilityType: AbilityType,
+)

@@ -20,17 +20,19 @@ import org.springframework.stereotype.Service
 
 @Service
 class VillageSettingDomainService {
-
     fun assertModify(
         village: Village,
-        resource: VillageCreateResource
+        resource: VillageCreateResource,
     ) {
         assertOrganization(village.participant.count, resource.setting.organization)
         assertCharachip(village.setting.charachip, resource.setting.charachip)
         assertRule(village, resource.setting.rule)
     }
 
-    fun createModifyMessage(village: Village, resource: VillageCreateResource): Message? {
+    fun createModifyMessage(
+        village: Village,
+        resource: VillageCreateResource,
+    ): Message? {
         // "村の設定が変更されました。\n変更項目"
         val list = mutableListOf<String>()
         if (village.name != resource.villageName) list.add("村の名前")
@@ -43,21 +45,22 @@ class VillageSettingDomainService {
             addTagModifyMessage(list, setting.tags, resource.setting.tags)
             addPasswordModifyMessage(list, setting.password.joinPassword, resource.setting.rule.joinPassword)
         }
-        val message = list.map { "・${it}" }.joinToString(
-            separator = "\n",
-            prefix = "村の設定が変更されました。\n変更項目\n"
-        )
+        val message =
+            list.map { "・$it" }.joinToString(
+                separator = "\n",
+                prefix = "村の設定が変更されました。\n変更項目\n",
+            )
         if (list.isEmpty()) return null
         return Message.createPublicSystemMessage(
             text = message,
-            villageDayId = village.day.latestDay().id
+            villageDayId = village.day.latestDay().id,
         )
     }
 
     private fun addCharachipModifyMessage(
         list: MutableList<String>,
         charachip: VillageCharachip,
-        charachip1: VillageCharachipCreateResource
+        charachip1: VillageCharachipCreateResource,
     ) {
         if (charachip.dummyCharaDay1Message != charachip1.dummyCharaDay1Message) list.add("ダミーキャラ1日目発言")
     }
@@ -65,7 +68,7 @@ class VillageSettingDomainService {
     private fun addTimeModifyMessage(
         list: MutableList<String>,
         time: VillageTime,
-        resourceTime: VillageTimeCreateResource
+        resourceTime: VillageTimeCreateResource,
     ) {
         if (time.startDatetime != resourceTime.startDatetime) list.add("開始日時")
         if (time.silentHours != resourceTime.silentHours) list.add("更新後沈黙時間")
@@ -74,7 +77,7 @@ class VillageSettingDomainService {
     private fun addOrganizationModifyMessage(
         list: MutableList<String>,
         organizations: VillageOrganizations,
-        resourceOrganization: VillageOrganizationCreateResource
+        resourceOrganization: VillageOrganizationCreateResource,
     ) {
         val org = organizations.toString()
         val resourceOrg = VillageOrganizations(resourceOrganization.organization).toString()
@@ -84,7 +87,7 @@ class VillageSettingDomainService {
     private fun addRuleModifyMessage(
         list: MutableList<String>,
         rules: VillageRules,
-        resourceRules: VillageRuleCreateResource
+        resourceRules: VillageRuleCreateResource,
     ) {
         if (rules.openVote != resourceRules.isOpenVote) list.add("投票形式")
         if (!rules.availableSkillRequest && resourceRules.isAvailableSkillRequest) list.add("役職希望有無")
@@ -102,29 +105,31 @@ class VillageSettingDomainService {
     private fun addRestrictModifyMessage(
         list: MutableList<String>,
         restricts: VillageMessageRestricts,
-        resourceRestrictList: List<VillageMessageRestrictCreateResource>
+        resourceRestrictList: List<VillageMessageRestrictCreateResource>,
     ) {
-        val existsDiff = restricts.restrictList.any { restrict ->
-            val resourceRestrict = resourceRestrictList.firstOrNull { it.type.code == restrict.type.code }
-            resourceRestrict == null || restrict.count != resourceRestrict.count || restrict.length != resourceRestrict.length
-        }
+        val existsDiff =
+            restricts.restrictList.any { restrict ->
+                val resourceRestrict = resourceRestrictList.firstOrNull { it.type.code == restrict.type.code }
+                resourceRestrict == null || restrict.count != resourceRestrict.count || restrict.length != resourceRestrict.length
+            }
         if (existsDiff) list.add("発言制限")
     }
 
     private fun addTagModifyMessage(
         list: MutableList<String>,
         tags: VillageTags,
-        resourceTags: VillageTagCreateResource
+        resourceTags: VillageTagCreateResource,
     ) {
-        val existsDiff = tags.list.size != resourceTags.tagCodes.size
-                || !tags.list.containsAll(resourceTags.tagCodes)
+        val existsDiff =
+            tags.list.size != resourceTags.tagCodes.size ||
+                !tags.list.containsAll(resourceTags.tagCodes)
         if (existsDiff) list.add("年齢制限")
     }
 
     private fun addPasswordModifyMessage(
         list: MutableList<String>,
         password: String?,
-        resourcePassword: String?
+        resourcePassword: String?,
     ) {
         if (password.isNullOrEmpty() && resourcePassword.isNullOrEmpty()) return
         if (password != resourcePassword) list.add("参加パスワード")
@@ -133,7 +138,10 @@ class VillageSettingDomainService {
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
-    private fun assertOrganization(participantCount: Int, organization: VillageOrganizationCreateResource) {
+    private fun assertOrganization(
+        participantCount: Int,
+        organization: VillageOrganizationCreateResource,
+    ) {
         // 現在の人数が編成の上限人数を超えていたらNG
         val resourceOrg = VillageOrganizations.invoke(organization.organization)
         val capacity = resourceOrg.organization.keys.max()!!
@@ -142,15 +150,21 @@ class VillageSettingDomainService {
         }
     }
 
-    private fun assertCharachip(charachip: VillageCharachip, resourceCharachip: VillageCharachipCreateResource) {
-        if (charachip.charachipIds.size != resourceCharachip.charachipIds.size
-            || charachip.charachipIds.any { !resourceCharachip.charachipIds.contains(it) }
+    private fun assertCharachip(
+        charachip: VillageCharachip,
+        resourceCharachip: VillageCharachipCreateResource,
+    ) {
+        if (charachip.charachipIds.size != resourceCharachip.charachipIds.size ||
+            charachip.charachipIds.any { !resourceCharachip.charachipIds.contains(it) }
         ) {
             throw FirewolfBusinessException("キャラチップとダミーキャラは変更できません")
         }
     }
 
-    private fun assertRule(village: Village, rule: VillageRuleCreateResource) {
+    private fun assertRule(
+        village: Village,
+        rule: VillageRuleCreateResource,
+    ) {
         if (village.spectator.count > 0 && !rule.isAvailableSpectate) {
             throw FirewolfBusinessException("すでに見物人がいるため見物人はOFFにできません")
         }

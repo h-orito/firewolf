@@ -6,13 +6,13 @@ import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 
 data class ParticipateVillage(
     val village: Village,
-    val participant: VillageParticipant
+    val participant: VillageParticipant,
 ) {
     constructor(
         player: Player,
-        village: Village
+        village: Village,
     ) : this(
         village = village,
-        participant = village.findMemberByPlayerId(player.id)!!
+        participant = village.findMemberByPlayerId(player.id)!!,
     )
 }

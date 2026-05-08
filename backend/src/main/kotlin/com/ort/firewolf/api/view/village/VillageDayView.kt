@@ -10,12 +10,11 @@ data class VillageDayView(
     val noonnight: String,
     val startDatetime: LocalDateTime,
     val dayChangeDatetime: LocalDateTime,
-    val sayableStartTime: LocalTime
+    val sayableStartTime: LocalTime,
 ) {
-
     constructor(
         villageDay: VillageDay,
-        silentHours: Int?
+        silentHours: Int?,
     ) : this(
         id = villageDay.id,
         day = villageDay.day,
@@ -23,7 +22,10 @@ data class VillageDayView(
         startDatetime = villageDay.startDatetime,
         dayChangeDatetime = villageDay.dayChangeDatetime,
         sayableStartTime =
-        if (silentHours == null) villageDay.startDatetime.toLocalTime()
-        else villageDay.startDatetime.plusHours(silentHours.toLong()).toLocalTime()
+            if (silentHours == null) {
+                villageDay.startDatetime.toLocalTime()
+            } else {
+                villageDay.startDatetime.plusHours(silentHours.toLong()).toLocalTime()
+            },
     )
 }

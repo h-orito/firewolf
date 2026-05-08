@@ -7,16 +7,15 @@ import com.ort.firewolf.domain.model.village.VillageDay
 data class DeadView(
     val code: String,
     val reason: String,
-    val villageDay: VillageDay
+    val villageDay: VillageDay,
 ) {
-
     constructor(
         dead: Dead,
-        shouldHidePlayer: Boolean
+        shouldHidePlayer: Boolean,
     ) : this(
         code = if (shouldHidePlayer) convertToHideCode(dead) else dead.code,
         reason = if (shouldHidePlayer) convertToHideReason(dead) else dead.reason,
-        villageDay = dead.villageDay
+        villageDay = dead.villageDay,
     )
 
     companion object {

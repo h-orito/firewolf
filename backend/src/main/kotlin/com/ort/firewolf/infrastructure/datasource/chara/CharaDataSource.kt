@@ -9,12 +9,13 @@ import kotlin.collections.map
 
 @Repository
 class CharaDataSource(
-    val charaBhv: CharaBhv
+    val charaBhv: CharaBhv,
 ) {
     fun findCharas(charachipId: Int): Charas {
-        val charaList = charaBhv.selectList {
-            it.query().setCharaGroupId_Equal(charachipId)
-        }
+        val charaList =
+            charaBhv.selectList {
+                it.query().setCharaGroupId_Equal(charachipId)
+            }
         charaBhv.loadCharaImage(charaList) {
             it.query().queryFaceType().addOrderBy_DispOrder_Asc()
         }
@@ -22,9 +23,10 @@ class CharaDataSource(
     }
 
     fun findCharas(charachips: Charachips): Charas {
-        val charaList = charaBhv.selectList {
-            it.query().setCharaGroupId_InScope(charachips.list.map { charachip -> charachip.id })
-        }
+        val charaList =
+            charaBhv.selectList {
+                it.query().setCharaGroupId_InScope(charachips.list.map { charachip -> charachip.id })
+            }
         charaBhv.loadCharaImage(charaList) {
             it.query().queryFaceType().addOrderBy_DispOrder_Asc()
         }
@@ -33,9 +35,10 @@ class CharaDataSource(
 
     fun findCharas(charachipIdList: List<Int>): Charas {
         if (charachipIdList.isEmpty()) return Charas(listOf())
-        val charaList = charaBhv.selectList {
-            it.query().setCharaGroupId_InScope(charachipIdList)
-        }
+        val charaList =
+            charaBhv.selectList {
+                it.query().setCharaGroupId_InScope(charachipIdList)
+            }
         charaBhv.loadCharaImage(charaList) {
             it.query().setFaceTypeCode_Equal_通常()
             it.query().queryFaceType().addOrderBy_DispOrder_Asc()
@@ -45,9 +48,10 @@ class CharaDataSource(
 
     fun findCharasByCharaIds(charaIdList: List<Int>): Charas {
         if (charaIdList.isEmpty()) return Charas(listOf())
-        val charaList = charaBhv.selectList {
-            it.query().setCharaId_InScope(charaIdList)
-        }
+        val charaList =
+            charaBhv.selectList {
+                it.query().setCharaId_InScope(charaIdList)
+            }
         charaBhv.loadCharaImage(charaList) {
             it.query().queryFaceType().addOrderBy_DispOrder_Asc()
         }
@@ -55,9 +59,10 @@ class CharaDataSource(
     }
 
     fun findChara(charaId: Int): com.ort.firewolf.domain.model.charachip.Chara {
-        val chara = charaBhv.selectEntityWithDeletedCheck {
-            it.query().setCharaId_Equal(charaId)
-        }
+        val chara =
+            charaBhv.selectEntityWithDeletedCheck {
+                it.query().setCharaId_Equal(charaId)
+            }
         charaBhv.loadCharaImage(chara) {
             it.query().queryFaceType().addOrderBy_DispOrder_Asc()
         }
@@ -65,12 +70,13 @@ class CharaDataSource(
     }
 
     fun findDummyChara(charaChipId: Int): com.ort.firewolf.domain.model.charachip.Chara {
-        val chara = charaBhv.selectEntityWithDeletedCheck {
-            it.query().setCharaGroupId_Equal(charaChipId)
-            it.query().addOrderBy_DefaultJoinMessage_Asc().withNullsLast()
-            it.query().addOrderBy_CharaId_Asc()
-            it.fetchFirst(1)
-        }
+        val chara =
+            charaBhv.selectEntityWithDeletedCheck {
+                it.query().setCharaGroupId_Equal(charaChipId)
+                it.query().addOrderBy_DefaultJoinMessage_Asc().withNullsLast()
+                it.query().addOrderBy_CharaId_Asc()
+                it.fetchFirst(1)
+            }
         charaBhv.loadCharaImage(chara) {
             it.query().queryFaceType().addOrderBy_DispOrder_Asc()
         }
@@ -83,26 +89,30 @@ class CharaDataSource(
     private fun convertCharaToChara(chara: Chara): com.ort.firewolf.domain.model.charachip.Chara {
         return Chara(
             id = chara.charaId,
-            charaName = CharaName(
-                name = chara.charaName,
-                shortName = chara.charaShortName
-            ),
+            charaName =
+                CharaName(
+                    name = chara.charaName,
+                    shortName = chara.charaShortName,
+                ),
             charachipId = chara.charaGroupId,
-            defaultMessage = CharaDefaultMessage(
-                joinMessage = chara.defaultJoinMessage,
-                firstDayMessage = chara.defaultFirstdayMessage
-            ),
-            display = CharaSize(
-                width = chara.displayWidth,
-                height = chara.displayHeight
-            ),
-            faceList = chara.charaImageList.map { image ->
-                CharaFace(
-                    type = image.faceTypeCode,
-                    name = image.faceTypeCodeAsFaceType.alias(),
-                    imageUrl = image.charaImgUrl
-                )
-            }
+            defaultMessage =
+                CharaDefaultMessage(
+                    joinMessage = chara.defaultJoinMessage,
+                    firstDayMessage = chara.defaultFirstdayMessage,
+                ),
+            display =
+                CharaSize(
+                    width = chara.displayWidth,
+                    height = chara.displayHeight,
+                ),
+            faceList =
+                chara.charaImageList.map { image ->
+                    CharaFace(
+                        type = image.faceTypeCode,
+                        name = image.faceTypeCodeAsFaceType.alias(),
+                        imageUrl = image.charaImgUrl,
+                    )
+                },
         )
     }
 }

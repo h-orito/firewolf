@@ -8,11 +8,10 @@ import org.springframework.stereotype.Service
 
 @Service
 class AutopsyMessageDomainService : MessageTypeDomainService {
-
     override fun isViewable(
         village: Village,
         myself: VillageParticipant?,
         player: Player?,
-        day: Int
+        day: Int,
     ): Boolean = village.isViewableAutopsyMessage() || myself?.isViewableAutopsyMessage() ?: false
 }

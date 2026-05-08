@@ -7,5 +7,5 @@ data class VillageSayMessageTypeSituation(
     val messageType: MessageType,
     val restrict: VillageSayRestrictSituation,
     // 秘話用
-    val targetList: List<VillageParticipant>
+    val targetList: List<VillageParticipant>,
 )

@@ -8,16 +8,16 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class VoteDataSource(
-    val voteBhv: VoteBhv
+    val voteBhv: VoteBhv,
 ) {
-
     // ===================================================================================
     //                                                                              Select
     //                                                                              ======
     fun findVotes(villageId: Int): VillageVotes {
-        val voteList = voteBhv.selectList {
-            it.query().queryVillageDay().setVillageId_Equal(villageId)
-        }
+        val voteList =
+            voteBhv.selectList {
+                it.query().queryVillageDay().setVillageId_Equal(villageId)
+            }
         return VillageVotes(voteList.map { convertToVoteToVillageVote(it) })
     }
 
@@ -44,26 +44,29 @@ class VoteDataSource(
         voteBhv.insert(vote)
     }
 
-    fun updateDifference(before: VillageVotes, after: VillageVotes) {
+    fun updateDifference(
+        before: VillageVotes,
+        after: VillageVotes,
+    ) {
         // 削除
         before.list.filterNot { beforeVote ->
             after.list.any { afterVote ->
-                beforeVote.villageDayId == afterVote.villageDayId
-                    && beforeVote.myselfId == afterVote.myselfId
+                beforeVote.villageDayId == afterVote.villageDayId &&
+                    beforeVote.myselfId == afterVote.myselfId
             }
         }.forEach { deleteVote(it) }
         // 更新
         after.list.filter { afterVote ->
             before.list.any { beforeVote ->
-                beforeVote.villageDayId == afterVote.villageDayId
-                    && beforeVote.myselfId == afterVote.myselfId
+                beforeVote.villageDayId == afterVote.villageDayId &&
+                    beforeVote.myselfId == afterVote.myselfId
             }
         }.forEach { updateVote(it) }
         // 追加
         after.list.filterNot { afterVote ->
             before.list.any { beforeVote ->
-                beforeVote.villageDayId == afterVote.villageDayId
-                    && beforeVote.myselfId == afterVote.myselfId
+                beforeVote.villageDayId == afterVote.villageDayId &&
+                    beforeVote.myselfId == afterVote.myselfId
             }
         }.forEach { insertVote(it) }
     }
@@ -75,7 +78,7 @@ class VoteDataSource(
         return VillageVote(
             villageDayId = vote.villageDayId,
             myselfId = vote.villagePlayerId,
-            targetId = vote.targetVillagePlayerId
+            targetId = vote.targetVillagePlayerId,
         )
     }
 }

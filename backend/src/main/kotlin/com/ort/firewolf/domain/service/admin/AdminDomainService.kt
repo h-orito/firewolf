@@ -9,19 +9,23 @@ import org.springframework.stereotype.Service
 
 @Service
 class AdminDomainService {
-
-    fun convertToSituation(village: Village, myself: VillageParticipant?, players: Players): VillageAdminSituation {
+    fun convertToSituation(
+        village: Village,
+        myself: VillageParticipant?,
+        players: Players,
+    ): VillageAdminSituation {
         if (myself?.playerId != 1) return VillageAdminSituation(false, listOf())
         return VillageAdminSituation(
             admin = true,
-            participantList = village.allParticipants().memberList.map { participant ->
-                VillageParticipantSituation(
-                    name = participant.name(),
-                    nickname = players.list.find { it.id == participant.playerId }!!.nickname,
-                    twitterUserName = players.list.find { it.id == participant.playerId }!!.twitterUserName,
-                    skillName = participant.skill?.name
-                )
-            }
+            participantList =
+                village.allParticipants().memberList.map { participant ->
+                    VillageParticipantSituation(
+                        name = participant.name(),
+                        nickname = players.list.find { it.id == participant.playerId }!!.nickname,
+                        twitterUserName = players.list.find { it.id == participant.playerId }!!.twitterUserName,
+                        skillName = participant.skill?.name,
+                    )
+                },
         )
     }
 }

@@ -6,5 +6,5 @@ data class VillageCreatorSituation(
     val availableCancelVillage: Boolean,
     val availableKick: Boolean,
     val availableModifySetting: Boolean,
-    val availableExtendEpilogue: Boolean
+    val availableExtendEpilogue: Boolean,
 )

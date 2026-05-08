@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class VillageParticipantName(
     val name: String,
-    val shortName: String
+    val shortName: String,
 ) {
     fun existsDifference(other: VillageParticipantName): Boolean {
         return name != other.name || shortName != other.shortName

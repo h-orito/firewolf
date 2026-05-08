@@ -1,6 +1,5 @@
 package com.ort.firewolf.fw.config
 
-
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer
@@ -9,10 +8,8 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 import java.time.format.DateTimeFormatter
 
-
 @Configuration
 class FirewolfAppConfig {
-
     /**
      * レスポンスのプロパティのスネークケース変換、日時のフォーマットを行う
      * see http://www.ne.jp/asahi/hishidama/home/tech/java/spring/boot/rest/jackson.html
@@ -28,7 +25,6 @@ class FirewolfAppConfig {
     }
 
     companion object {
-
         const val dateFormat = "yyyy/MM/dd"
         const val dateTimeFormat = "yyyy/MM/dd HH:mm:ss"
     }

@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class SwaggerConfig {
-
     @Bean
     open fun modelResolver(objectMapper: ObjectMapper): ModelResolver {
         // ここでスネークケースのObjectMapperを渡す
@@ -27,15 +26,15 @@ class SwaggerConfig {
                     .description("人狼ゲームのバックエンドAPI")
                     .version("1.0.0")
                     .contact(
-                        Contact().name("Firewolf API Support")
-                    )
+                        Contact().name("Firewolf API Support"),
+                    ),
             )
             .servers(
                 listOf(
                     Server()
                         .url("/")
-                        .description("Current Server")
-                )
+                        .description("Current Server"),
+                ),
             )
     }
 }

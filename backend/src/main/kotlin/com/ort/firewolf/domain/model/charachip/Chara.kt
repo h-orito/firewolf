@@ -6,6 +6,5 @@ data class Chara(
     val charachipId: Int,
     val defaultMessage: CharaDefaultMessage,
     val display: CharaSize,
-    val faceList: List<CharaFace>
-) {
-}
+    val faceList: List<CharaFace>,
+)

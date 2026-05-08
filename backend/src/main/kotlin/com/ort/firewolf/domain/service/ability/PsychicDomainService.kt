@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service
 
 @Service
 class PsychicDomainService {
-
     fun processDayChangeAction(dayChange: DayChange): DayChange {
         // 霊能がいない、または処刑・突然死がいない場合は何もしない
         val existsAlivePsychic =
@@ -30,13 +29,15 @@ class PsychicDomainService {
     //                                                                        ============
     private fun createPsychicPrivateMessage(
         village: Village,
-        deadParticipant: VillageParticipant
+        deadParticipant: VillageParticipant,
     ): Message {
         val isWolf = village.participant.member(deadParticipant.id).skill!!.toCdef().isPsychicResultWolf
         val text = createPsychicPrivateMessageString(deadParticipant, isWolf)
         return Message.createPsychicPrivateMessage(text, village.day.latestDay().id)
     }
 
-    private fun createPsychicPrivateMessageString(target: VillageParticipant, isWolf: Boolean): String =
-        "${target.name()}は人狼${if (isWolf) "の" else "ではない"}ようだ。"
+    private fun createPsychicPrivateMessageString(
+        target: VillageParticipant,
+        isWolf: Boolean,
+    ): String = "${target.name()}は人狼${if (isWolf) "の" else "ではない"}ようだ。"
 }
