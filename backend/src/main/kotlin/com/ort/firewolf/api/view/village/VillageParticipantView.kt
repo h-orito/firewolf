@@ -12,7 +12,7 @@ import com.ort.firewolf.domain.model.village.Village
 import com.ort.firewolf.domain.model.village.participant.VillageParticipantName
 import com.ort.firewolf.domain.model.village.participant.VillageParticipantNotificationCondition
 import com.ort.firewolf.domain.model.village.participant.VillageParticipantStatus
-import com.ort.firewolf.domain.model.village.participant.coming_out.ComingOuts
+import com.ort.firewolf.domain.model.village.participant.comingout.ComingOuts
 
 data class VillageParticipantView(
     val id: Int,

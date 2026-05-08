@@ -17,8 +17,8 @@ import com.ort.firewolf.domain.model.village.participant.VillageParticipantName
 import com.ort.firewolf.domain.model.village.participant.VillageParticipantNotificationCondition
 import com.ort.firewolf.domain.model.village.participant.VillageParticipantStatus
 import com.ort.firewolf.domain.model.village.participant.VillageParticipants
-import com.ort.firewolf.domain.model.village.participant.coming_out.ComingOut
-import com.ort.firewolf.domain.model.village.participant.coming_out.ComingOuts
+import com.ort.firewolf.domain.model.village.participant.comingout.ComingOut
+import com.ort.firewolf.domain.model.village.participant.comingout.ComingOuts
 import com.ort.firewolf.domain.model.village.setting.PersonCapacity
 import com.ort.firewolf.domain.model.village.setting.VillageCharachip
 import com.ort.firewolf.domain.model.village.setting.VillageMessageRestrict

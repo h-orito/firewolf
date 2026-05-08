@@ -8,7 +8,7 @@ import com.ort.firewolf.domain.model.skill.Skill
 import com.ort.firewolf.domain.model.skill.SkillRequest
 import com.ort.firewolf.domain.model.village.Village
 import com.ort.firewolf.domain.model.village.VillageDay
-import com.ort.firewolf.domain.model.village.participant.coming_out.ComingOuts
+import com.ort.firewolf.domain.model.village.participant.comingout.ComingOuts
 
 data class VillageParticipant(
     val id: Int,

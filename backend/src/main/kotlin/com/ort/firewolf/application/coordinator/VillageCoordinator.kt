@@ -31,7 +31,7 @@ import com.ort.firewolf.domain.model.village.vote.VillageVote
 import com.ort.firewolf.domain.model.village.vote.VillageVotes
 import com.ort.firewolf.domain.service.ability.AbilityDomainService
 import com.ort.firewolf.domain.service.admin.AdminDomainService
-import com.ort.firewolf.domain.service.coming_out.ComingOutDomainService
+import com.ort.firewolf.domain.service.comingout.ComingOutDomainService
 import com.ort.firewolf.domain.service.commit.CommitDomainService
 import com.ort.firewolf.domain.service.creator.CreatorDomainService
 import com.ort.firewolf.domain.service.message.say.SayDomainService

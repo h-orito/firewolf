@@ -11,7 +11,7 @@ import com.ort.firewolf.domain.model.skill.Skills
 import com.ort.firewolf.domain.model.village.Village
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 import com.ort.firewolf.domain.service.ability.AbilityDomainService
-import com.ort.firewolf.domain.service.coming_out.ComingOutDomainService
+import com.ort.firewolf.domain.service.comingout.ComingOutDomainService
 import com.ort.firewolf.domain.service.commit.CommitDomainService
 import com.ort.firewolf.domain.service.participate.ParticipateDomainService
 import com.ort.firewolf.infrastructure.datasource.message.MessageDataSource

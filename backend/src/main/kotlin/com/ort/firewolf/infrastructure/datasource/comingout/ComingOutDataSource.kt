@@ -1,8 +1,8 @@
-package com.ort.firewolf.infrastructure.datasource.coming_out
+package com.ort.firewolf.infrastructure.datasource.comingout
 
 import com.ort.dbflute.exbhv.ComingOutBhv
 import com.ort.dbflute.exentity.ComingOut
-import com.ort.firewolf.domain.model.village.participant.coming_out.ComingOuts
+import com.ort.firewolf.domain.model.village.participant.comingout.ComingOuts
 import org.springframework.stereotype.Repository
 
 @Repository

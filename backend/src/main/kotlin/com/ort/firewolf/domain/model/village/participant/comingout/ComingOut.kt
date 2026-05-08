@@ -1,4 +1,4 @@
-package com.ort.firewolf.domain.model.village.participant.coming_out
+package com.ort.firewolf.domain.model.village.participant.comingout
 
 import com.ort.firewolf.domain.model.skill.Skill
 

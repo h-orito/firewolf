@@ -1,4 +1,4 @@
-package com.ort.firewolf.domain.service.coming_out
+package com.ort.firewolf.domain.service.comingout
 
 import com.ort.firewolf.domain.model.message.Message
 import com.ort.firewolf.domain.model.myself.participant.VillageComingOutSituation
@@ -6,7 +6,7 @@ import com.ort.firewolf.domain.model.skill.Skill
 import com.ort.firewolf.domain.model.skill.Skills
 import com.ort.firewolf.domain.model.village.Village
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
-import com.ort.firewolf.domain.model.village.participant.coming_out.ComingOuts
+import com.ort.firewolf.domain.model.village.participant.comingout.ComingOuts
 import com.ort.firewolf.fw.exception.FirewolfBusinessException
 import org.springframework.stereotype.Service
 

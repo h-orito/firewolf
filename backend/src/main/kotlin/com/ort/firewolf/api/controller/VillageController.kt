@@ -65,7 +65,7 @@ import com.ort.firewolf.domain.model.village.Villages
 import com.ort.firewolf.domain.model.village.participant.VillageParticipantName
 import com.ort.firewolf.domain.model.village.participant.VillageParticipantNotificationCondition
 import com.ort.firewolf.domain.model.village.participant.VillageParticipantStatus
-import com.ort.firewolf.domain.model.village.participant.coming_out.ComingOuts
+import com.ort.firewolf.domain.model.village.participant.comingout.ComingOuts
 import com.ort.firewolf.fw.exception.FirewolfBusinessException
 import com.ort.firewolf.fw.security.FirewolfUser
 import org.springframework.security.core.annotation.AuthenticationPrincipal
