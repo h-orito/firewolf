@@ -14,7 +14,8 @@ data class VillageDayView(
 ) {
     constructor(
         villageDay: VillageDay,
-        silentHours: Int?,
+        silentHoursDay1: Int?,
+        silentHoursDay2: Int?,
     ) : this(
         id = villageDay.id,
         day = villageDay.day,
@@ -22,10 +23,20 @@ data class VillageDayView(
         startDatetime = villageDay.startDatetime,
         dayChangeDatetime = villageDay.dayChangeDatetime,
         sayableStartTime =
-            if (silentHours == null) {
-                villageDay.startDatetime.toLocalTime()
-            } else {
-                villageDay.startDatetime.plusHours(silentHours.toLong()).toLocalTime()
+            silentHoursOf(villageDay.day, silentHoursDay1, silentHoursDay2).let { silentHours ->
+                if (silentHours == null) {
+                    villageDay.startDatetime.toLocalTime()
+                } else {
+                    villageDay.startDatetime.plusHours(silentHours.toLong()).toLocalTime()
+                }
             },
     )
+
+    companion object {
+        private fun silentHoursOf(
+            day: Int,
+            silentHoursDay1: Int?,
+            silentHoursDay2: Int?,
+        ): Int? = if (day <= 1) silentHoursDay1 else silentHoursDay2
+    }
 }

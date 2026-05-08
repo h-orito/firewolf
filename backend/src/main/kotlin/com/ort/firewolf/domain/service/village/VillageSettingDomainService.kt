@@ -71,7 +71,8 @@ class VillageSettingDomainService {
         resourceTime: VillageTimeCreateResource,
     ) {
         if (time.startDatetime != resourceTime.startDatetime) list.add("開始日時")
-        if (time.silentHours != resourceTime.silentHours) list.add("更新後沈黙時間")
+        if (time.silentHoursDay1 != resourceTime.silentHoursDay1) list.add("更新後1日目沈黙時間")
+        if (time.silentHoursDay2 != resourceTime.silentHoursDay2) list.add("更新後2日目以降沈黙時間")
     }
 
     private fun addOrganizationModifyMessage(

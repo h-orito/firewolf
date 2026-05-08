@@ -133,7 +133,8 @@ object VillageDataConverter {
                             )
                         },
                     dayChangeIntervalSeconds = detectItemText(settingList, CDef.VillageSettingItem.更新間隔秒)?.toInt(),
-                    silentHours = detectItemText(settingList, CDef.VillageSettingItem.沈黙時間)?.toInt(),
+                    silentHoursDay1 = detectItemText(settingList, CDef.VillageSettingItem.N1日目沈黙時間)?.toInt(),
+                    silentHoursDay2 = detectItemText(settingList, CDef.VillageSettingItem.N2日目以降沈黙時間)?.toInt(),
                 ),
             charachip =
                 VillageCharachip.invoke(

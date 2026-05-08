@@ -41,9 +41,10 @@ data class VillageSettingRegisterBody(
 data class VillageTimeCreateBody(
     @field:NotNull
     val startDatetime: LocalDateTime?,
-    val silentHours: Int?,
+    val silentHoursDay1: Int?,
+    val silentHoursDay2: Int?,
 ) {
-    constructor() : this(null, null)
+    constructor() : this(null, null, null)
 }
 
 data class VillageOrganizationCreateBody(

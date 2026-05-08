@@ -19,7 +19,8 @@ data class VillageSettingCreateResource(
 
 data class VillageTimeCreateResource(
     val startDatetime: LocalDateTime,
-    val silentHours: Int?,
+    val silentHoursDay1: Int?,
+    val silentHoursDay2: Int?,
 )
 
 data class VillageOrganizationCreateResource(

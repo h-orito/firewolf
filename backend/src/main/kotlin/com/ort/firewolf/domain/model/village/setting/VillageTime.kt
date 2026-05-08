@@ -1,6 +1,7 @@
 package com.ort.firewolf.domain.model.village.setting
 
 import com.ort.dbflute.allcommon.CDef
+import com.ort.firewolf.domain.model.village.VillageDay
 import com.ort.firewolf.domain.model.village.VillageDays
 import com.ort.firewolf.fw.FirewolfDateUtil
 import java.time.LocalDateTime
@@ -12,7 +13,8 @@ data class VillageTime(
     val epilogueStartDatetime: LocalDateTime?,
     val startDatetime: LocalDateTime,
     val dayChangeIntervalSeconds: Int,
-    val silentHours: Int?,
+    val silentHoursDay1: Int?,
+    val silentHoursDay2: Int?,
 ) {
     companion object {
         private const val DEFAULT_INTERVAL = 86400
@@ -26,7 +28,8 @@ data class VillageTime(
             epilogueStartDatetime: LocalDateTime?,
             startDatetime: LocalDateTime?,
             dayChangeIntervalSeconds: Int?,
-            silentHours: Int?,
+            silentHoursDay1: Int?,
+            silentHoursDay2: Int?,
         ): VillageTime {
             require(termType == null || CDef.Term.codeOf(termType) != null)
             requireNotNull(startDatetime)
@@ -41,7 +44,8 @@ data class VillageTime(
                 epilogueStartDatetime = epilogueStartDatetime,
                 startDatetime = startDatetime,
                 dayChangeIntervalSeconds = dayChangeIntervalSeconds ?: DEFAULT_INTERVAL,
-                silentHours = silentHours,
+                silentHoursDay1 = silentHoursDay1,
+                silentHoursDay2 = silentHoursDay2,
             )
         }
     }
@@ -50,14 +54,17 @@ data class VillageTime(
         termType != time.termType ||
             startDatetime != time.startDatetime ||
             dayChangeIntervalSeconds != time.dayChangeIntervalSeconds ||
-            silentHours != time.silentHours
+            silentHoursDay1 != time.silentHoursDay1 ||
+            silentHoursDay2 != time.silentHoursDay2
 
-    fun isSilentTime(dayStartDatetime: LocalDateTime): Boolean {
-        silentHours ?: return false
+    fun isSilentTime(latestDay: VillageDay): Boolean {
+        val silentHours = silentHoursOf(latestDay.day) ?: return false
         if (silentHours <= 0) return false
         val now = FirewolfDateUtil.currentLocalDateTime()
-        return now.isBefore(dayStartDatetime.plusHours(silentHours.toLong()))
+        return now.isBefore(latestDay.startDatetime.plusHours(silentHours.toLong()))
     }
+
+    fun silentHoursOf(day: Int): Int? = if (day <= 1) silentHoursDay1 else silentHoursDay2
 
     fun extendPrologue(): VillageTime {
         val now = FirewolfDateUtil.currentLocalDateTime()

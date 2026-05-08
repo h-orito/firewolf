@@ -376,11 +376,19 @@ public abstract class AbstractBsVillageSettingCQ extends AbstractConditionQuery 
     }
 
     /**
-     * Equal(=). As 沈黙時間 (silent_hours). And OnlyOnceRegistered. <br>
-     * 沈黙時間
+     * Equal(=). As N1日目沈黙時間 (silent_hours). And OnlyOnceRegistered. <br>
+     * 1日目沈黙時間
      */
-    public void setVillageSettingItemCode_Equal_沈黙時間() {
-        setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.沈黙時間);
+    public void setVillageSettingItemCode_Equal_N1日目沈黙時間() {
+        setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.N1日目沈黙時間);
+    }
+
+    /**
+     * Equal(=). As N2日目以降沈黙時間 (silent_hours_day2). And OnlyOnceRegistered. <br>
+     * 2日目以降沈黙時間
+     */
+    public void setVillageSettingItemCode_Equal_N2日目以降沈黙時間() {
+        setVillageSettingItemCode_Equal_AsVillageSettingItem(CDef.VillageSettingItem.N2日目以降沈黙時間);
     }
 
     /**
@@ -607,11 +615,19 @@ public abstract class AbstractBsVillageSettingCQ extends AbstractConditionQuery 
     }
 
     /**
-     * NotEqual(&lt;&gt;). As 沈黙時間 (silent_hours). And OnlyOnceRegistered. <br>
-     * 沈黙時間
+     * NotEqual(&lt;&gt;). As N1日目沈黙時間 (silent_hours). And OnlyOnceRegistered. <br>
+     * 1日目沈黙時間
      */
-    public void setVillageSettingItemCode_NotEqual_沈黙時間() {
-        setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.沈黙時間);
+    public void setVillageSettingItemCode_NotEqual_N1日目沈黙時間() {
+        setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.N1日目沈黙時間);
+    }
+
+    /**
+     * NotEqual(&lt;&gt;). As N2日目以降沈黙時間 (silent_hours_day2). And OnlyOnceRegistered. <br>
+     * 2日目以降沈黙時間
+     */
+    public void setVillageSettingItemCode_NotEqual_N2日目以降沈黙時間() {
+        setVillageSettingItemCode_NotEqual_AsVillageSettingItem(CDef.VillageSettingItem.N2日目以降沈黙時間);
     }
 
     /**

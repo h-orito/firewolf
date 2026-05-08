@@ -45,11 +45,11 @@ data class RecruitingVillageView(
             village.setting.charachip.charachipIds.map { id -> charachips.list.first { it.id == id }.name }
                 .joinToString("、"),
         sayableTime =
-            if (village.setting.time.silentHours == null || village.setting.time.silentHours == 0) {
+            if (village.setting.time.silentHoursDay1 == null || village.setting.time.silentHoursDay1 == 0) {
                 "24時間"
             } else {
                 village.setting.time.let {
-                    val start = it.startDatetime.plusHours(it.silentHours!!.toLong()).toLocalTime()
+                    val start = it.startDatetime.plusHours(it.silentHoursDay1!!.toLong()).toLocalTime()
                     val end = it.startDatetime.toLocalTime()
                     val endPrefix = if (start.isAfter(end)) "翌" else ""
                     "${start.format(DateTimeFormatter.ofPattern("HH:mm"))} - ${endPrefix}${

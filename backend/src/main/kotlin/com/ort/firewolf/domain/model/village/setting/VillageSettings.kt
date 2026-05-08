@@ -31,7 +31,8 @@ data class VillageSettings(
                         epilogueStartDatetime = null,
                         startDatetime = resource.time.startDatetime,
                         dayChangeIntervalSeconds = 86400,
-                        silentHours = resource.time.silentHours,
+                        silentHoursDay1 = resource.time.silentHoursDay1,
+                        silentHoursDay2 = resource.time.silentHoursDay2,
                     ),
                 charachip =
                     VillageCharachip(

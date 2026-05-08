@@ -401,7 +401,7 @@ public interface CDef extends Classification {
                 subItemMap.put("shortName", "大");
                 subItemMap.put("order", "104");
                 subItemMap.put("campCode", "WEREWOLF");
-                subItemMap.put("description", "あなたは大狼です。人狼系役職とC国狂人同士にしか聞こえない会話が可能です。また、毎晩一人を襲撃することができます。占い師に占われても人狼と判定されません。");
+                subItemMap.put("description", "あなたは大狼です。人狼系役職とC国狂人同士にしか聞こえない会話が可能です。また、毎晩一人を襲撃することができます。また、占い師に占われても人狼と判定されません。");
                 _subItemMapMap.put(大狼.code(), Collections.unmodifiableMap(subItemMap));
             }
             {
@@ -1723,8 +1723,10 @@ public interface CDef extends Classification {
         最大人数("person_max", "最大人数"),
         /** 最低人数 */
         最低人数("person_min", "最低人数"),
-        /** 沈黙時間 */
-        沈黙時間("silent_hours", "沈黙時間"),
+        /** 1日目沈黙時間 */
+        N1日目沈黙時間("silent_hours", "1日目沈黙時間"),
+        /** 2日目以降沈黙時間 */
+        N2日目以降沈黙時間("silent_hours_day2", "2日目以降沈黙時間"),
         /** 開始予定日時 */
         開始予定日時("start_datetime", "開始予定日時"),
         /** 期間形式 */

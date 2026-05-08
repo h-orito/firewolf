@@ -7,11 +7,12 @@ data class VillageDaysView(
 ) {
     constructor(
         villageDays: VillageDays,
-        silentHours: Int?,
+        silentHoursDay1: Int?,
+        silentHoursDay2: Int?,
     ) : this(
         dayList =
             villageDays.dayList.map {
-                VillageDayView(it, silentHours)
+                VillageDayView(it, silentHoursDay1, silentHoursDay2)
             },
     )
 }

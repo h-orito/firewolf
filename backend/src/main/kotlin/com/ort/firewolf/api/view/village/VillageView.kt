@@ -48,7 +48,12 @@ data class VillageView(
                 players = players,
                 shouldHidePlayer = !village.status.isSolved(),
             ),
-        day = VillageDaysView(village.day, village.setting.time.silentHours),
+        day =
+            VillageDaysView(
+                village.day,
+                village.setting.time.silentHoursDay1,
+                village.setting.time.silentHoursDay2,
+            ),
         silentTime = village.isSilentTime(),
     )
 }

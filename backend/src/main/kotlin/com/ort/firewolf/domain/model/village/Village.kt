@@ -297,7 +297,7 @@ data class Village(
         }
     }
 
-    fun isSilentTime(): Boolean = status.isProgress() && setting.time.isSilentTime(day.latestDay().startDatetime)
+    fun isSilentTime(): Boolean = status.isProgress() && setting.time.isSilentTime(day.latestDay())
 
     fun isAvailableCommit(): Boolean = setting.rules.availableCommit && status.isProgress()
 

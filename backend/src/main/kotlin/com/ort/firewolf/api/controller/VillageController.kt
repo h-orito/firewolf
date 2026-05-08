@@ -787,7 +787,8 @@ class VillageController(
     private fun convertToVillageTimeCreateResource(body: VillageTimeCreateBody): VillageTimeCreateResource =
         VillageTimeCreateResource(
             startDatetime = body.startDatetime!!,
-            silentHours = body.silentHours,
+            silentHoursDay1 = body.silentHoursDay1,
+            silentHoursDay2 = body.silentHoursDay2,
         )
 
     private fun convertToVillageOrganizationCreateResource(body: VillageOrganizationCreateBody): VillageOrganizationCreateResource =

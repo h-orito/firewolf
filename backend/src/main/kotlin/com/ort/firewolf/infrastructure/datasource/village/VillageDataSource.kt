@@ -413,7 +413,16 @@ class VillageDataSource(
                 CDef.VillageSettingItem.更新間隔秒,
                 afterTime.dayChangeIntervalSeconds.toString(),
             )
-            updateVillageSetting(villageId, CDef.VillageSettingItem.沈黙時間, afterTime.silentHours?.toString() ?: "")
+            updateVillageSetting(
+                villageId,
+                CDef.VillageSettingItem.N1日目沈黙時間,
+                afterTime.silentHoursDay1?.toString() ?: "",
+            )
+            updateVillageSetting(
+                villageId,
+                CDef.VillageSettingItem.N2日目以降沈黙時間,
+                afterTime.silentHoursDay2?.toString() ?: "",
+            )
         }
         after.setting.organizations.let { afterOrg ->
             if (!before.setting.organizations.existsDifference(afterOrg)) return@let
@@ -742,7 +751,16 @@ class VillageDataSource(
         )
         insertVillageSetting(villageId, CDef.VillageSettingItem.コミット可能か, toFlg(settings.rules.availableCommit))
         insertVillageSetting(villageId, CDef.VillageSettingItem.入村パスワード, settings.password.joinPassword ?: "")
-        insertVillageSetting(villageId, CDef.VillageSettingItem.沈黙時間, settings.time.silentHours?.toString() ?: "")
+        insertVillageSetting(
+            villageId,
+            CDef.VillageSettingItem.N1日目沈黙時間,
+            settings.time.silentHoursDay1?.toString() ?: "",
+        )
+        insertVillageSetting(
+            villageId,
+            CDef.VillageSettingItem.N2日目以降沈黙時間,
+            settings.time.silentHoursDay2?.toString() ?: "",
+        )
         insertVillageSetting(villageId, CDef.VillageSettingItem.役欠けありか, toFlg(settings.rules.availableDummySkill))
         insertVillageSetting(villageId, CDef.VillageSettingItem.アクション可能か, toFlg(settings.rules.availableAction))
         insertVillageSetting(villageId, CDef.VillageSettingItem.秘話可能か, toFlg(settings.rules.availableSecretSay))

@@ -269,11 +269,19 @@ public abstract class BsVillageSettingItem extends AbstractEntity implements Dom
     }
 
     /**
-     * Set the value of villageSettingItemCode as 沈黙時間 (silent_hours). <br>
-     * 沈黙時間
+     * Set the value of villageSettingItemCode as N1日目沈黙時間 (silent_hours). <br>
+     * 1日目沈黙時間
      */
-    public void setVillageSettingItemCode_沈黙時間() {
-        setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.沈黙時間);
+    public void setVillageSettingItemCode_N1日目沈黙時間() {
+        setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.N1日目沈黙時間);
+    }
+
+    /**
+     * Set the value of villageSettingItemCode as N2日目以降沈黙時間 (silent_hours_day2). <br>
+     * 2日目以降沈黙時間
+     */
+    public void setVillageSettingItemCode_N2日目以降沈黙時間() {
+        setVillageSettingItemCodeAsVillageSettingItem(CDef.VillageSettingItem.N2日目以降沈黙時間);
     }
 
     /**
@@ -549,14 +557,25 @@ public abstract class BsVillageSettingItem extends AbstractEntity implements Dom
     }
 
     /**
-     * Is the value of villageSettingItemCode 沈黙時間? <br>
-     * 沈黙時間
+     * Is the value of villageSettingItemCode N1日目沈黙時間? <br>
+     * 1日目沈黙時間
      * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
      * @return The determination, true or false.
      */
-    public boolean isVillageSettingItemCode沈黙時間() {
+    public boolean isVillageSettingItemCodeN1日目沈黙時間() {
         CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
-        return cdef != null ? cdef.equals(CDef.VillageSettingItem.沈黙時間) : false;
+        return cdef != null ? cdef.equals(CDef.VillageSettingItem.N1日目沈黙時間) : false;
+    }
+
+    /**
+     * Is the value of villageSettingItemCode N2日目以降沈黙時間? <br>
+     * 2日目以降沈黙時間
+     * <p>It's treated as case insensitive and if the code value is null, it returns false.</p>
+     * @return The determination, true or false.
+     */
+    public boolean isVillageSettingItemCodeN2日目以降沈黙時間() {
+        CDef.VillageSettingItem cdef = getVillageSettingItemCodeAsVillageSettingItem();
+        return cdef != null ? cdef.equals(CDef.VillageSettingItem.N2日目以降沈黙時間) : false;
     }
 
     /**
