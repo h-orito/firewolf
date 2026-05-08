@@ -11,8 +11,8 @@ data class MessageContent(
     val faceCode: String?,
 ) {
     companion object {
-        const val defaultLengthMax = 400
-        const val defaultLineMax = 20
+        const val DEFAULT_LENGTH_MAX = 400
+        const val DEFAULT_LINE_MAX = 20
 
         operator fun invoke(
             messageType: String,
@@ -44,8 +44,8 @@ data class MessageContent(
     fun shouldNotify(): Boolean = text.contains("@国主") || text.contains("＠国主")
 
     fun assertMessageLength(
-        maxLength: Int = defaultLengthMax,
-        lineMax: Int = defaultLineMax,
+        maxLength: Int = DEFAULT_LENGTH_MAX,
+        lineMax: Int = DEFAULT_LINE_MAX,
     ) {
         // 行数
         if (text.replace("\r\n", "\n").split("\n").size > lineMax) throw FirewolfBadRequestException("行数オーバーです")

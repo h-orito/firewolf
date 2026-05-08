@@ -193,8 +193,8 @@ class SayDomainService(
                     village.status.toCdef(),
                     latestDayMessageCountMap,
                 ),
-            maxLength = restrict?.length ?: MessageContent.defaultLengthMax,
-            maxLine = restrict?.line ?: MessageContent.defaultLineMax,
+            maxLength = restrict?.length ?: MessageContent.DEFAULT_LENGTH_MAX,
+            maxLine = restrict?.line ?: MessageContent.DEFAULT_LINE_MAX,
         )
     }
 

@@ -17,15 +17,15 @@ class FirewolfAppConfig {
     @Bean
     fun objectMapperBuilder(): Jackson2ObjectMapperBuilder {
         val builder = Jackson2ObjectMapperBuilder()
-        builder.simpleDateFormat(dateTimeFormat)
-        builder.serializers(LocalDateSerializer(DateTimeFormatter.ofPattern(dateFormat)))
-        builder.serializers(LocalDateTimeSerializer(DateTimeFormatter.ofPattern(dateTimeFormat)))
+        builder.simpleDateFormat(DATE_TIME_FORMAT)
+        builder.serializers(LocalDateSerializer(DateTimeFormatter.ofPattern(DATE_FORMAT)))
+        builder.serializers(LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)))
         builder.propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
         return builder
     }
 
     companion object {
-        const val dateFormat = "yyyy/MM/dd"
-        const val dateTimeFormat = "yyyy/MM/dd HH:mm:ss"
+        const val DATE_FORMAT = "yyyy/MM/dd"
+        const val DATE_TIME_FORMAT = "yyyy/MM/dd HH:mm:ss"
     }
 }

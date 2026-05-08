@@ -9,7 +9,7 @@ data class VillageMessageRestrict(
     val type: MessageType,
     val count: Int,
     val length: Int,
-    val line: Int = MessageContent.defaultLineMax,
+    val line: Int = MessageContent.DEFAULT_LINE_MAX,
 ) {
     fun assertSay(
         messageContent: MessageContent,
