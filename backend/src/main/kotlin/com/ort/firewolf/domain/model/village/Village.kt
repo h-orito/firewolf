@@ -389,8 +389,10 @@ data class Village(
         val newStartDatetime = if (now.isBefore(dayChangeDatetime)) now else dayChangeDatetime
         val newDay =
             VillageDay(
-                id = 0, // dummy
-                day = day.latestDay().day + 1, // 一旦長期だけを考えるので常に昼
+                // dummy
+                id = 0,
+                // 一旦長期だけを考えるので常に昼
+                day = day.latestDay().day + 1,
                 noonnight = CDef.Noonnight.昼.code(),
                 startDatetime = newStartDatetime,
                 dayChangeDatetime = dayChangeDatetime.plusSeconds(setting.time.dayChangeIntervalSeconds.toLong()),
@@ -583,8 +585,10 @@ data class Village(
     private fun winLose(): Village {
         if (!isSettled()) return this
         return this.copy(
-            winCamp = judgeWinCamp(), // 村自体の勝利陣営
-            participant = this.participant.winLose(judgeWinCamp()!!), // 個人ごとの勝敗
+            // 村自体の勝利陣営
+            winCamp = judgeWinCamp(),
+            // 個人ごとの勝敗
+            participant = this.participant.winLose(judgeWinCamp()!!),
         )
     }
 
@@ -608,7 +612,8 @@ data class Village(
     companion object {
         fun createForRegister(resource: VillageCreateResource): Village {
             return Village(
-                id = 1, // dummy
+                // dummy
+                id = 1,
                 name = resource.villageName,
                 creatorPlayerId = resource.createPlayerId,
                 status = VillageStatus(CDef.VillageStatus.プロローグ),

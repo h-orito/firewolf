@@ -11,7 +11,8 @@ data class CharachipView(
     val name: String,
     val designer: Designer,
     val descriptionUrl: String,
-    val charaList: List<Chara>, // domainとの違い
+    // domainとの違い
+    val charaList: List<Chara>,
     @JsonProperty("is_available_change_name") val isAvailableChangeName: Boolean,
 ) {
     constructor(

@@ -32,7 +32,7 @@ import com.ort.firewolf.domain.model.village.setting.VillageTime
 import org.dbflute.cbean.result.ListResultBean
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.Optional
 
 object VillageDataConverter {
     const val FLG_TRUE = "1"
@@ -95,8 +95,9 @@ object VillageDataConverter {
             setting = convertVillageSettingListToVillageSetting(village),
             participant = VillageParticipants(count = village.participantCount),
             spectator = VillageParticipants(count = village.visitorCount),
+            // 最新の1日だけ
             day =
-                VillageDays( // 最新の1日だけ
+                VillageDays(
                     dayList =
                         village.villageDayList.firstOrNull()?.let {
                             listOf(convertVillageDayToVillageDay(it))

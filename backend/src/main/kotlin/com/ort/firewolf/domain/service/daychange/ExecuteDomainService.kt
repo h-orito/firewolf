@@ -137,10 +137,10 @@ class ExecuteDomainService(
         // 強運者を除いて1名以上存在したら強運者以外から選択
         val excludeLuckyManList =
             maxVotedParticipantIdList.filterNot { village.participant.member(it).skill!!.toCdef().isHasLuckyAbility }
+        // 全員強運者の場合は強運者から選択
         return if (excludeLuckyManList.isNotEmpty()) {
             excludeLuckyManList.shuffled().first()
-        } // 全員強運者
-        else {
+        } else {
             maxVotedParticipantIdList.shuffled().first()
         }
     }

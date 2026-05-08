@@ -31,8 +31,10 @@ data class Message(
                 time =
                     MessageTime(
                         villageDayId = villageDayId,
-                        datetime = FirewolfDateUtil.currentLocalDateTime(), // dummy
-                        unixTimeMilli = 0L, // dummy
+                        // dummy
+                        datetime = FirewolfDateUtil.currentLocalDateTime(),
+                        // dummy
+                        unixTimeMilli = 0L,
                     ),
                 content = messageContent,
             )
@@ -137,14 +139,18 @@ data class Message(
                 time =
                     MessageTime(
                         villageDayId = villageDayId,
-                        datetime = FirewolfDateUtil.currentLocalDateTime(), // dummy
-                        unixTimeMilli = 0L, // dummy
+                        // dummy
+                        datetime = FirewolfDateUtil.currentLocalDateTime(),
+                        // dummy
+                        unixTimeMilli = 0L,
                     ),
                 content =
                     MessageContent(
                         type = messageType,
-                        num = 0, // dummy
-                        count = 0, // dummy
+                        // dummy
+                        num = 0,
+                        // dummy
+                        count = 0,
                         text = text,
                         faceCode = null,
                     ),

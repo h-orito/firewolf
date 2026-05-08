@@ -68,7 +68,8 @@ class VillageDataSource(
         insertVillageDay(
             villageId,
             com.ort.firewolf.domain.model.village.VillageDay(
-                id = 1, // dummy
+                // dummy
+                id = 1,
                 day = 0,
                 noonnight = CDef.Noonnight.昼.code(),
                 startDatetime = LocalDateTime.now(),

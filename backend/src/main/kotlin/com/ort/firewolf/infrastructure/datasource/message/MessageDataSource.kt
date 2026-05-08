@@ -102,8 +102,10 @@ class MessageDataSource(
             list = messagePage.reversed().map { convertMessageToMessage(it) },
             allPageCount = messagePage.allPageCount,
             allRecordCount = messagePage.allRecordCount,
-            isExistPrePage = messagePage.existsNextPage(), // 逆順にしているので
-            isExistNextPage = false, // 最新なので次はなし
+            // 逆順にしているので
+            isExistPrePage = messagePage.existsNextPage(),
+            // 最新なので次はなし
+            isExistNextPage = false,
             currentPageNum = null,
             isLatest = true,
         )

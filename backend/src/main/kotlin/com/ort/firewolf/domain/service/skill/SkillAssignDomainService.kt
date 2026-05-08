@@ -138,7 +138,9 @@ class SkillAssignDomainService {
         // 範囲指定している人
         changedParticipants.memberList
             .filter {
-                it.skill == null && CDef.Skill.listOfSomeoneSkill().contains(it.skillRequest.first.toCdef()) && it.skillRequest.first.toCdef() != CDef.Skill.おまかせ
+                it.skill == null &&
+                    CDef.Skill.listOfSomeoneSkill().contains(it.skillRequest.first.toCdef()) &&
+                    it.skillRequest.first.toCdef() != CDef.Skill.おまかせ
             }
             .shuffled()
             .forEach {
@@ -177,7 +179,9 @@ class SkillAssignDomainService {
         // 範囲指定している人
         changedParticipants.memberList
             .filter {
-                it.skill == null && CDef.Skill.listOfSomeoneSkill().contains(it.skillRequest.second.toCdef()) && it.skillRequest.second.toCdef() != CDef.Skill.おまかせ
+                it.skill == null &&
+                    CDef.Skill.listOfSomeoneSkill().contains(it.skillRequest.second.toCdef()) &&
+                    it.skillRequest.second.toCdef() != CDef.Skill.おまかせ
             }
             .shuffled()
             .forEach {

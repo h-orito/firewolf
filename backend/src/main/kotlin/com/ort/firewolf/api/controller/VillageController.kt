@@ -211,8 +211,10 @@ class VillageController(
                 keyword = form.keyword,
                 messageTypeList = messageTypeList,
                 isLatest = form.is_disp_latest ?: false,
-                fromParticipantIdList = form.participant_id_list?.filterNotNull(), // [null]で来る問題に対応
-                toParticipantIdList = form.to_participant_id_list?.filterNotNull(), // [null]で来る問題に対応
+                // [null]で来る問題に対応
+                fromParticipantIdList = form.participant_id_list?.filterNotNull(),
+                // [null]で来る問題に対応
+                toParticipantIdList = form.to_participant_id_list?.filterNotNull(),
             )
         val players: Players = playerService.findPlayers(villageId)
         val charaIds = village.allParticipants().memberList.map { it.charaId }.distinct()
@@ -344,7 +346,8 @@ class VillageController(
         return MessageView(
             from =
                 VillageParticipantView(
-                    id = 1, // dummy
+                    // dummy
+                    id = 1,
                     name =
                         VillageParticipantName(
                             name = body.charaName!!,
@@ -376,7 +379,8 @@ class VillageController(
             toCharacterName = null,
             time =
                 MessageTimeView(
-                    villageDayId = 1, // dummy
+                    // dummy
+                    villageDayId = 1,
                     day = 0,
                     datetime = LocalDateTime.now(),
                     unixTimeMilli = LocalDateTime.now().toInstant(ZoneOffset.ofHours(+9)).toEpochMilli(),
@@ -682,7 +686,7 @@ class VillageController(
     fun saveNotification(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: FirewolfUser,
-        @RequestBody @Validated body: VillageNotificationBody, //
+        @RequestBody @Validated body: VillageNotificationBody,
     ) {
         villageCoordinator.saveNotification(
             villageId,
@@ -727,7 +731,8 @@ class VillageController(
 
         val createResource =
             convertToVillageCreateResource(villageRegisterBody, player).copy(
-                createPlayerId = village.creatorPlayerId, // 管理者に上書きされるのを防ぐ
+                // 管理者に上書きされるのを防ぐ
+                createPlayerId = village.creatorPlayerId,
             )
         villageCoordinator.assertModifySetting(village, player, createResource)
     }

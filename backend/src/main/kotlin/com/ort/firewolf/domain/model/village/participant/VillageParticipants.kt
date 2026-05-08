@@ -9,7 +9,8 @@ import com.ort.firewolf.domain.model.village.VillageDay
 import com.ort.firewolf.domain.model.village.participant.coming_out.ComingOuts
 
 data class VillageParticipants(
-    val count: Int, // 退村した人は含まない
+    // 退村した人は含まない
+    val count: Int,
     val memberList: List<VillageParticipant> = listOf(),
 ) {
     fun assignSkill(
@@ -42,7 +43,8 @@ data class VillageParticipants(
             memberList =
                 memberList +
                     VillageParticipant(
-                        id = -1, // dummy
+                        // dummy
+                        id = -1,
                         charaId = chara.id,
                         charaName =
                             VillageParticipantName(

@@ -2,10 +2,13 @@ package com.ort.firewolf.infrastructure.datasource.chara
 
 import com.ort.dbflute.exbhv.CharaBhv
 import com.ort.dbflute.exentity.Chara
-import com.ort.firewolf.domain.model.charachip.*
+import com.ort.firewolf.domain.model.charachip.CharaDefaultMessage
+import com.ort.firewolf.domain.model.charachip.CharaFace
+import com.ort.firewolf.domain.model.charachip.CharaName
+import com.ort.firewolf.domain.model.charachip.CharaSize
+import com.ort.firewolf.domain.model.charachip.Charachips
+import com.ort.firewolf.domain.model.charachip.Charas
 import org.springframework.stereotype.Repository
-import kotlin.Int
-import kotlin.collections.map
 
 @Repository
 class CharaDataSource(
@@ -87,7 +90,7 @@ class CharaDataSource(
     //                                                                             Mapping
     //                                                                             =======
     private fun convertCharaToChara(chara: Chara): com.ort.firewolf.domain.model.charachip.Chara {
-        return Chara(
+        return com.ort.firewolf.domain.model.charachip.Chara(
             id = chara.charaId,
             charaName =
                 CharaName(
