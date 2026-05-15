@@ -1,0 +1,4 @@
+# dbflute 関連は Linguist の言語統計から除外（自動生成・ツール本体）
+backend/src/main/kotlin/com/ort/dbflute/** linguist-generated=true
+backend/mydbflute/** linguist-generated=true
+backend/dbflute_firewolfdb/** linguist-generated=true
