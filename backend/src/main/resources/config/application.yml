@@ -1,0 +1,62 @@
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:4306/firewolfdb?characterEncoding=UTF-8
+    username: firewolfuser # 本番は起動引数で与える
+    password: firewolfpass # 本番は起動引数で与える
+    driverClassName: com.mysql.cj.jdbc.Driver
+    type: org.apache.tomcat.jdbc.pool.DataSource
+  messages:
+    basename: messages
+    cache-duration: -1
+    encoding: UTF-8
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+  cache:
+    caffeine:
+      spec: "expireAfterAccess=600s"
+security:
+  corsClientUrls:
+    - http://localhost:*
+server:
+  port: 8087
+  servlet:
+    context-path: /firewolf
+    session:
+      timeout: 86400
+  compression:
+    enabled: true
+  tomcat:
+    basedir: /var/log
+    accesslog:
+      enabled: true
+      suffix: .log
+      prefix: access_log
+      file-date-format: .yyyy-MM-dd
+      max-days: 30
+      pattern: '%t "%r" %s %b "%{Referer}i" "%{User-Agent}i" %{X-Forwarded-For}i %D %S %I'
+    remoteip.remote-ip-header: true
+    use-forward-headers: true
+logging:
+  level:
+    org.springframework: INFO
+    root: INFO
+    org.seasar.dbflute: ERROR
+  file.name: /var/log/firewolf.log
+slack.token:
+twitter:
+  oauth:
+    consumer-key: ""
+    consumer-secret: ""
+    access-token: ""
+    access-token-secret: ""
+
+firebase:
+  adminsdk:
+    secretkey:
+      path: ""
+  database:
+    url: ""
+
+discord:
+  webhook-url:
+  master-userid:
