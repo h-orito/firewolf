@@ -15,10 +15,6 @@
 # ブランチごとのビルド設定
 # ==============================================
 
-# feature/nuxt4 ブランチ用の設定
-[context.feature-nuxt4]
-  command = "pnpm install && pnpm exec nuxt generate"
-
 # プルリクエスト用のプレビュー設定
 [context.deploy-preview]
   command = "pnpm install && pnpm exec nuxt generate"
