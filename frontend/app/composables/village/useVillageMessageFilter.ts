@@ -51,6 +51,45 @@ export const useVillageMessageFilter = () => {
     })
   }
 
+  const syncNewParticipants = (
+    newIds: readonly number[],
+    oldIds: readonly number[]
+  ) => {
+    if (newIds.length <= oldIds.length) return
+
+    const addedIds = newIds.filter((id) => !oldIds.includes(id))
+
+    const currentFilter = filterStore.participantIdFilter
+    if (currentFilter !== null) {
+      const wasSelectingAll =
+        currentFilter.length === oldIds.length &&
+        oldIds.every((id) => currentFilter.includes(id))
+      if (wasSelectingAll) {
+        filterStore.setMessageFilter({
+          participantIdList: [...currentFilter, ...addedIds]
+        })
+      }
+    }
+
+    const currentToFilter = filterStore.toParticipantIdFilter
+    if (currentToFilter !== null) {
+      const wasSelectingAll =
+        currentToFilter.length === oldIds.length &&
+        oldIds.every((id) => currentToFilter.includes(id))
+      if (wasSelectingAll) {
+        filterStore.setMessageFilter({
+          toParticipantIdList: [...currentToFilter, ...addedIds]
+        })
+      }
+    }
+  }
+
+  watch(allParticipantIds, (newIds, oldIds) => {
+    if (oldIds && oldIds.length > 0) {
+      syncNewParticipants(newIds, oldIds)
+    }
+  })
+
   /**
    * フィルタリング中かどうか
    */

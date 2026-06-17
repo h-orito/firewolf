@@ -5,6 +5,10 @@
       <div class="rounded-lg bg-white p-4 shadow">
         <ul class="list-disc space-y-1 pl-6 text-left text-sm">
           <li>
+            2026/06/18
+            プロローグ中に参加者が増えた場合、発言抽出の対象に自動追加されるよう改善
+          </li>
+          <li>
             2026/05/09
             村設定：沈黙時間を1日目と2日目以降で個別に設定できるよう変更
           </li>
