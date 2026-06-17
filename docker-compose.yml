@@ -1,0 +1,36 @@
+# 開発用 MySQL。各種値は backend/src/main/resources/config/application.yml に合わせている。
+#   url: jdbc:mysql://127.0.0.1:4306/firewolfdb  -> host port 4306 / db firewolfdb
+#   username: firewolfuser / password: firewolfpass
+#
+# MySQL 公式イメージは起動時に以下を自動実行する:
+#   - MYSQL_DATABASE のDB作成
+#   - MYSQL_USER / MYSQL_PASSWORD のユーザー作成と、MYSQL_DATABASE への GRANT ALL
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: firewolf-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: firewolfdb
+      MYSQL_USER: firewolfuser
+      MYSQL_PASSWORD: firewolfpass
+      TZ: Asia/Tokyo
+    # application.yml の characterEncoding=UTF-8 に合わせ utf8mb4 を既定にする
+    # lower-case-table-names=1: テーブル名を小文字保存し大文字小文字を区別しない
+    #   （初期化時のみ指定可。変更時は volume を作り直す必要がある）
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --lower-case-table-names=1
+    ports:
+      - "4306:3306"
+    volumes:
+      - firewolf-mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  firewolf-mysql-data:
