@@ -53,9 +53,9 @@ twitter:
 firebase:
   adminsdk:
     secretkey:
-      path: ""
+      path: ${FIREBASE_ADMINSDK_SECRETKEY_PATH:}
   database:
-    url: ""
+    url: ${FIREBASE_DATABASE_URL:}
 
 discord:
   webhook-url:

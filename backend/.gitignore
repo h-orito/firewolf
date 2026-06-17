@@ -35,6 +35,10 @@
 /dbflute_firewolfdb/schema/project-history-firewolfdb.diffmap
 /bin/
 
+### Env ###
+.env
+!.env.example
+
 ### Claude ###
 .claude/settings.local.json
 .serena
