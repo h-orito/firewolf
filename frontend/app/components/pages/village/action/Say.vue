@@ -545,7 +545,7 @@ const insertAnchor = (anchorString: string) => {
   // カーソル位置を挿入後の位置に移動
   nextTick(() => {
     const newPosition = selectionStart + anchorString.length
-    textarea.focus()
+    textarea.focus({ preventScroll: true })
     textarea.setSelectionRange(newPosition, newPosition)
   })
 }
