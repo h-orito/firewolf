@@ -5,6 +5,14 @@ spring:
     password: ${FIREWOLF_DB_PASSWORD}
     driverClassName: com.mysql.cj.jdbc.Driver
     type: org.apache.tomcat.jdbc.pool.DataSource
+    tomcat:
+      # DB (wolf-db) は 1 コア相当・max_connections=200 を全アプリで共有するため、
+      # プール上限で DB への同時接続数に蓋をする（上限到達時はアプリ側で最大 max-wait 待つ）
+      max-active: 40
+      max-idle: 40
+      min-idle: 5
+      initial-size: 5
+      max-wait: 10000
   messages:
     basename: messages
     cache-duration: -1
