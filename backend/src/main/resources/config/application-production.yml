@@ -6,8 +6,9 @@ spring:
     driverClassName: com.mysql.cj.jdbc.Driver
     type: org.apache.tomcat.jdbc.pool.DataSource
     tomcat:
-      # DB (wolf-db) は 1 コア相当・max_connections=200 を全アプリで共有するため、
-      # プール上限で DB への同時接続数に蓋をする（上限到達時はアプリ側で最大 max-wait 待つ）
+      # wolf-db は全アプリで共有しており接続数上限も有限なため、
+      # プール上限を明示して DB への同時接続数を固定する（配分は運用ドキュメント側で管理）。
+      # 上限到達時は max-wait まで待ち、取得できなければ PoolExhaustedException になる
       max-active: 40
       max-idle: 40
       min-idle: 5
