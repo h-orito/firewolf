@@ -7,7 +7,7 @@ spring:
     type: org.apache.tomcat.jdbc.pool.DataSource
     tomcat:
       # wolf-db は全アプリで共有しており接続数上限も有限なため、
-      # プール上限を明示して DB への同時接続数を固定する（配分は運用ドキュメント側で管理）。
+      # プール上限を明示して DB への同時接続数を固定する（全アプリの配分と根拠は h-orito/firewolf#3 を参照）。
       # 上限到達時は max-wait まで待ち、取得できなければ PoolExhaustedException になる
       max-active: 40
       max-idle: 40
