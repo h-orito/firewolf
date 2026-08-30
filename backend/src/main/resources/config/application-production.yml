@@ -5,6 +5,19 @@ spring:
     password: ${FIREWOLF_DB_PASSWORD}
     driverClassName: com.mysql.cj.jdbc.Driver
     type: org.apache.tomcat.jdbc.pool.DataSource
+    tomcat:
+      # wolf-db は全アプリで共有しており接続数上限も有限なため、
+      # プール上限を明示して DB への同時接続数を固定する（全アプリの配分と根拠は h-orito/firewolf#3 を参照）。
+      # 上限到達時は max-wait まで待ち、取得できなければ PoolExhaustedException になる
+      max-active: 40
+      max-idle: 40
+      min-idle: 5
+      initial-size: 5
+      max-wait: 10000
+      # アイドル接続が MySQL 側 (wait_timeout) で切られていても掴まないよう、貸出時に検証する
+      test-on-borrow: true
+      validation-query: SELECT 1
+      validation-interval: 30000
   messages:
     basename: messages
     cache-duration: -1
