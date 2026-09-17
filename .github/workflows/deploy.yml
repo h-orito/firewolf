@@ -40,15 +40,3 @@ jobs:
 
       - name: Push image
         run: docker push ghcr.io/h-orito/firewolf
-
-  deploy:
-    needs: build
-    runs-on: [self-hosted, k8s]
-    steps:
-      - name: Setup kubectl
-        uses: azure/setup-kubectl@v4
-        with:
-          version: latest
-
-      - name: Restart deployment
-        run: kubectl rollout restart deployment/firewolf -n default
