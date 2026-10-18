@@ -2,7 +2,9 @@
   <div v-if="isCurrentVillageDayLatest" class="text-xs leading-4.5">
     <!-- 村の状況メッセージ -->
     <UiFeedbackAlert :class="charSizeClass" class="mb-1.5" type="default">
-      <span :class="charSizeClass" v-html="villageSituationMessageHtml" />
+      <span :class="charSizeClass" class="whitespace-pre-line">{{
+        villageSituationMessage
+      }}</span>
     </UiFeedbackAlert>
 
     <!-- 突然死警告メッセージ -->
@@ -12,7 +14,9 @@
       class="mb-1.5"
       type="warning"
     >
-      <span :class="charSizeClass" v-html="suddenlyDeathMessageHtml" />
+      <span :class="charSizeClass" class="whitespace-pre-line">{{
+        suddenlyDeathMessage
+      }}</span>
     </UiFeedbackAlert>
 
     <!-- 沈黙時間メッセージ -->
@@ -22,7 +26,9 @@
       class="mb-1.5"
       type="warning"
     >
-      <span :class="charSizeClass" v-html="silentTimeMessageHtml" />
+      <span :class="charSizeClass" class="whitespace-pre-line">{{
+        silentTimeMessage
+      }}</span>
     </UiFeedbackAlert>
   </div>
 </template>
@@ -57,11 +63,6 @@ const villageSituationMessage = computed(() => {
     default:
       return ''
   }
-})
-
-// HTML変換（改行 -> <br />）
-const villageSituationMessageHtml = computed(() => {
-  return villageSituationMessage.value.replace(/\n/g, '<br />')
 })
 
 // プロローグメッセージ
@@ -158,14 +159,10 @@ const isSilentTime = computed(() => {
   return village.value.silent_time
 })
 
-// 突然死警告メッセージ
+// 突然死警告メッセージ（参加者名はユーザー入力なので v-html を使わずテキストとして描画する）
 const suddenlyDeathMessage = computed(() => {
   const noSayMemberNames = noSayMembers.value.map((member) => member.name)
   return `日付更新までに通常発言がない人は突然死します。\n現在まで発言していない人\n${noSayMemberNames.join('\n')}`
-})
-
-const suddenlyDeathMessageHtml = computed(() => {
-  return suddenlyDeathMessage.value.replace(/\n/g, '<br />')
 })
 
 // 未発言メンバーが存在するか
@@ -193,10 +190,6 @@ const getSayCount = (participantId: number): number => {
 // 沈黙時間メッセージ
 const silentTimeMessage = computed(() => {
   return `通常発言ができない時間です。\n${sayableTime.value}から発言できます。`
-})
-
-const silentTimeMessageHtml = computed(() => {
-  return silentTimeMessage.value.replace(/\n/g, '<br />')
 })
 
 // 発言可能時刻
