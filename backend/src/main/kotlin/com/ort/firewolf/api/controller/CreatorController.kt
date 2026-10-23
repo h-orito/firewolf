@@ -13,6 +13,7 @@ import com.ort.firewolf.domain.model.message.Message
 import com.ort.firewolf.domain.model.message.MessageContent
 import com.ort.firewolf.domain.model.message.MessageTime
 import com.ort.firewolf.domain.model.player.Players
+import com.ort.firewolf.domain.service.creator.CreatorDomainService
 import com.ort.firewolf.fw.exception.FirewolfBusinessException
 import com.ort.firewolf.fw.security.FirewolfUser
 import org.springframework.cache.annotation.CacheEvict
@@ -32,6 +33,7 @@ class CreatorController(
     private val playerService: PlayerService,
     private val messageService: MessageService,
     private val villageCoordinator: VillageCoordinator,
+    private val creatorDomainService: CreatorDomainService,
 ) {
     @PostMapping("/creator/village/{villageId}/kick")
     @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
@@ -47,6 +49,8 @@ class CreatorController(
         if (user.authority != CDef.Authority.管理者 && village.creatorPlayerId != player.id) {
             throw FirewolfBusinessException("村建てか管理者しか使えません")
         }
+
+        creatorDomainService.assertKick(village, user.authority == CDef.Authority.管理者)
 
         // キック
         val changedVillage = village.leaveParticipant(body.targetId!!)
@@ -70,6 +74,8 @@ class CreatorController(
         if (user.authority != CDef.Authority.管理者 && village.creatorPlayerId != player.id) {
             throw FirewolfBusinessException("村建てか管理者しか使えません")
         }
+
+        creatorDomainService.assertCancelVillage(village, user.authority == CDef.Authority.管理者)
 
         val changedVillage = village.changeStatus(CDef.VillageStatus.廃村)
         villageService.updateVillageDifference(village, changedVillage)
@@ -150,6 +156,8 @@ class CreatorController(
         if (user.authority != CDef.Authority.管理者 && village.creatorPlayerId != player.id) {
             throw FirewolfBusinessException("村建てか管理者しか使えません")
         }
+
+        creatorDomainService.assertExtendEpilogue(village, user.authority == CDef.Authority.管理者)
 
         val changedVillage = village.extendEpilogue()
         villageService.updateVillageDifference(village, changedVillage)
