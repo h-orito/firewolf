@@ -40,11 +40,16 @@ data class FirewolfUser(
     }
 }
 
+/**
+ * 接続元の IP を返す。Cloudflare 配下のため、Cloudflare が必ず上書きする `CF-Connecting-IP` を使う。
+ * `X-Forwarded-For` はクライアントが任意の値を送れるので使わない。
+ * Cloudflare を通らない 80 番の経路は ingress で取得系 API だけに絞ってある。
+ */
 fun HttpServletRequest.getIpAddress(): String {
-    val xForwardedFor = this.getHeader("X-Forwarded-For")
-    return if (xForwardedFor.isNullOrEmpty()) {
+    val cfConnectingIp = this.getHeader("CF-Connecting-IP")
+    return if (cfConnectingIp.isNullOrBlank()) {
         this.remoteAddr
     } else {
-        xForwardedFor
+        cfConnectingIp.trim()
     }
 }
