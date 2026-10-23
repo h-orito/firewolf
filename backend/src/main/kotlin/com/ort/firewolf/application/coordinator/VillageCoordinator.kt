@@ -5,6 +5,7 @@ import com.ort.firewolf.application.service.AbilityService
 import com.ort.firewolf.application.service.CharachipService
 import com.ort.firewolf.application.service.ComingOutService
 import com.ort.firewolf.application.service.CommitService
+import com.ort.firewolf.application.service.JoinPasswordAttemptLimiter
 import com.ort.firewolf.application.service.MessageService
 import com.ort.firewolf.application.service.NotificationService
 import com.ort.firewolf.application.service.PlayerService
@@ -72,6 +73,7 @@ class VillageCoordinator(
     private val comingOutDomainService: ComingOutDomainService,
     private val adminDomainService: AdminDomainService,
     private val rpDomainService: RpDomainService,
+    private val joinPasswordAttemptLimiter: JoinPasswordAttemptLimiter,
 ) {
     /**
      * 村参加者取得
@@ -192,6 +194,14 @@ class VillageCoordinator(
         val village: Village = villageService.findVillage(villageId)
         val player: Player = playerService.findPlayer(user)
         val charas: Charas = charachipService.findCharas(village.setting.charachip.charachipIds)
+
+        // 入村パスワードは試行回数を制限する (実際の確認は下の assertParticipate / assertSpectate で行う)
+        if (village.setting.password.joinPasswordRequired) {
+            if (!joinPasswordAttemptLimiter.acquire(player.id, villageId)) {
+                throw FirewolfBusinessException("入村パスワードを続けて間違えたため、しばらく参加できません。時間をおいてから再度お試しください")
+            }
+            joinPasswordAttemptLimiter.release(player.id, villageId, failed = !village.isCorrectJoinPassword(password))
+        }
 
         if (isSpectate) {
             participateDomainService.assertSpectate(

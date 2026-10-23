@@ -229,6 +229,9 @@ data class Village(
     //                                                                                 権限
     //                                                                           =========
 
+    /** 入村パスワードが合っているか (パスワードのない村は常に true) */
+    fun isCorrectJoinPassword(password: String?): Boolean = setting.password.matches(password)
+
     /** 村として参加可能か */
     fun isAvailableParticipate(): Boolean = status.isPrologue() && participant.count < setting.capacity.max
 
@@ -569,7 +572,7 @@ data class Village(
 
     private fun assertPassword(password: String?) {
         if (!setting.password.joinPasswordRequired) return
-        if (setting.password.joinPassword != password) throw FirewolfBusinessException("入村パスワードが誤っています")
+        if (!isCorrectJoinPassword(password)) throw FirewolfBusinessException("入村パスワードが誤っています")
     }
 
     private fun villagerCount(): Int =
