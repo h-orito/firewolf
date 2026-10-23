@@ -219,6 +219,16 @@ class VillageDataSource(
     }
 
     /**
+     * 村の行をロックする (トランザクションが終わるまで、同じ村をロックしようとする処理を待たせる)
+     */
+    fun lockVillage(villageId: Int) {
+        villageBhv.selectEntityWithDeletedCheck {
+            it.query().setVillageId_Equal(villageId)
+            it.lockForUpdate()
+        }
+    }
+
+    /**
      * キャッシュを使わず村情報を取得
      */
     fun findVillageWithoutCache(

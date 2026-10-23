@@ -79,6 +79,26 @@ class ParticipateDomainService {
     }
 
     /**
+     * 参加登録の直前に、最新の村で定員・1 人 1 席・キャラの重複を確認し直す
+     * (事前の確認から登録までの間に他の人が参加していることがあるため。パスワードは事前に確認済み)
+     */
+    fun assertParticipateCapacity(
+        player: Player,
+        village: Village,
+        charaId: Int,
+        isSpectate: Boolean,
+        charachipCharaNum: Int,
+    ) {
+        if (village.allParticipants().findByPlayerId(player.id) != null) throw FirewolfBusinessException("既に参加しています")
+        if (isSpectate) {
+            if (!isAvailableSpectate(player, village, charachipCharaNum)) throw FirewolfBusinessException("見学できません")
+        } else {
+            if (!isAvailableParticipate(player, village)) throw FirewolfBusinessException("参加できません")
+        }
+        if (village.isAlreadyParticipateCharacter(charaId)) throw FirewolfBusinessException("既に参加されているキャラクターです")
+    }
+
+    /**
      * 参加メッセージ
      */
     fun createParticipateMessage(
