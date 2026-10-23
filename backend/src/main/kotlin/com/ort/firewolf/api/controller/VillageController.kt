@@ -584,7 +584,8 @@ class VillageController(
                     content =
                         MessageContent.invoke(
                             messageType = CDef.MessageType.アクション.toModel().code,
-                            text = "${body.myself!!}${body.target ?: ""}${body.message}",
+                            // 行為者名はサーバーで付ける (body.myself は使わない)
+                            text = village.createActionText(participant, body.target, body.message),
                             faceCode = null,
                         ).copy(num = 1),
                 ),
@@ -607,7 +608,8 @@ class VillageController(
         @AuthenticationPrincipal user: FirewolfUser,
         @RequestBody @Validated body: VillageActionBody,
     ) {
-        villageCoordinator.action(villageId, user, body.myself!!, body.target, body.message!!)
+        // 行為者名はサーバーで付ける (body.myself は使わない)
+        villageCoordinator.action(villageId, user, body.target, body.message!!)
     }
 
     /**
