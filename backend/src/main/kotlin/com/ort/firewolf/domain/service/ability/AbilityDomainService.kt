@@ -77,8 +77,9 @@ class AbilityDomainService(
         if (!isUsable(village, participant, abilityType)) {
             throw FirewolfBusinessException("${abilityType.name}能力を使えない状態です")
         }
+        // 行使者指定がおかしい
+        assertAbilityActor(village, participant, myselfId, abilityType)
         // 対象指定がおかしい
-        if (abilityType.toCdef() == CDef.AbilityType.襲撃 && myselfId == null) throw FirewolfBusinessException("襲撃者指定が必要です")
         if (targetId == null && !canNoTarget(village, abilityType)) throw FirewolfBusinessException("対象指定が必要です")
         if (targetId != null &&
             getSelectableTargetList(
@@ -89,6 +90,26 @@ class AbilityDomainService(
             ).none { it.id == targetId }
         ) {
             throw FirewolfBusinessException("指定できない対象を指定しています")
+        }
+    }
+
+    /**
+     * 行使者の指定を確認する
+     * 襲撃は生存している襲撃能力者の中から襲撃者を選べる。それ以外の能力は本人しか行使できない
+     */
+    internal fun assertAbilityActor(
+        village: Village,
+        participant: VillageParticipant,
+        myselfId: Int?,
+        abilityType: AbilityType,
+    ) {
+        if (abilityType.toCdef() == CDef.AbilityType.襲撃) {
+            myselfId ?: throw FirewolfBusinessException("襲撃者指定が必要です")
+            if (attackDomainService.getSelectableAttacker(village).none { it.id == myselfId }) {
+                throw FirewolfBusinessException("指定できない襲撃者を指定しています")
+            }
+        } else if (myselfId != null && myselfId != participant.id) {
+            throw FirewolfBusinessException("自分以外の能力は設定できません")
         }
     }
 

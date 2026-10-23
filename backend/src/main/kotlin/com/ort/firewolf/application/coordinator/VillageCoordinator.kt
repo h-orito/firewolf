@@ -505,9 +505,11 @@ class VillageCoordinator(
         val abilityType = AbilityType(abilityTypeCode)
         abilityDomainService.assertAbility(village, myself, myselfId, targetId, abilityType, villageAbilities)
         // 能力セット
-        val villageAbility = VillageAbility(village.day.latestDay().id, myselfId ?: myself!!.id, targetId, abilityType)
+        // 行使者を指定できるのは襲撃だけ (assertAbility で確認済み)。それ以外は本人
+        val actorId = if (abilityType.toCdef() == CDef.AbilityType.襲撃) myselfId!! else myself!!.id
+        val villageAbility = VillageAbility(village.day.latestDay().id, actorId, targetId, abilityType)
         abilityService.updateAbility(villageAbility)
-        val participant = myselfId?.let { village.participant.member(it) } ?: myself!!
+        val participant = if (actorId == myself!!.id) myself else village.participant.member(actorId)
         messageService.registerAbilitySetMessage(village, participant, targetId, abilityType)
     }
 
