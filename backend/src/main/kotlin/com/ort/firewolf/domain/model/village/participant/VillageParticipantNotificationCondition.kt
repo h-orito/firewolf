@@ -1,5 +1,7 @@
 package com.ort.firewolf.domain.model.village.participant
 
+import java.net.URI
+
 data class VillageParticipantNotificationCondition(
     val discordWebhookUrl: String,
     val village: VillageCondition,
@@ -24,4 +26,22 @@ data class VillageParticipantNotificationCondition(
         /** キーワード */
         val keywords: List<String>,
     )
+
+    companion object {
+        // 通知先として許可する Discord のホスト
+        private val discordWebhookHosts = listOf("discord.com", "discordapp.com", "ptb.discord.com", "canary.discord.com")
+
+        /**
+         * 通知先が Discord の Webhook URL か
+         * https で、Discord のホスト (ポート指定なし) の /api/webhooks/ 配下 (.. を含まない) だけを許可する
+         */
+        fun isValidDiscordWebhookUrl(url: String): Boolean {
+            val uri = runCatching { URI(url) }.getOrNull() ?: return false
+            if (uri.scheme != "https" || uri.rawUserInfo != null || uri.port != -1) return false
+            val host = uri.host ?: return false
+            if (discordWebhookHosts.none { it.equals(host, ignoreCase = true) }) return false
+            val path = uri.rawPath ?: return false
+            return path.startsWith("/api/webhooks/") && !path.contains("..")
+        }
+    }
 }

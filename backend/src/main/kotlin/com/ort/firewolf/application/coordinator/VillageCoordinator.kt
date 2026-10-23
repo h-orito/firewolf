@@ -603,6 +603,12 @@ class VillageCoordinator(
     ) {
         val village = villageService.findVillage(villageId)
         val myself = findParticipant(village, user) ?: throw FirewolfBusinessException("保存できません")
+        // 空文字は通知なし
+        if (notificationCondition.discordWebhookUrl.isNotEmpty() &&
+            !VillageParticipantNotificationCondition.isValidDiscordWebhookUrl(notificationCondition.discordWebhookUrl)
+        ) {
+            throw FirewolfBusinessException("Discord の Webhook URL を指定してください")
+        }
         villageService.registerParticipantNotificationSetting(myself.id, notificationCondition)
         if (notificationCondition.discordWebhookUrl.isNotEmpty() &&
             myself.notification?.discordWebhookUrl != notificationCondition.discordWebhookUrl

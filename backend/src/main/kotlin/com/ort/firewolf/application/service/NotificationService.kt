@@ -18,14 +18,14 @@ class NotificationService(
         message: Message,
     ) {
         if (!message.shouldNotify()) return
-        discordRepository.post(villageId, message.content.text)
+        discordRepository.post(villageId, escapeDiscordMarkdown(message.content.text))
     }
 
     fun notifyToDeveloperTextIfNeeded(
         village: Village,
         text: String,
     ) {
-        discordRepository.post(village.id, text)
+        discordRepository.post(village.id, escapeDiscordMarkdown(text))
     }
 
     fun notifyVillageStartToCustomerIfNeeded(village: Village) {
@@ -108,7 +108,7 @@ class NotificationService(
             discordRepository.postToWebhook(
                 webhookUrl = it.discordWebhookUrl,
                 villageId = village.id,
-                message = "${fromParticipant.name()}から秘話が届きました。",
+                message = "${escapeDiscordMarkdown(fromParticipant.name())}から秘話が届きました。",
                 shouldContainVillageUrl = false,
             )
             return toParticipant.id
@@ -148,7 +148,7 @@ class NotificationService(
                     if (fromParticipant == null) {
                         "${messageTypeName}であなたの発言がアンカー指定されました。"
                     } else {
-                        "${fromParticipant.name()}の${messageTypeName}であなたの発言がアンカー指定されました。"
+                        "${escapeDiscordMarkdown(fromParticipant.name())}の${messageTypeName}であなたの発言がアンカー指定されました。"
                     }
                 discordRepository.postToWebhook(
                     webhookUrl = it.notification!!.discordWebhookUrl,
@@ -196,7 +196,7 @@ class NotificationService(
                     if (fromParticipant == null) {
                         "${messageTypeName}に指定キーワードが含まれています。"
                     } else {
-                        "${fromParticipant.name()}の${messageTypeName}に指定キーワードが含まれています。"
+                        "${escapeDiscordMarkdown(fromParticipant.name())}の${messageTypeName}に指定キーワードが含まれています。"
                     }
                 discordRepository.postToWebhook(
                     webhookUrl = it.notification!!.discordWebhookUrl,
@@ -236,9 +236,20 @@ class NotificationService(
                 discordRepository.postToWebhook(
                     webhookUrl = it.notification!!.discordWebhookUrl,
                     villageId = village.id,
-                    message = "${fromParticipant.name()}から${message.content.type.name}が届きました。",
+                    message = "${escapeDiscordMarkdown(fromParticipant.name())}から${message.content.type.name}が届きました。",
                     shouldContainVillageUrl = false,
                 )
             }
     }
 }
+
+// Discord の書式・メンションの記号をエスケープし、ユーザーが入力した名前や本文をそのまま表示させる
+private val discordMarkdownCharacters = setOf('\\', '*', '_', '~', '`', '|', '>', '<', '[', ']', '(', ')', '#', '-', '@', ':')
+
+internal fun escapeDiscordMarkdown(text: String): String =
+    buildString {
+        text.forEach {
+            if (it in discordMarkdownCharacters) append('\\')
+            append(it)
+        }
+    }
