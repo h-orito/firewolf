@@ -2,6 +2,15 @@ import type { User, UserCredential } from 'firebase/auth'
 import type { MyselfPlayerView } from '~/lib/api/types'
 import * as firebaseAuth from '~/lib/firebase/auth'
 
+const ID_TOKEN_COOKIE = 'id-token'
+const ID_TOKEN_CHECK_DATE_COOKIE = 'id-token-check-date'
+// stores/auth.ts の getAuthToken と同じ属性
+const idTokenCookieOptions = {
+  maxAge: 60 * 60 * 24 * 30, // 30日
+  sameSite: 'strict' as const,
+  secure: import.meta.env.PROD
+}
+
 /**
  * 認証操作を提供するComposable
  * ビジネスロジックと状態管理の橋渡しを担当
@@ -55,6 +64,9 @@ export const useAuth = () => {
     await firebaseAuth.signOut()
     authStore.setUser(null)
     authStore.setMyselfPlayer(null)
+    // ログアウト後に ID トークンが残らないよう、保存した Cookie を消す
+    useCookie(ID_TOKEN_COOKIE, idTokenCookieOptions).value = null
+    useCookie(ID_TOKEN_CHECK_DATE_COOKIE, idTokenCookieOptions).value = null
   }
 
   /**
@@ -110,17 +122,14 @@ export const useAuth = () => {
 
     // トークンをCookieに保存
     const idToken = await firebaseUser.getIdToken(false)
-    const idTokenCookie = useCookie('id-token', {
-      maxAge: 60 * 60 * 24 * 30,
-      sameSite: 'strict'
-    })
+    const idTokenCookie = useCookie(ID_TOKEN_COOKIE, idTokenCookieOptions)
     idTokenCookie.value = idToken
 
     // 1時間で有効期限が切れるので50分後に再取得させる
-    const checkDateCookie = useCookie('id-token-check-date', {
-      maxAge: 60 * 60 * 24 * 30,
-      sameSite: 'strict'
-    })
+    const checkDateCookie = useCookie(
+      ID_TOKEN_CHECK_DATE_COOKIE,
+      idTokenCookieOptions
+    )
     const now = new Date()
     now.setMinutes(now.getMinutes() + 50)
     checkDateCookie.value = now.toISOString()
