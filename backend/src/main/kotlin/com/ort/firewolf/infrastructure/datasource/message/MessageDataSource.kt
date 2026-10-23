@@ -178,9 +178,13 @@ class MessageDataSource(
         return messageList.groupBy { CDef.MessageType.codeOf(it.messageTypeCode) }.mapValues { it.value.size }
     }
 
+    /**
+     * @param isAnchorable アンカー先の発言 (種別, 発言者) を宛先として記録してよいか
+     */
     fun registerMessage(
         village: Village,
         message: com.ort.firewolf.domain.model.message.Message,
+        isAnchorable: (CDef.MessageType, Int) -> Boolean,
     ): com.ort.firewolf.domain.model.message.Message {
         val mes = Message()
         val messageTypeCode = message.content.type.code
@@ -224,7 +228,7 @@ class MessageDataSource(
             try {
                 mes.messageNumber = selectNextMessageNumber(village.id, message.content.type.code)
                 messageBhv.insert(mes)
-                insertMessageSendTo(mes)
+                insertMessageSendTo(mes, isAnchorable)
                 return findMessage(
                     villageId = village.id,
                     messageType = CDef.MessageType.codeOf(messageTypeCode),
@@ -237,7 +241,10 @@ class MessageDataSource(
         throw FirewolfBusinessException("混み合っているため発言に失敗しました。再度発言してください。")
     }
 
-    private fun insertMessageSendTo(m: Message) {
+    private fun insertMessageSendTo(
+        m: Message,
+        isAnchorable: (CDef.MessageType, Int) -> Boolean,
+    ) {
         val splitted = m.messageContent.split(">>")
         if (splitted.size <= 1) {
             return // >>が含まれていない
@@ -254,6 +261,9 @@ class MessageDataSource(
                             it.query().setMessageNumber_Equal(number)
                         }
                     if (!optMessage.isPresent || optMessage.get().villagePlayerId == null) {
+                        return@forEach
+                    }
+                    if (!isAnchorable(messageType, optMessage.get().villagePlayerId)) {
                         return@forEach
                     }
                     val sendTo = MessageSendto()
@@ -283,10 +293,11 @@ class MessageDataSource(
         village: Village,
         before: Messages,
         after: Messages,
+        isAnchorable: (Village, com.ort.firewolf.domain.model.message.Message) -> (CDef.MessageType, Int) -> Boolean,
     ) {
         // 追加しかないのでbeforeにないindexから追加していく
         after.list.drop(before.list.size).forEach {
-            registerMessage(village, it)
+            registerMessage(village, it, isAnchorable(village, it))
         }
     }
 

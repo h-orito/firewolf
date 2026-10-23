@@ -13,6 +13,7 @@ import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 import com.ort.firewolf.domain.service.ability.AbilityDomainService
 import com.ort.firewolf.domain.service.comingout.ComingOutDomainService
 import com.ort.firewolf.domain.service.commit.CommitDomainService
+import com.ort.firewolf.domain.service.message.MessageDomainService
 import com.ort.firewolf.domain.service.participate.ParticipateDomainService
 import com.ort.firewolf.infrastructure.datasource.message.MessageDataSource
 import org.springframework.stereotype.Service
@@ -25,6 +26,7 @@ class MessageService(
     private val commitDomainService: CommitDomainService,
     private val comingOutDomainService: ComingOutDomainService,
     private val notificationService: NotificationService,
+    private val messageDomainService: MessageDomainService,
 ) {
     /**
      * 発言取得
@@ -93,7 +95,7 @@ class MessageService(
         village: Village,
         message: Message,
     ): Message {
-        val registered = messageDataSource.registerMessage(village, message)
+        val registered = messageDataSource.registerMessage(village, message, isAnchorable(village, message))
         notificationService.notifyToDeveloperIfNeeded(village.id, registered)
         return registered
     }
@@ -117,10 +119,9 @@ class MessageService(
         isSpectate: Boolean,
     ) {
         // {N}人目、{キャラ名}。
-        messageDataSource.registerMessage(
-            village,
-            participateDomainService.createParticipateMessage(village, chara, charaName, charaShortName, isSpectate),
-        )
+        val participateMessage =
+            participateDomainService.createParticipateMessage(village, chara, charaName, charaShortName, isSpectate)
+        messageDataSource.registerMessage(village, participateMessage, isAnchorable(village, participateMessage))
         // 参加発言
         val messageContent =
             MessageContent.invoke(
@@ -208,6 +209,17 @@ class MessageService(
         before: Messages,
         after: Messages,
     ) {
-        messageDataSource.updateDifference(village, before, after)
+        messageDataSource.updateDifference(village, before, after, ::isAnchorable)
+    }
+
+    // 発言者が見られる発言へのアンカーだけを、発言の宛先として記録する
+    private fun isAnchorable(
+        village: Village,
+        message: Message,
+    ): (CDef.MessageType, Int) -> Boolean {
+        val sender = message.fromVillageParticipantId?.let { village.allParticipants().member(it) }
+        return { messageType, participantId ->
+            messageDomainService.isAnchorableMessage(village, sender, messageType, participantId)
+        }
     }
 }
