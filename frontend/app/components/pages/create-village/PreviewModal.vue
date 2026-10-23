@@ -19,17 +19,16 @@
                     <Icon name="i-heroicons-question-mark-circle" />
                   </button>
                 </td>
-                <td
-                  class="px-4 py-3 text-sm text-gray-700"
-                  v-html="setting.value.replace(/\n/g, '<br />')"
-                />
+                <td class="px-4 py-3 text-sm whitespace-pre-line text-gray-700">
+                  {{ setting.value }}
+                </td>
               </tr>
               <tr v-show="expandedDescriptions[index]">
                 <td
                   colspan="2"
                   class="bg-gray-50 px-4 py-3 text-sm text-gray-600"
                 >
-                  <p v-html="setting.description?.replace(/\n/g, '<br />')"></p>
+                  <p class="whitespace-pre-line">{{ setting.description }}</p>
                 </td>
               </tr>
             </template>
