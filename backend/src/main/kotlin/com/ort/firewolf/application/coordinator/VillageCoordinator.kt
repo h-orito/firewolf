@@ -362,6 +362,72 @@ class VillageCoordinator(
     }
 
     /**
+     * 村建てによるキック
+     * @param villageId villageId
+     * @param user user
+     * @param targetId キックする村参加者ID
+     */
+    @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
+    @CacheEvict(cacheNames = ["village", "messages", "latest-messages"], allEntries = true)
+    fun kick(
+        villageId: Int,
+        user: FirewolfUser,
+        targetId: Int,
+    ) {
+        // キックできない状況ならエラー
+        val village: Village = villageService.findVillage(villageId)
+        val isAdmin = assertCreatorOrAdmin(village, user)
+        creatorDomainService.assertKick(village, isAdmin)
+        // キック
+        val changedVillage = village.leaveParticipant(targetId)
+        val participant = village.memberById(targetId)
+        if (participant.playerId == 1) return // ダミーはキックできない
+        // シスメ
+        val updatedVillage = villageService.updateVillageDifference(village, changedVillage)
+        messageService.registerLeaveMessage(updatedVillage, participant)
+    }
+
+    /**
+     * 村建てによる廃村
+     * @param villageId villageId
+     * @param user user
+     */
+    @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
+    @CacheEvict(cacheNames = ["village", "messages", "latest-messages"], allEntries = true)
+    fun cancelVillage(
+        villageId: Int,
+        user: FirewolfUser,
+    ) {
+        // 廃村できない状況ならエラー
+        val village: Village = villageService.findVillage(villageId)
+        val isAdmin = assertCreatorOrAdmin(village, user)
+        creatorDomainService.assertCancelVillage(village, isAdmin)
+        // 廃村
+        villageService.updateVillageDifference(village, village.changeStatus(CDef.VillageStatus.廃村))
+        messageService.registerMessage(village, village.createCreatorCancelVillageMessage())
+    }
+
+    /**
+     * 村建てによるエピローグ延長
+     * @param villageId villageId
+     * @param user user
+     */
+    @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
+    @CacheEvict(cacheNames = ["village", "messages", "latest-messages"], allEntries = true)
+    fun extendEpilogue(
+        villageId: Int,
+        user: FirewolfUser,
+    ) {
+        // 延長できない状況ならエラー
+        val village: Village = villageService.findVillage(villageId)
+        val isAdmin = assertCreatorOrAdmin(village, user)
+        creatorDomainService.assertExtendEpilogue(village, isAdmin)
+        // 延長
+        villageService.updateVillageDifference(village, village.extendEpilogue())
+        messageService.registerMessage(village, village.createCreatorExtendEpilogueMessage())
+    }
+
+    /**
      * 発言できるか確認
      *
      * @param villageId villageId
@@ -707,6 +773,22 @@ class VillageCoordinator(
             isSpectate = false,
             ipAddress = "dummy",
         )
+    }
+
+    /**
+     * 村建てか管理者でなければエラー
+     * @return 管理者か
+     */
+    private fun assertCreatorOrAdmin(
+        village: Village,
+        user: FirewolfUser,
+    ): Boolean {
+        val isAdmin = user.authority == CDef.Authority.管理者
+        val player = playerService.findPlayer(user)
+        if (!isAdmin && village.creatorPlayerId != player.id) {
+            throw FirewolfBusinessException("村建てか管理者しか使えません")
+        }
+        return isAdmin
     }
 
     private fun assertSay(

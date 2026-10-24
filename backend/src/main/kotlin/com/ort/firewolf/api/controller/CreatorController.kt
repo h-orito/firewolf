@@ -5,7 +5,6 @@ import com.ort.firewolf.api.body.CreatorKickBody
 import com.ort.firewolf.api.body.CreatorSayBody
 import com.ort.firewolf.api.view.message.MessageView
 import com.ort.firewolf.application.coordinator.VillageCoordinator
-import com.ort.firewolf.application.service.MessageService
 import com.ort.firewolf.application.service.PlayerService
 import com.ort.firewolf.application.service.VillageService
 import com.ort.firewolf.domain.model.charachip.Charas
@@ -30,51 +29,23 @@ import java.time.ZoneOffset
 class CreatorController(
     private val villageService: VillageService,
     private val playerService: PlayerService,
-    private val messageService: MessageService,
     private val villageCoordinator: VillageCoordinator,
 ) {
     @PostMapping("/creator/village/{villageId}/kick")
-    @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
-    @CacheEvict(cacheNames = ["village", "messages", "latest-messages"], allEntries = true)
     fun kick(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: FirewolfUser,
         @RequestBody @Validated body: CreatorKickBody,
     ) {
-        val village = villageService.findVillage(villageId)
-        val player = playerService.findPlayer(user)
-
-        if (user.authority != CDef.Authority.管理者 && village.creatorPlayerId != player.id) {
-            throw FirewolfBusinessException("村建てか管理者しか使えません")
-        }
-
-        // キック
-        val changedVillage = village.leaveParticipant(body.targetId!!)
-        val participant = village.memberById(body.targetId)
-        if (participant.playerId == 1) return // ダミーはキックできない
-        // シスメ
-        val updatedVillage = villageService.updateVillageDifference(village, changedVillage)
-        messageService.registerLeaveMessage(updatedVillage, participant)
+        villageCoordinator.kick(villageId, user, body.targetId!!)
     }
 
     @PostMapping("/creator/village/{villageId}/cancel")
-    @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
-    @CacheEvict(cacheNames = ["village", "messages", "latest-messages"], allEntries = true)
     fun cancel(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: FirewolfUser,
     ) {
-        val village = villageService.findVillage(villageId)
-        val player = playerService.findPlayer(user)
-
-        if (user.authority != CDef.Authority.管理者 && village.creatorPlayerId != player.id) {
-            throw FirewolfBusinessException("村建てか管理者しか使えません")
-        }
-
-        val changedVillage = village.changeStatus(CDef.VillageStatus.廃村)
-        villageService.updateVillageDifference(village, changedVillage)
-        val message = village.createCreatorCancelVillageMessage()
-        messageService.registerMessage(village, message)
+        villageCoordinator.cancelVillage(villageId, user)
     }
 
     @PostMapping("/creator/village/{villageId}/say-confirm")
@@ -138,22 +109,10 @@ class CreatorController(
     }
 
     @PostMapping("/creator/village/{villageId}/extend-epilogue")
-    @Transactional(rollbackFor = [Exception::class, FirewolfBusinessException::class])
-    @CacheEvict(cacheNames = ["village", "messages", "latest-messages"], allEntries = true)
     fun extendEpilogue(
         @PathVariable("villageId") villageId: Int,
         @AuthenticationPrincipal user: FirewolfUser,
     ) {
-        val village = villageService.findVillage(villageId)
-        val player = playerService.findPlayer(user)
-
-        if (user.authority != CDef.Authority.管理者 && village.creatorPlayerId != player.id) {
-            throw FirewolfBusinessException("村建てか管理者しか使えません")
-        }
-
-        val changedVillage = village.extendEpilogue()
-        villageService.updateVillageDifference(village, changedVillage)
-        val message = village.createCreatorExtendEpilogueMessage()
-        messageService.registerMessage(village, message)
+        villageCoordinator.extendEpilogue(villageId, user)
     }
 }

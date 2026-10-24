@@ -3,6 +3,7 @@ package com.ort.firewolf.domain.service.creator
 import com.ort.firewolf.domain.model.myself.participant.VillageCreatorSituation
 import com.ort.firewolf.domain.model.player.Player
 import com.ort.firewolf.domain.model.village.Village
+import com.ort.firewolf.fw.exception.FirewolfBusinessException
 import org.springframework.stereotype.Service
 
 @Service
@@ -19,6 +20,28 @@ class CreatorDomainService {
             availableModifySetting = isAvailableModifySetting(village, player),
             availableExtendEpilogue = isAvailableExtendEpilogue(village, player),
         )
+    }
+
+    // 村建ての操作は画面と同じくフェーズで制限する (管理者は運営のため制限しない)
+    fun assertKick(
+        village: Village,
+        isAdmin: Boolean,
+    ) {
+        if (!isAdmin && !village.status.isPrologue()) throw FirewolfBusinessException("プロローグ中のみキックできます")
+    }
+
+    fun assertCancelVillage(
+        village: Village,
+        isAdmin: Boolean,
+    ) {
+        if (!isAdmin && !village.status.isPrologue()) throw FirewolfBusinessException("プロローグ中のみ廃村にできます")
+    }
+
+    fun assertExtendEpilogue(
+        village: Village,
+        isAdmin: Boolean,
+    ) {
+        if (!isAdmin && !village.status.isEpilogue()) throw FirewolfBusinessException("エピローグ中のみ延長できます")
     }
 
     // ===================================================================================
