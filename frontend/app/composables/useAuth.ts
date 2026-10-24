@@ -2,6 +2,9 @@ import type { User, UserCredential } from 'firebase/auth'
 import type { MyselfPlayerView } from '~/lib/api/types'
 import * as firebaseAuth from '~/lib/firebase/auth'
 
+// 以前 ID トークンを保存していた Cookie。今は保存しないので、残っていれば消す
+const LEGACY_TOKEN_COOKIES = ['id-token', 'id-token-check-date']
+
 /**
  * 認証操作を提供するComposable
  * ビジネスロジックと状態管理の橋渡しを担当
@@ -14,6 +17,9 @@ export const useAuth = () => {
    * 認証状態の初期化
    */
   const initializeAuth = () => {
+    LEGACY_TOKEN_COOKIES.forEach((name) => {
+      useCookie(name).value = null
+    })
     firebaseAuth.onAuthStateChanged((firebaseUser) => {
       authStore.setUser(firebaseUser)
       authStore.setLoading(false)
@@ -107,23 +113,6 @@ export const useAuth = () => {
         console.error('Failed to register user:', error)
       }
     }
-
-    // トークンをCookieに保存
-    const idToken = await firebaseUser.getIdToken(false)
-    const idTokenCookie = useCookie('id-token', {
-      maxAge: 60 * 60 * 24 * 30,
-      sameSite: 'strict'
-    })
-    idTokenCookie.value = idToken
-
-    // 1時間で有効期限が切れるので50分後に再取得させる
-    const checkDateCookie = useCookie('id-token-check-date', {
-      maxAge: 60 * 60 * 24 * 30,
-      sameSite: 'strict'
-    })
-    const now = new Date()
-    now.setMinutes(now.getMinutes() + 50)
-    checkDateCookie.value = now.toISOString()
   }
 
   /**
