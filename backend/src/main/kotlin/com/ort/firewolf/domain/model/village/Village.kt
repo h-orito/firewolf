@@ -365,9 +365,24 @@ data class Village(
         messageContent: MessageContent,
         latestDayMessageCountMap: Map<CDef.MessageType, Int>,
     ) {
-        val restrict = setting.rules.messageRestrict.restrict(messageContent.type.toCdef()) ?: return // 制限なし
+        val restrict = setting.rules.messageRestrict.restrict(messageContent.type.toCdef())
+        if (restrict == null) {
+            // 回数の制限はないが、文字数・行数は既定の上限で確認する
+            messageContent.assertMessageLength()
+            return
+        }
         restrict.assertSay(messageContent, status.toCdef(), latestDayMessageCountMap)
     }
+
+    /**
+     * アクション発言の本文を作る
+     * 行為者名はサーバーで付け、対象は「全員」か村にいる人の名前だけを受け付ける
+     */
+    fun createActionText(
+        myself: VillageParticipant,
+        targetText: String?,
+        messageText: String,
+    ): String = buildActionText(myself.name(), allParticipants().memberList.map { it.name() }, targetText, messageText)
 
     /** 村として能力を行使できるか */
     fun canUseAbility(): Boolean = status.isProgress()
@@ -613,6 +628,20 @@ data class Village(
     //                                                                    companion object
     //                                                                             =======
     companion object {
+        const val ACTION_TARGET_EVERYONE = "全員"
+
+        internal fun buildActionText(
+            myselfName: String,
+            participantNames: List<String>,
+            targetText: String?,
+            messageText: String,
+        ): String {
+            if (targetText != null && targetText != ACTION_TARGET_EVERYONE && !participantNames.contains(targetText)) {
+                throw FirewolfBusinessException("指定できない対象です")
+            }
+            return "${myselfName}は、${targetText ?: ""}$messageText"
+        }
+
         fun createForRegister(resource: VillageCreateResource): Village {
             return Village(
                 // dummy

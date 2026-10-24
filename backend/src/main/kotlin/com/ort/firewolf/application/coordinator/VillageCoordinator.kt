@@ -329,11 +329,18 @@ class VillageCoordinator(
         shortName: String,
     ) {
         val village: Village = villageService.findVillage(villageId)
-        val participant: VillageParticipant? = findParticipant(village, user)
+        val participant: VillageParticipant =
+            findParticipant(village, user) ?: throw FirewolfBusinessException("村に参加していません")
+        // 名前変更できない状況ならエラー (画面と同じ条件)
+        val charachips = charachipService.findCharachips(village.setting.charachip.charachipIds)
+        val charas = charachipService.findCharasByCharaIds(listOf(participant.charaId))
+        if (!rpDomainService.convertToSituation(village, participant, charachips, charas).isAvailableChangeName) {
+            throw FirewolfBusinessException("名前を変更できません")
+        }
         // 名前変更
         val changedVillage: Village =
             village.changeName(
-                participant!!.id,
+                participant.id,
                 name,
                 shortName,
             )
@@ -514,7 +521,6 @@ class VillageCoordinator(
     fun action(
         villageId: Int,
         user: FirewolfUser,
-        myselfText: String,
         targetText: String?,
         messageText: String,
     ) {
@@ -523,7 +529,7 @@ class VillageCoordinator(
         // 発言
         val village: Village = villageService.findVillage(villageId)
         val myself: VillageParticipant = findParticipant(village, user)!!
-        val text = "${myselfText}${targetText ?: ""}$messageText"
+        val text = village.createActionText(myself, targetText, messageText)
         val message: Message =
             Message.createSayMessage(
                 myself,
