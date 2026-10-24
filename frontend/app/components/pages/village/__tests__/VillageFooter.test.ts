@@ -63,10 +63,12 @@ vi.mock('~/composables/village/useVillageTimer', () => ({
 
 // useWindowResize のモック
 const mockIsMobile = ref(false)
+const mockIsDesktop = ref(false)
 
 vi.mock('~/composables/useWindowResize', () => ({
   useWindowResize: () => ({
-    isMobile: mockIsMobile
+    isMobile: mockIsMobile,
+    isDesktop: mockIsDesktop
   })
 }))
 
@@ -106,6 +108,7 @@ describe('VillageFooter', () => {
     mockExistsNewMessages.value = false
     mockTimerText.value = '残01:30:00'
     mockIsMobile.value = false
+    mockIsDesktop.value = false
   })
 
   const mountComponent = () => {
@@ -226,7 +229,8 @@ describe('VillageFooter', () => {
       expect(wrapper.find('.modal-filter-stub').exists()).toBe(true)
     })
 
-    it('フィルタリング中の場合、抽出ボタンをクリックするとフィルタがリセットされる', async () => {
+    // 抽出の解除はモーダル・サイドバー内のリセットボタンで行う（フッターのボタンは常にモーダルを開く）
+    it('フィルタリング中でも、抽出ボタンをクリックするとモーダルが開きフィルタはリセットしない', async () => {
       mockIsFiltering.value = true
       const wrapper = mountComponent()
 
@@ -236,19 +240,22 @@ describe('VillageFooter', () => {
       )
       await filterButton?.trigger('click')
 
-      expect(mockResetFilter).toHaveBeenCalled()
-      expect(mockLoadMessages).toHaveBeenCalled()
+      expect(wrapper.find('.modal-filter-stub').exists()).toBe(true)
+      expect(mockResetFilter).not.toHaveBeenCalled()
     })
 
-    it('フィルタリング中の場合、解除テキストが表示される', () => {
-      mockIsFiltering.value = true
+    it('デスクトップでは抽出ボタンを表示しない', () => {
+      mockIsDesktop.value = true
       const wrapper = mountComponent()
 
-      expect(wrapper.text()).toContain('解除')
+      const buttons = wrapper.findAll('button')
+      expect(
+        buttons.some((b) => b.attributes('aria-label') === '発言を抽出')
+      ).toBe(false)
     })
 
-    it('フィルタリング中でない場合、解除テキストが表示されない', () => {
-      mockIsFiltering.value = false
+    it('フィルタリング中でも、フッターに解除テキストは表示しない', () => {
+      mockIsFiltering.value = true
       const wrapper = mountComponent()
 
       expect(wrapper.text()).not.toContain('解除')
