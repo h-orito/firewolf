@@ -69,6 +69,20 @@ class MessageDomainService(
         }
     }
 
+    /**
+     * 発言者がアンカーで参照した発言を、発言の宛先 (アンカー先の発言者) として記録してよいか
+     * 発言者が見られない発言を記録すると、宛先での絞り込みからその発言者が分かってしまうため、
+     * 発言者自身の発言か、発言者が見られる種別の発言だけを記録する
+     */
+    fun isAnchorableMessage(
+        village: Village,
+        sender: VillageParticipant?,
+        anchoredMessageType: CDef.MessageType,
+        anchoredMessageParticipantId: Int,
+    ): Boolean =
+        sender?.id == anchoredMessageParticipantId ||
+            isViewableMessage(village, sender, null, anchoredMessageType, village.day.latestDay().day)
+
     fun createQuery(
         village: Village,
         participant: VillageParticipant?,

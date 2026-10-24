@@ -14,6 +14,7 @@ import com.ort.firewolf.domain.model.message.Messages
 import com.ort.firewolf.domain.model.village.Village
 import com.ort.firewolf.domain.model.village.participant.VillageParticipant
 import com.ort.firewolf.domain.model.village.participant.VillageParticipantName
+import com.ort.firewolf.domain.service.message.MessageDomainService
 import com.ort.firewolf.fw.FirewolfDateUtil
 import com.ort.firewolf.fw.exception.FirewolfBusinessException
 import org.dbflute.cbean.result.PagingResultBean
@@ -27,6 +28,7 @@ import java.util.regex.Pattern
 class MessageDataSource(
     private val messageBhv: MessageBhv,
     private val messageSendtoBhv: MessageSendtoBhv,
+    private val messageDomainService: MessageDomainService,
 ) {
     private val logger = LoggerFactory.getLogger(MessageDataSource::class.java)
 
@@ -224,7 +226,7 @@ class MessageDataSource(
             try {
                 mes.messageNumber = selectNextMessageNumber(village.id, message.content.type.code)
                 messageBhv.insert(mes)
-                insertMessageSendTo(mes)
+                insertMessageSendTo(village, message, mes)
                 return findMessage(
                     villageId = village.id,
                     messageType = CDef.MessageType.codeOf(messageTypeCode),
@@ -237,11 +239,16 @@ class MessageDataSource(
         throw FirewolfBusinessException("混み合っているため発言に失敗しました。再度発言してください。")
     }
 
-    private fun insertMessageSendTo(m: Message) {
+    private fun insertMessageSendTo(
+        village: Village,
+        message: com.ort.firewolf.domain.model.message.Message,
+        m: Message,
+    ) {
         val splitted = m.messageContent.split(">>")
         if (splitted.size <= 1) {
             return // >>が含まれていない
         }
+        val sender = message.fromVillageParticipantId?.let { village.allParticipants().member(it) }
         splitted.drop(1).forEach { str ->
             patternMessageTypeMap.forEach { (pattern: Pattern, messageType: CDef.MessageType) ->
                 val matcher = pattern.matcher(str)
@@ -254,6 +261,10 @@ class MessageDataSource(
                             it.query().setMessageNumber_Equal(number)
                         }
                     if (!optMessage.isPresent || optMessage.get().villagePlayerId == null) {
+                        return@forEach
+                    }
+                    // 発言者が見られる発言へのアンカーだけを、発言の宛先として記録する
+                    if (!messageDomainService.isAnchorableMessage(village, sender, messageType, optMessage.get().villagePlayerId)) {
                         return@forEach
                     }
                     val sendTo = MessageSendto()
