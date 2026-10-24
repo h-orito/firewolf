@@ -257,8 +257,17 @@ class VillageCoordinator(
         secondRequestSkill: CDef.Skill = CDef.Skill.おまかせ,
         ipAddress: String,
     ) {
+        // 同時に参加されても定員・1 人 1 席・キャラの重複を守れるよう、村の行をロックしてから最新の状態で確認し直す
+        villageService.lockVillage(villageId)
+        var village: Village = villageService.findVillageWithoutCache(villageId)
+        participateDomainService.assertParticipateCapacity(
+            player = playerService.findPlayer(playerId),
+            village = village,
+            charaId = charaId,
+            isSpectate = isSpectate,
+            charachipCharaNum = charachipService.findCharas(village.setting.charachip.charachipIds).list.size,
+        )
         // 村参加者登録
-        var village: Village = villageService.findVillage(villageId)
         val chara: Chara = charachipService.findChara(charaId)
         val changedVillage: Village =
             village.participate(

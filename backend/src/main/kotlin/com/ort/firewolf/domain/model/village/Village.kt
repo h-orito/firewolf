@@ -580,7 +580,7 @@ data class Village(
     // ===================================================================================
     //                                                                        Assist Logic
     //                                                                        ============
-    private fun isAlreadyParticipateCharacter(charaId: Int): Boolean {
+    fun isAlreadyParticipateCharacter(charaId: Int): Boolean {
         return participant.memberList.any { it.charaId == charaId } ||
             spectator.memberList.any { it.charaId == charaId }
     }

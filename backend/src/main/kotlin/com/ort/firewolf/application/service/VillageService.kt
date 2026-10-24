@@ -38,6 +38,11 @@ class VillageService(
     fun findVillagesAsDetail(villageIdList: List<Int>): Villages = villageDataSource.findVillagesAsDetail(villageIdList)
 
     /**
+     * 村の行をロックする (トランザクション内で呼ぶ)
+     */
+    fun lockVillage(villageId: Int) = villageDataSource.lockVillage(villageId)
+
+    /**
      * キャッシュを使わずに村取得
      */
     fun findVillageWithoutCache(
