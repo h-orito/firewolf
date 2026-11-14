@@ -41,6 +41,28 @@
     X-Content-Type-Options = "nosniff"
     X-XSS-Protection = "1; mode=block"
     Referrer-Policy = "strict-origin-when-cross-origin"
+    # まず Report-Only で配信し、違反がブラウザのコンソールに出ないことを確認してから有効化する
+    # - script-src: Nuxt が index.html に埋め込む設定用の inline script / importmap（ビルドごとに内容が変わる）、
+    #   Firebase Auth のポップアップログインが読み込む apis.google.com、Google AdSense
+    # - style-src / font-src: SPA ローディング画面の inline style、AdSense が読み込む Google Fonts
+    # - img-src: キャラチップ画像（wolfort.net）、AdSense
+    # - connect-src: API（wolfort.dev）、Firebase Auth、Service Worker 経由の画像取得（wolfort.net）、AdSense
+    # - frame-src: Firebase Auth の iframe（/__/auth/* は firebaseapp.com へプロキシしている）、AdSense の広告枠
+    Content-Security-Policy-Report-Only = """\
+      default-src 'self'; \
+      script-src 'self' 'unsafe-inline' https://apis.google.com https://pagead2.googlesyndication.com https://*.adtrafficquality.google; \
+      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; \
+      img-src 'self' data: https://wolfort.net https://pagead2.googlesyndication.com https://*.adtrafficquality.google; \
+      font-src 'self' data: https://fonts.gstatic.com; \
+      connect-src 'self' https://wolfort.dev https://wolfort.net https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://apis.google.com https://pagead2.googlesyndication.com https://*.adtrafficquality.google; \
+      frame-src 'self' https://firewolf-d9fe8.firebaseapp.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://*.adtrafficquality.google https://www.google.com; \
+      worker-src 'self'; \
+      manifest-src 'self'; \
+      object-src 'none'; \
+      base-uri 'self'; \
+      form-action 'self'; \
+      frame-ancestors 'none'\
+      """
 
 # 静的アセットのキャッシュ設定（ハッシュ付きファイル）
 [[headers]]
