@@ -7,6 +7,8 @@ import com.ort.firewolf.domain.model.village.Village
 import com.ort.firewolf.domain.service.message.MessageDomainService
 import com.ort.firewolf.infrastructure.repository.DiscordRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.support.TransactionSynchronization
+import org.springframework.transaction.support.TransactionSynchronizationManager
 
 @Service
 class NotificationService(
@@ -18,14 +20,33 @@ class NotificationService(
         message: Message,
     ) {
         if (!message.shouldNotify()) return
-        discordRepository.post(villageId, escapeDiscordMarkdown(message.content.text))
+        postToDeveloperAfterCommit(villageId, escapeDiscordMarkdown(message.content.text))
     }
 
     fun notifyToDeveloperTextIfNeeded(
         village: Village,
         text: String,
     ) {
-        discordRepository.post(village.id, escapeDiscordMarkdown(text))
+        postToDeveloperAfterCommit(village.id, escapeDiscordMarkdown(text))
+    }
+
+    // 入村などでは村の行をロックしたまま処理するため、Discord への送信 (最大で接続 5 秒 + 読み取り 10 秒) は
+    // commit してロックを解放した後に行う。ロールバックした場合は送らない。トランザクション外ではすぐに送る
+    private fun postToDeveloperAfterCommit(
+        villageId: Int,
+        text: String,
+    ) {
+        if (!TransactionSynchronizationManager.isSynchronizationActive()) {
+            discordRepository.post(villageId, text)
+            return
+        }
+        TransactionSynchronizationManager.registerSynchronization(
+            object : TransactionSynchronization {
+                override fun afterCommit() {
+                    discordRepository.post(villageId, text)
+                }
+            },
+        )
     }
 
     fun notifyVillageStartToCustomerIfNeeded(village: Village) {
